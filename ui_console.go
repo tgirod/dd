@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/gliderlabs/ssh"
 )
 
 type Console struct {
@@ -13,23 +11,12 @@ type Console struct {
 	stack   []tea.Model // pile des vues ouvertes pour la navigation
 }
 
-// NewConsole créé le modèle bubbletea qui sera utilisé pour l'affichage
-func NewConsole(pty ssh.Pty) Console {
-	c := Console{
-		width:  pty.Window.Width,
-		height: pty.Window.Height,
-		// la première vue est toujours le prompt
-		stack: []tea.Model{
-			Prompt{
-				input: "rien",
-			},
-		},
-	}
-	return c
-}
-
 func (c Console) Init() tea.Cmd {
-	return nil
+	return func() tea.Msg {
+		return Prompt{
+			input: "",
+		}
+	}
 }
 
 type Close struct{}
@@ -67,7 +54,6 @@ func (c Console) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	// délègue update à la vue au sommet de la pile
 	top := len(c.stack) - 1
 	m := c.stack[top]
-	fmt.Println(m)
 	m, cmd := m.Update(msg)
 	c.stack[top] = m
 	return c, cmd

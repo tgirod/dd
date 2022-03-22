@@ -74,5 +74,5 @@ func (a *App) handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	model := NewConsole(pty)
 	model.network = a.network
 
-	return model, []tea.ProgramOption{tea.WithAltScreen()}
+	return model, []tea.ProgramOption{}
 }

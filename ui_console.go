@@ -2,6 +2,7 @@ package main
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/davecgh/go-spew/spew"
 )
 
 type Console struct {
@@ -13,9 +14,7 @@ type Console struct {
 
 func (c Console) Init() tea.Cmd {
 	return func() tea.Msg {
-		return Prompt{
-			input: "",
-		}
+		return NewPrompt()
 	}
 }
 
@@ -31,8 +30,9 @@ func (c Console) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		// les bindings communs à toute l'appli
-		switch msg.Type {
-		case tea.KeyCtrlC:
+		spew.Dump(msg.String())
+		switch msg.String() {
+		case "ctrl+c":
 			return c, tea.Quit
 		}
 

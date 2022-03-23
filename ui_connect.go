@@ -5,9 +5,9 @@ import tea "github.com/charmbracelet/bubbletea"
 // Connect est le programme permettant d'établir la connexion a un
 // serveur distant.
 type Connect struct {
-	Address  string // adresse du serveur à joindre
-	Login    string // identifiant d'accès
-	Password string // mot de passe
+	address  string // adresse du serveur à joindre
+	login    string // identifiant d'accès
+	password string // mot de passe
 }
 
 func (c Connect) Init() tea.Cmd {

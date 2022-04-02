@@ -71,12 +71,11 @@ func (a *App) handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	}
 
 	// l'objet console est le modèle utilisé par bubbletea
-	//model := NewConsole(pty)
-	model := Console{
-		network: a.network,
-		width:   pty.Window.Width,
-		height:  pty.Window.Height,
-	}
+	model := NewConsole(
+		a.network,
+		pty.Window.Width,
+		pty.Window.Height,
+	)
 
-	return model, []tea.ProgramOption{}
+	return model, []tea.ProgramOption{tea.WithAltScreen()}
 }

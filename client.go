@@ -23,13 +23,12 @@ var (
 	errMissingArgument = errors.New("argument manquant")
 )
 
-type Console struct {
-	network *Network // données partagées du jeu
-	width   int      // largeur de l'affichage
-	height  int      // hauteur de l'affichage
-	input   string   // saisie utilisateur
-	log     string   // résultat de la dernière commande
-	root    Cmd      // commande racine de la console
+type Client struct {
+	width  int    // largeur de l'affichage
+	height int    // hauteur de l'affichage
+	input  string // saisie utilisateur
+	log    string // résultat de la dernière commande
+	root   Cmd    // commande racine de la console
 }
 
 // commande utilisable par l'utilisateur
@@ -47,7 +46,7 @@ type Arg struct {
 	Help string
 }
 
-func (c Console) Init() tea.Cmd {
+func (c Client) Init() tea.Cmd {
 	return nil
 }
 
@@ -57,7 +56,7 @@ type LogMsg struct {
 	msg string
 }
 
-func (c Console) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tea.KeyMsg:
@@ -110,7 +109,7 @@ func (c Console) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // View délègue l'affichage à la vue au sommet de la pile
-func (c Console) View() string {
+func (c Client) View() string {
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "%s\n", c.log)
 	//for _, l := range c.logs {
@@ -120,11 +119,10 @@ func (c Console) View() string {
 	return b.String()
 }
 
-func NewConsole(n *Network, width, height int) Console {
-	c := Console{
-		network: n,
-		width:   width,
-		height:  height,
+func NewClient(width, height int) Client {
+	c := Client{
+		width:  width,
+		height: height,
 	}
 
 	c.root = Cmd{
@@ -153,7 +151,7 @@ func NewConsole(n *Network, width, height int) Console {
 
 // parse interprète la saisie utilisateur et retourne la commande à exécuter à
 // partir de cette saisie
-func (c Console) Parse() tea.Cmd {
+func (c Client) Parse() tea.Cmd {
 	args := strings.Fields(c.input)
 
 	if len(args) == 0 {
@@ -263,7 +261,7 @@ func (l LogMsg) View() string {
 	return b.String()
 }
 
-func (c Console) Usage() string {
+func (c Client) Usage() string {
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "Liste des commandes disponibles\n\n")
 	for _, cmd := range c.root.Sub {

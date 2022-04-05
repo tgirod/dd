@@ -17,8 +17,7 @@ import (
 )
 
 type App struct {
-	s       *ssh.Server
-	network *Network // la représentation du réseau
+	s *ssh.Server
 }
 
 // NewApp créé un nouvel objet application
@@ -71,8 +70,7 @@ func (a *App) handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	}
 
 	// l'objet console est le modèle utilisé par bubbletea
-	model := NewConsole(
-		a.network,
+	model := NewClient(
 		pty.Window.Width,
 		pty.Window.Height,
 	)

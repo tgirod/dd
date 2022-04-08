@@ -28,13 +28,6 @@ type Game struct {
 	*storm.DB
 }
 
-func NewGame(path string) (Game, error) {
-	gob.Register(Node{})
-	gob.Register(Connect{})
-	db, err := storm.Open(path, storm.Codec(gc.Codec))
-	return Game{db}, err
-}
-
 func (g Game) FindServer(address string) (Server, error) {
 	var server Server
 	if err := g.One("Address", address, &server); err != nil {

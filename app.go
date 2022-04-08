@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/gob"
 	"fmt"
 	"log"
 	"os"
@@ -9,6 +10,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/asdine/storm/v3"
+	gc "github.com/asdine/storm/v3/codec/gob"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/wish"
 	bm "github.com/charmbracelet/wish/bubbletea"
@@ -44,9 +47,15 @@ func NewApp() *App {
 func (a *App) Start() {
 	var err error
 
-	if a.Game, err = NewGame("game.db"); err != nil {
+	// ouverture de la BDD
+	gob.Register(Node{})
+	gob.Register(Connect{})
+	db, err := storm.Open("game.db", storm.Codec(gc.Codec))
+	if err != nil {
 		log.Fatal(err)
 	}
+	a.Game = Game{db}
+	a.Game.Init() // FIXME a invoquer uniquement avec un argument "init"
 	defer a.Game.Close()
 
 	done := make(chan os.Signal, 1)

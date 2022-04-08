@@ -15,8 +15,8 @@ type Client struct {
 	input  textinput.Model // invite de commande
 	output string          // résultat de la dernière commande
 
-	game      Game // état interne du jeu
-	consoleID int  // identifiant de la console
+	Game          // état interne du jeu
+	consoleID int // identifiant de la console
 }
 
 func (c Client) Init() tea.Cmd {
@@ -73,9 +73,9 @@ func NewClient(width, height int, game Game) Client {
 	c := Client{
 		width:     width,
 		height:    height,
-		game:      game,
 		input:     textinput.New(),
 		consoleID: co.ID,
+		Game:      game,
 	}
 	c.input.Focus()
 
@@ -92,20 +92,20 @@ func (c Client) Run() tea.Cmd {
 
 		// récupérer la console
 		var console Console
-		if err := c.game.One("ID", c.consoleID, &console); err != nil {
+		if err := c.Game.One("ID", c.consoleID, &console); err != nil {
 			return LogMsg{
 				err: err,
 			}
 		}
 
 		// exécuter la commande
-		ctx := Context{c.game, console}
+		ctx := Context{c.Game, console}
 		return console.Run(ctx, args)
 	}
 }
 
 func (c Client) Quit() tea.Msg {
-	if err := c.game.Delete("Console", c.consoleID); err != nil {
+	if err := c.Game.Delete("Console", c.consoleID); err != nil {
 		fmt.Println(err)
 	}
 

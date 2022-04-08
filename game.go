@@ -62,8 +62,8 @@ func FindService[T any](g Game, serverID int, name string) (T, error) {
 type Console struct {
 	ID        int `storm:"id,increment"`
 	Command       // commandes disponibles
-	serverID  int // identifiant du serveur auquel la console est connectée
-	privilege int // niveau de privilège
+	ServerID  int // identifiant du serveur auquel la console est connectée
+	Privilege int // niveau de privilège
 }
 
 func NewConsole() Console {

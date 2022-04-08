@@ -13,16 +13,16 @@ type Server struct {
 }
 
 type Cred struct {
-	login     string
-	password  string
-	privilege int
+	Login     string
+	Password  string
+	Privilege int
 }
 
 func (s Server) CheckCredentials(login, password string) (int, error) {
 	var cred Cred
 	for _, c := range s.Credentials {
-		if c.login == login && c.password == password {
-			return cred.privilege, nil
+		if c.Login == login && c.Password == password {
+			return cred.Privilege, nil
 		}
 	}
 	return 0, errInvalidCredentials

@@ -54,8 +54,8 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 		return LogMsg{err: err}
 	}
 
-	ctx.Console.serverID = server.ID
-	ctx.Console.privilege = privilege
+	ctx.Console.ServerID = server.ID
+	ctx.Console.Privilege = privilege
 
 	return LogMsg{msg: "connexion établie"}
 }

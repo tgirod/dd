@@ -18,6 +18,7 @@ import (
 
 type App struct {
 	s *ssh.Server
+	Game
 }
 
 // NewApp créé un nouvel objet application
@@ -25,23 +26,29 @@ func NewApp() *App {
 	var err error
 	a := new(App)
 
-	a.s, err = wish.NewServer(
+	if a.s, err = wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", host, port)),
 		wish.WithHostKeyPath(".ssh/term_info_ed25519"),
 		wish.WithMiddleware(
-			bm.Middleware(a.handler),
+			bm.Middleware(a.Handler),
 			lm.Middleware(),
 		),
-	)
-	if err != nil {
-		log.Fatalln(err)
+	); err != nil {
+		log.Fatal(err)
 	}
+
 	return a
 }
 
 // Start démarre le serveur, en attente de connexions
 func (a *App) Start() {
 	var err error
+
+	if a.Game, err = NewGame("game.db"); err != nil {
+		log.Fatal(err)
+	}
+	defer a.Game.Close()
+
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	log.Printf("Starting SSH server on %s:%d", host, port)
@@ -60,8 +67,8 @@ func (a *App) Start() {
 	}
 }
 
-// handler prend en charge la connexion entrante et créé les objets nécessaires
-func (a *App) handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
+// Handler prend en charge la connexion entrante et créé les objets nécessaires
+func (a *App) Handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	// si le terminal qui tente de se connecter est invalide
 	pty, _, active := s.Pty()
 	if !active {
@@ -69,11 +76,12 @@ func (a *App) handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 		return nil, nil
 	}
 
-	// l'objet console est le modèle utilisé par bubbletea
-	model := NewClient(
+	// création de l'interface utilisateur
+	client := NewClient(
 		pty.Window.Width,
 		pty.Window.Height,
+		a.Game,
 	)
 
-	return model, []tea.ProgramOption{tea.WithAltScreen()}
+	return client, []tea.ProgramOption{tea.WithAltScreen()}
 }

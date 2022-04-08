@@ -1,59 +1,29 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"log"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
 
-var (
-	compStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("8"))
-	errStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("9"))
-	okStyle     = lipgloss.NewStyle().Foreground(lipgloss.Color("10"))
-	cursorStyle = lipgloss.NewStyle().Reverse(true)
-	paramStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
-)
-
-var (
-	errInvalidCommand  = errors.New("commande invalide")
-	errMissingCommand  = errors.New("commande manquante")
-	errMissingArgument = errors.New("argument manquant")
-)
+func NoOp() tea.Msg {
+	return nil
+}
 
 type Client struct {
 	width  int    // largeur de l'affichage
 	height int    // hauteur de l'affichage
 	input  string // saisie utilisateur
 	log    string // résultat de la dernière commande
-	root   Cmd    // commande racine de la console
-}
 
-// commande utilisable par l'utilisateur
-type Cmd struct {
-	Name string                       // nom de la sous-commande
-	Help string                       // description de la commande
-	Sub  []Cmd                        // les sous-commandes disponibles
-	Args []Arg                        // les arguments requis par la commande
-	Run  func(args ...string) tea.Cmd // le code exécuté
-}
-
-// argument d'une commande
-type Arg struct {
-	Name string
-	Help string
+	game      Game // état interne du jeu
+	consoleID int  // identifiant de la console
 }
 
 func (c Client) Init() tea.Cmd {
 	return nil
-}
-
-// LogMsg contient le retour d'un programme à ajouter dans les logs
-type LogMsg struct {
-	err error
-	msg string
 }
 
 func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -69,8 +39,7 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "enter":
 			// lancer l'exécution de la commande
-			cmd := c.Parse()
-			//c.logs = append(c.logs, "> "+c.input)
+			cmd := c.Run()
 			c.input = ""
 			return c, cmd
 		}
@@ -101,155 +70,65 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case LogMsg:
 		// ajoute dans les logs
 		c.log = msg.View()
-		//c.logs = append(c.logs, string(msg))
+		return c, nil
+
+	case ErrMsg:
+		// affiche un message d'erreur
+		c.log = msg.View()
 		return c, nil
 	}
 
 	return c, nil
 }
 
-// View délègue l'affichage à la vue au sommet de la pile
 func (c Client) View() string {
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "%s\n", c.log)
-	//for _, l := range c.logs {
-	//fmt.Fprintln(&b, l)
-	//}
 	fmt.Fprintf(&b, "> %s\n", c.input)
 	return b.String()
 }
 
-func NewClient(width, height int) Client {
-	c := Client{
-		width:  width,
-		height: height,
+func NewClient(width, height int, game Game) Client {
+	co := NewConsole()
+	if err := game.Save(&co); err != nil {
+		log.Panic(err)
 	}
 
-	c.root = Cmd{
-		Name: ">",
-		Help: "accédez au Net en toute sécurité",
-		Sub: []Cmd{
-			{
-				Name: "connect",
-				Help: "établit la connexion à un serveur via son adresse",
-				Args: []Arg{
-					{Name: "address", Help: "adresse du serveur"},
-					{Name: "login", Help: "identifiant"},
-					{Name: "password", Help: "mot de passe"},
-				},
-				Run: func(args ...string) tea.Cmd {
-					return func() tea.Msg {
-						return c.Connect(args[0], args[1], args[2])
-					}
-				},
-			},
-		},
+	c := Client{
+		width:     width,
+		height:    height,
+		game:      game,
+		consoleID: co.ID,
 	}
 
 	return c
 }
 
-// parse interprète la saisie utilisateur et retourne la commande à exécuter à
-// partir de cette saisie
-func (c Client) Parse() tea.Cmd {
+// Run parse et exécute la commande saisie par l'utilisateur
+func (c Client) Run() tea.Cmd {
 	args := strings.Fields(c.input)
 
-	if len(args) == 0 {
-		// afficher l'aide
-		return func() tea.Msg {
+	return func() tea.Msg {
+		fmt.Println("run", args)
+		// construire la tea.Cmd qui parse et exécute la commande
+
+		// récupérer la console
+		var co Console
+		if err := c.game.One("ID", c.consoleID, &co); err != nil {
 			return LogMsg{
-				err: errMissingCommand,
-				msg: c.Usage(),
-			}
-		}
-	}
-
-	return c.root.Parse(args)
-}
-
-func (c Cmd) Parse(args []string) tea.Cmd {
-	if c.IsLeaf() {
-		// il n'y a pas de sous-commandes
-
-		if len(args) < len(c.Args) {
-			// il manque des arguments
-			return func() tea.Msg {
-				err := errMissingArgument
-				for i := len(c.Args) - 1; i >= len(args); i-- {
-					err = fmt.Errorf("%s : %w", c.Args[i].Name, err)
-				}
-				return LogMsg{
-					err: err,
-					msg: c.Usage(),
-				}
+				err: err,
 			}
 		}
 
-		// on exécute le code de la fonction Run
-		return c.Run(args...)
+		// exécuter la commande
+		return co.Run(c.game, args)
 	}
-
-	// rechercher une sous-commande
-	match := c.Match(args[0])
-	if len(match) == 0 {
-
-		// aucune commande ne correspond, afficher l'aide de cmd
-		return func() tea.Msg {
-			return LogMsg{
-				err: fmt.Errorf("%s : %w", args[0], errInvalidCommand),
-				msg: c.Usage(),
-			}
-		}
-	}
-
-	// poursuivre le parsing dans la sous-commande
-	return match[0].Parse(args[1:])
 }
 
-func (c Cmd) IsLeaf() bool {
-	return len(c.Sub) == 0
-}
-
-func (c Cmd) Match(prefix string) []Cmd {
-	sub := make([]Cmd, 0, len(c.Sub))
-	for _, s := range c.Sub {
-		if strings.HasPrefix(s.Name, prefix) {
-			sub = append(sub, s)
-		}
-	}
-	return sub
-}
-
-func (c Cmd) Usage() string {
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "%s - %s\n", strings.ToUpper(c.Name), c.Help)
-	fmt.Fprintln(&b, "USAGE")
-
-	if c.IsLeaf() {
-		// pas de sous-commande, afficher les arguments
-		fmt.Fprintf(&b, "\t%s", c.Name)
-		for _, a := range c.Args {
-			fmt.Fprintf(&b, " <%s>", a.Name)
-		}
-		fmt.Fprintln(&b, "")
-		fmt.Fprintln(&b, "ARGUMENTS")
-		for _, a := range c.Args {
-			fmt.Fprintf(&b, "\t%s\n", a.Usage())
-		}
-		return b.String()
-	}
-
-	// afficher la liste des sous-commandes
-	fmt.Fprintf(&b, "%s <COMMANDE>\n", c.Name)
-	fmt.Fprintln(&b, "COMMANDES")
-	for _, s := range c.Sub {
-		fmt.Fprintf(&b, "%12s - %s\n", s.Name, s.Help)
-	}
-	return b.String()
-}
-
-func (a Arg) Usage() string {
-	return fmt.Sprintf("%12s - %s", a.Name, a.Help)
+// LogMsg contient le retour d'un programme à ajouter dans les logs
+type LogMsg struct {
+	err error
+	msg string
 }
 
 func (l LogMsg) View() string {
@@ -261,11 +140,10 @@ func (l LogMsg) View() string {
 	return b.String()
 }
 
-func (c Client) Usage() string {
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "Liste des commandes disponibles\n\n")
-	for _, cmd := range c.root.Sub {
-		fmt.Fprintf(&b, "%12s - %s\n", cmd.Name, cmd.Help)
-	}
-	return b.String()
+type ErrMsg struct {
+	err error
+}
+
+func (e ErrMsg) View() string {
+	return fmt.Sprintf("ERR : %s\n", e.err.Error())
 }

@@ -108,16 +108,16 @@ func (c Client) Run() tea.Cmd {
 		// construire la tea.Cmd qui parse et exécute la commande
 
 		// récupérer la console
-		var co Console
-		if err := c.game.One("ID", c.consoleID, &co); err != nil {
+		var console Console
+		if err := c.game.One("ID", c.consoleID, &console); err != nil {
 			return LogMsg{
 				err: err,
 			}
 		}
 
 		// exécuter la commande
-		ctx := Context{c.game, co}
-		return co.Run(ctx, args)
+		ctx := Context{c.game, console}
+		return console.Run(ctx, args)
 	}
 }
 

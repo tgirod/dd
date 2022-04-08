@@ -19,11 +19,11 @@ type Cred struct {
 }
 
 func (s Server) CheckCredentials(login, password string) (int, error) {
-	var cred Cred
 	for _, c := range s.Credentials {
 		if c.Login == login && c.Password == password {
-			return cred.Privilege, nil
+			return c.Privilege, nil
 		}
 	}
+
 	return 0, errInvalidCredentials
 }

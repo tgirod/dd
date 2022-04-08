@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -15,12 +14,19 @@ type Client struct {
 	input  textinput.Model // invite de commande
 	output string          // résultat de la dernière commande
 
-	Game          // état interne du jeu
-	consoleID int // identifiant de la console
+	Game    // état interne du jeu
+	Console // console enregistrée dans le jeu
 }
 
 func (c Client) Init() tea.Cmd {
-	return nil
+	return func() tea.Msg {
+		// enregistrer la console dans l'état du jeu
+		console, err := c.Game.NewConsole()
+		if err != nil {
+			return LogMsg{err: err}
+		}
+		return console
+	}
 }
 
 func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -51,6 +57,12 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// ajoute dans les logs
 		c.output = msg.View()
 		return c, nil
+
+	case Console:
+		// mettre à jour la console associée au client
+		fmt.Printf("%+v\n", msg)
+		c.Console = msg
+
 	}
 
 	c.input, cmd = c.input.Update(msg)
@@ -65,17 +77,11 @@ func (c Client) View() string {
 }
 
 func NewClient(width, height int, game Game) Client {
-	co := NewConsole()
-	if err := game.Save(&co); err != nil {
-		log.Panic(err)
-	}
-
 	c := Client{
-		width:     width,
-		height:    height,
-		input:     textinput.New(),
-		consoleID: co.ID,
-		Game:      game,
+		width:  width,
+		height: height,
+		input:  textinput.New(),
+		Game:   game,
 	}
 	c.input.Focus()
 
@@ -90,22 +96,14 @@ func (c Client) Run() tea.Cmd {
 		fmt.Println("run", args)
 		// construire la tea.Cmd qui parse et exécute la commande
 
-		// récupérer la console
-		var console Console
-		if err := c.Game.One("ID", c.consoleID, &console); err != nil {
-			return LogMsg{
-				err: err,
-			}
-		}
-
 		// exécuter la commande
-		ctx := Context{c.Game, console}
-		return console.Run(ctx, args)
+		ctx := Context{c.Game, c.Console}
+		return c.Console.Run(ctx, args)
 	}
 }
 
 func (c Client) Quit() tea.Msg {
-	if err := c.Game.Delete("Console", c.consoleID); err != nil {
+	if err := c.Game.DeleteStruct(c.Console); err != nil {
 		fmt.Println(err)
 	}
 

@@ -40,6 +40,27 @@ func (g Game) FindServer(address string) (Server, error) {
 	return server, nil
 }
 
+func (g Game) NewConsole() (Console, error) {
+	// créer la console avec les commandes de base
+	var console = Console{
+		Command: Node{
+			Sub: []Command{
+				Connect{},
+			},
+		},
+	}
+
+	// sauver la console dans la BDD
+	if err := g.Save(&console); err != nil {
+		if err != nil {
+			fmt.Println(err)
+			return console, errInternalError
+		}
+	}
+
+	return console, nil
+}
+
 func FindService[T any](g Game, serverID int, name string) (T, error) {
 	var service T
 	if err := g.Select(
@@ -64,16 +85,6 @@ type Console struct {
 	Command       // commandes disponibles
 	ServerID  int // identifiant du serveur auquel la console est connectée
 	Privilege int // niveau de privilège
-}
-
-func NewConsole() Console {
-	return Console{
-		Command: Node{
-			Sub: []Command{
-				Connect{},
-			},
-		},
-	}
 }
 
 // Service regroupe les infos de base exposées par tous les services

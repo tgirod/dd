@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -54,8 +55,15 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 		return LogMsg{err: err}
 	}
 
-	ctx.Console.ServerID = server.ID
-	ctx.Console.Privilege = privilege
+	// mettre à jour la console
+	console := ctx.Console
+	console.ServerID = server.ID
+	console.Privilege = privilege
+	if err := ctx.Game.Update(&console); err != nil {
+		fmt.Println(err)
+		return LogMsg{err: errInternalError}
+	}
 
-	return LogMsg{msg: "connexion établie"}
+	// retourner la console mise à jour pour que le client l'actualise
+	return console
 }

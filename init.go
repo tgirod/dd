@@ -1,6 +1,11 @@
 package main
 
 func (g Game) Init() error {
+	// nettoyer les tables
+	g.Drop(&Server{})
+	g.Drop(&Console{})
+	g.Drop(&Link{})
+
 	s1 := Server{
 		ID:      1,
 		Address: "jesus",

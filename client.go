@@ -6,6 +6,8 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	lg "github.com/charmbracelet/lipgloss"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 type Client struct {
@@ -77,10 +79,58 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (c Client) View() string {
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "%s\n", c.output)
-	fmt.Fprint(&b, c.input.View())
-	return b.String()
+	return lg.JoinVertical(lg.Left,
+		c.statusView(),
+		c.outputView(),
+		c.inputView(),
+	)
+}
+
+var (
+	// barre d'état
+	statusStyle = lg.NewStyle().
+			Padding(0, 1, 0, 1).
+			Background(lg.Color("2")).
+			Foreground(lg.Color("15"))
+
+	// affichage de la dernière commande
+	outputStyle = lg.NewStyle().
+			PaddingLeft(1).PaddingRight(1).
+			Margin(1).
+			BorderStyle(lg.NormalBorder()).
+			BorderForeground(lg.Color("10"))
+
+	// invite de commande
+	inputStyle = lg.NewStyle().
+			PaddingLeft(1).PaddingRight(1)
+)
+
+func (c Client) statusView() string {
+	status := fmt.Sprintf("privilege: %d", c.Console.Privilege)
+	width := c.width - statusStyle.GetHorizontalFrameSize()
+	return statusStyle.Render(
+		lg.PlaceHorizontal(width, lg.Left, status),
+	)
+}
+
+func (c Client) outputView() string {
+	// dimensions de l'espace d'affichage
+	width := c.width - outputStyle.GetHorizontalFrameSize()
+	height := c.height - 2 - outputStyle.GetVerticalFrameSize()
+
+	// wrap du texte, au cas ou
+	wrap := wordwrap.String(c.output, width)
+
+	// disposer le texte dans un espace qui remplit l'écran
+	content := lg.Place(width, height, lg.Left, lg.Top, wrap)
+
+	return outputStyle.Render(content)
+}
+
+func (c Client) inputView() string {
+	width := c.width - inputStyle.GetHorizontalFrameSize()
+	content := lg.PlaceHorizontal(width, lg.Left, c.input.View())
+	return inputStyle.Render(content)
 }
 
 func NewClient(width, height int, game Game) Client {

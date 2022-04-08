@@ -14,7 +14,12 @@ type Command interface {
 	ParseName() string // nom de la commande pour le parsing
 	ShortHelp() string // nom de la commande + ligne de description
 	LongHelp() string  // aide complète
-	Run(g Game, args []string) tea.Msg
+	Run(ctx Context, args []string) tea.Msg
+}
+
+type Context struct {
+	Game    // référence à l'état du jeu
+	Console // la console d'ou provient la commande
 }
 
 // Node est un noeud intermédiaire dans l'arbre de commandes
@@ -45,7 +50,7 @@ func (n Node) LongHelp() string {
 }
 
 // Parse exécute le parsing des arguments pour le noeud courant
-func (n Node) Run(g Game, args []string) tea.Msg {
+func (n Node) Run(ctx Context, args []string) tea.Msg {
 	if len(args) == 0 {
 		return LogMsg{
 			errMissingCommand,
@@ -62,7 +67,7 @@ func (n Node) Run(g Game, args []string) tea.Msg {
 	}
 
 	// on retient la première commande qui a le bon préfixe
-	return match[0].Run(g, args[1:])
+	return match[0].Run(ctx, args[1:])
 }
 
 // Match retourne la liste des sous-commandes correspondant au préfixe
@@ -99,7 +104,7 @@ func (c Connect) LongHelp() string {
 	return b.String()
 }
 
-func (c Connect) Run(g Game, args []string) tea.Msg {
+func (c Connect) Run(ctx Context, args []string) tea.Msg {
 	if len(args) < 3 {
 		return LogMsg{
 			errMissingArgument,
@@ -114,7 +119,7 @@ func (c Connect) Run(g Game, args []string) tea.Msg {
 
 	// récupérer le serveur
 	var server Server
-	if err := g.One("Address", address, &server); err != nil {
+	if err := ctx.Game.One("Address", address, &server); err != nil {
 		if err == storm.ErrNotFound {
 			return LogMsg{
 				err: fmt.Errorf("%s : %w", address, errServerNotFound),

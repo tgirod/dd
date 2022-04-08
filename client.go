@@ -116,7 +116,8 @@ func (c Client) Run() tea.Cmd {
 		}
 
 		// exécuter la commande
-		return co.Run(c.game, args)
+		ctx := Context{c.game, co}
+		return co.Run(ctx, args)
 	}
 }
 

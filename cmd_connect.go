@@ -45,17 +45,9 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 	password := args[2]
 
 	// récupérer le serveur
-	var server Server
-	if err := ctx.Game.One("Address", address, &server); err != nil {
-		if err == storm.ErrNotFound {
-			return LogMsg{
-				err: fmt.Errorf("%s : %w", address, errServerNotFound),
-			}
-		} else {
-			return LogMsg{
-				err: err,
-			}
-		}
+	server, err := ctx.Game.FindServer(address)
+	if err != nil {
+		return LogMsg{err: err}
 	}
 
 	privilege, err := server.Connect(login, password)

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/gob"
 	"errors"
+	"fmt"
 
 	"github.com/asdine/storm/v3"
 	gc "github.com/asdine/storm/v3/codec/gob"
@@ -30,6 +31,21 @@ func NewGame(path string) (Game, error) {
 	gob.Register(Connect{})
 	db, err := storm.Open(path, storm.Codec(gc.Codec))
 	return Game{db}, err
+}
+
+func (g Game) FindServer(address string) (Server, error) {
+	var server Server
+	if err := g.One("Address", address, &server); err != nil {
+		if err == storm.ErrNotFound {
+			return server, fmt.Errorf("%s : %w", address, errServerNotFound)
+		}
+
+		// erreur interne
+		fmt.Println(err)
+		return server, errInternalError
+	}
+
+	return server, nil
 }
 
 // Console représente le terminal depuis lequel le joueur accède au net

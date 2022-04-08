@@ -5,14 +5,15 @@ import (
 	"log"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Client struct {
-	width  int    // largeur de l'affichage
-	height int    // hauteur de l'affichage
-	input  string // saisie utilisateur
-	log    string // résultat de la dernière commande
+	width  int             // largeur de l'affichage
+	height int             // hauteur de l'affichage
+	input  textinput.Model // invite de commande
+	output string          // résultat de la dernière commande
 
 	game      Game // état interne du jeu
 	consoleID int  // identifiant de la console
@@ -23,38 +24,21 @@ func (c Client) Init() tea.Cmd {
 }
 
 func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
 	switch msg := msg.(type) {
 
 	case tea.KeyMsg:
+		switch msg.Type {
 
-		switch msg.String() {
-
-		case "ctrl+c":
+		case tea.KeyCtrlC:
 			// quitter l'application client
 			return c, tea.Sequentially(c.Quit, tea.Quit)
 
-		case "enter":
+		case tea.KeyEnter:
 			// lancer l'exécution de la commande
-			cmd := c.Run()
-			c.input = ""
+			cmd = c.Run()
+			c.input.Reset()
 			return c, cmd
-		}
-
-		if msg.Type == tea.KeyRunes {
-			// ajouter dans le champ input
-			c.input += msg.String()
-		}
-
-		if msg.Type == tea.KeyBackspace {
-			if len(c.input) == 0 {
-				return c, nil
-			}
-
-			// supprimer la dernière rune
-			input := []rune(c.input)
-			if len(input) > 0 {
-				c.input = string(input[:len(input)-1])
-			}
 		}
 
 	case tea.WindowSizeMsg:
@@ -65,17 +49,18 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case LogMsg:
 		// ajoute dans les logs
-		c.log = msg.View()
+		c.output = msg.View()
 		return c, nil
 	}
 
-	return c, nil
+	c.input, cmd = c.input.Update(msg)
+	return c, cmd
 }
 
 func (c Client) View() string {
 	b := strings.Builder{}
-	fmt.Fprintf(&b, "%s\n", c.log)
-	fmt.Fprintf(&b, "> %s\n", c.input)
+	fmt.Fprintf(&b, "%s\n", c.output)
+	fmt.Fprint(&b, c.input.View())
 	return b.String()
 }
 
@@ -89,15 +74,17 @@ func NewClient(width, height int, game Game) Client {
 		width:     width,
 		height:    height,
 		game:      game,
+		input:     textinput.New(),
 		consoleID: co.ID,
 	}
+	c.input.Focus()
 
 	return c
 }
 
 // Run parse et exécute la commande saisie par l'utilisateur
 func (c Client) Run() tea.Cmd {
-	args := strings.Fields(c.input)
+	args := strings.Fields(c.input.Value())
 
 	return func() tea.Msg {
 		fmt.Println("run", args)

@@ -7,11 +7,13 @@ import (
 
 	"github.com/asdine/storm/v3"
 	gc "github.com/asdine/storm/v3/codec/gob"
+	"github.com/asdine/storm/v3/q"
 )
 
 var (
 	errInternalError   = errors.New("erreur interne")
 	errServerNotFound  = errors.New("serveur introuvable")
+	errServiceNotFound = errors.New("serveur introuvable")
 	errInvalidCommand  = errors.New("commande invalide")
 	errMissingCommand  = errors.New("commande manquante")
 	errMissingArgument = errors.New("argument manquant")
@@ -48,6 +50,24 @@ func (g Game) FindServer(address string) (Server, error) {
 	return server, nil
 }
 
+func FindService[T any](g Game, serverID int, name string) (T, error) {
+	var service T
+	if err := g.Select(
+		q.Eq("ServerID", serverID),
+		q.Eq("Name", name),
+	).First(&service); err != nil {
+		if err == storm.ErrNotFound {
+			return service, fmt.Errorf("%s : %w", name, errServiceNotFound)
+		}
+
+		// erreur interne
+		fmt.Println(err)
+		return service, errInternalError
+	}
+
+	return service, nil
+}
+
 // Console représente le terminal depuis lequel le joueur accède au net
 type Console struct {
 	ID        int `storm:"id,increment"`
@@ -69,8 +89,8 @@ func NewConsole() Console {
 // Service regroupe les infos de base exposées par tous les services
 type Service struct {
 	ID        int    // ID du service (interne)
-	ServerID  int    // ID du serveur sur lequel le service tourne
-	Name      string // nom du service
+	ServerID  int    `storm:"index"` // ID du serveur sur lequel le service tourne
+	Name      string `storm:"index"` // nom du service
 	Privilege int    // niveau de privilège requis pour utiliser le service
 }
 

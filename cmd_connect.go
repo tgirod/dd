@@ -65,5 +65,9 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 	}
 
 	// retourner la console mise à jour pour que le client l'actualise
-	return console
+	return ConnectMsg{console}
+}
+
+type ConnectMsg struct {
+	Console
 }

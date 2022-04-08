@@ -25,8 +25,13 @@ func (c Client) Init() tea.Cmd {
 		if err != nil {
 			return LogMsg{err: err}
 		}
-		return console
+		return ConsoleMsg{console}
 	}
+}
+
+// ConsoleMsg contient le nouvel état de la console
+type ConsoleMsg struct {
+	Console
 }
 
 func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -58,11 +63,13 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output = msg.View()
 		return c, nil
 
-	case Console:
+	case ConsoleMsg:
 		// mettre à jour la console associée au client
-		fmt.Printf("%+v\n", msg)
-		c.Console = msg
+		c.Console = msg.Console
 
+	case ConnectMsg:
+		c.Console = msg.Console
+		c.output = "connexion établie"
 	}
 
 	c.input, cmd = c.input.Update(msg)

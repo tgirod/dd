@@ -35,7 +35,7 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "ctrl+c":
 			// quitter l'application client
-			return c, tea.Quit
+			return c, tea.Sequentially(c.Quit, tea.Quit)
 
 		case "enter":
 			// lancer l'exécution de la commande
@@ -123,6 +123,14 @@ func (c Client) Run() tea.Cmd {
 		// exécuter la commande
 		return co.Run(c.game, args)
 	}
+}
+
+func (c Client) Quit() tea.Msg {
+	if err := c.game.Delete("Console", c.consoleID); err != nil {
+		fmt.Println(err)
+	}
+
+	return nil
 }
 
 // LogMsg contient le retour d'un programme à ajouter dans les logs

@@ -8,10 +8,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func NoOp() tea.Msg {
-	return nil
-}
-
 type Client struct {
 	width  int    // largeur de l'affichage
 	height int    // hauteur de l'affichage

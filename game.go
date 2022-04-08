@@ -50,9 +50,10 @@ func (g Game) FindServer(address string) (Server, error) {
 
 // Console représente le terminal depuis lequel le joueur accède au net
 type Console struct {
-	ID       int `storm:"id,increment"`
-	Command      // commandes disponibles
-	serverID int // identifiant du serveur auquel la console est connectée
+	ID        int `storm:"id,increment"`
+	Command       // commandes disponibles
+	serverID  int // identifiant du serveur auquel la console est connectée
+	privilege int // niveau de privilège
 }
 
 func NewConsole() Console {

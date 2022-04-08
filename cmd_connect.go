@@ -49,18 +49,20 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 		return LogMsg{err: err}
 	}
 
-	privilege, err := server.Connect(login, password)
-	if err != nil {
-		return LogMsg{
-			err: fmt.Errorf("connexion impossible : %w", err),
-		}
+	// vérifier l'existence du login
+	cred, ok := server.Credentials[login]
+	if !ok {
+		return LogMsg{err: fmt.Errorf("%s : %w", login, errInvalidLogin)}
 	}
 
-	return ConnectMsg{server, privilege}
-}
+	// vérifier la validité du password
+	if cred.password != password {
+		return LogMsg{err: errInvalidPassword}
+	}
 
-// ConnectMsg est retourné quand la connexion est une réussite
-type ConnectMsg struct {
-	Server        // infos sur le serveur
-	Privilege int // niveau de privilège acquis
+	// modifier l'état de la console pour valider la connexion
+	ctx.Console.serverID = server.ID
+	ctx.Console.privilege = cred.privilege
+
+	return LogMsg{msg: "connexion établie"}
 }

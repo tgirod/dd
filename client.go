@@ -71,11 +71,6 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// ajoute dans les logs
 		c.log = msg.View()
 		return c, nil
-
-	case ErrMsg:
-		// affiche un message d'erreur
-		c.log = msg.View()
-		return c, nil
 	}
 
 	return c, nil
@@ -146,12 +141,4 @@ func (l LogMsg) View() string {
 	}
 	fmt.Fprintf(&b, "%s\n", l.msg)
 	return b.String()
-}
-
-type ErrMsg struct {
-	err error
-}
-
-func (e ErrMsg) View() string {
-	return fmt.Sprintf("ERR : %s\n", e.err.Error())
 }

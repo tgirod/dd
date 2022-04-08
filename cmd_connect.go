@@ -49,19 +49,13 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 	}
 
 	// vérifier l'existence du login
-	cred, ok := server.Credentials[login]
-	if !ok {
-		return LogMsg{err: fmt.Errorf("%s : %w", login, errInvalidLogin)}
+	privilege, err := server.CheckCredentials(login, password)
+	if err != nil {
+		return LogMsg{err: err}
 	}
 
-	// vérifier la validité du password
-	if cred.password != password {
-		return LogMsg{err: errInvalidPassword}
-	}
-
-	// modifier l'état de la console pour valider la connexion
 	ctx.Console.serverID = server.ID
-	ctx.Console.privilege = cred.privilege
+	ctx.Console.privilege = privilege
 
 	return LogMsg{msg: "connexion établie"}
 }

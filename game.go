@@ -1,26 +1,23 @@
 package main
 
 import (
-	"encoding/gob"
 	"errors"
 	"fmt"
 
 	"github.com/asdine/storm/v3"
-	gc "github.com/asdine/storm/v3/codec/gob"
 	"github.com/asdine/storm/v3/q"
 )
 
 var (
-	errInternalError   = errors.New("erreur interne")
-	errServerNotFound  = errors.New("serveur introuvable")
-	errServiceNotFound = errors.New("serveur introuvable")
-	errInvalidCommand  = errors.New("commande invalide")
-	errMissingCommand  = errors.New("commande manquante")
-	errMissingArgument = errors.New("argument manquant")
-	errInvalidLogin    = errors.New("identifiant invalide")
-	errInvalidPassword = errors.New("mot de passe invalide")
-	errInvalidLink     = errors.New("aucun service link ne porte ce nom")
-	errInvalidDatabase = errors.New("aucun service database ne porte ce nom")
+	errInternalError      = errors.New("erreur interne")
+	errServerNotFound     = errors.New("serveur introuvable")
+	errServiceNotFound    = errors.New("serveur introuvable")
+	errInvalidCommand     = errors.New("commande invalide")
+	errMissingCommand     = errors.New("commande manquante")
+	errMissingArgument    = errors.New("argument manquant")
+	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
+	errInvalidLink        = errors.New("aucun service link ne porte ce nom")
+	errInvalidDatabase    = errors.New("aucun service database ne porte ce nom")
 )
 
 // Game contient l'état du jeu et les méthodes utiles pour en simplifier l'accès

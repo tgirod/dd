@@ -22,11 +22,11 @@ func (c Connect) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(c.ShortHelp() + "\n")
 	b.WriteString("USAGE\n")
-	b.WriteString("\tconnect <ADDRESS> <LOGIN> <PASSWORD>\n")
+	b.WriteString("  connect <ADDRESS> <LOGIN> <PASSWORD>\n")
 	b.WriteString("ARGUMENTS\n")
-	b.WriteString("\t ADDRESS -- l'adresse du serveur sur le Net\n")
-	b.WriteString("\t LOGIN -- identifiant de connexion\n")
-	b.WriteString("\t PASSWORD -- mot de passe de connexion\n")
+	b.WriteString("   ADDRESS -- l'adresse du serveur sur le Net\n")
+	b.WriteString("   LOGIN -- identifiant de connexion\n")
+	b.WriteString("   PASSWORD -- mot de passe de connexion\n")
 	return b.String()
 }
 

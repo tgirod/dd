@@ -40,10 +40,10 @@ func (n Node) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(n.ShortHelp() + "\n")
 	b.WriteString("USAGE\n")
-	fmt.Fprintf(&b, "\t%s <SOUS-COMMANDE>\n", n.Name)
+	fmt.Fprintf(&b, "  %s <SOUS-COMMANDE>\n", n.Name)
 	b.WriteString("SOUS-COMMANDES\n")
 	for _, s := range n.Sub {
-		b.WriteString("\t" + s.ShortHelp() + "\n")
+		b.WriteString("  " + s.ShortHelp() + "\n")
 	}
 	return b.String()
 }

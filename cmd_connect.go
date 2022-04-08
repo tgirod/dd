@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/asdine/storm"
 	tea "github.com/charmbracelet/bubbletea"
 )
 

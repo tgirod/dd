@@ -55,7 +55,10 @@ func (a *App) Start() {
 		log.Fatal(err)
 	}
 	a.Game = Game{db}
-	a.Game.Init() // FIXME a invoquer uniquement avec un argument "init"
+	if err := a.Game.Init(); err != nil {
+		// FIXME a invoquer uniquement avec un argument "init"
+		log.Fatal(err)
+	}
 	defer a.Game.Close()
 
 	done := make(chan os.Signal, 1)

@@ -57,7 +57,7 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 
 	// mettre à jour la console
 	console := ctx.Console
-	console.ServerID = server.ID
+	console.Server = server
 	console.Privilege = privilege
 	if err := ctx.Game.Update(&console); err != nil {
 		fmt.Println(err)

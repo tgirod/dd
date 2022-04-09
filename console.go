@@ -6,8 +6,8 @@ import "fmt"
 type Console struct {
 	ID        int `storm:"id,increment"`
 	Node          // commandes disponibles
-	ServerID  int // identifiant du serveur auquel la console est connectée
 	Privilege int // niveau de privilège
+	Server        // serveur auquel la console est actuellement connectée
 }
 
 func NewConsole(g Game) (Console, error) {

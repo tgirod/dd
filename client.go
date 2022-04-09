@@ -164,6 +164,7 @@ func (c Client) Run() tea.Cmd {
 	}
 }
 
+// Quit supprime la console de l'état du jeu
 func (c Client) Quit() tea.Msg {
 	if err := c.Game.DeleteStruct(c.Console); err != nil {
 		fmt.Println(err)

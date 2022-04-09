@@ -156,7 +156,6 @@ func (c Client) Run() tea.Cmd {
 	args := strings.Fields(c.input.Value())
 
 	return func() tea.Msg {
-		fmt.Println("run", args)
 		// construire la tea.Cmd qui parse et exécute la commande
 
 		// exécuter la commande

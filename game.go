@@ -76,9 +76,9 @@ func ListServices[T any](g Game, address string) ([]T, error) {
 
 // Service regroupe les infos de base exposées par tous les services
 type Service struct {
-	ID            int    // ID du service (interne)
-	ServerAddress string `storm:"index"` // ID du serveur sur lequel le service tourne
-	Name          string `storm:"index"` // nom du service
+	ID            int    `storm:"increment"` // ID du service (interne)
+	ServerAddress string `storm:"index"`     // ID du serveur sur lequel le service tourne
+	Name          string `storm:"index"`     // nom du service
 	Description   string // description courte du service
 	Privilege     int    // niveau de privilège requis pour utiliser le service
 }

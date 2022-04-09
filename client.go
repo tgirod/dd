@@ -23,7 +23,7 @@ type Client struct {
 func (c Client) Init() tea.Cmd {
 	return func() tea.Msg {
 		// enregistrer la console dans l'état du jeu
-		console, err := c.Game.NewConsole()
+		console, err := NewConsole(c.Game)
 		if err != nil {
 			return LogMsg{err: err}
 		}

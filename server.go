@@ -3,8 +3,7 @@ package main
 // Server représente un serveur sur le Net
 type Server struct {
 	// informations générales
-	ID      int    // ID du serveur (interne)
-	Address string `storm:"unique"` // Addresse du serveur sur le réseau
+	Address string `storm:"id"` // Addresse du serveur sur le réseau
 
 	// liste de codes d'accès valides pour se connecter au serveur
 	Credentials []Cred

@@ -7,7 +7,6 @@ func (g Game) Init() error {
 	g.Drop(&Link{})
 
 	s1 := Server{
-		ID:      1,
 		Address: "jesus",
 		Credentials: []Cred{
 			{"invite", "invite", 1},

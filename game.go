@@ -40,10 +40,10 @@ func (g Game) FindServer(address string) (Server, error) {
 	return server, nil
 }
 
-func FindService[T any](g Game, serverID int, name string) (T, error) {
+func FindService[T any](g Game, address string, name string) (T, error) {
 	var service T
 	if err := g.Select(
-		q.Eq("ServerID", serverID),
+		q.Eq("ServerAddress", address),
 		q.Eq("Name", name),
 	).First(&service); err != nil {
 		if err == storm.ErrNotFound {
@@ -60,10 +60,10 @@ func FindService[T any](g Game, serverID int, name string) (T, error) {
 
 // Service regroupe les infos de base exposées par tous les services
 type Service struct {
-	ID        int    // ID du service (interne)
-	ServerID  int    `storm:"index"` // ID du serveur sur lequel le service tourne
-	Name      string `storm:"index"` // nom du service
-	Privilege int    // niveau de privilège requis pour utiliser le service
+	ID            int    // ID du service (interne)
+	ServerAddress string `storm:"index"` // ID du serveur sur lequel le service tourne
+	Name          string `storm:"index"` // nom du service
+	Privilege     int    // niveau de privilège requis pour utiliser le service
 }
 
 // Link est un service permettant de se connecter ailleurs

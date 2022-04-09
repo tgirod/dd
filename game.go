@@ -59,9 +59,13 @@ func FindService[T any](g Game, address string, name string) (T, error) {
 	return service, nil
 }
 
-func FindServices[T any](g Game, address string) ([]T, error) {
+func ListServices[T any](g Game, address string) ([]T, error) {
 	var services []T
 	if err := g.Find("ServerAddress", address, &services); err != nil {
+		if err == storm.ErrNotFound {
+			// 0 services de ce type
+			return services, nil
+		}
 		// erreur interne
 		fmt.Println(err)
 		return services, errInternalError

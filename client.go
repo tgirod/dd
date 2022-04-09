@@ -57,22 +57,18 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case tea.WindowSizeMsg:
-		// gère le redimensionnement de la fenêtre
 		c.height = msg.Height
 		c.width = msg.Width
 		return c, nil
 
 	case LogMsg:
-		// affiche le résultat de la commande dans la sortie
 		c.output = msg.View()
 		return c, nil
 
 	case HelpMsg:
-		// affiche l'aide dans la sortie
 		c.output = msg.Help
 
 	case ConsoleMsg:
-		// mettre à jour la console associée au client
 		c.Console = msg.Console
 
 	case ConnectMsg:

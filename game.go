@@ -43,9 +43,10 @@ func (g Game) FindServer(address string) (Server, error) {
 func (g Game) NewConsole() (Console, error) {
 	// créer la console avec les commandes de base
 	var console = Console{
-		Command: Node{
+		Node: Node{
 			Sub: []Command{
 				Connect{},
+				Help{},
 			},
 		},
 	}
@@ -82,7 +83,7 @@ func FindService[T any](g Game, serverID int, name string) (T, error) {
 // Console représente le terminal depuis lequel le joueur accède au net
 type Console struct {
 	ID        int `storm:"id,increment"`
-	Command       // commandes disponibles
+	Node          // commandes disponibles
 	ServerID  int // identifiant du serveur auquel la console est connectée
 	Privilege int // niveau de privilège
 }

@@ -61,9 +61,13 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return c, nil
 
 	case LogMsg:
-		// ajoute dans les logs
+		// affiche le résultat de la commande dans la sortie
 		c.output = msg.View()
 		return c, nil
+
+	case HelpMsg:
+		// affiche l'aide dans la sortie
+		c.output = msg.Help
 
 	case ConsoleMsg:
 		// mettre à jour la console associée au client

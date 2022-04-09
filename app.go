@@ -50,6 +50,7 @@ func (a *App) Start() {
 	// ouverture de la BDD
 	gob.Register(Node{})
 	gob.Register(Connect{})
+	gob.Register(Help{})
 	db, err := storm.Open("game.db", storm.Codec(gc.Codec))
 	if err != nil {
 		log.Fatal(err)

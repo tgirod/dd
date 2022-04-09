@@ -84,6 +84,8 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case QuitMsg:
 		c.output = "déconnexion"
+		c.Server = Server{}
+		c.Privilege = 0
 		return c, c.Quit
 
 	}

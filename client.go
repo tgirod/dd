@@ -78,6 +78,14 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case ConnectMsg:
 		c.Console = msg.Console
 		c.output = "connexion établie"
+
+	case IndexMsg:
+		c.output = msg.View()
+
+	case QuitMsg:
+		c.output = "déconnexion"
+		return c, c.Quit
+
 	}
 
 	c.input, cmd = c.input.Update(msg)

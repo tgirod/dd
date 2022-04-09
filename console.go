@@ -17,6 +17,8 @@ func NewConsole(g Game) (Console, error) {
 			Sub: []Command{
 				Connect{},
 				Help{},
+				Index{},
+				Quit{},
 			},
 		},
 	}
@@ -30,4 +32,8 @@ func NewConsole(g Game) (Console, error) {
 	}
 
 	return console, nil
+}
+
+func (c Console) IsConnected() bool {
+	return c.Server.Address != ""
 }

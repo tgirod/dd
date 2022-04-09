@@ -18,6 +18,7 @@ var (
 	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
 	errInvalidLink        = errors.New("aucun service link ne porte ce nom")
 	errInvalidDatabase    = errors.New("aucun service database ne porte ce nom")
+	errNotConnected       = errors.New("la console n'est pas connectée")
 )
 
 // Game contient l'état du jeu et les méthodes utiles pour en simplifier l'accès
@@ -58,11 +59,23 @@ func FindService[T any](g Game, address string, name string) (T, error) {
 	return service, nil
 }
 
+func FindServices[T any](g Game, address string) ([]T, error) {
+	var services []T
+	if err := g.Find("ServerAddress", address, &services); err != nil {
+		// erreur interne
+		fmt.Println(err)
+		return services, errInternalError
+	}
+
+	return services, nil
+}
+
 // Service regroupe les infos de base exposées par tous les services
 type Service struct {
 	ID            int    // ID du service (interne)
 	ServerAddress string `storm:"index"` // ID du serveur sur lequel le service tourne
 	Name          string `storm:"index"` // nom du service
+	Description   string // description courte du service
 	Privilege     int    // niveau de privilège requis pour utiliser le service
 }
 

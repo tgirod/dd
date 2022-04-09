@@ -1,45 +1,40 @@
-Architecture générale du projet
+# Les fichiers
+
+main.go : point de départ de l'application, pas grand chose dedans
+pour l'instant.
+
+app.go : contient l'objet `App`, qui est le coeur de l'application :
+gestion des connexions entrantes et de l'état interne du jeu.
+
+game.go : l'état interne du jeu, stocké dans une BDD. Il y a quelques
+autres trucs définis ici, mais ils pourraient aller dans des fichiers
+séparés.
+
+init.go : l'initialisation de l'état du jeu. A terme, l'exécution de
+ce code devrait être optionnelle, pour pouvoir conserver l'état du
+jeu entre deux démarrages.
+
+client.go : le code de l'interface graphique exposée aux joueurs lors
+de la connexion.
+
+console.go : l'objet représentant la console utilisée par le joueur :
+ses commandes, l'état de sa connexion ... Cet objet est ajouté à la
+BDD lors de la création d'un client, et une copie de cet objet réside
+dans le client.
+
+command.go : le code utilisé pour le parsing des commandes.
+
+cmd_connect.go cmd_help.go cmd_index.go cmd_quit.go : le code des
+commandes accessibles au joueur
+
+server.go : la représentation d'un serveur avec ses services et ses
+mesures de sécurité.
+
+# Outils
 
 Sur cette nouvelle version, je m'appuie sur bubbletea, wish et storm
 
-- bubbletea est une lib pour fabriquer des TUI 
-- wish est un serveur ssh permettant de servir ladite TUI 
+- bubbletea est une lib pour fabriquer des TUI
+- wish est un serveur ssh permettant de servir ladite TUI
 - storm est une base de données clef-valeur simple
 
-# App
-
-L'application principale contient le serveur SSH, et l'état interne
-du jeu.
-
-# Game
-
-L'état interne du jeu, sous la forme du base de données
-storm. Encapsuler la base de données sert surtout à ajouter quelques
-méthodes pour simplifier certaines requêtes sur la BDD.
-
-# Console
-
-Lors de chaque connexion, une interface bubbletea est créée, ainsi
-qu'un nouvel objet `Console`. Celui-ci est par la même occasion ajouté
-à la BDD.
-
-La console contient les commandes disponibles, ainsi que quelques
-informations sur l'état courant de sa connexion.
-
-Elle prend en charge le parsing des commandes saisies par l'utilisateur
-et leur exécution sur le réseau.
-
-Ce coup-ci, je me suis forcé à rester sur un truc un peu verbeux mais
-simple pour ce qui est de la définition des commandes.
-
-# Server
-
-un serveur dans le réseau, fournissant des services.
-
-- les services disponibles - les méthodes correspondant aux différentes
-commandes utilisateur - la gestion des droits d'accès au serveur -
-les fonctions de sécurité
-
-# Service
-
-un service accessible aux utilisateurs

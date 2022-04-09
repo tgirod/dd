@@ -11,10 +11,11 @@ import (
 )
 
 type Client struct {
-	width  int             // largeur de l'affichage
-	height int             // hauteur de l'affichage
-	input  textinput.Model // invite de commande
-	output string          // résultat de la dernière commande
+	width   int             // largeur de l'affichage
+	height  int             // hauteur de l'affichage
+	input   textinput.Model // invite de commande
+	output  string          // résultat de la dernière commande
+	lastCmd string          // dernière commande saisie
 
 	Game    // état interne du jeu
 	Console // console enregistrée dans le jeu
@@ -49,6 +50,7 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case tea.KeyEnter:
 			// lancer l'exécution de la commande
+			c.lastCmd = c.input.Value()
 			cmd = c.Run()
 			c.input.Reset()
 			return c, cmd
@@ -123,11 +125,22 @@ func (c Client) outputView() string {
 	width := c.width - outputStyle.GetHorizontalFrameSize()
 	height := c.height - 2 - outputStyle.GetVerticalFrameSize()
 
-	// wrap du texte, au cas ou
-	wrap := wordwrap.String(c.output, width)
+	// dernière commande + output
+	content := ""
+	if c.lastCmd != "" {
+		content = lg.JoinVertical(lg.Left,
+			fmt.Sprintf("> %s\n", c.lastCmd),
+			c.output,
+		)
+	} else {
+		content = c.output
+	}
+
+	// wrap au cas ou certaines lignes seraient trop longues
+	content = wordwrap.String(content, width)
 
 	// disposer le texte dans un espace qui remplit l'écran
-	content := lg.Place(width, height, lg.Left, lg.Top, wrap)
+	content = lg.Place(width, height, lg.Left, lg.Top, content)
 
 	return outputStyle.Render(content)
 }

@@ -80,14 +80,14 @@ type Service struct {
 	ServerAddress string `storm:"index"`     // ID du serveur sur lequel le service tourne
 	Name          string `storm:"index"`     // nom du service
 	Description   string // description courte du service
-	Privilege     int    // niveau de privilège requis pour utiliser le service
+	Restricted    int    // niveau de privilège requis pour utiliser le service
 }
 
 // Link est un service permettant de se connecter ailleurs
 type Link struct {
-	Service   `storm:"inline"`
-	TargetID  int // ID du serveur distant
-	Privilege int // niveau de privilège une fois connecté
+	Service       `storm:"inline"`
+	TargetAddress string // ID du serveur distant
+	Privilege     int    // niveau de privilège une fois connecté
 }
 
 // Database est un service de base de données

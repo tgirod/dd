@@ -8,6 +8,9 @@ type Server struct {
 	// liste de codes d'accès valides pour se connecter au serveur
 	Credentials []Cred
 
+	// les services hébergés
+	Links []Link
+
 	// TODO backdoors
 }
 
@@ -25,4 +28,13 @@ func (s Server) CheckCredentials(login, password string) (int, error) {
 	}
 
 	return 0, errInvalidCredentials
+}
+
+func (s Server) FindLink(name string) (Link, error) {
+	for _, l := range s.Links {
+		if l.Name == name {
+			return l, nil
+		}
+	}
+	return Link{}, errLinkNotFound
 }

@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/asdine/storm/v3"
-	"github.com/asdine/storm/v3/q"
 )
 
 var (
@@ -16,8 +15,8 @@ var (
 	errMissingCommand     = errors.New("commande manquante")
 	errMissingArgument    = errors.New("argument manquant")
 	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
-	errInvalidLink        = errors.New("aucun service link ne porte ce nom")
-	errInvalidDatabase    = errors.New("aucun service database ne porte ce nom")
+	errLinkNotFound       = errors.New("service link introuvable")
+	errDataNotFound       = errors.New("service data introuvable")
 	errNotConnected       = errors.New("la console n'est pas connectée")
 )
 
@@ -39,39 +38,6 @@ func (g Game) FindServer(address string) (Server, error) {
 	}
 
 	return server, nil
-}
-
-func FindService[T any](g Game, address string, name string) (T, error) {
-	var service T
-	if err := g.Select(
-		q.Eq("ServerAddress", address),
-		q.Eq("Name", name),
-	).First(&service); err != nil {
-		if err == storm.ErrNotFound {
-			return service, fmt.Errorf("%s : %w", name, errServiceNotFound)
-		}
-
-		// erreur interne
-		fmt.Println(err)
-		return service, errInternalError
-	}
-
-	return service, nil
-}
-
-func ListServices[T any](g Game, address string) ([]T, error) {
-	var services []T
-	if err := g.Find("ServerAddress", address, &services); err != nil {
-		if err == storm.ErrNotFound {
-			// 0 services de ce type
-			return services, nil
-		}
-		// erreur interne
-		fmt.Println(err)
-		return services, errInternalError
-	}
-
-	return services, nil
 }
 
 // Service regroupe les infos de base exposées par tous les services

@@ -27,20 +27,13 @@ func (i Index) LongHelp() string {
 
 func (i Index) Run(ctx Context, args []string) tea.Msg {
 	var msg IndexMsg
-	var err error
 
 	if !ctx.Console.IsConnected() {
 		return LogMsg{err: errNotConnected}
 	}
 
-	// récupérer tous les services associés
-	addr := ctx.Console.Server.Address
-
-	// récupérer les links
-	msg.Links, err = ListServices[Link](ctx.Game, addr)
-	if err != nil {
-		return LogMsg{err: err}
-	}
+	// récupérer les services link
+	msg.Links = ctx.Console.Server.Links
 
 	return msg
 }

@@ -102,14 +102,15 @@ var (
 
 	// affichage de la dernière commande
 	outputStyle = lg.NewStyle().
-			PaddingLeft(1).PaddingRight(1).
+			Padding(0, 1, 0, 1).
 			Margin(0, 1, 0, 1).
 			BorderStyle(lg.NormalBorder()).
 			BorderForeground(lg.Color("10"))
 
 	// invite de commande
 	inputStyle = lg.NewStyle().
-			PaddingLeft(1).PaddingRight(1)
+			Padding(0, 1, 0, 1).
+			Margin(0, 1, 0, 1)
 )
 
 func (c Client) statusView() string {

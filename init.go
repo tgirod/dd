@@ -6,14 +6,34 @@ func (g Game) Init() error {
 	g.Drop(&Console{})
 	g.Drop(&Link{})
 
-	s1 := Server{
+	if err := g.Save(&Server{
 		Address: "jesus",
 		Credentials: []Cred{
-			{"invite", "invite", 1},
+			{"public", "public", 1},
 		},
+	}); err != nil {
+		return err
 	}
 
-	if err := g.Save(&s1); err != nil {
+	if err := g.Save(&Link{
+		Service: Service{
+			ServerAddress: "jesus",
+			Name:          "dist22",
+			Description:   "accès au réseau du district 22",
+			Restricted:    1,
+		},
+		TargetAddress: "dist22",
+		Privilege:     1,
+	}); err != nil {
+		return err
+	}
+
+	if err := g.Save(&Server{
+		Address: "dist22",
+		Credentials: []Cred{
+			{"public", "public", 1},
+		},
+	}); err != nil {
 		return err
 	}
 

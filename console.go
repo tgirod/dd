@@ -19,6 +19,7 @@ func NewConsole(g Game) (Console, error) {
 				Help{},
 				Index{},
 				Quit{},
+				Pop{},
 			},
 		},
 	}

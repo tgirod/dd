@@ -16,6 +16,7 @@ type Client struct {
 	input   textinput.Model // invite de commande
 	output  string          // résultat de la dernière commande
 	lastCmd string          // dernière commande saisie
+	modal   tea.Model       // interface modale
 
 	Game    // état interne du jeu
 	Console // console enregistrée dans le jeu
@@ -37,24 +38,15 @@ type ConsoleMsg struct {
 	Console
 }
 
+// OpenModalMsg ouvre une fenêtre modale
+type OpenModalMsg tea.Model
+
+// CloseModalMsg ferme la fenêtre modale
+type CloseModalMsg struct{}
+
 func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
-
-	case tea.KeyMsg:
-		switch msg.Type {
-
-		case tea.KeyCtrlC:
-			// quitter l'application client
-			return c, tea.Sequentially(c.Quit, tea.Quit)
-
-		case tea.KeyEnter:
-			// lancer l'exécution de la commande
-			c.lastCmd = c.input.Value()
-			cmd = c.Run()
-			c.input.Reset()
-			return c, cmd
-		}
 
 	case tea.WindowSizeMsg:
 		c.height = msg.Height
@@ -74,9 +66,11 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case ConnectMsg:
 		c.Console = msg.Console
 		c.output = "connexion établie"
+		return c, nil
 
 	case IndexMsg:
 		c.output = msg.View()
+		return c, nil
 
 	case QuitMsg:
 		c.output = "déconnexion"
@@ -84,17 +78,62 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Privilege = 0
 		return c, c.Quit
 
+	case OpenModalMsg:
+		c.modal = msg
+		c.input.Blur()
+		return c, nil
+
+	case CloseModalMsg:
+		c.modal = nil
+		c.input.Focus()
+		return c, nil
+
+	case tea.KeyMsg:
+		switch msg.Type {
+
+		case tea.KeyCtrlC:
+			// quitter l'application client
+			return c, tea.Sequentially(c.Quit, tea.Quit)
+
+		case tea.KeyEnter:
+			// lancer l'exécution de la commande
+			c.lastCmd = c.input.Value()
+			cmd = c.Run()
+			c.input.Reset()
+			return c, cmd
+		}
+
 	}
 
+	if c.modal != nil {
+		// déléguer le traitement des messages à la fenêtre modale
+		c.modal, cmd = c.modal.Update(msg)
+		return c, cmd
+	}
+
+	// cas par défaut, le message est traité par textinput
 	c.input, cmd = c.input.Update(msg)
 	return c, cmd
 }
 
 func (c Client) View() string {
-	return lg.JoinVertical(lg.Left,
-		c.statusView(),
-		c.outputView(),
-		c.inputView(),
+
+	if c.modal == nil {
+		return lg.JoinVertical(lg.Left,
+			c.statusView(),
+			c.outputView(),
+			c.inputView(),
+		)
+	}
+
+	modal := c.modal.View()
+
+	return lg.Place(
+		c.width, c.height,
+		lg.Center, lg.Center,
+		modal,
+		lg.WithWhitespaceChars("+ "),
+		lg.WithWhitespaceForeground(lg.Color("8")),
 	)
 }
 
@@ -117,6 +156,13 @@ var (
 	inputStyle = lg.NewStyle().
 			Padding(0, 1, 0, 1).
 			Margin(0, 1, 0, 1)
+
+	// fenêtre modale
+	modalStyle = lg.NewStyle().
+			Padding(0, 1, 0, 1).
+			Margin(0, 1, 0, 1).
+			BorderStyle(lg.DoubleBorder()).
+			BorderForeground(lg.Color("10"))
 )
 
 func (c Client) statusView() string {

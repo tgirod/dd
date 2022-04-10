@@ -96,11 +96,13 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return c, tea.Sequentially(c.Quit, tea.Quit)
 
 		case tea.KeyEnter:
-			// lancer l'exécution de la commande
-			c.lastCmd = c.input.Value()
-			cmd = c.Run()
-			c.input.Reset()
-			return c, cmd
+			if c.modal == nil {
+				// lancer l'exécution de la commande
+				c.lastCmd = c.input.Value()
+				cmd = c.Run()
+				c.input.Reset()
+				return c, cmd
+			}
 		}
 
 	}

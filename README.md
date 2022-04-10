@@ -117,3 +117,31 @@ un programme qu'une fois par run ?
 Bientôt l'évasion ne suffit plus. Le hacker sort l'arme lourde :
 il repère une glace en charge de la protection du serveur et la fait
 planter. Mais elle ne tardera pas à revenir, et là ce sera la fin ...
+
+# Développement
+
+- architecture
+	- [x] serveur SSH qui expose l'interface utilisateur (wish + bubbletea)
+	- [x] stocker l'état du jeu dans la BDD
+	- [ ] quand un client met à jour l'état du jeu, pousser cette
+	mise à jour vers les autres clients.
+	- [ ] supprimer l'objet `Console` de la BDD en cas de plantage du client
+	- [ ] accès concurrent à la BDD - utiliser des transactions ?
+- interface
+	- [x] interface de base : barre de statut + output + prompt
+	- [ ] fenêtre modale, quand une commande nécessite d'afficher
+	une interface spéciale
+	- [ ] effet "typewriter"
+	- [ ] effet "corruption de l'affichage"
+- jeu
+	- [ ] simuler une coupure complète de la connexion
+	- [x] console, serveur
+	- commandes
+		- [x] connect : se connecter à un serveur
+		- [x] help : aide sur l'usage des commandes
+		- [x] index : lister les services
+		- [x] quit : déconnexion du serveur courant
+		- [ ] data : faire des recherches dans une BDD
+		- [ ] msg : messagerie
+		- [ ] pay : effectuer des paiements
+		- [ ] edit : manipuler les registres d'un device branché

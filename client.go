@@ -150,9 +150,7 @@ var (
 	// affichage de la dernière commande
 	outputStyle = lg.NewStyle().
 			Padding(0, 1, 0, 1).
-			Margin(0, 1, 0, 1).
-			BorderStyle(lg.NormalBorder()).
-			BorderForeground(lg.Color("10"))
+			Margin(0, 1, 0, 1)
 
 	// invite de commande
 	inputStyle = lg.NewStyle().
@@ -195,7 +193,7 @@ func (c Client) outputView() string {
 	content = wordwrap.String(content, width)
 
 	// disposer le texte dans un espace qui remplit l'écran
-	content = lg.Place(width, height, lg.Left, lg.Top, content)
+	content = lg.Place(width, height, lg.Left, lg.Bottom, content)
 
 	return outputStyle.Render(content)
 }

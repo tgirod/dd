@@ -216,25 +216,9 @@ func (c Client) outputView() string {
 }
 
 func (c Client) inputView() string {
+	content := c.input.View()
 	width := c.width - inputStyle.GetHorizontalFrameSize()
-
-	var content string
-	if c.input.Focus {
-		if c.input.Value == "" {
-			content = cursorStyle.Render(c.input.Placeholder[0:1]) + mutedTextStyle.Render(c.input.Placeholder[1:])
-		} else {
-			content = c.input.Value + cursorStyle.Render(" ")
-		}
-	} else {
-		if c.input.Value == "" {
-			content = mutedTextStyle.Render(c.input.Placeholder)
-		} else {
-			content = c.input.Value
-		}
-	}
-
 	content = lg.PlaceHorizontal(width, lg.Left, "> "+content)
-
 	return inputStyle.Render(content)
 }
 
@@ -279,6 +263,25 @@ type Input struct {
 	Hidden      bool
 	Focus       bool
 	Placeholder string
+}
+
+func (i Input) View() string {
+	var content string
+	if i.Focus {
+		if i.Value == "" {
+			content = cursorStyle.Render(i.Placeholder[0:1]) + mutedTextStyle.Render(i.Placeholder[1:])
+		} else {
+			content = i.Value + cursorStyle.Render(" ")
+		}
+	} else {
+		if i.Value == "" {
+			content = mutedTextStyle.Render(i.Placeholder)
+		} else {
+			content = i.Value
+		}
+	}
+
+	return content
 }
 
 // LogMsg contient le retour d'un programme à ajouter dans les logs

@@ -177,6 +177,9 @@ var (
 
 	// texte normal
 	normalTextStyle = lg.NewStyle().Foreground(lg.Color("15"))
+
+	// curseur
+	cursorStyle = lg.NewStyle().Reverse(true)
 )
 
 func (c Client) statusView() string {
@@ -214,12 +217,24 @@ func (c Client) outputView() string {
 
 func (c Client) inputView() string {
 	width := c.width - inputStyle.GetHorizontalFrameSize()
-	content := c.input.Value
-	if content == "" {
-		content = mutedTextStyle.Render(c.input.Placeholder)
+
+	var content string
+	if c.input.Focus {
+		if c.input.Value == "" {
+			content = cursorStyle.Render(c.input.Placeholder[0:1]) + mutedTextStyle.Render(c.input.Placeholder[1:])
+		} else {
+			content = c.input.Value + cursorStyle.Render(" ")
+		}
+	} else {
+		if c.input.Value == "" {
+			content = mutedTextStyle.Render(c.input.Placeholder)
+		} else {
+			content = c.input.Value
+		}
 	}
 
 	content = lg.PlaceHorizontal(width, lg.Left, "> "+content)
+
 	return inputStyle.Render(content)
 }
 
@@ -229,7 +244,7 @@ func NewClient(width, height int, game Game) Client {
 		height: height,
 		input: Input{
 			Focus:       true,
-			Placeholder: "entrez une commande ou help",
+			Placeholder: "help",
 		},
 		Game: game,
 	}

@@ -99,28 +99,18 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return c, cmd
 		}
 
-		// gestion du prompt
-		switch msg.Type {
-
-		case tea.KeyEnter:
+		if msg.Type == tea.KeyEnter {
 			// valider la commande
 			c.lastCmd = c.input.Value
 			cmd = c.Run()
 			c.input.Value = ""
 			return c, cmd
-
-		case tea.KeyRunes:
-			// ajouter la rune au prompt
-			c.input.Value = c.input.Value + msg.String()
-			return c, nil
-
-		case tea.KeyBackspace:
-			// supprimer la dernière rune du prompt
-			if len(c.input.Value) > 0 {
-				v := c.input.Value
-				c.input.Value = string([]rune(v)[:len(v)-1])
-			}
 		}
+
+		// laisser le prompt gérer
+		input, cmd := c.input.Update(msg)
+		c.input = input.(Input)
+		return c, cmd
 	}
 
 	return c, cmd
@@ -171,6 +161,14 @@ var (
 			Margin(0, 1, 0, 1).
 			BorderStyle(lg.DoubleBorder()).
 			BorderForeground(lg.Color("10"))
+
+	focusFieldStyle = lg.NewStyle().
+			BorderStyle(lg.NormalBorder()).
+			BorderForeground(lg.Color("10"))
+
+	unfocusFieldStyle = lg.NewStyle().
+				BorderStyle(lg.NormalBorder()).
+				BorderForeground(lg.Color("8"))
 
 	// texte discret
 	mutedTextStyle = lg.NewStyle().Foreground(lg.Color("8"))
@@ -256,32 +254,6 @@ func (c Client) Quit() tea.Msg {
 	}
 
 	return nil
-}
-
-type Input struct {
-	Value       string
-	Hidden      bool
-	Focus       bool
-	Placeholder string
-}
-
-func (i Input) View() string {
-	var content string
-	if i.Focus {
-		if i.Value == "" {
-			content = cursorStyle.Render(i.Placeholder[0:1]) + mutedTextStyle.Render(i.Placeholder[1:])
-		} else {
-			content = i.Value + cursorStyle.Render(" ")
-		}
-	} else {
-		if i.Value == "" {
-			content = mutedTextStyle.Render(i.Placeholder)
-		} else {
-			content = i.Value
-		}
-	}
-
-	return content
 }
 
 // LogMsg contient le retour d'un programme à ajouter dans les logs

@@ -4,19 +4,18 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
 )
 
 type Client struct {
-	width   int             // largeur de l'affichage
-	height  int             // hauteur de l'affichage
-	input   textinput.Model // invite de commande
-	output  string          // résultat de la dernière commande
-	lastCmd string          // dernière commande saisie
-	modal   tea.Model       // interface modale
+	width   int       // largeur de l'affichage
+	height  int       // hauteur de l'affichage
+	input   Input     // invite de commande
+	output  string    // résultat de la dernière commande
+	lastCmd string    // dernière commande saisie
+	modal   tea.Model // interface modale
 
 	Game    // état interne du jeu
 	Console // console enregistrée dans le jeu
@@ -80,41 +79,50 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case OpenModalMsg:
 		c.modal = msg
-		c.input.Blur()
+		c.input.Focus = false
 		return c, nil
 
 	case CloseModalMsg:
 		c.modal = nil
-		c.input.Focus()
+		c.input.Focus = true
 		return c, nil
 
 	case tea.KeyMsg:
-		switch msg.Type {
-
-		case tea.KeyCtrlC:
+		if msg.Type == tea.KeyCtrlC {
 			// quitter l'application client
 			return c, tea.Sequentially(c.Quit, tea.Quit)
-
-		case tea.KeyEnter:
-			if c.modal == nil {
-				// lancer l'exécution de la commande
-				c.lastCmd = c.input.Value()
-				cmd = c.Run()
-				c.input.Reset()
-				return c, cmd
-			}
 		}
 
+		if c.modal != nil {
+			// déléguer le traitement des messages à la fenêtre modale
+			c.modal, cmd = c.modal.Update(msg)
+			return c, cmd
+		}
+
+		// gestion du prompt
+		switch msg.Type {
+
+		case tea.KeyEnter:
+			// valider la commande
+			c.lastCmd = c.input.Value
+			cmd = c.Run()
+			c.input.Value = ""
+			return c, cmd
+
+		case tea.KeyRunes:
+			// ajouter la rune au prompt
+			c.input.Value = c.input.Value + msg.String()
+			return c, nil
+
+		case tea.KeyBackspace:
+			// supprimer la dernière rune du prompt
+			if len(c.input.Value) > 0 {
+				v := c.input.Value
+				c.input.Value = string([]rune(v)[:len(v)-1])
+			}
+		}
 	}
 
-	if c.modal != nil {
-		// déléguer le traitement des messages à la fenêtre modale
-		c.modal, cmd = c.modal.Update(msg)
-		return c, cmd
-	}
-
-	// cas par défaut, le message est traité par textinput
-	c.input, cmd = c.input.Update(msg)
 	return c, cmd
 }
 
@@ -163,6 +171,12 @@ var (
 			Margin(0, 1, 0, 1).
 			BorderStyle(lg.DoubleBorder()).
 			BorderForeground(lg.Color("10"))
+
+	// texte discret
+	mutedTextStyle = lg.NewStyle().Foreground(lg.Color("8"))
+
+	// texte normal
+	normalTextStyle = lg.NewStyle().Foreground(lg.Color("15"))
 )
 
 func (c Client) statusView() string {
@@ -200,7 +214,12 @@ func (c Client) outputView() string {
 
 func (c Client) inputView() string {
 	width := c.width - inputStyle.GetHorizontalFrameSize()
-	content := lg.PlaceHorizontal(width, lg.Left, c.input.View())
+	content := c.input.Value
+	if content == "" {
+		content = mutedTextStyle.Render(c.input.Placeholder)
+	}
+
+	content = lg.PlaceHorizontal(width, lg.Left, "> "+content)
 	return inputStyle.Render(content)
 }
 
@@ -208,18 +227,19 @@ func NewClient(width, height int, game Game) Client {
 	c := Client{
 		width:  width,
 		height: height,
-		input:  textinput.New(),
-		Game:   game,
+		input: Input{
+			Focus:       true,
+			Placeholder: "entrez une commande ou help",
+		},
+		Game: game,
 	}
-	c.input.Focus()
-	c.input.Placeholder = "entrez une commande ou help"
 
 	return c
 }
 
 // Run parse et exécute la commande saisie par l'utilisateur
 func (c Client) Run() tea.Cmd {
-	args := strings.Fields(c.input.Value())
+	args := strings.Fields(c.input.Value)
 
 	return func() tea.Msg {
 		// construire la tea.Cmd qui parse et exécute la commande
@@ -237,6 +257,13 @@ func (c Client) Quit() tea.Msg {
 	}
 
 	return nil
+}
+
+type Input struct {
+	Value       string
+	Hidden      bool
+	Focus       bool
+	Placeholder string
 }
 
 // LogMsg contient le retour d'un programme à ajouter dans les logs

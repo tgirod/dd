@@ -141,6 +141,7 @@ planter. Mais elle ne tardera pas à revenir, et là ce sera la fin ...
 		- [x] help : aide sur l'usage des commandes
 		- [x] index : lister les services
 		- [x] quit : déconnexion du serveur courant
+		- [ ] link : suit un lien de connexion vers un autre serveur
 		- [ ] data : faire des recherches dans une BDD
 		- [ ] msg : messagerie
 		- [ ] pay : effectuer des paiements

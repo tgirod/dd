@@ -129,7 +129,7 @@ planter. Mais elle ne tardera pas à revenir, et là ce sera la fin ...
 	- [ ] accès concurrent à la BDD - utiliser des transactions ?
 - interface
 	- [x] interface de base : barre de statut + output + prompt
-	- [ ] fenêtre modale, quand une commande nécessite d'afficher
+	- [x] fenêtre modale, quand une commande nécessite d'afficher
 	une interface spéciale
 	- [ ] effet "typewriter"
 	- [ ] effet "corruption de l'affichage"

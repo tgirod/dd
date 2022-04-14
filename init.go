@@ -21,6 +21,15 @@ func (g Game) Init() error {
 				TargetAddress: "dist22",
 				Privilege:     1,
 			},
+			{
+				Service: Service{
+					Name:        "dist22-4",
+					Description: "accès au réseau du district 22",
+					Restricted:  4,
+				},
+				TargetAddress: "dist22",
+				Privilege:     4,
+			},
 		},
 	}); err != nil {
 		return err

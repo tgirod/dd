@@ -41,6 +41,11 @@ func (l Link) Run(ctx Context, args []string) tea.Msg {
 		return LogMsg{err: err}
 	}
 
+	// a les privilèges suffisant
+	if !ctx.Console.HasAccess(gate.Restricted) {
+		return LogMsg{err: errLowPrivilege}
+	}
+
 	// chercher le serveur correspondant
 	server, err := ctx.Game.FindServer(gate.TargetAddress)
 	if err != nil {

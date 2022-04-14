@@ -136,6 +136,7 @@ planter. Mais elle ne tardera pas à revenir, et là ce sera la fin ...
 - jeu
 	- [ ] simuler une coupure complète de la connexion
 	- [x] console, serveur
+	- [ ] ajouter les restrictions basées sur les accréditations
 	- commandes
 		- [x] connect : se connecter à un serveur
 		- [x] help : aide sur l'usage des commandes

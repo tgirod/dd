@@ -18,6 +18,7 @@ var (
 	errGateNotFound       = errors.New("service gate introuvable")
 	errDataNotFound       = errors.New("service data introuvable")
 	errNotConnected       = errors.New("la console n'est pas connectée")
+	errLowPrivilege       = errors.New("niveau de privilège insuffisant")
 )
 
 // Game contient l'état du jeu et les méthodes utiles pour en simplifier l'accès

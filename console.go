@@ -38,3 +38,7 @@ func NewConsole(g Game) (Console, error) {
 func (c Console) IsConnected() bool {
 	return c.Server.Address != ""
 }
+
+func (c Console) HasAccess(restricted int) bool {
+	return c.Privilege >= restricted
+}

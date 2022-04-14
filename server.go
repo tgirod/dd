@@ -9,7 +9,7 @@ type Server struct {
 	Credentials []Cred
 
 	// les services hébergés
-	Links []Link
+	Gates []Gate
 
 	// TODO backdoors
 }
@@ -30,11 +30,11 @@ func (s Server) CheckCredentials(login, password string) (int, error) {
 	return 0, errInvalidCredentials
 }
 
-func (s Server) FindLink(name string) (Link, error) {
-	for _, l := range s.Links {
+func (s Server) FindGate(name string) (Gate, error) {
+	for _, l := range s.Gates {
 		if l.Name == name {
 			return l, nil
 		}
 	}
-	return Link{}, errLinkNotFound
+	return Gate{}, errGateNotFound
 }

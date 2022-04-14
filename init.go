@@ -4,7 +4,6 @@ func (g Game) Init() error {
 	// nettoyer les tables
 	g.Drop(&Server{})
 	g.Drop(&Console{})
-	g.Drop(&Link{})
 
 	// serveur de Jésus
 	if err := g.Save(&Server{
@@ -12,13 +11,12 @@ func (g Game) Init() error {
 		Credentials: []Cred{
 			{"public", "public", 1},
 		},
-		Links: []Link{
+		Gates: []Gate{
 			{
 				Service: Service{
-					ServerAddress: "jesus",
-					Name:          "dist22",
-					Description:   "accès au réseau du district 22",
-					Restricted:    1,
+					Name:        "dist22",
+					Description: "accès au réseau du district 22",
+					Restricted:  1,
 				},
 				TargetAddress: "dist22",
 				Privilege:     1,

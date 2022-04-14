@@ -15,7 +15,7 @@ var (
 	errMissingCommand     = errors.New("commande manquante")
 	errMissingArgument    = errors.New("argument manquant")
 	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
-	errLinkNotFound       = errors.New("service link introuvable")
+	errGateNotFound       = errors.New("service gate introuvable")
 	errDataNotFound       = errors.New("service data introuvable")
 	errNotConnected       = errors.New("la console n'est pas connectée")
 )
@@ -42,15 +42,14 @@ func (g Game) FindServer(address string) (Server, error) {
 
 // Service regroupe les infos de base exposées par tous les services
 type Service struct {
-	ID            int    `storm:"increment"` // ID du service (interne)
-	ServerAddress string `storm:"index"`     // ID du serveur sur lequel le service tourne
-	Name          string `storm:"index"`     // nom du service
-	Description   string // description courte du service
-	Restricted    int    // niveau de privilège requis pour utiliser le service
+	ID          int    `storm:"increment"` // ID du service (interne)
+	Name        string `storm:"index"`     // nom du service
+	Description string // description courte du service
+	Restricted  int    // niveau de privilège requis pour utiliser le service
 }
 
-// Link est un service permettant de se connecter ailleurs
-type Link struct {
+// Gate est un service permettant de se connecter ailleurs
+type Gate struct {
 	Service       `storm:"inline"`
 	TargetAddress string // ID du serveur distant
 	Privilege     int    // niveau de privilège une fois connecté

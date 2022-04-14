@@ -18,8 +18,8 @@ func NewConsole(g Game) (Console, error) {
 				Connect{},
 				Help{},
 				Index{},
+				Link{},
 				Quit{},
-				Pop{},
 			},
 		},
 	}

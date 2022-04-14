@@ -16,15 +16,15 @@ func (q Quit) ShortHelp() string {
 	return "quit -- ferme la connexion au serveur courant"
 }
 
-func (i Quit) LongHelp() string {
+func (q Quit) LongHelp() string {
 	b := strings.Builder{}
-	b.WriteString(i.ShortHelp() + "\n")
+	b.WriteString(q.ShortHelp() + "\n")
 	b.WriteString("USAGE\n")
 	b.WriteString("  quit\n")
 	return b.String()
 }
 
-func (i Quit) Run(ctx Context, args []string) tea.Msg {
+func (q Quit) Run(ctx Context, args []string) tea.Msg {
 	if !ctx.Console.IsConnected() {
 		return LogMsg{err: errNotConnected}
 	}

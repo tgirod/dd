@@ -32,22 +32,22 @@ func (i Index) Run(ctx Context, args []string) tea.Msg {
 		return LogMsg{err: errNotConnected}
 	}
 
-	// récupérer les services link
-	msg.Links = ctx.Console.Server.Links
+	// récupérer les services gate
+	msg.Gates = ctx.Console.Server.Gates
 
 	return msg
 }
 
 type IndexMsg struct {
-	Links []Link
+	Gates []Gate
 }
 
 func (i IndexMsg) View() string {
 	b := strings.Builder{}
 
-	b.WriteString("LINKS\n\n")
-	for _, l := range i.Links {
-		fmt.Fprintf(&b, "  %s -- %s\n", l.Service.Name, l.Service.Description)
+	b.WriteString("GATES\n\n")
+	for _, g := range i.Gates {
+		fmt.Fprintf(&b, "  %s -- %s\n", g.Service.Name, g.Service.Description)
 	}
 	return b.String()
 }

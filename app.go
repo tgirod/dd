@@ -53,7 +53,7 @@ func (a *App) Start() {
 	gob.Register(Help{})
 	gob.Register(Index{})
 	gob.Register(Quit{})
-	gob.Register(Pop{})
+	gob.Register(Link{})
 	db, err := storm.Open("game.db", storm.Codec(gc.Codec))
 	if err != nil {
 		log.Fatal(err)

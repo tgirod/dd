@@ -61,8 +61,16 @@ type DataMsg struct {
 func (d DataMsg) View() string {
 	b := strings.Builder{}
 
-	for i, e := range d.Entries {
-		fmt.Fprintf(&b, "%d  %s\n", i, e.Title)
+	for _, e := range d.Entries {
+		fmt.Fprintf(&b, "---------------\n")
+		fmt.Fprintf(&b, "TITRE : %s\n", e.Title)
+		fmt.Fprintf(&b, "MOTS-CLEFS : ")
+		for _, k := range e.Keywords {
+			fmt.Fprintf(&b, "%s ", k)
+		}
+		fmt.Fprintf(&b, "\n\n")
+		fmt.Fprintf(&b, e.Content)
+		fmt.Fprintf(&b, "\n")
 	}
 
 	return b.String()

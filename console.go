@@ -16,6 +16,7 @@ func NewConsole(g Game) (Console, error) {
 		Node: Node{
 			Sub: []Command{
 				Connect{},
+				Data{},
 				Help{},
 				Index{},
 				Link{},

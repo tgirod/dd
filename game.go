@@ -16,7 +16,7 @@ var (
 	errMissingArgument    = errors.New("argument manquant")
 	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
 	errGateNotFound       = errors.New("service gate introuvable")
-	errDataNotFound       = errors.New("service data introuvable")
+	errDatabaseNotFound   = errors.New("service database introuvable")
 	errNotConnected       = errors.New("la console n'est pas connectée")
 	errLowPrivilege       = errors.New("niveau de privilège insuffisant")
 )
@@ -39,27 +39,4 @@ func (g Game) FindServer(address string) (Server, error) {
 	}
 
 	return server, nil
-}
-
-// Service regroupe les infos de base exposées par tous les services
-type Service struct {
-	Name        string // nom du service
-	Description string // description courte du service
-	Restricted  int    // niveau de privilège requis pour utiliser le service
-}
-
-// Gate est un service permettant de se connecter ailleurs
-type Gate struct {
-	Service
-	TargetAddress string // ID du serveur distant
-	Privilege     int    // niveau de privilège une fois connecté
-}
-
-// Database est un service de base de données
-type Database struct {
-	Service
-	Entries []struct {
-		keywords []string
-		content  string
-	}
 }

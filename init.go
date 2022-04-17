@@ -31,6 +31,27 @@ func (g Game) Init() error {
 				Privilege:     4,
 			},
 		},
+		Databases: []Database{
+			{
+				Service: Service{
+					Name:        "frostpunk",
+					Description: "discographie",
+					Restricted:  1,
+				},
+				Entries: []Entry{
+					{
+						Keywords: []string{"plastobéton"},
+						Title:    "du plasto sous les plages",
+						Content:  "le meilleur album du monde",
+					},
+					{
+						Keywords: []string{"blackwave"},
+						Title:    "The Black Wave - première sommation",
+						Content:  "le meilleur album du monde",
+					},
+				},
+			},
+		},
 	}); err != nil {
 		return err
 	}

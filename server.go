@@ -9,7 +9,8 @@ type Server struct {
 	Credentials []Cred
 
 	// les services hébergés
-	Gates []Gate
+	Gates     []Gate
+	Databases []Database
 
 	// TODO backdoors
 }
@@ -37,4 +38,13 @@ func (s Server) FindGate(name string) (Gate, error) {
 		}
 	}
 	return Gate{}, errGateNotFound
+}
+
+func (s Server) FindDatabase(name string) (Database, error) {
+	for _, l := range s.Databases {
+		if l.Name == name {
+			return l, nil
+		}
+	}
+	return Database{}, errDatabaseNotFound
 }

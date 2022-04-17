@@ -77,6 +77,10 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Privilege = 0
 		return c, c.Quit
 
+	case DataMsg:
+		c.output = msg.View()
+		return c, nil
+
 	case OpenModalMsg:
 		c.modal = msg
 		c.input.Focus = false

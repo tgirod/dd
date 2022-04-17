@@ -124,10 +124,15 @@ planter. Mais elle ne tardera pas à revenir, et là ce sera la fin ...
 
 - [x] serveur SSH qui expose l'interface utilisateur (wish + bubbletea)
 - [x] stocker l'état du jeu dans la BDD
-- [ ] quand un client met à jour l'état du jeu, pousser cette
-mise à jour vers les autres clients.
+- [ ] quand un client modifie l'état du jeu, propager aux autres clients
+	- [ ] modifier le middleware wish pour exposer `Program.Send`
+	- [ ] `chan tea.Msg` partagé pour diffuser les mises à jour ?
 - [ ] supprimer l'objet `Console` de la BDD en cas de plantage du client
 - [ ] accès concurrent à la BDD - utiliser des transactions ?
+
+Note : si au final on vire la BDD, on partage un pointeur `Game` et qu'on
+lui ajoute un `sync.Mutex`, l'état du jeu serait directement partagé
+par tous. Est-ce que je reviens sur cette décision ?
 
 ## Interface
 
@@ -149,7 +154,7 @@ mise à jour vers les autres clients.
 		- [ ] afficher uniquement le services pour lesquels on a les bons privilèges ?
 	- [x] quit : déconnexion du serveur courant
 	- [x] link : suit un lien de connexion vers un autre serveur
-	- [ ] data : faire des recherches dans une BDD
+	- [x] data : faire des recherches dans une BDD
 	- [ ] msg : messagerie
 	- [ ] pay : effectuer des paiements
 	- [ ] edit : manipuler les registres d'un device branché
@@ -161,4 +166,18 @@ mise à jour vers les autres clients.
 
 # Idées
 
-Mini-jeu pour le hacking, que le joueur ait un peu plus à faire que d'entrer une commande ?
+Mini-jeu pour le hacking, que le joueur ait un peu plus à faire que
+d'entrer une commande ?
+
+Constat : il est peu probable qu'un serveur ait plus d'un service d'un
+même type. Dans ce cas, ça n'a pas de sens de représenter les services
+comme des entités séparées du serveur.
+
+## dérive totale pour une autre fois
+
+Et si l'appli prenait la forme suivante :
+
+- un modèle principal qui propose une invite de commande
+- un modèle par programme
+- quelques programmes de base sur la console (help, connect, disconnect)
+- le serveur contient ses propres programmes qui sont affichés sur le client

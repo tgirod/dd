@@ -14,6 +14,7 @@ var (
 	errInvalidCommand     = errors.New("commande invalide")
 	errMissingCommand     = errors.New("commande manquante")
 	errMissingArgument    = errors.New("argument manquant")
+	errInvalidArgument    = errors.New("argument invalide")
 	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
 	errGateNotFound       = errors.New("service gate introuvable")
 	errDatabaseNotFound   = errors.New("service database introuvable")

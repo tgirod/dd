@@ -8,11 +8,9 @@ type Server struct {
 	// liste de codes d'accès valides pour se connecter au serveur
 	Credentials []Cred
 
-	// les services hébergés
-	Gates     []Gate
-	Databases []Database
-
-	// TODO backdoors
+	// les services fournis par le serveur
+	Gate
+	Database
 }
 
 type Cred struct {
@@ -29,22 +27,4 @@ func (s Server) CheckCredentials(login, password string) (int, error) {
 	}
 
 	return 0, errInvalidCredentials
-}
-
-func (s Server) FindGate(name string) (Gate, error) {
-	for _, l := range s.Gates {
-		if l.Name == name {
-			return l, nil
-		}
-	}
-	return Gate{}, errGateNotFound
-}
-
-func (s Server) FindDatabase(name string) (Database, error) {
-	for _, l := range s.Databases {
-		if l.Name == name {
-			return l, nil
-		}
-	}
-	return Database{}, errDatabaseNotFound
 }

@@ -16,10 +16,23 @@ func NewConsole(g Game) (Console, error) {
 		Node: Node{
 			Sub: []Command{
 				Connect{},
-				Data{},
+				Node{
+					Name: "data",
+					Help: "utiliser le service DATABASE pour rechercher des données",
+					Sub: []Command{
+						DataSearch{},
+					},
+				},
 				Help{},
 				Index{},
-				Link{},
+				Node{
+					Name: "link",
+					Help: "utiliser le service GATE pour accéder à un autre serveur",
+					Sub: []Command{
+						LinkList{},
+						LinkConnect{},
+					},
+				},
 				Quit{},
 			},
 		},

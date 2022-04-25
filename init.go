@@ -9,46 +9,38 @@ func (g Game) Init() error {
 	if err := g.Save(&Server{
 		Address: "jesus",
 		Credentials: []Cred{
-			{"public", "public", 1},
+			{"", "", 1},
 		},
-		Gates: []Gate{
-			{
-				Service: Service{
-					Name:        "dist22",
-					Description: "accès au réseau du district 22",
+		Gate: Gate{
+			Targets: []Target{
+				{
+					Address:     "dist22",
+					Description: "lien vers la grille du district 22",
 					Restricted:  1,
+					Privilege:   1,
 				},
-				TargetAddress: "dist22",
-				Privilege:     1,
-			},
-			{
-				Service: Service{
-					Name:        "dist22-4",
-					Description: "accès au réseau du district 22",
-					Restricted:  4,
+				{
+					Address:     "dist22",
+					Description: "lien vers la grille du district 22",
+					Restricted:  3,
+					Privilege:   3,
 				},
-				TargetAddress: "dist22",
-				Privilege:     4,
 			},
 		},
-		Databases: []Database{
-			{
-				Service: Service{
-					Name:        "frostpunk",
-					Description: "discographie",
-					Restricted:  1,
+		Database: Database{
+			Description: "anthologie du frostpunk",
+			Entries: []Entry{
+				{
+					Key:      "plas0",
+					Keywords: []string{"plastobéton"},
+					Title:    "du plasto sous les plages",
+					Content:  "le meilleur album du monde",
 				},
-				Entries: []Entry{
-					{
-						Keywords: []string{"plastobéton"},
-						Title:    "du plasto sous les plages",
-						Content:  "le meilleur album du monde",
-					},
-					{
-						Keywords: []string{"blackwave"},
-						Title:    "The Black Wave - première sommation",
-						Content:  "le meilleur album du monde",
-					},
+				{
+					Key:      "tbw0",
+					Keywords: []string{"blackwave"},
+					Title:    "The Black Wave - première sommation",
+					Content:  "le meilleur album du monde",
 				},
 			},
 		},
@@ -60,7 +52,7 @@ func (g Game) Init() error {
 	if err := g.Save(&Server{
 		Address: "dist22",
 		Credentials: []Cred{
-			{"public", "public", 1},
+			{"", "", 1},
 		},
 	}); err != nil {
 		return err

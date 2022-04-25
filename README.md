@@ -129,6 +129,8 @@ planter. Mais elle ne tardera pas à revenir, et là ce sera la fin ...
 	- [ ] `chan tea.Msg` partagé pour diffuser les mises à jour ?
 - [ ] supprimer l'objet `Console` de la BDD en cas de plantage du client
 - [ ] accès concurrent à la BDD - utiliser des transactions ?
+- [x] simplifier : un service de chaque type par serveur. un service Gate
+  contient plusieurs liens.
 
 Note : si au final on vire la BDD, on partage un pointeur `Game` et qu'on
 lui ajoute un `sync.Mutex`, l'état du jeu serait directement partagé
@@ -155,6 +157,7 @@ par tous. Est-ce que je reviens sur cette décision ?
 	- [x] quit : déconnexion du serveur courant
 	- [x] link : suit un lien de connexion vers un autre serveur
 	- [x] data : faire des recherches dans une BDD
+		- [ ] fuzzy search moins facile
 	- [ ] msg : messagerie
 	- [ ] pay : effectuer des paiements
 	- [ ] edit : manipuler les registres d'un device branché

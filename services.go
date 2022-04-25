@@ -17,28 +17,53 @@ type Service struct {
 // Gate est un service permettant de se connecter ailleurs
 type Gate struct {
 	// description du service
-	Service
+	Description string
 
-	// adresse du serveur distant
-	TargetAddress string
+	// liens fournis par le service
+	Targets []Target
+}
 
-	// niveau de privilège obtenu une fois connecté
+type Target struct {
+	// adresse du serveur de destination
+	Address string
+
+	// description du lien
+	Description string
+
+	// niveau de privilège nécessaire pour utiliser ce target
+	Restricted int
+
+	// niveau de privilège obtenu après la connexion
 	Privilege int
+}
+
+func (g Gate) IsEmpty() bool {
+	return len(g.Targets) == 0
 }
 
 // Database est un service de base de données
 type Database struct {
 	// description du service
-	Service
+	Description string
 
 	// données contenues
 	Entries []Entry
 }
 
+func (d Database) IsEmpty() bool {
+	return len(d.Entries) == 0
+}
+
 // Entry est une entrée dans une base de données
 type Entry struct {
+	// clef unique
+	Key string
+
 	// mots-clefs utilisés pour la recherche
 	Keywords []string
+
+	// niveau de privilège requis
+	Restricted int
 
 	// titre de l'entrée
 	Title string
@@ -47,19 +72,19 @@ type Entry struct {
 	Content string
 }
 
-// Match détermine si l'entrée contient le mot-clef
-func (e Entry) Match(keyword string) bool {
-	find := fuzzy.FindNormalizedFold(keyword, e.Keywords)
-	return len(find) > 0
-}
-
 // Search retourne la liste des entrées contenant le mot-clef
-func (d Database) Search(keyword string) []Entry {
+func (d Database) Search(keyword string, privilege int) []Entry {
 	result := make([]Entry, 0, len(d.Entries))
 	for _, e := range d.Entries {
-		if e.Match(keyword) {
+		if e.Match(keyword) && privilege >= e.Restricted {
 			result = append(result, e)
 		}
 	}
 	return result
+}
+
+// Match détermine si l'entrée contient le mot-clef
+func (e Entry) Match(keyword string) bool {
+	find := fuzzy.FindNormalizedFold(keyword, e.Keywords)
+	return len(find) > 0
 }

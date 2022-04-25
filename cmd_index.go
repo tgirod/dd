@@ -26,36 +26,30 @@ func (i Index) LongHelp() string {
 }
 
 func (i Index) Run(ctx Context, args []string) tea.Msg {
-	var msg IndexMsg
-
 	if !ctx.Console.IsConnected() {
-		return LogMsg{err: errNotConnected}
+		return ErrMsg(errNotConnected)
 	}
 
-	// récupérer les services
-	msg.Gates = ctx.Gates
-	msg.Databases = ctx.Databases
-
-	return msg
-}
-
-type IndexMsg struct {
-	Gates     []Gate
-	Databases []Database
-}
-
-func (i IndexMsg) View() string {
+	s := ctx.Console.Server
 	b := strings.Builder{}
 
-	b.WriteString("GATES\n\n")
-	for _, g := range i.Gates {
-		fmt.Fprintf(&b, "  %s -- %s\n", g.Service.Name, g.Service.Description)
-	}
+	fmt.Fprintf(&b,
+		"GATE: %s (%d liens)\n",
+		s.Gate.Description,
+		len(s.Gate.Targets),
+	)
 
-	b.WriteString("\nDATABASES\n\n")
-	for _, d := range i.Databases {
-		fmt.Fprintf(&b, "  %s -- %s\n", d.Service.Name, d.Service.Description)
-	}
+	fmt.Fprintf(&b,
+		"DATABASE : %s (%d entrées)\n",
+		s.Database.Description,
+		len(s.Database.Entries),
+	)
 
-	return b.String()
+	return IndexMsg(b.String())
+}
+
+type IndexMsg string
+
+func (i IndexMsg) View() string {
+	return string(i)
 }

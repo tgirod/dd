@@ -70,6 +70,10 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output = "connexion établie"
 		return c, nil
 
+	case LinkListMsg:
+		c.output = msg.View()
+		return c, nil
+
 	case IndexMsg:
 		c.output = msg.View()
 		return c, nil
@@ -80,7 +84,7 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Privilege = 0
 		return c, c.Quit
 
-	case DataMsg:
+	case DataSearchMsg:
 		c.output = msg.View()
 		return c, nil
 

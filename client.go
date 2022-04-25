@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"strings"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
@@ -95,7 +97,10 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case JackMsg:
 		c.Console = msg.Console
 		c.output = "connexion illégale établie"
-		return c, nil
+		if c.Console.Detected == 0 {
+			c.Console.Detected = 1
+		}
+		return c, tea.Every(time.Second, c.Security)
 
 	case LinkListMsg:
 		c.output = msg.View()
@@ -124,6 +129,14 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.modal = nil
 		c.input.Focus = true
 		return c, nil
+
+	case SecurityScanMsg:
+		return c, tea.Every(time.Second, c.Security)
+
+	case SecurityIncreaseMsg:
+		c.Detected++
+		c.output = fmt.Sprintf("threat level: %d", c.Detected)
+		return c, tea.Every(time.Second, c.Security)
 
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
@@ -296,3 +309,17 @@ func (c Client) Quit() tea.Msg {
 
 	return nil
 }
+
+func (c Client) Security(t time.Time) tea.Msg {
+	fmt.Println("sec")
+	r := rand.Float64()
+	if r < 0.1 {
+		return SecurityIncreaseMsg{}
+	}
+
+	return SecurityScanMsg{}
+}
+
+type SecurityIncreaseMsg struct{}
+
+type SecurityScanMsg struct{}

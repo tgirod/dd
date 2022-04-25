@@ -7,7 +7,7 @@ type Console struct {
 	ID        int `storm:"id,increment"`
 	Node          // commandes disponibles
 	Privilege int // niveau de privilège
-	Threat    int // niveau de danger
+	Detected  int // niveau de détection
 	Server        // serveur auquel la console est actuellement connectée
 }
 

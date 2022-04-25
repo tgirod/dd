@@ -26,11 +26,14 @@ func (c Client) Init() tea.Cmd {
 		// enregistrer la console dans l'état du jeu
 		console, err := NewConsole(c.Game)
 		if err != nil {
-			return LogMsg{err: err}
+			return ErrMsg(err)
 		}
 		return ConsoleMsg{console}
 	}
 }
+
+// ErrMsg contient le retour d'un programme à ajouter dans les logs
+type ErrMsg error
 
 // ConsoleMsg contient le nouvel état de la console
 type ConsoleMsg struct {
@@ -52,8 +55,8 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.width = msg.Width
 		return c, nil
 
-	case LogMsg:
-		c.output = msg.View()
+	case ErrMsg:
+		c.output = msg.Error()
 		return c, nil
 
 	case HelpMsg:
@@ -258,19 +261,4 @@ func (c Client) Quit() tea.Msg {
 	}
 
 	return nil
-}
-
-// LogMsg contient le retour d'un programme à ajouter dans les logs
-type LogMsg struct {
-	err error
-	msg string
-}
-
-func (l LogMsg) View() string {
-	b := strings.Builder{}
-	if l.err != nil {
-		fmt.Fprintf(&b, "ERR : %s\n\n", l.err.Error())
-	}
-	fmt.Fprintf(&b, "%s\n", l.msg)
-	return b.String()
 }

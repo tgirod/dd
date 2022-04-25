@@ -26,7 +26,7 @@ func (q Quit) LongHelp() string {
 
 func (q Quit) Run(ctx Context, args []string) tea.Msg {
 	if !ctx.Console.IsConnected() {
-		return LogMsg{err: errNotConnected}
+		return ErrMsg(errNotConnected)
 	}
 
 	return QuitMsg{}

@@ -8,6 +8,9 @@ type Server struct {
 	// liste de codes d'accès valides pour se connecter au serveur
 	Credentials []Cred
 
+	// niveau de détection. plus il est élevé, plus vite on se fait repérer
+	Detection float64
+
 	// les services fournis par le serveur
 	Gate
 	Database

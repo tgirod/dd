@@ -11,6 +11,7 @@ func (g Game) Init() error {
 		Credentials: []Cred{
 			{"", "", 1},
 		},
+		Detection: 0.1,
 		Gate: Gate{
 			Targets: []Target{
 				{

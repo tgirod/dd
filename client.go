@@ -138,6 +138,12 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output = fmt.Sprintf("threat level: %d", c.Detected)
 		return c, tea.Every(time.Second, c.Security)
 
+	case SecurityKickMsg:
+		c.output = "déconnecté de force du serveur"
+		c.Server = Server{}
+		c.Privilege = 0
+		return c, c.Quit
+
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
 			// quitter l'application client
@@ -311,15 +317,23 @@ func (c Client) Quit() tea.Msg {
 }
 
 func (c Client) Security(t time.Time) tea.Msg {
-	fmt.Println("sec")
+	if c.Console.Detected >= 10 {
+		// hacker repéré, il se fait kicker du serveur
+		return SecurityKickMsg{}
+	}
+
 	r := rand.Float64()
-	if r < 0.1 {
+	if r < c.Console.Server.Detection {
+		// la localisation du hacker progresse
 		return SecurityIncreaseMsg{}
 	}
 
+	// la localisation du hacker se poursuit
 	return SecurityScanMsg{}
 }
 
 type SecurityIncreaseMsg struct{}
 
 type SecurityScanMsg struct{}
+
+type SecurityKickMsg struct{}

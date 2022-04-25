@@ -7,6 +7,7 @@ type Console struct {
 	ID        int `storm:"id,increment"`
 	Node          // commandes disponibles
 	Privilege int // niveau de privilège
+	Threat    int // niveau de danger
 	Server        // serveur auquel la console est actuellement connectée
 }
 
@@ -34,6 +35,7 @@ func NewConsole(g Game) (Console, error) {
 					},
 				},
 				Quit{},
+				Jack{},
 			},
 		},
 	}

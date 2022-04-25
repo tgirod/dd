@@ -92,6 +92,11 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output = "connexion établie"
 		return c, nil
 
+	case JackMsg:
+		c.Console = msg.Console
+		c.output = "connexion illégale établie"
+		return c, nil
+
 	case LinkListMsg:
 		c.output = msg.View()
 		return c, nil

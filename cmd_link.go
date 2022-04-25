@@ -28,7 +28,7 @@ func (l LinkList) LongHelp() string {
 
 func (l LinkList) Run(ctx Context, args []string) tea.Msg {
 	if !ctx.Console.IsConnected() {
-		return ErrMsg(errNotConnected)
+		return ErrorMsg{errNotConnected}
 	}
 
 	// obtenir la liste des targets
@@ -73,32 +73,32 @@ func (l LinkConnect) LongHelp() string {
 
 func (l LinkConnect) Run(ctx Context, args []string) tea.Msg {
 	if len(args) < 1 {
-		return ErrMsg(errMissingArgument)
+		return ErrorMsg{errMissingArgument}
 	}
 
 	if !ctx.Console.IsConnected() {
-		return ErrMsg(errNotConnected)
+		return ErrorMsg{errNotConnected}
 	}
 
 	id, err := strconv.Atoi(args[0])
 	if err != nil {
-		return ErrMsg(errInvalidArgument)
+		return ErrorMsg{errInvalidArgument}
 	}
 
 	if id < 0 || id > len(ctx.Server.Targets)-1 {
-		return ErrMsg(errInvalidArgument)
+		return ErrorMsg{errInvalidArgument}
 	}
 
 	target := ctx.Gate.Targets[id]
 
 	if ctx.Console.Privilege < target.Restricted {
-		return ErrMsg(errLowPrivilege)
+		return ErrorMsg{errLowPrivilege}
 	}
 
 	// chercher le serveur correspondant
 	server, err := ctx.Game.FindServer(target.Address)
 	if err != nil {
-		return ErrMsg(errServerNotFound)
+		return ErrorMsg{errServerNotFound}
 	}
 
 	// modifier la console pour représenter la nouvelle connexion

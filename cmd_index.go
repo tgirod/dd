@@ -27,7 +27,7 @@ func (i Index) LongHelp() string {
 
 func (i Index) Run(ctx Context, args []string) tea.Msg {
 	if !ctx.Console.IsConnected() {
-		return ErrMsg(errNotConnected)
+		return ErrorMsg{errNotConnected}
 	}
 
 	s := ctx.Console.Server

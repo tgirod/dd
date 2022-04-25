@@ -29,11 +29,14 @@ func (d DataSearch) LongHelp() string {
 
 func (d DataSearch) Run(ctx Context, args []string) tea.Msg {
 	if len(args) < 1 {
-		return ErrMsg(errMissingArgument)
+		return ParseErrorMsg{
+			errMissingArgument,
+			d.LongHelp(),
+		}
 	}
 
 	if !ctx.Console.IsConnected() {
-		return ErrMsg(errNotConnected)
+		return ErrorMsg{errNotConnected}
 	}
 
 	// effectuer la recherche

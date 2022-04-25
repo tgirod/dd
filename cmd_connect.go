@@ -31,7 +31,10 @@ func (c Connect) LongHelp() string {
 
 func (c Connect) Run(ctx Context, args []string) tea.Msg {
 	if len(args) < 1 {
-		return ErrMsg(errMissingArgument)
+		return ParseErrorMsg{
+			fmt.Errorf("ADDRESS : %w", errMissingArgument),
+			c.LongHelp(),
+		}
 	}
 
 	// récupérer les arguments
@@ -40,7 +43,7 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 	// récupérer le serveur
 	server, err := ctx.Game.FindServer(address)
 	if err != nil {
-		return ErrMsg(err)
+		return ErrorMsg{err}
 	}
 
 	// construire la fenêtre modale pour demander le login et le password
@@ -135,7 +138,7 @@ func (c ConnectModal) Connect() tea.Msg {
 	// vérifier l'existence du login
 	privilege, err := c.Server.CheckCredentials(c.Login.Value, c.Password.Value)
 	if err != nil {
-		return ErrMsg(err)
+		return ErrorMsg{err}
 	}
 
 	// mettre à jour la console
@@ -144,7 +147,7 @@ func (c ConnectModal) Connect() tea.Msg {
 	console.Privilege = privilege
 	if err := c.Context.Game.Update(&console); err != nil {
 		fmt.Println(err)
-		return ErrMsg(errInternalError)
+		return ErrorMsg{errInternalError}
 	}
 
 	// retourner la console mise à jour pour que le client l'actualise

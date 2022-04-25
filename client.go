@@ -26,14 +26,32 @@ func (c Client) Init() tea.Cmd {
 		// enregistrer la console dans l'état du jeu
 		console, err := NewConsole(c.Game)
 		if err != nil {
-			return ErrMsg(err)
+			return ErrorMsg{err}
 		}
 		return ConsoleMsg{console}
 	}
 }
 
-// ErrMsg contient le retour d'un programme à ajouter dans les logs
-type ErrMsg error
+// ErrorMsg contient le retour d'un programme à ajouter dans les logs
+type ErrorMsg struct {
+	Err error
+}
+
+func (e ErrorMsg) View(width int) string {
+	return lg.PlaceHorizontal(width, lg.Center, errorTextStyle.Render(e.Err.Error()))
+}
+
+type ParseErrorMsg struct {
+	Err  error
+	Help string
+}
+
+func (p ParseErrorMsg) View(width int) string {
+	b := strings.Builder{}
+	b.WriteString(lg.PlaceHorizontal(width, lg.Center, errorTextStyle.Render(p.Err.Error())))
+	b.WriteString(p.Help)
+	return b.String()
+}
 
 // ConsoleMsg contient le nouvel état de la console
 type ConsoleMsg struct {
@@ -55,8 +73,12 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.width = msg.Width
 		return c, nil
 
-	case ErrMsg:
-		c.output = msg.Error()
+	case ErrorMsg:
+		c.output = msg.View(c.width)
+		return c, nil
+
+	case ParseErrorMsg:
+		c.output = msg.View(c.width)
 		return c, nil
 
 	case HelpMsg:
@@ -189,6 +211,9 @@ var (
 
 	// curseur
 	cursorStyle = lg.NewStyle().Reverse(true)
+
+	// texte erreur
+	errorTextStyle = lg.NewStyle().Foreground(lg.Color("9")).Padding(1)
 )
 
 func (c Client) statusView() string {

@@ -51,12 +51,18 @@ func (n Node) LongHelp() string {
 // Parse exécute le parsing des arguments pour le noeud courant
 func (n Node) Run(ctx Context, args []string) tea.Msg {
 	if len(args) == 0 {
-		return ErrMsg(errMissingCommand)
+		return ParseErrorMsg{
+			errMissingCommand,
+			n.LongHelp(),
+		}
 	}
 
 	match := n.Match(args[0])
 	if len(match) == 0 {
-		return ErrMsg(errInvalidCommand)
+		return ParseErrorMsg{
+			fmt.Errorf("%s : %w", args[0], errInvalidCommand),
+			n.LongHelp(),
+		}
 	}
 
 	// on retient la première commande qui a le bon préfixe

@@ -46,6 +46,7 @@ func (j Jack) Run(ctx Context, args []string) tea.Msg {
 
 	co := ctx.Console
 	co.Server = server
+	co.Login = "illegal"
 	co.Privilege = 1
 
 	return JackMsg{co}

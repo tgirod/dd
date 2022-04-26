@@ -97,8 +97,8 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case JackMsg:
 		c.Console = msg.Console
 		c.output = "connexion illégale établie"
-		if c.Console.Detected == 0 {
-			c.Console.Detected = 1
+		if c.Console.Alarm == 0 {
+			c.Console.Alarm = 1
 		}
 		return c, tea.Every(time.Second, c.Security)
 
@@ -114,6 +114,8 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output = "déconnexion"
 		c.Server = Server{}
 		c.Privilege = 0
+		c.Alarm = 0
+		c.Login = ""
 		return c, c.Quit
 
 	case DataSearchMsg:
@@ -134,8 +136,7 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return c, tea.Every(time.Second, c.Security)
 
 	case SecurityIncreaseMsg:
-		c.Detected++
-		c.output = fmt.Sprintf("threat level: %d", c.Detected)
+		c.Alarm++
 		return c, tea.Every(time.Second, c.Security)
 
 	case SecurityKickMsg:
@@ -199,8 +200,8 @@ var (
 	statusStyle = lg.NewStyle().
 			Padding(0, 1, 0, 1).
 			Margin(0, 1, 0, 1).
-			Background(lg.Color("2")).
-			Foreground(lg.Color("15"))
+			Foreground(lg.Color("0")).
+			Background(lg.Color("10"))
 
 	// affichage de la dernière commande
 	outputStyle = lg.NewStyle().
@@ -238,14 +239,21 @@ var (
 
 	// texte erreur
 	errorTextStyle = lg.NewStyle().Foreground(lg.Color("9")).Padding(1)
+
+	greenTextStyle  = lg.NewStyle().Foreground(lg.Color("0")).Background(lg.Color("10"))
+	yellowTextStyle = lg.NewStyle().Foreground(lg.Color("0")).Background(lg.Color("11"))
+	redTextStyle    = lg.NewStyle().Foreground(lg.Color("0")).Background(lg.Color("9"))
 )
 
 func (c Client) statusView() string {
-	status := fmt.Sprintf("privilege: %d", c.Console.Privilege)
-	width := c.width - statusStyle.GetHorizontalFrameSize()
-	return statusStyle.Render(
-		lg.PlaceHorizontal(width, lg.Left, status),
-	)
+	login := fmt.Sprintf("👤 %s", c.Console.Login)
+	priv := strings.Repeat("✪", c.Console.Privilege)
+	alarm := strings.Repeat("💀", c.Console.Alarm)
+
+	width := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(alarm)
+	status := lg.PlaceHorizontal(width, lg.Left, login+" "+priv) + alarm
+
+	return statusStyle.Render(status)
 }
 
 func (c Client) outputView() string {
@@ -317,7 +325,7 @@ func (c Client) Quit() tea.Msg {
 }
 
 func (c Client) Security(t time.Time) tea.Msg {
-	if c.Console.Detected >= 10 {
+	if c.Console.Alarm >= 10 {
 		// hacker repéré, il se fait kicker du serveur
 		return SecurityKickMsg{}
 	}

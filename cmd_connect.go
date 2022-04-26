@@ -144,6 +144,7 @@ func (c ConnectModal) Connect() tea.Msg {
 	// mettre à jour la console
 	console := c.Context.Console
 	console.Server = c.Server
+	console.Login = c.Login.Value
 	console.Privilege = privilege
 	if err := c.Context.Game.Update(&console); err != nil {
 		fmt.Println(err)

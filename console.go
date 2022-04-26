@@ -4,11 +4,23 @@ import "fmt"
 
 // Console représente le terminal depuis lequel le joueur accède au net
 type Console struct {
-	ID        int `storm:"id,increment"`
-	Node          // commandes disponibles
-	Privilege int // niveau de privilège
-	Detected  int // niveau de détection
-	Server        // serveur auquel la console est actuellement connectée
+	// identifiant unique pour la BDD
+	ID int `storm:"id,increment"`
+
+	// racine de l'arbre des commandes
+	Node
+
+	// identifiant dans le serveur actuel
+	Login string
+
+	// niveau de privilège dans le serveur actuel
+	Privilege int
+
+	// niveau d'alerte du serveur
+	Alarm int
+
+	// serveur auquel la console est connectée
+	Server
 }
 
 func NewConsole(g Game) (Console, error) {

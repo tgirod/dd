@@ -24,11 +24,11 @@ type Client struct {
 }
 
 func (c Client) Init() tea.Cmd {
+	// demander la création d'un objet Console
 	return func() tea.Msg {
-		// enregistrer la console dans l'état du jeu
-		console, err := NewConsole(c.Game)
+		console, err := c.Game.CreateConsole()
 		if err != nil {
-			return ErrorMsg{err}
+			return ErrorMsg{errInternalError}
 		}
 		return ConsoleMsg{console}
 	}
@@ -92,15 +92,7 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case ConnectMsg:
 		c.Console = msg.Console
 		c.output = "connexion établie"
-		return c, nil
-
-	case JackMsg:
-		c.Console = msg.Console
-		c.output = "connexion illégale établie"
-		if c.Console.Alarm == 0 {
-			c.Console.Alarm = 1
-		}
-		return c, tea.Every(time.Second, c.Security)
+		return c, c.UpdateConsole
 
 	case LinkListMsg:
 		c.output = msg.View()
@@ -116,7 +108,7 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Privilege = 0
 		c.Alarm = 0
 		c.Login = ""
-		return c, c.Quit
+		return c, c.UpdateConsole
 
 	case DataSearchMsg:
 		c.output = msg.View()
@@ -136,19 +128,40 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return c, tea.Every(time.Second, c.Security)
 
 	case SecurityIncreaseMsg:
-		c.Alarm++
-		return c, tea.Every(time.Second, c.Security)
+		c.Console.Alarm++
+		return c, tea.Batch(
+			c.UpdateConsole,
+			tea.Every(time.Second, c.Security),
+		)
 
 	case SecurityKickMsg:
 		c.output = "déconnecté de force du serveur"
 		c.Server = Server{}
 		c.Privilege = 0
-		return c, c.Quit
+		c.Alarm = 0
+		c.Login = ""
+		return c, c.UpdateConsole
+
+	case JackMsg:
+		c.Console = msg.Console
+		c.output = "connexion illégale établie"
+		return c, tea.Batch(
+			c.UpdateConsole,
+			c.StartSecurity(),
+		)
+
+	case RiseMsg:
+		c.Console = msg.Console
+		c.output = "augmentation du niveau de privilège effectuée"
+		return c, tea.Batch(
+			c.UpdateConsole,
+			c.StartSecurity(),
+		)
 
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
 			// quitter l'application client
-			return c, tea.Sequentially(c.Quit, tea.Quit)
+			return c, tea.Sequentially(c.DeleteConsole, tea.Quit)
 		}
 
 		if c.modal != nil {
@@ -315,16 +328,8 @@ func (c Client) Run() tea.Cmd {
 	}
 }
 
-// Quit supprime la console de l'état du jeu
-func (c Client) Quit() tea.Msg {
-	if err := c.Game.DeleteStruct(&c.Console); err != nil {
-		fmt.Println(err)
-	}
-
-	return nil
-}
-
 func (c Client) Security(t time.Time) tea.Msg {
+	fmt.Println("sec")
 	if c.Console.Alarm >= 10 {
 		// hacker repéré, il se fait kicker du serveur
 		return SecurityKickMsg{}
@@ -338,6 +343,28 @@ func (c Client) Security(t time.Time) tea.Msg {
 
 	// la localisation du hacker se poursuit
 	return SecurityScanMsg{}
+}
+
+func (c Client) UpdateConsole() tea.Msg {
+	if err := c.Game.UpdateConsole(c.Console); err != nil {
+		return ErrorMsg{errInternalError}
+	}
+
+	return nil
+}
+
+func (c Client) DeleteConsole() tea.Msg {
+	if err := c.Game.DeleteConsole(c.Console); err != nil {
+		return ErrorMsg{errInternalError}
+	}
+	return nil
+}
+
+func (c Client) StartSecurity() tea.Cmd {
+	if c.Console.Alarm == 1 {
+		return tea.Every(time.Second, c.Security)
+	}
+	return nil
 }
 
 type SecurityIncreaseMsg struct{}

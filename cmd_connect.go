@@ -103,6 +103,7 @@ func (c ConnectModal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return CloseModalMsg{}
 				},
 			)
+
 		default:
 			// écrire dans le champ qui va bien
 			if c.Login.Focus {
@@ -141,17 +142,13 @@ func (c ConnectModal) Connect() tea.Msg {
 		return ErrorMsg{err}
 	}
 
-	// mettre à jour la console
+	// modifier les infos de la console
 	console := c.Context.Console
 	console.Server = c.Server
 	console.Login = c.Login.Value
 	console.Privilege = privilege
-	if err := c.Context.Game.Update(&console); err != nil {
-		fmt.Println(err)
-		return ErrorMsg{errInternalError}
-	}
 
-	// retourner la console mise à jour pour que le client l'actualise
+	// retourner la console au client
 	return ConnectMsg{console}
 }
 

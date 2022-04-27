@@ -57,6 +57,7 @@ func (a *App) Start() {
 	gob.Register(LinkConnect{})
 	gob.Register(DataSearch{})
 	gob.Register(Jack{})
+	gob.Register(Rise{})
 	db, err := storm.Open("game.db", storm.Codec(gc.Codec))
 	if err != nil {
 		log.Fatal(err)

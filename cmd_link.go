@@ -105,6 +105,7 @@ func (l LinkConnect) Run(ctx Context, args []string) tea.Msg {
 	console := ctx.Console
 	console.Server = server
 	console.Privilege = target.Privilege
+	console.Alarm = 1
 
 	// envoyer le message pour mettre à jour la console
 	return ConnectMsg{console}

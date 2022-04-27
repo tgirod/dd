@@ -1,3 +1,64 @@
+# TODO
+
+fonctionnalités les plus importantes
+
+- [x] se déplacer
+- [x] faire des recherches
+- [x] restreindre l'accès à certaines ressources
+- [ ] distinguer un hacker d'un personnage normal (load ?)
+- [x] forcer une connexion
+- [ ] augmenter ses privilèges
+- [ ] ralentir une glace
+- [ ] envoyer des messages
+- [ ] interaction entre plusieurs joueurs (est-ce nécessaire ?)
+
+## Architecture
+
+- [x] serveur SSH qui expose l'interface utilisateur (wish + bubbletea)
+- [x] stocker l'état du jeu dans la BDD
+- [ ] quand un client modifie l'état du jeu, propager aux autres clients
+	- [ ] modifier le middleware wish pour exposer `Program.Send`
+	- [ ] `chan tea.Msg` partagé pour diffuser les mises à jour ?
+- [ ] supprimer l'objet `Console` de la BDD en cas de plantage du client
+- [ ] accès concurrent à la BDD - utiliser des transactions ?
+- [x] simplifier : un service de chaque type par serveur. un service Gate
+  contient plusieurs liens.
+
+Note : si au final on vire la BDD, on partage un pointeur `Game` et qu'on
+lui ajoute un `sync.Mutex`, l'état du jeu serait directement partagé
+par tous. Est-ce que je reviens sur cette décision ?
+
+## Interface
+
+- [x] interface de base : barre de statut + output + prompt
+- [x] fenêtre modale, quand une commande nécessite d'afficher une interface spéciale
+- [ ] effet "typewriter"
+- [ ] effet "corruption de l'affichage"
+- [ ] scroll quand il y a trop de choses à afficher
+
+## Jeu
+
+- [ ] simuler une coupure complète de la connexion
+- [x] console, serveur
+- [x] ajouter les restrictions basées sur les accréditations
+- commandes
+	- [x] connect : se connecter à un serveur
+	- [x] help : aide sur l'usage des commandes
+	- [x] index : lister les services
+	- [x] quit : déconnexion du serveur courant
+	- [x] link : suit un lien de connexion vers un autre serveur
+	- [x] data : faire des recherches dans une BDD
+		- [ ] fuzzy search moins facile
+	- [ ] msg : messagerie
+	- [ ] pay : effectuer des paiements
+	- [ ] edit : manipuler les registres d'un device branché
+- hacking
+	- [ ] load : charger une commande illégale
+	- [ ] jack : force la connexion a un serveur dont on connait l'adresse
+	- [ ] priv : monte le niveau de privilège dans un serveur
+	- [ ] hide : retarde la traque des glaces
+	- [ ] bomb : fait planter une glace
+
 # Architecture du jeu
 
 Le réseau est composé de serveurs contenant des services. Les
@@ -118,55 +179,6 @@ Bientôt l'évasion ne suffit plus. Le hacker sort l'arme lourde :
 il repère une glace en charge de la protection du serveur et la fait
 planter. Mais elle ne tardera pas à revenir, et là ce sera la fin ...
 
-# Développement
-
-## Architecture
-
-- [x] serveur SSH qui expose l'interface utilisateur (wish + bubbletea)
-- [x] stocker l'état du jeu dans la BDD
-- [ ] quand un client modifie l'état du jeu, propager aux autres clients
-	- [ ] modifier le middleware wish pour exposer `Program.Send`
-	- [ ] `chan tea.Msg` partagé pour diffuser les mises à jour ?
-- [ ] supprimer l'objet `Console` de la BDD en cas de plantage du client
-- [ ] accès concurrent à la BDD - utiliser des transactions ?
-- [x] simplifier : un service de chaque type par serveur. un service Gate
-  contient plusieurs liens.
-
-Note : si au final on vire la BDD, on partage un pointeur `Game` et qu'on
-lui ajoute un `sync.Mutex`, l'état du jeu serait directement partagé
-par tous. Est-ce que je reviens sur cette décision ?
-
-## Interface
-
-- [x] interface de base : barre de statut + output + prompt
-- [x] fenêtre modale, quand une commande nécessite d'afficher une interface spéciale
-- [ ] effet "typewriter"
-- [ ] effet "corruption de l'affichage"
-- [ ] scroll quand il y a trop de choses à afficher
-
-## Jeu
-
-- [ ] simuler une coupure complète de la connexion
-- [x] console, serveur
-- [x] ajouter les restrictions basées sur les accréditations
-- commandes
-	- [x] connect : se connecter à un serveur
-	- [x] help : aide sur l'usage des commandes
-	- [x] index : lister les services
-		- [ ] afficher uniquement le services pour lesquels on a les bons privilèges ?
-	- [x] quit : déconnexion du serveur courant
-	- [x] link : suit un lien de connexion vers un autre serveur
-	- [x] data : faire des recherches dans une BDD
-		- [ ] fuzzy search moins facile
-	- [ ] msg : messagerie
-	- [ ] pay : effectuer des paiements
-	- [ ] edit : manipuler les registres d'un device branché
-- hacking
-	- [ ] jack : force la connexion a un serveur dont on connait l'adresse
-	- [ ] priv : monte le niveau de privilège dans un serveur
-	- [ ] hide : retarde la traque des glaces
-	- [ ] bomb : fait planter une glace
-
 # Idées
 
 Mini-jeu pour le hacking, que le joueur ait un peu plus à faire que
@@ -184,3 +196,4 @@ Et si l'appli prenait la forme suivante :
 - un modèle par programme
 - quelques programmes de base sur la console (help, connect, disconnect)
 - le serveur contient ses propres programmes qui sont affichés sur le client
+

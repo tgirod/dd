@@ -33,7 +33,7 @@ func (g Game) Init() error {
 			Entries: []Entry{
 				{
 					Key:      "plas0",
-					Keywords: []string{"plastobéton"},
+					Keywords: []string{"plastobeton"},
 					Title:    "du plasto sous les plages",
 					Content:  "le meilleur album du monde",
 				},

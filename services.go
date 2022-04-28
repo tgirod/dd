@@ -1,6 +1,13 @@
 package main
 
-import "github.com/lithammer/fuzzysearch/fuzzy"
+import (
+	"unicode"
+
+	//"github.com/lithammer/fuzzysearch/fuzzy"
+	"golang.org/x/text/runes"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
+)
 
 // Service regroupe les infos de base exposées par tous les services
 type Service struct {
@@ -85,6 +92,19 @@ func (d Database) Search(keyword string, privilege int) []Entry {
 
 // Match détermine si l'entrée contient le mot-clef
 func (e Entry) Match(keyword string) bool {
-	find := fuzzy.FindNormalizedFold(keyword, e.Keywords)
-	return len(find) > 0
+	keyword = normalize(keyword)
+
+	for _, k := range e.Keywords {
+		if k == keyword {
+			return true
+		}
+	}
+
+	return false
+}
+
+func normalize(s string) string {
+	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
+	out, _, _ := transform.String(t, s)
+	return out
 }

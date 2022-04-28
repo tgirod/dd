@@ -35,14 +35,15 @@ func (d DataSearch) Run(ctx Context, args []string) tea.Msg {
 		}
 	}
 
+	keyword := args[0]
+
 	if !ctx.Console.IsConnected() {
 		return ErrorMsg{errNotConnected}
 	}
 
 	// effectuer la recherche
-	entries := ctx.Database.Search(args[1], ctx.Console.Privilege)
+	entries := ctx.Database.Search(keyword, ctx.Console.Privilege)
 	return DataSearchMsg{entries}
-
 }
 
 type DataSearchMsg struct {

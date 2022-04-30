@@ -7,7 +7,7 @@ fonctionnalités les plus importantes
 - [x] restreindre l'accès à certaines ressources
 - [ ] distinguer un hacker d'un personnage normal (load ?)
 - [x] forcer une connexion
-- [ ] augmenter ses privilèges
+- [x] augmenter ses privilèges
 - [ ] ralentir une glace
 - [ ] envoyer des messages
 - [ ] interaction entre plusieurs joueurs (est-ce nécessaire ?)

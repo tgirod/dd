@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"text/tabwriter"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -52,10 +53,17 @@ type DataSearchMsg struct {
 
 func (d DataSearchMsg) View() string {
 	b := strings.Builder{}
+	tw := tabwriter.NewWriter(&b, 8, 1, 2, ' ', 0)
 
+	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
 	for _, e := range d.Entries {
-		fmt.Fprintf(&b, "%5s %s\n", e.Key, e.Title)
+		fmt.Fprintf(tw, "%s\t%s\t%s\t\n",
+			e.Key,
+			strings.Join(e.Keywords, " "),
+			e.Title,
+		)
 	}
+	tw.Flush()
 
 	return b.String()
 }

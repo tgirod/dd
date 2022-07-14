@@ -52,7 +52,7 @@ func (i Input) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.Type {
-		case tea.KeyRunes:
+		case tea.KeyRunes, tea.KeySpace:
 			// ajouter la rune au prompt
 			i.Value = i.Value + msg.String()
 			return i, nil

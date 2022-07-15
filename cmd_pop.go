@@ -25,7 +25,7 @@ func (p Pop) LongHelp() string {
 	return b.String()
 }
 
-func (p Pop) Run(ctx Context, args []string) tea.Msg {
+func (p Pop) Run(c Client, args []string) tea.Msg {
 	return OpenModalMsg(p)
 }
 

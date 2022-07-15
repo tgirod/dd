@@ -24,12 +24,12 @@ func (r Rise) LongHelp() string {
 	return b.String()
 }
 
-func (r Rise) Run(ctx Context, args []string) tea.Msg {
-	if !ctx.Console.IsConnected() {
+func (r Rise) Run(c Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
 		return ErrorMsg{errNotConnected}
 	}
 
-	co := ctx.Console
+	co := c.Console
 	co.Privilege++
 	co.Alarm++
 	return RiseMsg{co}

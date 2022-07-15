@@ -319,12 +319,10 @@ func NewClient(width, height int, game Game) Client {
 func (c Client) Run() tea.Cmd {
 	args := strings.Fields(c.input.Value)
 
+	// construire la tea.Cmd qui parse et exécute la commande
 	return func() tea.Msg {
-		// construire la tea.Cmd qui parse et exécute la commande
-
 		// exécuter la commande
-		ctx := Context{c.Game, c.Console}
-		return c.Console.Run(ctx, args)
+		return c.Console.Run(c, args)
 	}
 }
 

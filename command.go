@@ -13,7 +13,7 @@ type Command interface {
 	ParseName() string // nom de la commande pour le parsing
 	ShortHelp() string // nom de la commande + ligne de description
 	LongHelp() string  // aide complète
-	Run(ctx Context, args []string) tea.Msg
+	Run(c Client, args []string) tea.Msg
 }
 
 type Context struct {
@@ -49,7 +49,7 @@ func (n Node) LongHelp() string {
 }
 
 // Parse exécute le parsing des arguments pour le noeud courant
-func (n Node) Run(ctx Context, args []string) tea.Msg {
+func (n Node) Run(c Client, args []string) tea.Msg {
 	if len(args) == 0 {
 		return ParseErrorMsg{
 			errMissingCommand,
@@ -66,7 +66,7 @@ func (n Node) Run(ctx Context, args []string) tea.Msg {
 	}
 
 	// on retient la première commande qui a le bon préfixe
-	return match[0].Run(ctx, args[1:])
+	return match[0].Run(c, args[1:])
 }
 
 // Match retourne la liste des sous-commandes correspondant au préfixe

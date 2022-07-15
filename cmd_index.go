@@ -25,12 +25,12 @@ func (i Index) LongHelp() string {
 	return b.String()
 }
 
-func (i Index) Run(ctx Context, args []string) tea.Msg {
-	if !ctx.Console.IsConnected() {
+func (i Index) Run(c Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
 		return ErrorMsg{errNotConnected}
 	}
 
-	s := ctx.Console.Server
+	s := c.Console.Server
 	b := strings.Builder{}
 
 	fmt.Fprintf(&b,

@@ -28,7 +28,7 @@ func (d DataSearch) LongHelp() string {
 	return b.String()
 }
 
-func (d DataSearch) Run(ctx Context, args []string) tea.Msg {
+func (d DataSearch) Run(c Client, args []string) tea.Msg {
 	if len(args) < 1 {
 		return ParseErrorMsg{
 			errMissingArgument,
@@ -38,12 +38,12 @@ func (d DataSearch) Run(ctx Context, args []string) tea.Msg {
 
 	keyword := args[0]
 
-	if !ctx.Console.IsConnected() {
+	if !c.Console.IsConnected() {
 		return ErrorMsg{errNotConnected}
 	}
 
 	// effectuer la recherche
-	entries := ctx.Database.Search(keyword, ctx.Console.Privilege)
+	entries := c.Database.Search(keyword, c.Console.Privilege)
 	return DataSearchMsg{entries}
 }
 

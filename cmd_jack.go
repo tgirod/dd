@@ -27,7 +27,7 @@ func (j Jack) LongHelp() string {
 	return b.String()
 }
 
-func (j Jack) Run(ctx Context, args []string) tea.Msg {
+func (j Jack) Run(c Client, args []string) tea.Msg {
 	if len(args) < 1 {
 		return ParseErrorMsg{
 			fmt.Errorf("ADDRESS : %w", errMissingArgument),
@@ -39,12 +39,12 @@ func (j Jack) Run(ctx Context, args []string) tea.Msg {
 	address := args[0]
 
 	// récupérer le serveur
-	server, err := ctx.Game.FindServer(address)
+	server, err := c.Game.FindServer(address)
 	if err != nil {
 		return ErrorMsg{err}
 	}
 
-	co := ctx.Console
+	co := c.Console
 	co.Server = server
 	co.Login = "illegal"
 	co.Privilege = 1

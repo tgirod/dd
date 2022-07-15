@@ -26,15 +26,15 @@ func (l LinkList) LongHelp() string {
 	return b.String()
 }
 
-func (l LinkList) Run(ctx Context, args []string) tea.Msg {
-	if !ctx.Console.IsConnected() {
+func (l LinkList) Run(c Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
 		return ErrorMsg{errNotConnected}
 	}
 
 	// obtenir la liste des targets
 	// TODO filtrer en fonction du niveau "restricted" ?
 	msg := LinkListMsg{}
-	msg.Targets = ctx.Gate.Targets
+	msg.Targets = c.Gate.Targets
 
 	return msg
 }
@@ -71,12 +71,12 @@ func (l LinkConnect) LongHelp() string {
 	return b.String()
 }
 
-func (l LinkConnect) Run(ctx Context, args []string) tea.Msg {
+func (l LinkConnect) Run(c Client, args []string) tea.Msg {
 	if len(args) < 1 {
 		return ErrorMsg{errMissingArgument}
 	}
 
-	if !ctx.Console.IsConnected() {
+	if !c.IsConnected() {
 		return ErrorMsg{errNotConnected}
 	}
 
@@ -85,28 +85,28 @@ func (l LinkConnect) Run(ctx Context, args []string) tea.Msg {
 		return ErrorMsg{errInvalidArgument}
 	}
 
-	if id < 0 || id > len(ctx.Server.Targets)-1 {
+	if id < 0 || id > len(c.Targets)-1 {
 		return ErrorMsg{errInvalidArgument}
 	}
 
-	target := ctx.Gate.Targets[id]
+	target := c.Targets[id]
 
-	if ctx.Console.Privilege < target.Restricted {
+	if c.Privilege < target.Restricted {
 		return ErrorMsg{errLowPrivilege}
 	}
 
 	// chercher le serveur correspondant
-	server, err := ctx.Game.FindServer(target.Address)
+	server, err := c.FindServer(target.Address)
 	if err != nil {
 		return ErrorMsg{errServerNotFound}
 	}
 
 	// modifier la console pour représenter la nouvelle connexion
-	console := ctx.Console
-	console.Server = server
-	console.Privilege = target.Privilege
-	console.Alarm = 1
+	co := c.Console
+	co.Server = server
+	co.Privilege = target.Privilege
+	co.Alarm = 1
 
 	// envoyer le message pour mettre à jour la console
-	return ConnectMsg{console}
+	return ConnectMsg{co}
 }

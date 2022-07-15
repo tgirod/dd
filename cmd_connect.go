@@ -29,7 +29,7 @@ func (c Connect) LongHelp() string {
 	return b.String()
 }
 
-func (c Connect) Run(ctx Context, args []string) tea.Msg {
+func (c Connect) Run(client Client, args []string) tea.Msg {
 	if len(args) < 1 {
 		return ParseErrorMsg{
 			fmt.Errorf("ADDRESS : %w", errMissingArgument),
@@ -41,7 +41,7 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 	address := args[0]
 
 	// récupérer le serveur
-	server, err := ctx.Game.FindServer(address)
+	server, err := client.Game.FindServer(address)
 	if err != nil {
 		return ErrorMsg{err}
 	}
@@ -58,8 +58,8 @@ func (c Connect) Run(ctx Context, args []string) tea.Msg {
 			Hidden:      true,
 			Width:       20,
 		},
-		Server:  server,
-		Context: ctx,
+		Server: server,
+		Client: client,
 	}
 
 	return OpenModalMsg(modal)
@@ -71,7 +71,7 @@ type ConnectModal struct {
 	Login    Input // champ pour saisir le login
 	Password Input // champ pour saisir le mot de passe
 	Server         // le serveur auquel on tente de se connecter
-	Context        // contexte d'exécution de la commande
+	Client         // contexte d'exécution de la commande
 }
 
 func (c ConnectModal) Init() tea.Cmd {
@@ -143,7 +143,7 @@ func (c ConnectModal) Connect() tea.Msg {
 	}
 
 	// modifier les infos de la console
-	console := c.Context.Console
+	console := c.Console
 	console.Server = c.Server
 	console.Login = c.Login.Value
 	console.Privilege = privilege

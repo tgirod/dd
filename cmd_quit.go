@@ -24,8 +24,8 @@ func (q Quit) LongHelp() string {
 	return b.String()
 }
 
-func (q Quit) Run(ctx Context, args []string) tea.Msg {
-	if !ctx.Console.IsConnected() {
+func (q Quit) Run(c Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
 		return ErrorMsg{errNotConnected}
 	}
 

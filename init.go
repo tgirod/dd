@@ -1,7 +1,13 @@
 package main
 
 // serveur local du dirty district
-var dd = Server{}
+var dd = Server{
+	Address: "dd.local",
+	Credentials: []Cred{
+		{"invite", "invite", 1},
+		{"jesus", "roxor", 5},
+	},
+}
 
 // serveur public du district 22
 var d22 = Server{}
@@ -34,7 +40,7 @@ var legba_archive = Server{}
 var lbd = Server{}
 
 // green data
-var green = Server{}
+var greendata = Server{}
 
 // serveur privé de Crunch
 var leet = Server{}
@@ -48,64 +54,24 @@ var hope = Server{}
 // fanpage The Black Wave
 var tbw = Server{}
 
-func (g Game) Init() error {
-	// nettoyer les tables
-	g.Drop(&Server{})
-	g.Drop(&Console{})
-
-	// serveur de Jésus
-	if err := g.Save(&Server{
-		Address: "jesus",
-		Credentials: []Cred{
-			{"", "", 1},
-		},
-		Detection: 0.1,
-		Gate: Gate{
-			Targets: []Target{
-				{
-					Address:     "dist22",
-					Description: "lien vers la grille du district 22",
-					Restricted:  1,
-					Privilege:   1,
-				},
-				{
-					Address:     "dist22",
-					Description: "lien vers la grille du district 22",
-					Restricted:  3,
-					Privilege:   3,
-				},
-			},
-		},
-		Database: Database{
-			Description: "anthologie du frostpunk",
-			Entries: []Entry{
-				{
-					Key:      "plas0",
-					Keywords: []string{"plastobeton"},
-					Title:    "du plasto sous les plages",
-					Content:  "le meilleur album du monde",
-				},
-				{
-					Key:      "tbw0",
-					Keywords: []string{"blackwave"},
-					Title:    "The Black Wave - première sommation",
-					Content:  "le meilleur album du monde",
-				},
-			},
-		},
-	}); err != nil {
-		return err
-	}
-
-	// serveur du district 22
-	if err := g.Save(&Server{
-		Address: "dist22",
-		Credentials: []Cred{
-			{"", "", 1},
-		},
-	}); err != nil {
-		return err
-	}
-
-	return nil
+// TODO remplir le jeu
+var game = &Game{
+	Network: []Server{
+		dd,
+		d22,
+		kramps,
+		kramps_priv,
+		kramps_sec,
+		central,
+		abus,
+		legba,
+		legba_satcom,
+		legba_archive,
+		lbd,
+		greendata,
+		leet,
+		celine,
+		hope,
+		tbw,
+	},
 }

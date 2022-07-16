@@ -1,112 +1,54 @@
 package main
 
 import (
-	"fmt"
-	"strconv"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type LinkList struct{}
+type Link struct{}
 
-func (l LinkList) ParseName() string {
-	return "list"
+func (l Link) ParseName() string {
+	return "link"
 }
 
-func (l LinkList) ShortHelp() string {
-	return "list -- liste les liens disponibles"
+func (l Link) ShortHelp() string {
+	return "link -- affiche les liens disponibles ou suit un lien"
 }
 
-func (l LinkList) LongHelp() string {
+func (l Link) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(l.ShortHelp() + "\n")
 	b.WriteString("USAGE\n")
-	b.WriteString("  link list\n")
+	b.WriteString("  link\n")
+	b.WriteString("    liste les liens disponibles\n")
+	b.WriteString("  link <ID>\n")
+	b.WriteString("    suit le lien ID\n")
 	return b.String()
 }
 
-func (l LinkList) Run(c Client, args []string) tea.Msg {
+func (l Link) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ErrorMsg{errNotConnected}
+		return ResultMsg{
+			Error: errNotConnected,
+		}
 	}
 
-	// obtenir la liste des targets
-	// TODO filtrer en fonction du niveau "restricted" ?
-	msg := LinkListMsg{}
-	msg.Targets = c.Gate.Targets
-
-	return msg
-}
-
-type LinkListMsg struct {
-	Targets []Target
-}
-
-func (l LinkListMsg) View() string {
-	b := strings.Builder{}
-	for i, t := range l.Targets {
-		fmt.Fprintf(&b, "%1d %s\n", i, t.Description)
-	}
-	return b.String()
-}
-
-type LinkConnect struct{}
-
-func (l LinkConnect) ParseName() string {
-	return "connect"
-}
-
-func (l LinkConnect) ShortHelp() string {
-	return "connect -- suit un lien pour se connecter à un autre serveur"
-}
-
-func (l LinkConnect) LongHelp() string {
-	b := strings.Builder{}
-	b.WriteString(l.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
-	b.WriteString("  link connect <NUM>\n")
-	b.WriteString("ARGUMENTS\n")
-	b.WriteString("  NUM -- numéro du lien à suivre\n")
-	return b.String()
-}
-
-func (l LinkConnect) Run(c Client, args []string) tea.Msg {
-	if len(args) < 1 {
-		return ErrorMsg{errMissingArgument}
+	if len(args) == 0 {
+		// FIXME afficher la liste des liens
+		// mention "accès restreint" quand l'utilisateur n'a pas les privilèges
+		return ResultMsg{
+			Output: "FIXME",
+		}
 	}
 
-	if !c.IsConnected() {
-		return ErrorMsg{errNotConnected}
+	// FIXME
+	//id := args[0]
+	// récupérer le lien correspondant
+	// vérifier le niveau d'accréditation
+	// récupérer le serveur correspondant
+	// effectuer la connexion avec le serveur
+	return ResultMsg{
+		Output: "FIXME",
 	}
-
-	id, err := strconv.Atoi(args[0])
-	if err != nil {
-		return ErrorMsg{errInvalidArgument}
-	}
-
-	if id < 0 || id > len(c.Targets)-1 {
-		return ErrorMsg{errInvalidArgument}
-	}
-
-	target := c.Targets[id]
-
-	if c.Privilege < target.Restricted {
-		return ErrorMsg{errLowPrivilege}
-	}
-
-	// chercher le serveur correspondant
-	server, err := c.FindServer(target.Address)
-	if err != nil {
-		return ErrorMsg{errServerNotFound}
-	}
-
-	// modifier la console pour représenter la nouvelle connexion
-	co := c.Console
-	co.Server = server
-	co.Privilege = target.Privilege
-	co.Alarm = 1
-
-	// envoyer le message pour mettre à jour la console
-	return ConnectMsg{co}
 }

@@ -21,19 +21,19 @@ func (c Help) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(c.ShortHelp() + "\n")
 	b.WriteString("USAGE\n")
-	b.WriteString("  connect\n")
+	b.WriteString("  help <COMMAND>\n")
+	b.WriteString("ARGUMENTS\n")
+	b.WriteString("  COMMAND -- nom d'une commande\n")
 	return b.String()
 }
 
-func (c Help) Run(client Client, args []string) tea.Msg {
+func (c Help) Run(client *Client, args []string) tea.Msg {
 	b := strings.Builder{}
 	b.WriteString("COMMANDES DISPONIBLES\n\n")
 	for _, s := range client.Console.Node.Sub {
 		b.WriteString("  " + s.ShortHelp() + "\n")
 	}
-	return HelpMsg{b.String()}
-}
-
-type HelpMsg struct {
-	Help string
+	return ResultMsg{
+		Output: b.String(),
+	}
 }

@@ -28,9 +28,9 @@ func (d DataSearch) LongHelp() string {
 	return b.String()
 }
 
-func (d DataSearch) Run(c Client, args []string) tea.Msg {
+func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 	if len(args) < 1 {
-		return ParseErrorMsg{
+		return ResultMsg{
 			errMissingArgument,
 			d.LongHelp(),
 		}
@@ -39,12 +39,24 @@ func (d DataSearch) Run(c Client, args []string) tea.Msg {
 	keyword := args[0]
 
 	if !c.Console.IsConnected() {
-		return ErrorMsg{errNotConnected}
+		return ResultMsg{Error: errNotConnected}
 	}
 
-	// effectuer la recherche
-	entries := c.Database.Search(keyword, c.Console.Privilege)
-	return DataSearchMsg{entries}
+	entries := c.Search(keyword)
+
+	// construire la réponse à afficher
+	b := strings.Builder{}
+	for _, e := range entries {
+		if c.Privilege >= e.Restricted {
+			fmt.Fprintf(&b, "%s %s %s\n", e.Key, e.Keywords, e.Title)
+		} else {
+			fmt.Fprintf(&b, "%s %s %s\n", e.Key, e.Keywords, "accès restreint")
+		}
+	}
+
+	return ResultMsg{
+		Output: b.String(),
+	}
 }
 
 type DataSearchMsg struct {

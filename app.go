@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"encoding/gob"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,8 +10,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/asdine/storm/v3"
-	gc "github.com/asdine/storm/v3/codec/gob"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/wish"
 	bm "github.com/charmbracelet/wish/bubbletea"
@@ -19,15 +17,31 @@ import (
 	"github.com/gliderlabs/ssh"
 )
 
+var (
+	errInternalError      = errors.New("erreur interne")
+	errServerNotFound     = errors.New("serveur introuvable")
+	errServiceNotFound    = errors.New("serveur introuvable")
+	errInvalidCommand     = errors.New("commande invalide")
+	errMissingCommand     = errors.New("commande manquante")
+	errMissingArgument    = errors.New("argument manquant")
+	errInvalidArgument    = errors.New("argument invalide")
+	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
+	errGateNotFound       = errors.New("service gate introuvable")
+	errDatabaseNotFound   = errors.New("service database introuvable")
+	errNotConnected       = errors.New("la console n'est pas connectée")
+	errLowPrivilege       = errors.New("niveau de privilège insuffisant")
+)
+
 type App struct {
 	s *ssh.Server
-	Game
+	*Game
 }
 
 // NewApp créé un nouvel objet application
 func NewApp() *App {
 	var err error
 	a := new(App)
+	a.Game = game
 
 	if a.s, err = wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", host, port)),
@@ -45,35 +59,11 @@ func NewApp() *App {
 
 // Start démarre le serveur, en attente de connexions
 func (a *App) Start() {
-	var err error
-
-	// ouverture de la BDD
-	gob.Register(Node{})
-	gob.Register(Connect{})
-	gob.Register(Help{})
-	gob.Register(Index{})
-	gob.Register(Quit{})
-	gob.Register(LinkList{})
-	gob.Register(LinkConnect{})
-	gob.Register(DataSearch{})
-	gob.Register(Jack{})
-	gob.Register(Rise{})
-	db, err := storm.Open("game.db", storm.Codec(gc.Codec))
-	if err != nil {
-		log.Fatal(err)
-	}
-	a.Game = Game{db}
-	if err := a.Game.Init(); err != nil {
-		// FIXME a invoquer uniquement avec un argument "init"
-		log.Fatal(err)
-	}
-	defer a.Game.Close()
-
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	log.Printf("Starting SSH server on %s:%d", host, port)
 	go func() {
-		if err = a.s.ListenAndServe(); err != nil {
+		if err := a.s.ListenAndServe(); err != nil {
 			log.Fatalln(err)
 		}
 	}()
@@ -85,6 +75,11 @@ func (a *App) Start() {
 	if err := a.s.Shutdown(ctx); err != nil {
 		log.Fatalln(err)
 	}
+}
+
+// TODO piste pour que le client ait accès à l'objet tea.Program
+func (a *App) ProgramHandler(s ssh.Session) *tea.Program {
+	return nil
 }
 
 // Handler prend en charge la connexion entrante et créé les objets nécessaires

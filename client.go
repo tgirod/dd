@@ -19,45 +19,31 @@ type Client struct {
 	lastCmd string    // dernière commande saisie
 	modal   tea.Model // interface modale
 
-	Game    // état interne du jeu
-	Console // console enregistrée dans le jeu
+	*Game    // état interne du jeu
+	*Console // console enregistrée dans le jeu
 }
 
-func (c Client) Init() tea.Cmd {
-	// demander la création d'un objet Console
-	return func() tea.Msg {
-		console, err := c.Game.CreateConsole()
-		if err != nil {
-			return ErrorMsg{errInternalError}
-		}
-		return ConsoleMsg{console}
+func NewClient(width, height int, game *Game) *Client {
+	return &Client{
+		width:  width,
+		height: height,
+		input: Input{
+			Focus:       true,
+			Placeholder: "help",
+		},
+		Game:    game,
+		Console: NewConsole(),
 	}
 }
 
-// ErrorMsg contient le retour d'un programme à ajouter dans les logs
-type ErrorMsg struct {
-	Err error
+func (c *Client) Init() tea.Cmd {
+	return nil
 }
 
-func (e ErrorMsg) View(width int) string {
-	return lg.PlaceHorizontal(width, lg.Center, errorTextStyle.Render(e.Err.Error()))
-}
-
-type ParseErrorMsg struct {
-	Err  error
-	Help string
-}
-
-func (p ParseErrorMsg) View(width int) string {
-	b := strings.Builder{}
-	b.WriteString(lg.PlaceHorizontal(width, lg.Center, errorTextStyle.Render(p.Err.Error())))
-	b.WriteString(p.Help)
-	return b.String()
-}
-
-// ConsoleMsg contient le nouvel état de la console
-type ConsoleMsg struct {
-	Console
+// affiche le résultat d'une commande
+type ResultMsg struct {
+	Error  error
+	Output string
 }
 
 // OpenModalMsg ouvre une fenêtre modale
@@ -66,52 +52,19 @@ type OpenModalMsg tea.Model
 // CloseModalMsg ferme la fenêtre modale
 type CloseModalMsg struct{}
 
-func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+type SecurityIncreaseMsg struct{}
+
+type SecurityScanMsg struct{}
+
+type SecurityKickMsg struct{}
+
+func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
 
 	case tea.WindowSizeMsg:
 		c.height = msg.Height
 		c.width = msg.Width
-		return c, nil
-
-	case ErrorMsg:
-		c.output = msg.View(c.width)
-		return c, nil
-
-	case ParseErrorMsg:
-		c.output = msg.View(c.width)
-		return c, nil
-
-	case HelpMsg:
-		c.output = msg.Help
-
-	case ConsoleMsg:
-		c.Console = msg.Console
-
-	case ConnectMsg:
-		c.Console = msg.Console
-		c.output = "connexion établie"
-		return c, c.UpdateConsole
-
-	case LinkListMsg:
-		c.output = msg.View()
-		return c, nil
-
-	case IndexMsg:
-		c.output = msg.View()
-		return c, nil
-
-	case QuitMsg:
-		c.output = "déconnexion"
-		c.Server = Server{}
-		c.Privilege = 0
-		c.Alarm = 0
-		c.Login = ""
-		return c, c.UpdateConsole
-
-	case DataSearchMsg:
-		c.output = msg.View()
 		return c, nil
 
 	case OpenModalMsg:
@@ -124,44 +77,18 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.input.Focus = true
 		return c, nil
 
-	case SecurityScanMsg:
-		return c, tea.Every(time.Second, c.Security)
-
-	case SecurityIncreaseMsg:
-		c.Console.Alarm++
-		return c, tea.Batch(
-			c.UpdateConsole,
-			tea.Every(time.Second, c.Security),
-		)
-
-	case SecurityKickMsg:
-		c.output = "déconnecté de force du serveur"
-		c.Server = Server{}
-		c.Privilege = 0
-		c.Alarm = 0
-		c.Login = ""
-		return c, c.UpdateConsole
-
-	case JackMsg:
-		c.Console = msg.Console
-		c.output = "connexion illégale établie"
-		return c, tea.Batch(
-			c.UpdateConsole,
-			c.StartSecurity(),
-		)
-
-	case RiseMsg:
-		c.Console = msg.Console
-		c.output = "augmentation du niveau de privilège effectuée"
-		return c, tea.Batch(
-			c.UpdateConsole,
-			c.StartSecurity(),
-		)
+	case ResultMsg:
+		if msg.Error != nil {
+			c.output = msg.Error.Error()
+			return c, nil
+		}
+		c.output = msg.Output
+		return c, nil
 
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
 			// quitter l'application client
-			return c, tea.Sequentially(c.DeleteConsole, tea.Quit)
+			return c, tea.Quit
 		}
 
 		if c.modal != nil {
@@ -187,8 +114,8 @@ func (c Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return c, cmd
 }
 
-func (c Client) View() string {
-
+func (c *Client) View() string {
+	// affichage par défaut
 	if c.modal == nil {
 		return lg.JoinVertical(lg.Left,
 			c.statusView(),
@@ -197,8 +124,8 @@ func (c Client) View() string {
 		)
 	}
 
+	// affichage dans le cas ou une fenêtre modale est ouverte
 	modal := c.modal.View()
-
 	return lg.Place(
 		c.width, c.height,
 		lg.Center, lg.Center,
@@ -301,22 +228,8 @@ func (c Client) inputView() string {
 	return inputStyle.Render(content)
 }
 
-func NewClient(width, height int, game Game) Client {
-	c := Client{
-		width:  width,
-		height: height,
-		input: Input{
-			Focus:       true,
-			Placeholder: "help",
-		},
-		Game: game,
-	}
-
-	return c
-}
-
 // Run parse et exécute la commande saisie par l'utilisateur
-func (c Client) Run() tea.Cmd {
+func (c *Client) Run() tea.Cmd {
 	args := strings.Fields(c.input.Value)
 
 	// construire la tea.Cmd qui parse et exécute la commande
@@ -343,30 +256,9 @@ func (c Client) Security(t time.Time) tea.Msg {
 	return SecurityScanMsg{}
 }
 
-func (c Client) UpdateConsole() tea.Msg {
-	if err := c.Game.UpdateConsole(c.Console); err != nil {
-		return ErrorMsg{errInternalError}
-	}
-
-	return nil
-}
-
-func (c Client) DeleteConsole() tea.Msg {
-	if err := c.Game.DeleteConsole(c.Console); err != nil {
-		return ErrorMsg{errInternalError}
-	}
-	return nil
-}
-
 func (c Client) StartSecurity() tea.Cmd {
 	if c.Console.Alarm == 1 {
 		return tea.Every(time.Second, c.Security)
 	}
 	return nil
 }
-
-type SecurityIncreaseMsg struct{}
-
-type SecurityScanMsg struct{}
-
-type SecurityKickMsg struct{}

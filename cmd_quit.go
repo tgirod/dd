@@ -24,12 +24,17 @@ func (q Quit) LongHelp() string {
 	return b.String()
 }
 
-func (q Quit) Run(c Client, args []string) tea.Msg {
+func (q Quit) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ErrorMsg{errNotConnected}
+		return ResultMsg{Error: errNotConnected}
 	}
 
-	return QuitMsg{}
-}
+	c.Console.Server = nil
+	c.Console.Login = ""
+	c.Console.Privilege = 0
+	c.Console.Alarm = 0
 
-type QuitMsg struct{}
+	return ResultMsg{
+		Output: "déconnexion effectuée",
+	}
+}

@@ -24,17 +24,14 @@ func (r Rise) LongHelp() string {
 	return b.String()
 }
 
-func (r Rise) Run(c Client, args []string) tea.Msg {
+func (r Rise) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ErrorMsg{errNotConnected}
+		return ResultMsg{Error: errNotConnected}
 	}
 
-	co := c.Console
-	co.Privilege++
-	co.Alarm++
-	return RiseMsg{co}
-}
-
-type RiseMsg struct {
-	Console
+	c.Console.Privilege++
+	c.Console.Alarm++
+	return ResultMsg{
+		Output: "augmentation du niveau de privilège",
+	}
 }

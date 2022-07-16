@@ -27,9 +27,9 @@ func (j Jack) LongHelp() string {
 	return b.String()
 }
 
-func (j Jack) Run(c Client, args []string) tea.Msg {
+func (j Jack) Run(c *Client, args []string) tea.Msg {
 	if len(args) < 1 {
-		return ParseErrorMsg{
+		return ResultMsg{
 			fmt.Errorf("ADDRESS : %w", errMissingArgument),
 			j.LongHelp(),
 		}
@@ -41,7 +41,7 @@ func (j Jack) Run(c Client, args []string) tea.Msg {
 	// récupérer le serveur
 	server, err := c.Game.FindServer(address)
 	if err != nil {
-		return ErrorMsg{err}
+		return ResultMsg{Error: err}
 	}
 
 	co := c.Console
@@ -50,9 +50,7 @@ func (j Jack) Run(c Client, args []string) tea.Msg {
 	co.Privilege = 1
 	co.Alarm++
 
-	return JackMsg{co}
-}
-
-type JackMsg struct {
-	Console
+	return ResultMsg{
+		Output: "connexion illégale établie",
+	}
 }

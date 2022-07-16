@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -25,31 +24,20 @@ func (i Index) LongHelp() string {
 	return b.String()
 }
 
-func (i Index) Run(c Client, args []string) tea.Msg {
+func (i Index) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ErrorMsg{errNotConnected}
+		return ResultMsg{Error: errNotConnected}
 	}
 
 	s := c.Console.Server
 	b := strings.Builder{}
 
-	fmt.Fprintf(&b,
-		"GATE: %s (%d liens)\n",
-		s.Gate.Description,
-		len(s.Gate.Targets),
-	)
+	b.WriteString(s.Description)
+	b.WriteString("\n\n")
+	b.WriteString("LIENS DISPONIBLES\n")
+	b.WriteString("DONNEES DISPONIBLES\n")
 
-	fmt.Fprintf(&b,
-		"DATABASE : %s (%d entrées)\n",
-		s.Database.Description,
-		len(s.Database.Entries),
-	)
-
-	return IndexMsg(b.String())
-}
-
-type IndexMsg string
-
-func (i IndexMsg) View() string {
-	return string(i)
+	return ResultMsg{
+		Output: b.String(),
+	}
 }

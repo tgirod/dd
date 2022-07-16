@@ -13,7 +13,7 @@ type Command interface {
 	ParseName() string // nom de la commande pour le parsing
 	ShortHelp() string // nom de la commande + ligne de description
 	LongHelp() string  // aide complète
-	Run(c Client, args []string) tea.Msg
+	Run(c *Client, args []string) tea.Msg
 }
 
 type Context struct {
@@ -49,19 +49,19 @@ func (n Node) LongHelp() string {
 }
 
 // Parse exécute le parsing des arguments pour le noeud courant
-func (n Node) Run(c Client, args []string) tea.Msg {
+func (n Node) Run(c *Client, args []string) tea.Msg {
 	if len(args) == 0 {
-		return ParseErrorMsg{
-			errMissingCommand,
-			n.LongHelp(),
+		return ResultMsg{
+			Error:  errMissingCommand,
+			Output: n.LongHelp(),
 		}
 	}
 
 	match := n.Match(args[0])
 	if len(match) == 0 {
-		return ParseErrorMsg{
-			fmt.Errorf("%s : %w", args[0], errInvalidCommand),
-			n.LongHelp(),
+		return ResultMsg{
+			Error:  fmt.Errorf("%s : %w", args[0], errInvalidCommand),
+			Output: n.LongHelp(),
 		}
 	}
 

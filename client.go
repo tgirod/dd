@@ -59,11 +59,12 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return c, nil
 
 	case ResultMsg:
+		b := strings.Builder{}
 		if msg.Error != nil {
-			c.output = msg.Error.Error()
-			return c, nil
+			fmt.Fprintf(&b, "%s\n\n", msg.Error.Error())
 		}
-		c.output = msg.Output
+		fmt.Fprintf(&b, "%s\n", msg.Output)
+		c.output = b.String()
 		return c, nil
 
 	case SecurityMsg:

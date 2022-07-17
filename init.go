@@ -9,7 +9,7 @@ var dd = Server{
 	},
 	Description: ddDesc,
 	Targets: []Target{
-		{d22.Address, "serveur public du District 22", 1, 1},
+		{d22.Address, "serveur public du District 22", 1, "invite", "invite"},
 	},
 	Registers: []Register{
 		{"cafe", false, "machine à café", 1},
@@ -42,87 +42,126 @@ var d22 = Server{
 	},
 	Description: `Bienvenue sur le serveur public du District 22 d'Europole.`,
 	Targets: []Target{
-		{legba.Address, "Legba Voodocom", 1, 1},
-		{kramps.Address, "Kramps Securty", 1, 1},
-		{corp.Address, "Central Services", 1, 1},
-		{abus.Address, "Association des Banques Unifiées Suisses", 1, 1},
-		{greendata.Address, "Green Data, solution environnementale", 1, 1},
+		{legba.Address, "Legba Voodoocom", 1, "invite", "invite"},
+		{kramps.Address, "Kramps Security", 1, "invite", "invite"},
+		{corp.Address, "Central Services", 1, "invite", "invite"},
+		{abus.Address, "Association des Banques Unifiées Suisses", 1, "invite", "invite"},
+		{greendata.Address, "Green Data, solution environnementale", 1, "invite", "invite"},
 	},
 }
 
 // serveur public de la kramps
 var kramps = Server{
 	Address: "kramps.d22.eu",
+	Credentials: []Cred{
+		{"invite", "invite", 1},
+	},
 	Targets: []Target{
-		{kramps_priv.Address, "Serveur réservé au personnel", 3, 1},
+		{kramps_priv.Address, "Serveur réservé au personnel", 3, "personnel", "kramps1234"},
 	},
 }
 
 // serveur privé de la kramps
 var kramps_priv = Server{
 	Address: "priv.kramps.d22.eu",
+	Credentials: []Cred{
+		{"personnel", "kramps1234", 3},
+	},
 	Targets: []Target{
-		{kramps_sec.Address, "Serveur central de sécurité", 5, 1},
+		{kramps_sec.Address, "Serveur central de sécurité", 5, "admin", "lkjqsod"},
 	},
 }
 
 // serveur de sécurité de la kramps
 var kramps_sec = Server{
 	Address: "sec.kramps.d22.eu",
+	Credentials: []Cred{
+		{"admin", "lkjqsod", 5},
+	},
 }
 
 // serveur des services corporatistes D22
 var corp = Server{
 	Address: "corp.d22.eu",
+	Credentials: []Cred{
+		{"invite", "invite", 1},
+	},
 }
 
 // serveur bancaire du D22
 var abus = Server{
 	Address: "abus.d22.eu",
+	Credentials: []Cred{
+		{"invite", "invite", 1},
+	},
 }
 
 // serveur public de Legba Voodoocom
 var legba = Server{
 	Address: "legba.d22.eu",
+	Credentials: []Cred{
+		{"invite", "invite", 1},
+	},
 	Targets: []Target{
-		{legba_satcom.Address, "division sat-com", 3, 1},
-		{legba_archive.Address, "archives", 3, 1},
+		{legba_satcom.Address, "division sat-com", 5, "admin", "satcom9876"},
+		{legba_archive.Address, "archives", 3, "personnel", "archive6543"},
 	},
 }
 
 // serveur privé de la communication satellite
 var legba_satcom = Server{
 	Address: "satcom.legba.d22.eu",
+	Credentials: []Cred{
+		{"admin", "satcom9876", 5},
+	},
 }
 
 // serveur archive de Silicon Spirit
 var legba_archive = Server{
 	Address: "archive.legba.d22.eu",
+	Credentials: []Cred{
+		{"personnel", "archive6543", 3},
+	},
 }
 
 // serveur le bon district
 var lbd = Server{
 	Address: "lebondistrict.d22.eu",
+	Credentials: []Cred{
+		{"invite", "invite", 1},
+	},
 }
 
 // green data
 var greendata = Server{
 	Address: "greendata.d22.eu",
+	Credentials: []Cred{
+		{"invite", "invite", 1},
+	},
 }
 
 // serveur privé de Crunch
 var leet = Server{
 	Address: "l33t.darknet",
+	Credentials: []Cred{
+		{"crunch", "hacktheplanet", 5},
+	},
 }
 
 // serveur privé de Céline
 var celine = Server{
 	Address: "celine.darknet",
+	Credentials: []Cred{
+		{"celine", "waytoocool", 5},
+	},
 }
 
 // serveur mémoriel de Hope
 var hope = Server{
 	Address: "hope.local",
+	Credentials: []Cred{
+		{"hope", "tearsintherain", 5},
+	},
 }
 
 var game = &Game{

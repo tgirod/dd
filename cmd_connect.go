@@ -72,6 +72,7 @@ func (c Connect) Run(client *Client, args []string) tea.Msg {
 		// succès de la connexion
 		co := client.Console
 		co.Privilege = priv
+		co.Login = login
 		co.Server = server
 
 		b := strings.Builder{}

@@ -77,8 +77,16 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	}
 
 	// effectuer la connexion avec le serveur
+	priv, err := server.CheckCredentials(target.Login, target.Password)
+	if err != nil {
+		return ResultMsg{
+			Error: errInternalError,
+		}
+	}
+
 	c.Console.Server = server
-	c.Console.Privilege = target.Privilege
+	c.Console.Privilege = priv
+	c.Console.Login = target.Login
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)

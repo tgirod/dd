@@ -63,8 +63,9 @@ type Target struct {
 	// niveau de privilège nécessaire pour utiliser ce target
 	Restricted int
 
-	// niveau de privilège obtenu après la connexion
-	Privilege int
+	// identité utilisée pour se connecter
+	Login    string
+	Password string
 }
 
 func (s *Server) FindTarget(address string) (Target, error) {

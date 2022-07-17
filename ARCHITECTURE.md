@@ -32,9 +32,8 @@ mesures de sécurité.
 
 # Outils
 
-Sur cette nouvelle version, je m'appuie sur bubbletea, wish et storm
+Sur cette nouvelle version, je m'appuie sur bubbletea et wish
 
 - bubbletea est une lib pour fabriquer des TUI
 - wish est un serveur ssh permettant de servir ladite TUI
-- storm est une base de données clef-valeur simple
 

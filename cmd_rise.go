@@ -30,7 +30,7 @@ func (r Rise) Run(c *Client, args []string) tea.Msg {
 	}
 
 	c.Console.Privilege++
-	c.Console.Alarm++
+	c.Console.Alert++
 	return ResultMsg{
 		Output: "augmentation du niveau de privilège",
 	}

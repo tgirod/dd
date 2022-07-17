@@ -153,7 +153,7 @@ var (
 func (c Client) statusView() string {
 	login := fmt.Sprintf("👤 %s", c.Console.Login)
 	priv := strings.Repeat("✪", c.Console.Privilege)
-	alarm := strings.Repeat("💀", c.Console.Alarm)
+	alarm := strings.Repeat("💀", c.Console.Alert)
 
 	width := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(alarm)
 	status := lg.PlaceHorizontal(width, lg.Left, login+" "+priv) + alarm
@@ -205,17 +205,17 @@ func (c *Client) Run() tea.Cmd {
 }
 
 func (c Client) Security(t time.Time) tea.Msg {
-	// tenter d'augementer l'alarme
-	if c.Console.Alarm > 0 && rand.Float64() < c.Console.Server.Detection {
-		c.Console.Alarm++
+	// tenter d'augementer le niveau d'alarme
+	if c.Console.Alert > 0 && rand.Float64() < c.Console.Server.Detection {
+		c.Console.Alert++
 	}
 
-	if c.Console.Alarm > 5 {
+	if c.Console.Alert > 5 {
 		// hacker repéré, il se fait kicker du serveur
 		c.Console.Server = nil
 		c.Console.Login = ""
 		c.Console.Privilege = 0
-		c.Console.Alarm = 0
+		c.Console.Alert = 0
 
 		return ResultMsg{
 			Output: "coupure forcée de la connexion",

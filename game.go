@@ -32,11 +32,8 @@ type Console struct {
 	// niveau de privilège dans le serveur actuel
 	Privilege int
 
-	// l'utilisateur a fait quelque chose d'illégal
-	Illegal bool
-
 	// niveau d'alerte du serveur
-	Alarm int
+	Alert int
 
 	// serveur auquel la console est connectée
 	*Server

@@ -50,7 +50,7 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 		return ResultMsg{Error: errNotConnected}
 	}
 
-	entries := c.Server.DataSearch(keyword)
+	entries := c.Server.DataSearch(keyword, c.Login)
 
 	// construire la réponse à afficher
 	b := strings.Builder{}
@@ -108,7 +108,7 @@ func (d DataView) Run(c *Client, args []string) tea.Msg {
 	}
 
 	id := args[0]
-	entry, err := c.Server.FindEntry(id)
+	entry, err := c.Server.FindEntry(id, c.Login)
 	if err != nil {
 		return ResultMsg{
 			Error: err,

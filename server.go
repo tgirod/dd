@@ -88,6 +88,9 @@ type Entry struct {
 	// niveau de privilège requis
 	Restricted int
 
+	// accessible uniquement au propriétaire
+	Owner string
+
 	// titre de l'entrée
 	Title string
 
@@ -95,20 +98,24 @@ type Entry struct {
 	Content string
 }
 
-func (s *Server) DataSearch(keyword string) []Entry {
+func (s *Server) DataSearch(keyword string, owner string) []Entry {
 	result := make([]Entry, 0, len(s.Entries))
 	for _, e := range s.Entries {
 		if e.Match(keyword) {
-			result = append(result, e)
+			if e.Owner == "" || e.Owner == owner {
+				result = append(result, e)
+			}
 		}
 	}
 	return result
 }
 
-func (s *Server) FindEntry(id string) (Entry, error) {
+func (s *Server) FindEntry(id string, owner string) (Entry, error) {
 	for _, e := range s.Entries {
 		if e.ID == id {
-			return e, nil
+			if e.Owner == "" || e.Owner == owner {
+				return e, nil
+			}
 		}
 	}
 	return Entry{}, errInvalidArgument

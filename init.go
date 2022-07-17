@@ -15,6 +15,9 @@ var dd = Server{
 		{"cafe", false, "machine à café", 1},
 		{"sono", true, "et je coupe le son ...", 3},
 	},
+	Entries: []Entry{
+		{"bluemars", []string{"boisson"}, 1, "jesus", "Blue Mars - le cocktail parfait", "la recette"},
+	},
 	Detection: 0.1,
 }
 

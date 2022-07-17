@@ -73,8 +73,13 @@ func (c Connect) Run(client *Client, args []string) tea.Msg {
 		co := client.Console
 		co.Privilege = priv
 		co.Server = server
+
+		b := strings.Builder{}
+		fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
+		fmt.Fprintf(&b, "%s\n", server.Description)
+
 		return ResultMsg{
-			Output: "connexion établie",
+			Output: b.String(),
 		}
 	}
 }

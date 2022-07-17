@@ -7,10 +7,25 @@ var dd = Server{
 		{"invite", "invite", 1},
 		{"jesus", "roxor", 5},
 	},
+	Description: `
+Tu es connecté.e sur le serveur local du Dirty District.
+Ci-dessous, quelques liens pour accéder au Net.
+
+Merci de ne pas faire n'importe quoi.
+`,
+	Targets: []Target{
+		{"d22.eu", "serveur public du District 22", 1, 1},
+	},
 }
 
 // serveur public du district 22
-var d22 = Server{}
+var d22 = Server{
+	Address: "d22.eu",
+	Credentials: []Cred{
+		{"invite", "invite", 1},
+	},
+	Description: `Bienvenue sur le serveur public du District 22 d'Europole.`,
+}
 
 // serveur public de la kramps
 var kramps = Server{}
@@ -54,7 +69,6 @@ var hope = Server{}
 // fanpage The Black Wave
 var tbw = Server{}
 
-// TODO remplir le jeu
 var game = &Game{
 	Network: []Server{
 		dd,

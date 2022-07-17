@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -35,20 +36,55 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	}
 
 	if len(args) == 0 {
-		// FIXME afficher la liste des liens
-		// mention "accès restreint" quand l'utilisateur n'a pas les privilèges
+		// lister les liens disponibles
+		b := strings.Builder{}
+		fmt.Fprintf(&b, "LIENS DISPONIBLES : %d\n", len(c.Server.Targets))
+		for _, t := range c.Server.Targets {
+			if c.Console.Privilege >= t.Restricted {
+				fmt.Fprintf(&b, "  %s %s\n", t.Address, t.Description)
+			} else {
+				fmt.Fprintf(&b, "  %s %s\n", t.Address, "Accès restreint")
+			}
+		}
+
 		return ResultMsg{
-			Output: "FIXME",
+			Output: b.String(),
 		}
 	}
 
-	// FIXME
-	//id := args[0]
-	// récupérer le lien correspondant
-	// vérifier le niveau d'accréditation
+	// récupérer le lien
+	address := args[0]
+	target, err := c.Server.FindTarget(address)
+	if err != nil {
+		return ResultMsg{
+			Error: fmt.Errorf("%s : %w", address, err),
+		}
+	}
+
+	// vérifier le niveau de privilège
+	if c.Console.Privilege < target.Restricted {
+		return ResultMsg{
+			Error: errLowPrivilege,
+		}
+	}
+
 	// récupérer le serveur correspondant
+	server, err := c.Game.FindServer(address)
+	if err != nil {
+		return ResultMsg{
+			Error: fmt.Errorf("%s : %w", address, err),
+		}
+	}
+
 	// effectuer la connexion avec le serveur
+	c.Console.Server = server
+	c.Console.Privilege = target.Privilege
+
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
+	fmt.Fprintf(&b, "%s\n", server.Description)
+
 	return ResultMsg{
-		Output: "FIXME",
+		Output: b.String(),
 	}
 }

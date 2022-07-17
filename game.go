@@ -32,6 +32,9 @@ type Console struct {
 	// niveau de privilège dans le serveur actuel
 	Privilege int
 
+	// l'utilisateur a fait quelque chose d'illégal
+	Illegal bool
+
 	// niveau d'alerte du serveur
 	Alarm int
 
@@ -47,9 +50,10 @@ func NewConsole() *Console {
 				Connect{},
 				Node{
 					Name: "data",
-					Help: "utiliser le service DATABASE pour rechercher des données",
+					Help: "effectuer une recherche sur le serveur",
 					Sub: []Command{
 						DataSearch{},
+						DataView{},
 					},
 				},
 				Help{},
@@ -121,10 +125,19 @@ type Target struct {
 	Privilege int
 }
 
+func (s *Server) FindTarget(address string) (Target, error) {
+	for _, t := range s.Targets {
+		if t.Address == address {
+			return t, nil
+		}
+	}
+	return Target{}, errInvalidArgument
+}
+
 // Entry est une entrée dans une base de données
 type Entry struct {
 	// clef unique
-	Key string
+	ID string
 
 	// mots-clefs utilisés pour la recherche
 	Keywords []string
@@ -147,6 +160,16 @@ func (s *Server) Search(keyword string) []Entry {
 		}
 	}
 	return result
+}
+
+func (s *Server) FindEntry(id string) (Entry, error) {
+	for _, e := range s.Entries {
+		if e.ID == id {
+			return e, nil
+		}
+	}
+	return Entry{}, errInvalidArgument
+
 }
 
 // Match détermine si l'entrée contient le mot-clef

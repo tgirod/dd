@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -33,9 +34,9 @@ func (i Index) Run(c *Client, args []string) tea.Msg {
 	b := strings.Builder{}
 
 	b.WriteString(s.Description)
-	b.WriteString("\n\n")
-	b.WriteString("LIENS DISPONIBLES\n")
-	b.WriteString("DONNEES DISPONIBLES\n")
+	b.WriteString("\n")
+	fmt.Fprintf(&b, "LIENS DISPONIBLE(S) : %d\n", len(s.Targets))
+	fmt.Fprintf(&b, "DONNEES DISPONIBLE(S) : %d\n", len(s.Entries))
 
 	return ResultMsg{
 		Output: b.String(),

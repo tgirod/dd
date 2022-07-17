@@ -26,10 +26,9 @@ var (
 	errMissingArgument    = errors.New("argument manquant")
 	errInvalidArgument    = errors.New("argument invalide")
 	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
-	errGateNotFound       = errors.New("service gate introuvable")
-	errDatabaseNotFound   = errors.New("service database introuvable")
 	errNotConnected       = errors.New("la console n'est pas connectée")
 	errLowPrivilege       = errors.New("niveau de privilège insuffisant")
+	errEntryNotFound      = errors.New("entrée introuvable")
 )
 
 type App struct {

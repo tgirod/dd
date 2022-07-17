@@ -12,12 +12,11 @@ import (
 )
 
 type Client struct {
-	width   int       // largeur de l'affichage
-	height  int       // hauteur de l'affichage
-	input   Input     // invite de commande
-	output  string    // résultat de la dernière commande
-	lastCmd string    // dernière commande saisie
-	modal   tea.Model // interface modale
+	width   int    // largeur de l'affichage
+	height  int    // hauteur de l'affichage
+	input   Input  // invite de commande
+	output  string // résultat de la dernière commande
+	lastCmd string // dernière commande saisie
 
 	*Game    // état interne du jeu
 	*Console // console enregistrée dans le jeu
@@ -37,7 +36,9 @@ func NewClient(width, height int, game *Game) *Client {
 }
 
 func (c *Client) Init() tea.Cmd {
-	return nil
+	return tea.Every(time.Second, func(t time.Time) tea.Msg {
+		return SecurityMsg{}
+	})
 }
 
 // affiche le résultat d'une commande
@@ -46,17 +47,7 @@ type ResultMsg struct {
 	Output string
 }
 
-// OpenModalMsg ouvre une fenêtre modale
-type OpenModalMsg tea.Model
-
-// CloseModalMsg ferme la fenêtre modale
-type CloseModalMsg struct{}
-
-type SecurityIncreaseMsg struct{}
-
-type SecurityScanMsg struct{}
-
-type SecurityKickMsg struct{}
+type SecurityMsg struct{}
 
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
@@ -67,16 +58,6 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.width = msg.Width
 		return c, nil
 
-	case OpenModalMsg:
-		c.modal = msg
-		c.input.Focus = false
-		return c, nil
-
-	case CloseModalMsg:
-		c.modal = nil
-		c.input.Focus = true
-		return c, nil
-
 	case ResultMsg:
 		if msg.Error != nil {
 			c.output = msg.Error.Error()
@@ -85,16 +66,13 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output = msg.Output
 		return c, nil
 
+	case SecurityMsg:
+		return c, tea.Every(time.Second, c.Security)
+
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
 			// quitter l'application client
 			return c, tea.Quit
-		}
-
-		if c.modal != nil {
-			// déléguer le traitement des messages à la fenêtre modale
-			c.modal, cmd = c.modal.Update(msg)
-			return c, cmd
 		}
 
 		if msg.Type == tea.KeyEnter {
@@ -115,23 +93,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (c *Client) View() string {
-	// affichage par défaut
-	if c.modal == nil {
-		return lg.JoinVertical(lg.Left,
-			c.statusView(),
-			c.outputView(),
-			c.inputView(),
-		)
-	}
-
-	// affichage dans le cas ou une fenêtre modale est ouverte
-	modal := c.modal.View()
-	return lg.Place(
-		c.width, c.height,
-		lg.Center, lg.Center,
-		modal,
-		lg.WithWhitespaceChars("+ "),
-		lg.WithWhitespaceForeground(lg.Color("8")),
+	return lg.JoinVertical(lg.Left,
+		c.statusView(),
+		c.outputView(),
+		c.inputView(),
 	)
 }
 
@@ -240,20 +205,25 @@ func (c *Client) Run() tea.Cmd {
 }
 
 func (c Client) Security(t time.Time) tea.Msg {
-	fmt.Println("sec")
-	if c.Console.Alarm >= 10 {
+	// tenter d'augementer l'alarme
+	if c.Console.Alarm > 0 && rand.Float64() < c.Console.Server.Detection {
+		c.Console.Alarm++
+	}
+
+	if c.Console.Alarm > 5 {
 		// hacker repéré, il se fait kicker du serveur
-		return SecurityKickMsg{}
+		c.Console.Server = nil
+		c.Console.Login = ""
+		c.Console.Privilege = 0
+		c.Console.Alarm = 0
+
+		return ResultMsg{
+			Output: "coupure forcée de la connexion",
+		}
 	}
 
-	r := rand.Float64()
-	if r < c.Console.Server.Detection {
-		// la localisation du hacker progresse
-		return SecurityIncreaseMsg{}
-	}
-
-	// la localisation du hacker se poursuit
-	return SecurityScanMsg{}
+	// on continue de faire tourner la routine de sécurité
+	return SecurityMsg{}
 }
 
 func (c Client) StartSecurity() tea.Cmd {

@@ -8,6 +8,15 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+var Registry = Node{
+	Name: "registry",
+	Help: "manipuler les périphériques connectés au serveur",
+	Sub: []Command{
+		RegistryView{},
+		RegistryEdit{},
+	},
+}
+
 type RegistryView struct{}
 
 func (r RegistryView) ParseName() string {

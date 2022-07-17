@@ -42,14 +42,7 @@ func NewConsole() *Console {
 		Node: Node{
 			Sub: []Command{
 				Connect{},
-				Node{
-					Name: "data",
-					Help: "effectuer une recherche sur le serveur",
-					Sub: []Command{
-						DataSearch{},
-						DataView{},
-					},
-				},
+				Data,
 				Help{},
 				Index{},
 				Link{},

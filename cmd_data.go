@@ -8,6 +8,15 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+var Data = Node{
+	Name: "data",
+	Help: "effectuer une recherche sur le serveur",
+	Sub: []Command{
+		DataSearch{},
+		DataView{},
+	},
+}
+
 type DataSearch struct{}
 
 func (d DataSearch) ParseName() string {

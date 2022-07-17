@@ -11,14 +11,14 @@ var dd = Server{
 Tu es connecté.e sur le serveur local du Dirty District.
 Ci-dessous, quelques liens pour accéder au Net.
 
-Merci de ne pas faire n'importe quoi.
-`,
+Merci de ne pas faire n'importe quoi.`,
 	Targets: []Target{
-		{"d22.eu", "serveur public du District 22", 1, 1},
+		{d22.Address, "serveur public du District 22", 1, 1},
 	},
 	Registers: []Register{
 		{"cafe", false, "machine à café"},
 	},
+	Detection: 0.1,
 }
 
 // serveur public du district 22
@@ -28,49 +28,89 @@ var d22 = Server{
 		{"invite", "invite", 1},
 	},
 	Description: `Bienvenue sur le serveur public du District 22 d'Europole.`,
+	Targets: []Target{
+		{legba.Address, "Legba Voodocom", 1, 1},
+		{kramps.Address, "Kramps Securty", 1, 1},
+		{corp.Address, "Central Services", 1, 1},
+		{abus.Address, "Association des Banques Unifiées Suisses", 1, 1},
+		{greendata.Address, "Green Data, solution environnementale", 1, 1},
+	},
 }
 
 // serveur public de la kramps
-var kramps = Server{}
+var kramps = Server{
+	Address: "kramps.d22.eu",
+	Targets: []Target{
+		{kramps_priv.Address, "Serveur réservé au personnel", 3, 1},
+	},
+}
 
 // serveur privé de la kramps
-var kramps_priv = Server{}
+var kramps_priv = Server{
+	Address: "priv.kramps.d22.eu",
+	Targets: []Target{
+		{kramps_sec.Address, "Serveur central de sécurité", 5, 1},
+	},
+}
 
 // serveur de sécurité de la kramps
-var kramps_sec = Server{}
+var kramps_sec = Server{
+	Address: "sec.kramps.d22.eu",
+}
 
 // serveur des services corporatistes D22
-var central = Server{}
+var corp = Server{
+	Address: "corp.d22.eu",
+}
 
 // serveur bancaire du D22
-var abus = Server{}
+var abus = Server{
+	Address: "abus.d22.eu",
+}
 
 // serveur public de Legba Voodoocom
-var legba = Server{}
+var legba = Server{
+	Address: "legba.d22.eu",
+	Targets: []Target{
+		{legba_satcom.Address, "division sat-com", 3, 1},
+		{legba_archive.Address, "archives", 3, 1},
+	},
+}
 
 // serveur privé de la communication satellite
-var legba_satcom = Server{}
+var legba_satcom = Server{
+	Address: "satcom.legba.d22.eu",
+}
 
 // serveur archive de Silicon Spirit
-var legba_archive = Server{}
+var legba_archive = Server{
+	Address: "archive.legba.d22.eu",
+}
 
 // serveur le bon district
-var lbd = Server{}
+var lbd = Server{
+	Address: "lebondistrict.d22.eu",
+}
 
 // green data
-var greendata = Server{}
+var greendata = Server{
+	Address: "greendata.d22.eu",
+}
 
 // serveur privé de Crunch
-var leet = Server{}
+var leet = Server{
+	Address: "l33t.darknet",
+}
 
 // serveur privé de Céline
-var celine = Server{}
+var celine = Server{
+	Address: "celine.darknet",
+}
 
 // serveur mémoriel de Hope
-var hope = Server{}
-
-// fanpage The Black Wave
-var tbw = Server{}
+var hope = Server{
+	Address: "hope.local",
+}
 
 var game = &Game{
 	Network: []Server{
@@ -79,7 +119,7 @@ var game = &Game{
 		kramps,
 		kramps_priv,
 		kramps_sec,
-		central,
+		corp,
 		abus,
 		legba,
 		legba_satcom,
@@ -89,6 +129,5 @@ var game = &Game{
 		leet,
 		celine,
 		hope,
-		tbw,
 	},
 }

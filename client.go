@@ -225,10 +225,3 @@ func (c Client) Security(t time.Time) tea.Msg {
 	// on continue de faire tourner la routine de sécurité
 	return SecurityMsg{}
 }
-
-func (c Client) StartSecurity() tea.Cmd {
-	if c.Console.Alarm == 1 {
-		return tea.Every(time.Second, c.Security)
-	}
-	return nil
-}

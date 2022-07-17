@@ -44,6 +44,7 @@ func NewConsole() *Console {
 				Connect{},
 				Data,
 				Help{},
+				Identify{},
 				Index{},
 				Link{},
 				Load{},

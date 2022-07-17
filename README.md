@@ -1,3 +1,11 @@
+# Comment utiliser ce programme ?
+
+installer go 1.18
+
+1. go build
+2. ./dd
+3. ssh localhost -p 1337
+
 # TODO
 
 fonctionnalités les plus importantes

@@ -58,7 +58,7 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
 	for _, e := range entries {
 		title := e.Title
-		if c.Privilege >= e.Restricted {
+		if c.Privilege < e.Restricted {
 			title = "accès restreint"
 		}
 

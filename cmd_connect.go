@@ -21,9 +21,9 @@ func (c Connect) ShortHelp() string {
 func (c Connect) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(c.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
+	b.WriteString("\nUSAGE\n")
 	b.WriteString("  connect <ADDRESS> <LOGIN> <PASSWORD>\n")
-	b.WriteString("ARGUMENTS\n")
+	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  ADDRESS  -- adresse du serveur sur le Net\n")
 	b.WriteString("  LOGIN    -- identifiant utilisateur\n")
 	b.WriteString("  PASSWORD -- mot de passe utilisateur\n")

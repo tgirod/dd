@@ -35,8 +35,9 @@ func (i Index) Run(c *Client, args []string) tea.Msg {
 
 	b.WriteString(s.Description)
 	b.WriteString("\n")
-	fmt.Fprintf(&b, "LIENS DISPONIBLE(S) : %d\n", len(s.Targets))
-	fmt.Fprintf(&b, "DONNEES DISPONIBLE(S) : %d\n", len(s.Entries))
+	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Targets))
+	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries))
+	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
 
 	return ResultMsg{
 		Output: b.String(),

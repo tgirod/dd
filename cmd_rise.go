@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -32,6 +33,6 @@ func (r Rise) Run(c *Client, args []string) tea.Msg {
 	c.Console.Privilege++
 	c.Console.Alert++
 	return ResultMsg{
-		Output: "augmentation du niveau de privilège",
+		Output: fmt.Sprintf("niveau de privilège augmenté à %d", c.Console.Privilege),
 	}
 }

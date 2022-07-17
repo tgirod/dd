@@ -20,9 +20,9 @@ func (l Load) ShortHelp() string {
 func (l Load) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(l.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
+	b.WriteString("\nUSAGE\n")
 	b.WriteString("  load <CODE>\n")
-	b.WriteString("ARGUMENTS\n")
+	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  CODE -- code de la commande\n")
 	return b.String()
 }

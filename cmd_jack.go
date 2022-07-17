@@ -20,9 +20,9 @@ func (j Jack) ShortHelp() string {
 func (j Jack) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(j.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
+	b.WriteString("\nUSAGE\n")
 	b.WriteString("  jack <ADDRESS>\n")
-	b.WriteString("ARGUMENTS\n")
+	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  ADDRESS -- l'adresse du serveur sur le Net\n")
 	return b.String()
 }

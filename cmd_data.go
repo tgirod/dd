@@ -21,9 +21,9 @@ func (d DataSearch) ShortHelp() string {
 func (d DataSearch) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(d.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
+	b.WriteString("\nUSAGE\n")
 	b.WriteString("  data search <KEYWORD>\n")
-	b.WriteString("ARGUMENTS\n")
+	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  KEYWORD -- mot-clef à rechercher\n")
 	return b.String()
 }

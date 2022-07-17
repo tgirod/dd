@@ -20,11 +20,11 @@ func (l Link) ShortHelp() string {
 func (l Link) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(l.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
-	b.WriteString("  link\n")
-	b.WriteString("    liste les liens disponibles\n")
-	b.WriteString("  link <ID>\n")
-	b.WriteString("    suit le lien ID\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  link [ID]\n")
+	b.WriteString("\nARGUMENTS\n")
+	b.WriteString("  aucun -- liste les liens disponibles\n")
+	b.WriteString("  ID    -- suit le lien ID\n")
 	return b.String()
 }
 

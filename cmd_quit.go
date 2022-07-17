@@ -19,7 +19,7 @@ func (q Quit) ShortHelp() string {
 func (q Quit) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(q.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
+	b.WriteString("\nUSAGE\n")
 	b.WriteString("  quit\n")
 	return b.String()
 }

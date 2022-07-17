@@ -19,7 +19,7 @@ func (p Plug) ShortHelp() string {
 func (p Plug) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(p.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
+	b.WriteString("\nUSAGE\n")
 	b.WriteString("  plug\n")
 	return b.String()
 }

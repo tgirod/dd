@@ -20,7 +20,7 @@ func (r Rise) ShortHelp() string {
 func (r Rise) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(r.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
+	b.WriteString("\nUSAGE\n")
 	b.WriteString("  rise\n")
 	return b.String()
 }

@@ -20,11 +20,11 @@ func (e Evade) ShortHelp() string {
 func (e Evade) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(e.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
-	b.WriteString("  evade\n")
-	b.WriteString("    liste les zones mémoires disponibles\n")
-	b.WriteString("  evade <MEM>\n")
-	b.WriteString("    évasion vers la zone mémoire <MEM>\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  evade [MEM]\n")
+	b.WriteString("\nARGUMENTS\n")
+	b.WriteString("  aucun -- liste les zones mémoire disponibles\n")
+	b.WriteString("  MEM   -- évasion vers la zone mémoire\n")
 	return b.String()
 }
 

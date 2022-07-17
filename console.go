@@ -49,14 +49,7 @@ func NewConsole() *Console {
 				Load{},
 				Plug{},
 				Quit{},
-				Node{
-					Name: "registry",
-					Help: "manipuler les périphériques connectés au serveur",
-					Sub: []Command{
-						RegistryView{},
-						RegistryEdit{},
-					},
-				},
+				Registry,
 			},
 		},
 	}

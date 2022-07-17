@@ -7,19 +7,32 @@ var dd = Server{
 		{"invite", "invite", 1},
 		{"jesus", "roxor", 5},
 	},
-	Description: `
-Tu es connecté.e sur le serveur local du Dirty District.
-Ci-dessous, quelques liens pour accéder au Net.
-
-Merci de ne pas faire n'importe quoi.`,
+	Description: ddDesc,
 	Targets: []Target{
 		{d22.Address, "serveur public du District 22", 1, 1},
 	},
 	Registers: []Register{
-		{"cafe", false, "machine à café"},
+		{"cafe", false, "machine à café", 1},
+		{"sono", true, "et je coupe le son ...", 3},
 	},
 	Detection: 0.1,
 }
+
+var ddDesc = `
+ ____  _      _           ____  _     _        _      _
+|  _ \(_)_ __| |_ _   _  |  _ \(_)___| |_ _ __(_) ___| |_
+| | | | | '__| __| | | | | | | | / __| __| '__| |/ __| __|
+| |_| | | |  | |_| |_| | | |_| | \__ \ |_| |  | | (__| |_
+|____/|_|_|   \__|\__, | |____/|_|___/\__|_|  |_|\___|\__|
+                  |___/
+Bienvenue sur le serveur communautaire du Dirty District.
+
+Ce serveur est connecté au Net par le biais d'un accès illégal. Merci de ne pas
+faire n'importe quoi.
+
+Tape "index" pour avoir la liste des services fournis par le serveur. Si tu as
+besoin d'aide, demande à ton nerd préféré.
+`
 
 // serveur public du district 22
 var d22 = Server{

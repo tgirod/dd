@@ -53,7 +53,6 @@ var Hack = map[string]Command{
 }
 
 func NewConsole() *Console {
-	// TODO compléter les commandes par défaut
 	return &Console{
 		Node: Node{
 			Sub: []Command{

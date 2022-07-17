@@ -1,15 +1,65 @@
 package main
 
+const (
+	SEC1 = 0.05
+	SEC2 = 0.1
+	SEC3 = 0.2
+	SEC4 = 0.4
+	SEC5 = 0.8
+)
+
+const (
+	mel            = "GGCCAAAGCTCCTTCGGAGC"
+	rocky          = "CCGCGCAGAATCATAGCTGT"
+	rita           = "CAAAGTTCTAGGCATAGGGA"
+	styx           = "TTAGCTCGATATCCTAACCC"
+	kapo           = "GAACTGCTTTAGTTGACGGA"
+	scalpel        = "TGAAAGAGACATGATGCCTT"
+	greko          = "TCTGAGGTTTATTGATTTCG"
+	jesus          = "TTCGGGATTACTGCGTGCTG"
+	escobar        = "GGAGGACACCCCAAACGCAT"
+	cageot         = "GCCCTTGTCATGTACTTAGT"
+	lafouine       = "CTGTCACCCAATCTACAGCG"
+	eva            = "CTGTTGTAGTGACATGTTTC"
+	fatmike        = "AACCTTGGGCACGGTCGGTA"
+	kennedy        = "CCCGCGGGCAAAGCTGACAG"
+	savagegirl     = "GGGTCTATAGGTCAAACGGT"
+	raoulcool      = "GTCACAAGGTTGTTTAATGG"
+	greenglass     = "ATGCCTACCTCCAATGATTA"
+	chillydaisy    = "CGGGAGACACGTTCAGTCTT"
+	frereping      = "GCATGGCCGAATTCCTCATT"
+	papaproxy      = "CGATTTGTATTGGATACGGA"
+	nikki          = "ACGAACCTAGAGCCGCACGC"
+	celine         = "CGCTCCCATTTCATGTCAGC"
+	cramille       = "TTTGGGAGAAGCTTATGCAC"
+	tigerdoll      = "ATATGTTGAGCGTAAAGGCG"
+	sistermorphine = "CCATCCGGCGGACCTTATGC"
+	zilmir         = "GACGGGATACCTACTCTCGA"
+	bettyb         = "ATTCCGACTCAGGGTACCGG"
+	abraham        = "TGGCGTCTCTAATTCTTGCC"
+	crunch         = "TTCAAGCTGAATATGAAAGG"
+	onekick        = "GTCAAATCTGAGACTCTTGC"
+	jacob          = "TGAAAGAGACAGTATGCCGT"
+	gang1          = "TTCGACTGAATGTTTGATGT"
+	gang2          = "TATCGACGCACGGGACTTGG"
+	gang3          = "CGAGAAATGACAGAGTTGTA"
+	paula          = "GGGTGATCTGTTGCCCCCTG"
+	ringo          = "AACTGACGGATTCGATCATG"
+	georges        = "GTTTGCACGGAACATGCAAC"
+	jeanne         = "GACCCGTATTTCGCTGATTG"
+	oggy           = "TCAGCTTCTAACGTTCGGGA"
+)
+
 // serveur local du dirty district
 var dd = Server{
 	Address: "dd.local",
 	Credentials: []Cred{
-		{"invite", "invite", 1},
+		{"public", "public", 1},
 		{"jesus", "roxor", 5},
 	},
 	Description: ddDesc,
 	Targets: []Target{
-		{d22.Address, "serveur public du District 22", 1, "invite", "invite"},
+		{d22.Address, "serveur public du District 22", 1, "public", "public"},
 	},
 	Registers: []Register{
 		{"cafe", false, "machine à café", 1},
@@ -18,7 +68,7 @@ var dd = Server{
 	Entries: []Entry{
 		{"bluemars", []string{"boisson"}, 1, "jesus", "Blue Mars - le cocktail parfait", "la recette"},
 	},
-	Detection: 0.1,
+	Detection: SEC1,
 }
 
 var ddDesc = `
@@ -41,23 +91,24 @@ besoin d'aide, demande à ton nerd préféré.
 var d22 = Server{
 	Address: "d22.eu",
 	Credentials: []Cred{
-		{"invite", "invite", 1},
+		{"public", "public", 1},
 	},
 	Description: `Bienvenue sur le serveur public du District 22 d'Europole.`,
 	Targets: []Target{
-		{legba.Address, "Legba Voodoocom", 1, "invite", "invite"},
-		{kramps.Address, "Kramps Security", 1, "invite", "invite"},
-		{corp.Address, "Central Services", 1, "invite", "invite"},
-		{abus.Address, "Association des Banques Unifiées Suisses", 1, "invite", "invite"},
-		{greendata.Address, "Green Data, solution environnementale", 1, "invite", "invite"},
+		{legba.Address, "Legba Voodoocom", 1, "public", "public"},
+		{kramps.Address, "Kramps Security", 1, "public", "public"},
+		{corp.Address, "Central Services", 1, "public", "public"},
+		{abus.Address, "Association des Banques Unifiées Suisses", 1, "public", "public"},
+		{greendata.Address, "Green Data, solution environnementale", 1, "public", "public"},
 	},
+	Detection: SEC2,
 }
 
 // serveur public de la kramps
 var kramps = Server{
 	Address: "kramps.d22.eu",
 	Credentials: []Cred{
-		{"invite", "invite", 1},
+		{"public", "public", 1},
 	},
 	Targets: []Target{
 		{kramps_priv.Address, "Serveur réservé au personnel", 3, "personnel", "kramps1234"},
@@ -87,7 +138,7 @@ var kramps_sec = Server{
 var corp = Server{
 	Address: "corp.d22.eu",
 	Credentials: []Cred{
-		{"invite", "invite", 1},
+		{"public", "public", 1},
 	},
 }
 
@@ -95,7 +146,7 @@ var corp = Server{
 var abus = Server{
 	Address: "abus.d22.eu",
 	Credentials: []Cred{
-		{"invite", "invite", 1},
+		{"public", "public", 1},
 	},
 }
 
@@ -103,7 +154,7 @@ var abus = Server{
 var legba = Server{
 	Address: "legba.d22.eu",
 	Credentials: []Cred{
-		{"invite", "invite", 1},
+		{"public", "public", 1},
 	},
 	Targets: []Target{
 		{legba_satcom.Address, "division sat-com", 5, "admin", "satcom9876"},
@@ -131,7 +182,7 @@ var legba_archive = Server{
 var lbd = Server{
 	Address: "lebondistrict.d22.eu",
 	Credentials: []Cred{
-		{"invite", "invite", 1},
+		{"public", "public", 1},
 	},
 }
 
@@ -139,7 +190,7 @@ var lbd = Server{
 var greendata = Server{
 	Address: "greendata.d22.eu",
 	Credentials: []Cred{
-		{"invite", "invite", 1},
+		{"public", "public", 1},
 	},
 }
 
@@ -152,7 +203,7 @@ var leet = Server{
 }
 
 // serveur privé de Céline
-var celine = Server{
+var lair = Server{
 	Address: "celine.darknet",
 	Credentials: []Cred{
 		{"celine", "waytoocool", 5},
@@ -182,7 +233,7 @@ var game = &Game{
 		lbd,
 		greendata,
 		leet,
-		celine,
+		lair,
 		hope,
 	},
 }

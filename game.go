@@ -39,6 +39,11 @@ type Console struct {
 	*Server
 }
 
+var Hack = map[string]Command{
+	"jack": Jack{},
+	"rise": Rise{},
+}
+
 func NewConsole() *Console {
 	// TODO compléter les commandes par défaut
 	return &Console{
@@ -56,9 +61,8 @@ func NewConsole() *Console {
 				Help{},
 				Index{},
 				Link{},
+				Load{},
 				Quit{},
-				Jack{},
-				Rise{},
 			},
 		},
 	}

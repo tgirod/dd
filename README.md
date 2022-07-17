@@ -16,6 +16,7 @@ le jeu
 
 - [x] topologie du réseau
 - [ ] accréditations pour accéder aux divers serveurs
+- [ ] modifier les codes pour charger les logiciels de hack (et matérialiser les logiciels avec des clefs USB)
 
 ## Interface
 

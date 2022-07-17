@@ -35,6 +35,9 @@ type Console struct {
 	// niveau d'alerte du serveur
 	Alert int
 
+	// interface neurale directe
+	DNI bool
+
 	// serveur auquel la console est connectée
 	*Server
 }
@@ -62,6 +65,7 @@ func NewConsole() *Console {
 				Index{},
 				Link{},
 				Load{},
+				Plug{},
 				Quit{},
 			},
 		},

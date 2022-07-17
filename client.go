@@ -68,7 +68,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return c, nil
 
 	case SecurityMsg:
-		return c, tea.Every(time.Second, c.Security)
+		return c, tea.Every(c.SecurityDelay(), c.Security)
 
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
@@ -91,6 +91,15 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	return c, cmd
+}
+
+// temps entre deux scans de sécurité - plus long si le hacker a activé la DNI
+func (c *Client) SecurityDelay() time.Duration {
+	delay := time.Second
+	if c.Console.DNI {
+		delay *= 3
+	}
+	return delay
 }
 
 func (c *Client) View() string {

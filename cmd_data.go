@@ -42,7 +42,7 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 		return ResultMsg{Error: errNotConnected}
 	}
 
-	entries := c.Server.Search(keyword)
+	entries := c.Server.DataSearch(keyword)
 
 	// construire la réponse à afficher
 	b := strings.Builder{}

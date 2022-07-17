@@ -119,9 +119,9 @@ func (s *Server) FindEntry(id string) (Entry, error) {
 }
 
 func (s *Server) FindRegister(name string) (*Register, error) {
-	for _, r := range s.Registers {
+	for i, r := range s.Registers {
 		if r.Name == name {
-			return &r, nil
+			return &s.Registers[i], nil
 		}
 	}
 	return nil, errInvalidArgument

@@ -16,6 +16,9 @@ Merci de ne pas faire n'importe quoi.
 	Targets: []Target{
 		{"d22.eu", "serveur public du District 22", 1, 1},
 	},
+	Registers: []Register{
+		{"cafe", false, "machine à café"},
+	},
 }
 
 // serveur public du district 22

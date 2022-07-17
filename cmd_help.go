@@ -35,6 +35,8 @@ func (c Help) Run(client *Client, args []string) tea.Msg {
 		for _, s := range client.Console.Node.Sub {
 			b.WriteString("  " + s.ShortHelp() + "\n")
 		}
+		b.WriteString("\nPour plus d'aide, tapez 'help <COMMAND>'\n")
+
 		return ResultMsg{
 			Output: b.String(),
 		}

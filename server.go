@@ -2,6 +2,11 @@ package main
 
 import (
 	"strings"
+	"unicode"
+
+	"golang.org/x/text/runes"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
 	//"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
@@ -99,16 +104,6 @@ func (s *Server) DataSearch(keyword string) []Entry {
 	return result
 }
 
-func (s *Server) RegisterSearch(prefix string) []Register {
-	result := make([]Register, 0, len(s.Registers))
-	for _, r := range s.Registers {
-		if r.Match(prefix) {
-			result = append(result, r)
-		}
-	}
-	return result
-}
-
 func (s *Server) FindEntry(id string) (Entry, error) {
 	for _, e := range s.Entries {
 		if e.ID == id {
@@ -118,20 +113,11 @@ func (s *Server) FindEntry(id string) (Entry, error) {
 	return Entry{}, errInvalidArgument
 }
 
-func (s *Server) FindRegister(name string) (*Register, error) {
-	for i, r := range s.Registers {
-		if r.Name == name {
-			return &s.Registers[i], nil
-		}
-	}
-	return nil, errInvalidArgument
-}
-
 // Match détermine si l'entrée contient le mot-clef
 func (e Entry) Match(keyword string) bool {
-	//FIXME
-	//keyword = normalize(keyword)
+	keyword = normalize(keyword)
 
+	// FIXME est-ce qu'on utilise strings.HasPrefix (plus facile) ?
 	for _, k := range e.Keywords {
 		if k == keyword {
 			return true
@@ -146,8 +132,34 @@ type Register struct {
 	Name        string
 	State       bool
 	Description string
+	Restricted  int
 }
 
 func (r *Register) Match(prefix string) bool {
 	return strings.HasPrefix(r.Name, prefix)
+}
+
+func (s *Server) RegisterSearch(prefix string) []Register {
+	result := make([]Register, 0, len(s.Registers))
+	for _, r := range s.Registers {
+		if r.Match(prefix) {
+			result = append(result, r)
+		}
+	}
+	return result
+}
+
+func (s *Server) FindRegister(name string) (*Register, error) {
+	for i, r := range s.Registers {
+		if r.Name == name {
+			return &s.Registers[i], nil
+		}
+	}
+	return nil, errInvalidArgument
+}
+
+func normalize(s string) string {
+	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
+	out, _, _ := transform.String(t, s)
+	return out
 }

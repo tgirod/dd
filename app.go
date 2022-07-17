@@ -30,6 +30,8 @@ var (
 	errConnected          = errors.New("la console est connectée")
 	errLowPrivilege       = errors.New("niveau de privilège insuffisant")
 	errEntryNotFound      = errors.New("entrée introuvable")
+	errMemNotFound        = errors.New("zone mémoire introuvable")
+	errMemUnavailable     = errors.New("zone mémoie indisponible")
 )
 
 type App struct {

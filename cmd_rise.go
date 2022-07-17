@@ -32,6 +32,8 @@ func (r Rise) Run(c *Client, args []string) tea.Msg {
 
 	c.Console.Privilege++
 	c.Console.Alert++
+	c.Console.Illegal()
+
 	return ResultMsg{
 		Output: fmt.Sprintf("niveau de privilège augmenté à %d", c.Console.Privilege),
 	}

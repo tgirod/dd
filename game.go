@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	//"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
@@ -35,6 +36,9 @@ type Console struct {
 	// niveau d'alerte du serveur
 	Alert int
 
+	// zones mémoires disponibles pour une évasion
+	Mem map[string]bool
+
 	// interface neurale directe
 	DNI bool
 
@@ -43,8 +47,9 @@ type Console struct {
 }
 
 var Hack = map[string]Command{
-	"jack": Jack{},
-	"rise": Rise{},
+	"jack":  Jack{},
+	"rise":  Rise{},
+	"evade": Evade{},
 }
 
 func NewConsole() *Console {
@@ -74,6 +79,21 @@ func NewConsole() *Console {
 
 func (c *Console) IsConnected() bool {
 	return c.Server != nil
+}
+
+// Illegal est une méthode appelée à chaque fois qu'une commande illégale est utilisée
+func (c *Console) Illegal() {
+	if len(c.Mem) == 0 {
+		c.InitMem()
+	}
+}
+
+func (c *Console) InitMem() {
+	c.Mem = make(map[string]bool)
+	for i := 0; i < 5; i++ {
+		addr := fmt.Sprintf("%08x", rand.Uint32())
+		c.Mem[addr] = true
+	}
 }
 
 // Server représente un serveur sur le Net

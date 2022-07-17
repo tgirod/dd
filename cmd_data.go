@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"strings"
-	"text/tabwriter"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -55,7 +54,7 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 
 	// construire la réponse à afficher
 	b := strings.Builder{}
-	tw := tabwriter.NewWriter(&b, 8, 1, 2, ' ', 0)
+	tw := tw(&b)
 	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
 	for _, e := range entries {
 		title := e.Title

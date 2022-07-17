@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"strings"
-	"text/tabwriter"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -52,7 +51,7 @@ func (r RegistryView) Run(c *Client, args []string) tea.Msg {
 	}
 
 	b := strings.Builder{}
-	tw := tabwriter.NewWriter(&b, 8, 1, 2, ' ', 0)
+	tw := tw(&b)
 	fmt.Fprintf(tw, "NAME\tSTATE\tDESCRIPTION\t\n")
 	for _, r := range regs {
 		if r.Restricted <= c.Privilege {

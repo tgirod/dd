@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
 	"strings"
+	"text/tabwriter"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -234,4 +236,8 @@ func (c Client) Security(t time.Time) tea.Msg {
 
 	// on continue de faire tourner la routine de sécurité
 	return SecurityMsg{}
+}
+
+func tw(output io.Writer) *tabwriter.Writer {
+	return tabwriter.NewWriter(output, 8, 1, 2, ' ', 0)
 }

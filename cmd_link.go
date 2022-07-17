@@ -21,10 +21,10 @@ func (l Link) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(l.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  link [ID]\n")
+	b.WriteString("  link [ADDRESS]\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  aucun -- liste les liens disponibles\n")
-	b.WriteString("  ID    -- suit le lien ID\n")
+	b.WriteString("  aucun   -- liste les liens disponibles\n")
+	b.WriteString("  ADDRESS -- suit le lien ID\n")
 	return b.String()
 }
 
@@ -38,14 +38,16 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	if len(args) == 0 {
 		// lister les liens disponibles
 		b := strings.Builder{}
-		fmt.Fprintf(&b, "LIENS DISPONIBLES : %d\n", len(c.Server.Targets))
+		tw := tw(&b)
+		fmt.Fprintf(tw, "ADDRESS\tDESCRIPTION\t\n")
 		for _, t := range c.Server.Targets {
 			if c.Console.Privilege >= t.Restricted {
-				fmt.Fprintf(&b, "  %s %s\n", t.Address, t.Description)
+				fmt.Fprintf(tw, "%s\t%s\t\n", t.Address, t.Description)
 			} else {
-				fmt.Fprintf(&b, "  %s %s\n", t.Address, "Accès restreint")
+				fmt.Fprintf(&b, "\t%s\t%s\t\n", t.Address, "Accès restreint")
 			}
 		}
+		tw.Flush()
 
 		return ResultMsg{
 			Output: b.String(),
@@ -87,6 +89,7 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	c.Console.Server = server
 	c.Console.Privilege = priv
 	c.Console.Login = target.Login
+	c.Console.InitMem()
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)

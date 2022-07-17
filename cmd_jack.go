@@ -49,7 +49,7 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	co.Login = "illegal"
 	co.Privilege = 1
 	co.Alert++
-	co.Illegal()
+	co.InitMem()
 
 	return ResultMsg{
 		Output: "connexion illégale établie",

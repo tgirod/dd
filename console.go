@@ -60,13 +60,6 @@ func (c *Console) IsConnected() bool {
 	return c.Server != nil
 }
 
-// Illegal est une méthode appelée à chaque fois qu'une commande illégale est utilisée
-func (c *Console) Illegal() {
-	if len(c.Mem) == 0 {
-		c.InitMem()
-	}
-}
-
 func (c *Console) InitMem() {
 	c.Mem = make(map[string]bool)
 	for i := 0; i < 5; i++ {

@@ -21,10 +21,10 @@ func (e Evade) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(e.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  evade [MEM]\n")
+	b.WriteString("  evade [ZONE]\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  aucun -- liste les zones mémoire disponibles\n")
-	b.WriteString("  MEM   -- évasion vers la zone mémoire\n")
+	b.WriteString("  aucun -- lister les zones mémoire disponibles\n")
+	b.WriteString("  ZONE  -- évasion vers la zone mémoire\n")
 	return b.String()
 }
 
@@ -36,14 +36,17 @@ func (e Evade) Run(c *Client, args []string) tea.Msg {
 	// afficher la liste des zones mémoires disponibles
 	if len(args) == 0 {
 		b := strings.Builder{}
-		b.WriteString("ZONES MEMOIRES POUR EVASION\n")
+		tw := tw(&b)
+		fmt.Fprintf(tw, "ZONE\tDISPONIBILITE\t\n")
 		for addr, available := range c.Console.Mem {
 			if !available {
-				fmt.Fprintf(&b, "  %s  INDISPONIBLE\n", addr)
+				fmt.Fprintf(tw, "%s\t%s\t\n", addr, "INDISPONIBLE")
 			} else {
-				fmt.Fprintf(&b, "  %s  OK\n", addr)
+				fmt.Fprintf(tw, "%s\t%s\t\n", addr, "OK")
 			}
 		}
+		tw.Flush()
+
 		return ResultMsg{
 			Output: b.String(),
 		}

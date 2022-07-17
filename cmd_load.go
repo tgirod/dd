@@ -28,10 +28,6 @@ func (l Load) LongHelp() string {
 }
 
 func (l Load) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
-	}
-
 	if len(args) < 1 {
 		return ResultMsg{
 			Error:  fmt.Errorf("CODE : %w", errMissingArgument),

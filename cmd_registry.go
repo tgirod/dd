@@ -55,7 +55,11 @@ func (r RegistryView) Run(c *Client, args []string) tea.Msg {
 	tw := tabwriter.NewWriter(&b, 8, 1, 2, ' ', 0)
 	fmt.Fprintf(tw, "NAME\tSTATE\tDESCRIPTION\t\n")
 	for _, r := range regs {
-		fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
+		if r.Restricted <= c.Privilege {
+			fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
+		} else {
+			fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, "Accès restreint")
+		}
 	}
 	tw.Flush()
 	return ResultMsg{
@@ -99,6 +103,12 @@ func (r RegistryEdit) Run(c *Client, args []string) tea.Msg {
 	if err != nil {
 		return ResultMsg{
 			Error: fmt.Errorf("%s : %w", name, err),
+		}
+	}
+
+	if reg.Restricted > c.Privilege {
+		return ResultMsg{
+			Error: errLowPrivilege,
 		}
 	}
 	reg.State = !reg.State

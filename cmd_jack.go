@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -14,34 +15,57 @@ func (j Jack) ParseName() string {
 }
 
 func (j Jack) ShortHelp() string {
-	return "jack\tforce la connexion a un serveur distant"
+	return "jack\tforce l'accès à un lien"
 }
 
 func (j Jack) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(j.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  jack <ADDRESS>\n")
+	b.WriteString("  jack [ID]\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  ADDRESS -- l'adresse du serveur sur le Net\n")
+	b.WriteString("  aucun -- liste les liens disponibles\n")
+	b.WriteString("  ID    -- force l'accès au lien ID\n")
 	return b.String()
 }
 
 func (j Jack) Run(c *Client, args []string) tea.Msg {
-	if len(args) < 1 {
+	if !c.Console.IsConnected() {
 		return ResultMsg{
-			fmt.Errorf("ADDRESS : %w", errMissingArgument),
-			j.LongHelp(),
+			Error: errNotConnected,
 		}
 	}
 
-	// récupérer les arguments
-	address := args[0]
+	if len(args) == 0 {
+		// lister les liens disponibles
+		b := strings.Builder{}
+		tw := tw(&b)
+		fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
+		for i, t := range c.Server.Targets {
+			fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
+		}
+		tw.Flush()
 
-	// récupérer le serveur
-	server, err := c.Game.FindServer(address)
+		return ResultMsg{
+			Output: b.String(),
+		}
+	}
+
+	// récupérer le lien
+	id, err := strconv.Atoi(args[0])
+	if err != nil || id < 0 || id >= len(c.Server.Targets) {
+		return ResultMsg{
+			Error: fmt.Errorf("ID : %w", errInvalidArgument),
+		}
+	}
+	target := c.Server.Targets[id]
+
+	// récupérer le serveur correspondant
+	server, err := c.Game.FindServer(target.Address)
 	if err != nil {
-		return ResultMsg{Error: err}
+		return ResultMsg{
+			Error: fmt.Errorf("%s : %w", target.Address, err),
+		}
 	}
 
 	co := c.Console
@@ -51,7 +75,11 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	co.Alert++
 	co.InitMem()
 
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
+	fmt.Fprintf(&b, "%s\n", server.Description)
+
 	return ResultMsg{
-		Output: "connexion illégale établie",
+		Output: b.String(),
 	}
 }

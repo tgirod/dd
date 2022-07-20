@@ -23,7 +23,7 @@ func (r RegistryView) ParseName() string {
 }
 
 func (r RegistryView) ShortHelp() string {
-	return "view -- affiche les registres correspondant à la recherche"
+	return "view\taffiche les registres correspondant à la recherche"
 }
 
 func (r RegistryView) LongHelp() string {

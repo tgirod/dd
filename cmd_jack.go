@@ -14,7 +14,7 @@ func (j Jack) ParseName() string {
 }
 
 func (j Jack) ShortHelp() string {
-	return "jack -- force la connexion a un serveur distant"
+	return "jack\tforce la connexion a un serveur distant"
 }
 
 func (j Jack) LongHelp() string {

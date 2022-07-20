@@ -14,7 +14,7 @@ func (i Identify) ParseName() string {
 }
 
 func (i Identify) ShortHelp() string {
-	return "identify -- validation d'identité avec le login/password"
+	return "identify\tvalidation d'identité avec le login/password"
 }
 
 func (i Identify) LongHelp() string {

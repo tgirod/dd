@@ -15,7 +15,7 @@ func (c Help) ParseName() string {
 }
 
 func (c Help) ShortHelp() string {
-	return "help -- affiche l'aide"
+	return "help\taffiche l'aide"
 }
 
 func (c Help) LongHelp() string {
@@ -32,9 +32,12 @@ func (c Help) Run(client *Client, args []string) tea.Msg {
 	if len(args) == 0 {
 		b := strings.Builder{}
 		b.WriteString("COMMANDES DISPONIBLES\n\n")
+		tw := tw(&b)
+		fmt.Fprintf(tw, "NOM\tDESCRIPTION\t\n")
 		for _, s := range client.Console.Node.Sub {
-			b.WriteString("  " + s.ShortHelp() + "\n")
+			fmt.Fprintf(tw, s.ShortHelp()+"\t\n")
 		}
+		tw.Flush()
 		b.WriteString("\nPour plus d'aide, tapez 'help <COMMAND>'\n")
 
 		return ResultMsg{

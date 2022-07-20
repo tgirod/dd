@@ -33,7 +33,7 @@ func (n Node) ParseName() string {
 }
 
 func (n Node) ShortHelp() string {
-	return fmt.Sprintf("%s -- %s", n.Name, n.Help)
+	return fmt.Sprintf("%s\t%s", n.Name, n.Help)
 }
 
 func (n Node) LongHelp() string {

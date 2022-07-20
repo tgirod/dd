@@ -14,7 +14,7 @@ func (l Link) ParseName() string {
 }
 
 func (l Link) ShortHelp() string {
-	return "link -- affiche les liens disponibles ou suit un lien"
+	return "link\taffiche les liens disponibles ou suit un lien"
 }
 
 func (l Link) LongHelp() string {

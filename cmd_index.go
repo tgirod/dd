@@ -14,7 +14,7 @@ func (i Index) ParseName() string {
 }
 
 func (i Index) ShortHelp() string {
-	return "index -- liste les services du serveur courant"
+	return "index\tliste les services du serveur courant"
 }
 
 func (i Index) LongHelp() string {

@@ -13,7 +13,7 @@ func (q Quit) ParseName() string {
 }
 
 func (q Quit) ShortHelp() string {
-	return "quit -- ferme la connexion au serveur courant"
+	return "quit\tferme la connexion au serveur courant"
 }
 
 func (q Quit) LongHelp() string {

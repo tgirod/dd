@@ -14,7 +14,7 @@ func (e Evade) ParseName() string {
 }
 
 func (e Evade) ShortHelp() string {
-	return "evade -- manoeuvre d'évasion pour gagner un peu de temps"
+	return "evade\tmanoeuvre d'évasion pour gagner un peu de temps"
 }
 
 func (e Evade) LongHelp() string {

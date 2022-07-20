@@ -23,7 +23,7 @@ func (d DataSearch) ParseName() string {
 }
 
 func (d DataSearch) ShortHelp() string {
-	return "search -- effectue une recherche avec des mots clefs"
+	return "search\teffectue une recherche avec des mots clefs"
 }
 
 func (d DataSearch) LongHelp() string {

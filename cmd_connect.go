@@ -15,7 +15,7 @@ func (c Connect) ParseName() string {
 }
 
 func (c Connect) ShortHelp() string {
-	return "connect -- établit la connexion avec un serveur"
+	return "connect\tétablit la connexion avec un serveur"
 }
 
 func (c Connect) LongHelp() string {

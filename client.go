@@ -165,10 +165,14 @@ var (
 func (c Client) statusView() string {
 	login := fmt.Sprintf("👤 %s", c.Console.Login)
 	priv := strings.Repeat("✪", c.Console.Privilege)
+	server := "déconnecté"
+	if c.Console.Server != nil {
+		server = c.Console.Server.Address
+	}
 	alarm := strings.Repeat("💀", c.Console.Alert)
 
-	width := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(alarm)
-	status := lg.PlaceHorizontal(width, lg.Left, login+" "+priv) + alarm
+	width := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(alarm) - lg.Width(server) - 1
+	status := lg.PlaceHorizontal(width, lg.Left, login+" "+priv) + server + " " + alarm
 
 	return statusStyle.Render(status)
 }

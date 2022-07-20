@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -21,10 +22,10 @@ func (l Link) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(l.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  link [ADDRESS]\n")
+	b.WriteString("  link [ID]\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  aucun   -- liste les liens disponibles\n")
-	b.WriteString("  ADDRESS -- suit le lien ID\n")
+	b.WriteString("  aucun -- liste les liens disponibles\n")
+	b.WriteString("  ID    -- suit le lien ID\n")
 	return b.String()
 }
 
@@ -39,12 +40,12 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 		// lister les liens disponibles
 		b := strings.Builder{}
 		tw := tw(&b)
-		fmt.Fprintf(tw, "ADDRESS\tDESCRIPTION\t\n")
-		for _, t := range c.Server.Targets {
+		fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
+		for i, t := range c.Server.Targets {
 			if c.Console.Privilege >= t.Restricted {
-				fmt.Fprintf(tw, "%s\t%s\t\n", t.Address, t.Description)
+				fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
 			} else {
-				fmt.Fprintf(tw, "\t%s\t%s\t\n", t.Address, "Accès restreint")
+				fmt.Fprintf(tw, "\t%d\t%s\t\n", i, "Accès restreint")
 			}
 		}
 		tw.Flush()
@@ -55,13 +56,13 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	}
 
 	// récupérer le lien
-	address := args[0]
-	target, err := c.Server.FindTarget(address)
-	if err != nil {
+	id, err := strconv.Atoi(args[0])
+	if err != nil || id < 0 || id >= len(c.Server.Targets) {
 		return ResultMsg{
-			Error: fmt.Errorf("%s : %w", address, err),
+			Error: fmt.Errorf("ID : %w", errInvalidArgument),
 		}
 	}
+	target := c.Server.Targets[id]
 
 	// vérifier le niveau de privilège
 	if c.Console.Privilege < target.Restricted {
@@ -71,10 +72,10 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	}
 
 	// récupérer le serveur correspondant
-	server, err := c.Game.FindServer(address)
+	server, err := c.Game.FindServer(target.Address)
 	if err != nil {
 		return ResultMsg{
-			Error: fmt.Errorf("%s : %w", address, err),
+			Error: fmt.Errorf("%s : %w", target.Address, err),
 		}
 	}
 

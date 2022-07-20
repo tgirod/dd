@@ -109,10 +109,12 @@ var kramps = Server{
 	Address: "kramps.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
+		{"joe", "password", 3}, // utilisateur lambda, accès direct
 	},
 	Targets: []Target{
 		{kramps_priv.Address, "Serveur réservé au personnel", 3, "personnel", "kramps1234"},
 	},
+	Detection: SEC2,
 }
 
 // serveur privé de la kramps
@@ -124,6 +126,7 @@ var kramps_priv = Server{
 	Targets: []Target{
 		{kramps_sec.Address, "Serveur central de sécurité", 5, "admin", "lkjqsod"},
 	},
+	Detection: SEC3,
 }
 
 // serveur de sécurité de la kramps
@@ -132,6 +135,7 @@ var kramps_sec = Server{
 	Credentials: []Cred{
 		{"admin", "lkjqsod", 5},
 	},
+	Detection: SEC4,
 }
 
 // serveur des services corporatistes D22

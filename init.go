@@ -94,7 +94,7 @@ var d22 = Server{
 	Credentials: []Cred{
 		{"public", "public", 1},
 	},
-	Description: `Bienvenue sur le serveur public du District 22 d'Europole.`,
+	Description: dd22Desc,
 	Targets: []Target{
 		{legba.Address, "Legba Voodoocom", 1, "public", "public"},
 		{kramps.Address, "Kramps Security", 1, "public", "public"},
@@ -104,6 +104,28 @@ var d22 = Server{
 	},
 	Detection: SEC2,
 }
+var dd22Desc = `
+
+                    _____                            _                       
+                   |  ___|                          | |                      
+                   | |__ _   _ _ __ ___  _ __   ___ | | ___                  
+                   |  __| | | | '__/ _ \| '_ \ / _ \| |/ _ \                 
+                   | |__| |_| | | | (_) | |_) | (_) | |  __/                 
+                   \____/\__,_|_|  \___/| .__/ \___/|_|\___|                 
+                                        | |                                  
+                                        |_|                                  
+               ______ _     _        _      _     _____  _____               
+               |  _  (_)   | |      (_)    | |   / __  \/ __  \              
+  ______ ___   | | | |_ ___| |_ _ __ _  ___| |_   ' / /' ' / /'   ___ ______ 
+ |______/ _ \  | | | | / __| __| '__| |/ __| __|   / /    / /    / _ \______|
+       | (_) | | |/ /| \__ \ |_| |  | | (__| |_  ./ /___./ /___ | (_) |      
+        \___/  |___/ |_|___/\__|_|  |_|\___|\__| \_____/\_____/  \___/       
+                                                                             
+
+           Bienvenue sur le serveur public du District 22 d'Europole.
+           Un noeud du plus grand fournisseur d'accès de Méga-Europe. 
+                                                                                                
+`
 
 // serveur public de la kramps
 var kramps = Server{

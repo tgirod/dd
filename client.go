@@ -107,7 +107,7 @@ func (c *Client) SecurityDelay() time.Duration {
 func (c *Client) View() string {
 	return lg.JoinVertical(lg.Left,
 		c.statusView(),
-		c.debugView(),
+		// c.debugView(),
 		c.outputView(),
 		c.inputView(),
 	)
@@ -122,7 +122,7 @@ var (
 			Background(lg.Color("10"))
 	// historique
 	histStyle = lg.NewStyle().
-		        Padding(0, 1, 0, 1).
+			Padding(0, 1, 0, 1).
 			Margin(0, 1, 0, 1).
 			Foreground(lg.Color("10")).
 			Background(lg.Color("0"))
@@ -170,17 +170,22 @@ var (
 )
 
 func (c Client) statusView() string {
-	login := fmt.Sprintf("👤 %s", c.Console.Login)
-	priv := strings.Repeat("✪", c.Console.Privilege)
-	server := "déconnecté"
-	if c.Console.Server != nil {
-		server = c.Console.Server.Address
+	login := fmt.Sprintf("👤[%s]", c.Console.Login)
+	priv := fmt.Sprintf("✪[%d]", c.Console.Privilege)
+	alarm := fmt.Sprintf("💀[%d]", c.Console.Alert)
+
+	b := strings.Builder{}
+	if len(c.Console.History) == 0 {
+		b.WriteString("déconnecté")
 	}
-	alarm := strings.Repeat("💀", c.Console.Alert)
+	for _, h := range c.Console.History {
+		fmt.Fprintf(&b, "%s/", h.Address)
+	}
+	hist := fmt.Sprintf("🖧[%s]", b.String())
 
-	width := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(alarm) - lg.Width(server) - 1
-	status := lg.PlaceHorizontal(width, lg.Left, login+" "+priv) + server + " " + alarm
-
+	left := fmt.Sprintf("%s %s %s ", login, priv, alarm)
+	histWidth := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(left)
+	status := left + lg.PlaceHorizontal(histWidth, lg.Left, hist)
 	return statusStyle.Render(status)
 }
 
@@ -199,11 +204,12 @@ func (c Client) debugView() string {
 
 	return histStyle.Render(content)
 }
+
 func (c Client) outputView() string {
 	// dimensions de l'espace d'affichage
 	width := c.width - outputStyle.GetHorizontalFrameSize()
 	// Need vertical space for debug
-	height := c.height - 2 - outputStyle.GetVerticalFrameSize() -5
+	height := c.height - 2 - outputStyle.GetVerticalFrameSize()
 
 	// dernière commande + output
 	content := ""
@@ -256,7 +262,7 @@ func (c Client) Security(t time.Time) tea.Msg {
 		c.Console.Privilege = 0
 		c.Console.Alert = 0
 		c.Console.History.Clear()
-		
+
 		return ResultMsg{
 			Output: "coupure forcée de la connexion",
 		}

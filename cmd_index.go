@@ -21,7 +21,7 @@ func (i Index) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(i.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  index\n")
+	b.WriteString("  index\n\n")
 	return b.String()
 }
 

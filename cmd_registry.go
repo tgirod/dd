@@ -33,7 +33,7 @@ func (r RegistryView) LongHelp() string {
 	b.WriteString("  registry view [PREFIX]\n")
 	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  aucun   -- liste tous les registres\n")
-	b.WriteString("  PREFIX  -- premières lettres du nom du registre\n")
+	b.WriteString("  PREFIX  -- premières lettres du nom du registre\n\n")
 	return b.String()
 }
 

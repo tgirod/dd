@@ -67,6 +67,7 @@ var dd = Server{
 	},
 	Entries: []Entry{
 		{"bluemars", []string{"boisson"}, 1, "jesus", "Blue Mars - le cocktail parfait", "la recette"},
+		{"mojito", []string{"boisson"}, 1, "", "Mojito - le cocktail classique", "Menthe, glace pilée, citron vert et plein de rhum"},
 	},
 	Detection: SEC1,
 }

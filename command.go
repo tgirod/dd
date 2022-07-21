@@ -45,6 +45,7 @@ func (n Node) LongHelp() string {
 	for _, s := range n.Sub {
 		b.WriteString("  " + s.ShortHelp() + "\n")
 	}
+	b.WriteString("\n")
 	return b.String()
 }
 

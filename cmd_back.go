@@ -22,7 +22,7 @@ func (cmd Back) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(cmd.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  back\n")
+	b.WriteString("  back\n\n")
 	return b.String()
 }
 

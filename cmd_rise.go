@@ -21,7 +21,7 @@ func (r Rise) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(r.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  rise\n")
+	b.WriteString("  rise\n\n")
 	return b.String()
 }
 

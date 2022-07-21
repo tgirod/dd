@@ -63,6 +63,8 @@ func (i Identify) Run(c *Client, args []string) tea.Msg {
 		// succès de la connexion
 		c.Console.Privilege = priv
 		c.Console.Login = login
+		c.Console.History.Push( Target{c.Console.Server.Address,"",
+			priv,login,password} )
 
 		b := strings.Builder{}
 		fmt.Fprintf(&b, "identité établie. Bienvenue, %s.\n\n", login)

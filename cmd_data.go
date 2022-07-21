@@ -37,18 +37,21 @@ func (d DataSearch) LongHelp() string {
 }
 
 func (d DataSearch) Run(c *Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
+		return ResultMsg{
+			Cmd:   "data search " + strings.Join(args, " "),
+			Error: errNotConnected}
+	}
+
 	if len(args) < 1 {
 		return ResultMsg{
-			errMissingArgument,
-			d.LongHelp(),
+			Cmd:    "data search " + strings.Join(args, " "),
+			Error:  errMissingArgument,
+			Output: d.LongHelp(),
 		}
 	}
 
 	keyword := args[0]
-
-	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
-	}
 
 	entries := c.Server.DataSearch(keyword, c.Login)
 
@@ -71,6 +74,7 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 	tw.Flush()
 
 	return ResultMsg{
+		Cmd:    "data search " + strings.Join(args, ""),
 		Output: b.String(),
 	}
 }
@@ -102,8 +106,9 @@ func (d DataView) Run(c *Client, args []string) tea.Msg {
 
 	if len(args) < 1 {
 		return ResultMsg{
-			errMissingArgument,
-			d.LongHelp(),
+			Cmd:    "data view " + strings.Join(args, " "),
+			Error:  errMissingArgument,
+			Output: d.LongHelp(),
 		}
 	}
 
@@ -111,12 +116,14 @@ func (d DataView) Run(c *Client, args []string) tea.Msg {
 	entry, err := c.Server.FindEntry(id, c.Login)
 	if err != nil {
 		return ResultMsg{
+			Cmd:   "data view " + strings.Join(args, " "),
 			Error: err,
 		}
 	}
 
 	if c.Console.Privilege < entry.Restricted {
 		return ResultMsg{
+			Cmd:   "data view " + strings.Join(args, " "),
 			Error: fmt.Errorf("%s : %w", id, errLowPrivilege),
 		}
 	}
@@ -129,6 +136,7 @@ func (d DataView) Run(c *Client, args []string) tea.Msg {
 	fmt.Fprintf(&b, entry.Content)
 
 	return ResultMsg{
+		Cmd:    "data view " + strings.Join(args, " "),
 		Output: b.String(),
 	}
 }

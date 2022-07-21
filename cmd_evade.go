@@ -30,7 +30,10 @@ func (e Evade) LongHelp() string {
 
 func (e Evade) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
+		return ResultMsg{
+			Cmd:   "evade" + strings.Join(args, " "),
+			Error: errNotConnected,
+		}
 	}
 
 	// afficher la liste des zones mémoires disponibles
@@ -48,6 +51,7 @@ func (e Evade) Run(c *Client, args []string) tea.Msg {
 		tw.Flush()
 
 		return ResultMsg{
+			Cmd:    "evade",
 			Output: b.String(),
 		}
 	}
@@ -56,12 +60,14 @@ func (e Evade) Run(c *Client, args []string) tea.Msg {
 	available, exist := c.Console.Mem[addr]
 	if !exist {
 		return ResultMsg{
+			Cmd:   "evade" + strings.Join(args, " "),
 			Error: fmt.Errorf("%s : %w", addr, errMemNotFound),
 		}
 	}
 
 	if !available {
 		return ResultMsg{
+			Cmd:   "evade" + strings.Join(args, " "),
 			Error: fmt.Errorf("%s : %w", addr, errMemUnavailable),
 		}
 	}
@@ -71,6 +77,7 @@ func (e Evade) Run(c *Client, args []string) tea.Msg {
 	c.Console.Alert = 1
 
 	return ResultMsg{
+		Cmd:    "evade " + strings.Join(args, " "),
 		Output: "Evasion effectuée",
 	}
 }

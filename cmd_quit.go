@@ -26,7 +26,10 @@ func (q Quit) LongHelp() string {
 
 func (q Quit) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
+		return ResultMsg{
+			Cmd:   "quit" + strings.Join(args, " "),
+			Error: errNotConnected,
+		}
 	}
 
 	c.Console.Server = nil
@@ -37,6 +40,7 @@ func (q Quit) Run(c *Client, args []string) tea.Msg {
 	c.Console.History.Clear()
 
 	return ResultMsg{
+		Cmd:    "quit",
 		Output: "déconnexion effectuée",
 	}
 }

@@ -27,7 +27,9 @@ func (i Index) LongHelp() string {
 
 func (i Index) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
+		return ResultMsg{
+			Cmd:   "index",
+			Error: errNotConnected}
 	}
 
 	s := c.Console.Server
@@ -40,6 +42,7 @@ func (i Index) Run(c *Client, args []string) tea.Msg {
 	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
 
 	return ResultMsg{
+		Cmd:    "index",
 		Output: b.String(),
 	}
 }

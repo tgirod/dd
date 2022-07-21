@@ -27,6 +27,7 @@ func (p Plug) LongHelp() string {
 func (p Plug) Run(c *Client, args []string) tea.Msg {
 	if c.Console.IsConnected() {
 		return ResultMsg{
+			Cmd:    "plug",
 			Error:  errConnected,
 			Output: p.LongHelp(),
 		}
@@ -35,6 +36,7 @@ func (p Plug) Run(c *Client, args []string) tea.Msg {
 	c.Console.DNI = true
 
 	return ResultMsg{
+		Cmd:    "plug",
 		Output: "interface neuronale directe activée",
 	}
 }

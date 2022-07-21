@@ -32,18 +32,25 @@ func (cmd Back) Run(client *Client, args []string) tea.Msg {
 	client.Console.History.Pop()
 	prev_target, res := client.Console.History.Peek()
 	if res != nil {
-		return ResultMsg{res, ""}
+		return ResultMsg{
+			Cmd:   "back",
+			Error: res,
+		}
 	}
 	// récupérer le serveur
 	server, err := client.Game.FindServer(prev_target.Address)
 	if err != nil {
-		return ResultMsg{err, ""}
+		return ResultMsg{
+			Cmd:   "back",
+			Error: err,
+		}
 	}
-	
+
 	if priv, err := server.CheckCredentials(prev_target.Login, prev_target.Password); err != nil {
 		// échec de la connexion
 		return ResultMsg{
-			Error: fmt.Errorf("connect : %w", err),
+			Cmd:   "back",
+			Error: fmt.Errorf("back : %w", err),
 		}
 	} else {
 		// succès de la connexion
@@ -51,7 +58,7 @@ func (cmd Back) Run(client *Client, args []string) tea.Msg {
 		co.Privilege = priv
 		co.Login = prev_target.Login
 		co.Server = server
-		co.Alert = co.Alert / 2     //Alain : back n'est pas sans soucis
+		co.Alert = co.Alert / 2 //Alain : back n'est pas sans soucis
 		co.InitMem()
 
 		b := strings.Builder{}
@@ -59,6 +66,7 @@ func (cmd Back) Run(client *Client, args []string) tea.Msg {
 		fmt.Fprintf(&b, "%s\n", server.Description)
 
 		return ResultMsg{
+			Cmd:    "back",
 			Output: b.String(),
 		}
 	}

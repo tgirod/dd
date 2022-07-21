@@ -39,7 +39,9 @@ func (r RegistryView) LongHelp() string {
 
 func (r RegistryView) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
+		return ResultMsg{
+			Cmd:   "registry view " + strings.Join(args, " "),
+			Error: errNotConnected}
 	}
 
 	// par défaut afficher la liste de tous les registres
@@ -62,6 +64,7 @@ func (r RegistryView) Run(c *Client, args []string) tea.Msg {
 	}
 	tw.Flush()
 	return ResultMsg{
+		Cmd:    "registry view " + strings.Join(args, " "),
 		Output: b.String(),
 	}
 }
@@ -88,11 +91,14 @@ func (r RegistryEdit) LongHelp() string {
 
 func (r RegistryEdit) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
+		return ResultMsg{
+			Cmd:   "registry edit " + strings.Join(args, " "),
+			Error: errNotConnected}
 	}
 
 	if len(args) < 1 {
 		return ResultMsg{
+			Cmd:   "registry edit " + strings.Join(args, " "),
 			Error: fmt.Errorf("NAME : %w", errMissingArgument),
 		}
 	}
@@ -101,18 +107,21 @@ func (r RegistryEdit) Run(c *Client, args []string) tea.Msg {
 	reg, err := c.FindRegister(name)
 	if err != nil {
 		return ResultMsg{
+			Cmd:   "registry edit " + strings.Join(args, " "),
 			Error: fmt.Errorf("%s : %w", name, err),
 		}
 	}
 
 	if reg.Restricted > c.Privilege {
 		return ResultMsg{
+			Cmd:   "registry edit " + strings.Join(args, " "),
 			Error: errLowPrivilege,
 		}
 	}
 	reg.State = !reg.State
 
 	return ResultMsg{
+		Cmd:    "registry edit " + strings.Join(args, " "),
 		Output: fmt.Sprintf("registre %s est désormais sur l'état '%t'\n", reg.Name, reg.State),
 	}
 }

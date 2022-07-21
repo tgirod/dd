@@ -30,6 +30,7 @@ func (l Load) LongHelp() string {
 func (l Load) Run(c *Client, args []string) tea.Msg {
 	if len(args) < 1 {
 		return ResultMsg{
+			Cmd:    "load " + strings.Join(args, " "),
 			Error:  fmt.Errorf("CODE : %w", errMissingArgument),
 			Output: l.LongHelp(),
 		}
@@ -39,12 +40,14 @@ func (l Load) Run(c *Client, args []string) tea.Msg {
 	cmd, ok := Hack[code]
 	if !ok {
 		return ResultMsg{
+			Cmd:   "load " + strings.Join(args, " "),
 			Error: fmt.Errorf("%s : %w", code, errInvalidArgument),
 		}
 	}
 	c.Console.Node.Sub = append(c.Console.Node.Sub, cmd)
 
 	return ResultMsg{
+		Cmd:    "load " + strings.Join(args, " "),
 		Output: fmt.Sprintf("%s : commande chargée", cmd.ParseName()),
 	}
 }

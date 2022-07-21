@@ -51,6 +51,7 @@ func (c *Client) Init() tea.Cmd {
 // affiche le résultat d'une commande
 type ResultMsg struct {
 	Error  error
+	Cmd    string
 	Output string
 }
 
@@ -74,8 +75,9 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case ResultMsg:
 		b := strings.Builder{}
 		if msg.Error != nil {
-			fmt.Fprintf(&b, "%s\n\n", msg.Error.Error())
+			fmt.Fprintf(&b, "%s\n\n", errorTextStyle.Render(msg.Error.Error()))
 		}
+		fmt.Fprintf(&b, "> %s\n\n", msg.Cmd)
 		fmt.Fprintf(&b, "%s\n", msg.Output)
 		curOutput := c.Wrap(b.String())
 		if c.prevOutput == "" {

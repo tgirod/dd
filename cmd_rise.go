@@ -27,13 +27,16 @@ func (r Rise) LongHelp() string {
 
 func (r Rise) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
+		return ResultMsg{
+			Cmd:   "rise",
+			Error: errNotConnected}
 	}
 
 	c.Console.Privilege++
 	c.Console.Alert++
 
 	return ResultMsg{
+		Cmd:    "rise",
 		Output: fmt.Sprintf("niveau de privilège augmenté à %d", c.Console.Privilege),
 	}
 }

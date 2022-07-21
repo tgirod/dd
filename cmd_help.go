@@ -41,6 +41,7 @@ func (c Help) Run(client *Client, args []string) tea.Msg {
 		b.WriteString("\nPour plus d'aide, tapez 'help <COMMAND>'\n")
 
 		return ResultMsg{
+			Cmd:    "help " + strings.Join(args, " "),
 			Output: b.String(),
 		}
 	}
@@ -49,11 +50,13 @@ func (c Help) Run(client *Client, args []string) tea.Msg {
 	match := client.Console.Node.Match(cmd)
 	if len(match) == 0 {
 		return ResultMsg{
+			Cmd:   "help " + strings.Join(args, " "),
 			Error: fmt.Errorf("%s : %w", cmd, errInvalidCommand),
 		}
 	}
 
 	return ResultMsg{
+		Cmd:    "help " + strings.Join(args, " "),
 		Output: match[0].LongHelp(),
 	}
 }

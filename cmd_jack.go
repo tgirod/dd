@@ -32,6 +32,7 @@ func (j Jack) LongHelp() string {
 func (j Jack) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
 		return ResultMsg{
+			Cmd:   "jack " + strings.Join(args, " "),
 			Error: errNotConnected,
 		}
 	}
@@ -47,6 +48,7 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 		tw.Flush()
 
 		return ResultMsg{
+			Cmd:    "jack",
 			Output: b.String(),
 		}
 	}
@@ -55,6 +57,7 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	id, err := strconv.Atoi(args[0])
 	if err != nil || id < 0 || id >= len(c.Server.Targets) {
 		return ResultMsg{
+			Cmd:   "jack " + strings.Join(args, " "),
 			Error: fmt.Errorf("ID : %w", errInvalidArgument),
 		}
 	}
@@ -64,6 +67,7 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	server, err := c.Game.FindServer(target.Address)
 	if err != nil {
 		return ResultMsg{
+			Cmd:   "jack " + strings.Join(args, " "),
 			Error: fmt.Errorf("%s : %w", target.Address, err),
 		}
 	}
@@ -80,6 +84,7 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	fmt.Fprintf(&b, "%s\n", server.Description)
 
 	return ResultMsg{
+		Cmd:    "jack " + strings.Join(args, " "),
 		Output: b.String(),
 	}
 }

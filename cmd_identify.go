@@ -37,15 +37,17 @@ func (i Identify) Run(c *Client, args []string) tea.Msg {
 
 	if len(args) < 1 {
 		return ResultMsg{
-			fmt.Errorf("LOGIN : %w", errMissingArgument),
-			i.LongHelp(),
+			Error:  fmt.Errorf("LOGIN : %w", errMissingArgument),
+			Cmd:    "identify " + strings.Join(args, ""),
+			Output: i.LongHelp(),
 		}
 	}
 
 	if len(args) < 2 {
 		return ResultMsg{
-			fmt.Errorf("PASSWORD : %w", errMissingArgument),
-			i.LongHelp(),
+			Error:  fmt.Errorf("PASSWORD : %w", errMissingArgument),
+			Cmd:    "identify " + strings.Join(args, ""),
+			Output: i.LongHelp(),
 		}
 	}
 
@@ -57,19 +59,21 @@ func (i Identify) Run(c *Client, args []string) tea.Msg {
 	if priv, err := server.CheckCredentials(login, password); err != nil {
 		// échec de la connexion
 		return ResultMsg{
+			Cmd:   fmt.Sprintf("identify %s %s", login, strings.Repeat("*", len(password))),
 			Error: fmt.Errorf("identify : %w", err),
 		}
 	} else {
 		// succès de la connexion
 		c.Console.Privilege = priv
 		c.Console.Login = login
-		c.Console.History.Push( Target{c.Console.Server.Address,"",
-			priv,login,password} )
+		c.Console.History.Push(Target{c.Console.Server.Address, "",
+			priv, login, password})
 
 		b := strings.Builder{}
 		fmt.Fprintf(&b, "identité établie. Bienvenue, %s.\n\n", login)
 
 		return ResultMsg{
+			Cmd:    fmt.Sprintf("identify %s %s", login, strings.Repeat("*", len(password))),
 			Output: b.String(),
 		}
 	}

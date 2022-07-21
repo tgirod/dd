@@ -75,6 +75,8 @@ func (c Connect) Run(client *Client, args []string) tea.Msg {
 		co.Login = login
 		co.Server = server
 		co.InitMem()
+		co.History.Clear()
+		co.History.Push( Target{server.Address,"",priv,login,password} )
 
 		b := strings.Builder{}
 		fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)

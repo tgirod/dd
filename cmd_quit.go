@@ -34,6 +34,7 @@ func (q Quit) Run(c *Client, args []string) tea.Msg {
 	c.Console.Privilege = 0
 	c.Console.Alert = 0
 	c.Console.DNI = false
+	c.Console.History.Clear()
 
 	return ResultMsg{
 		Output: "déconnexion effectuée",

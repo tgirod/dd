@@ -29,6 +29,9 @@ type Console struct {
 
 	// serveur auquel la console est connectée
 	*Server
+
+	// Pile de serveurs visités lors de cette connexion
+	History Stack
 }
 
 var Hack = map[string]Command{
@@ -41,6 +44,7 @@ func NewConsole() *Console {
 	return &Console{
 		Node: Node{
 			Sub: []Command{
+				Back{},
 				Connect{},
 				Data,
 				Help{},

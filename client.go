@@ -120,8 +120,6 @@ func (c *Client) SecurityDelay() time.Duration {
 func (c *Client) View() string {
 	return lg.JoinVertical(lg.Left,
 		c.statusView(),
-		// c.debugView(),
-		// c.outputView(),
 		c.output.View(),
 		c.inputView(),
 	)

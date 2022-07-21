@@ -167,6 +167,34 @@ var corp = Server{
 	Credentials: []Cred{
 		{"public", "public", 1},
 	},
+	Targets: []Target{
+		{justice.Address, "services judiciaires", 1, "public", "public"},
+	},
+}
+
+// serveur judiciaire
+var justice = Server {
+	Address: "justice.corp.d22.eu",
+		Credentials: []Cred{
+		{"public", "public", 1},
+	},		
+	Entries: []Entry{
+		{"@mel", []string{mel}, 1, "", "Mélody MATHISON", "Disparue - Incident 16485-4346B, Nexkemia Petrochemicals, 07/07/2000"},
+		{"@rocky", []string{rocky}, 1, "", "TODO", "- D22/de#867533654: encours de dettes, cumul 4.463 ¥€$\n- D22/ou#7578538765: outrage et rébellion, EuroPol\n- D22/ou#65432446543: outrage et rébellion, LegbaSecurity" },
+		{"@rita", []string{rita}, 1, "", "Margherita BELLAMY", "- néant"},
+		{"@styx", []string{styx}, 1, "", "Sébastien BRONNER", "TODO"},
+		{"@kapo", []string{kapo}, 1, "", "Carmélia BELLAMY", "TODO"},
+		{"@scalpel", []string{scalpel}, 1, "", "Julius VILLANOVA", "***** Personne recherchée, mandat inter-district PJ/676/ER/65534 *****\n- D22/cm#5674243: complicité de meurtre"},
+		{"@greko", []string{greko}, 1, "", "Eddy TODO", "- néant"},
+		{"@jesus", []string{jesus}, 1, "", "Edwin JOHANNESEN", "- néant"},
+		{"@escobar", []string{escobar}, 1, "", "Jonathan BRANSON", "- néant"},
+		{"@cageot", []string{cageot}, 1, "", "John MacFRIGHT", "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D21/rc#12785234452 rupture contrat\n\n\n$$$SPECIAL$$$ contacter cont4yes@kitsu.eu, ¥€$ en rapport."},	
+		{"@lafouine", []string{lafouine}, 1, "", "Sylvia Kemija MIHALEC", "- néant"},
+	
+		
+
+		
+	},
 }
 
 // serveur bancaire du D22
@@ -348,6 +376,7 @@ var game = &Game{
 		kramps_priv,
 		kramps_sec,
 		corp,
+		justice,
 		abus,
 		legba,
 		legba_satcom,

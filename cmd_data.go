@@ -91,7 +91,7 @@ func (d DataView) LongHelp() string {
 	b.WriteString("USAGE\n")
 	b.WriteString("  data view <ID>\n")
 	b.WriteString("ARGUMENTS\n")
-	b.WriteString("  ID -- l'identifiant de l'entrée à afficher\n")
+	b.WriteString("  ID -- l'identifiant de l'entrée à afficher\n\n")
 	return b.String()
 }
 

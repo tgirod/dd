@@ -160,11 +160,40 @@ var legba = Server{
 	Credentials: []Cred{
 		{"public", "public", 1},
 	},
+	Description: lbDesc,
 	Targets: []Target{
 		{legba_satcom.Address, "division sat-com", 5, "admin", "satcom9876"},
 		{legba_archive.Address, "archives", 3, "personnel", "archive6543"},
 	},
 }
+var lbDesc = `
+                 ......                 
+           .',,,,,,,,,,,,,,,.           
+        .;;,'.            .',;;'        
+      ':;.   ...  ,odooodkxxdc;;:,      
+    .::..;:oOKXXOOXWWWWNXNWN0xd:';c'     Entrez dans une nouvelle réalité
+   .c,  :XMWWWWWKkKK0KKdck0Okdol. .c,   
+  .c'   'dxkKNWWO,...;kklxdOWWWXl  .c,       Soyez l'acteur du changement
+  :;        .:ollc,cxOOooxkXMWO;.   'l.      
+ 'c.         'dc.';ox0O,lWWWWKl''.   :;            Matérialisez vos rêves
+ ;c         .;l:'..;coOxdKNXKc,kXd.  ;: 
+ ;c         .,:od:.   'kKOdl:'cdc.   ;:              Obtenez l'impossible
+ 'c.           .';c;',l0Oolc:c,.     :; 
+  :;              .xXN0c',;,'.      'c.                    Et plus encore
+  .c,            'xKKd.            .c,  
+   .c,     .',;:lKMKxo:;,'..      .c,                   
+    .::. 'xKNWWMMMWMMMMWWNXk:   .;c. .____                ___.              
+      .:;;,,:clloooooollc:;'. .;:,   |    |    ____   ____\_ |__ _____      
+        .,;;,.            .',;;'     |    |  _/ __ \ / ___\| __ \\__  \     
+           .',,,,,,,,,,,',,'.        |    |__\  ___// /_/  > \_\ \/ __ \_   
+                 .......             |_______ \___  >___  /|___  (____  /   
+          ____   ___                         \/   \/_____/     \/     \/ 
+          \   \ /   /___   ____   __| _/____   ____   ____  ____   _____  
+           \   Y   /  _ \ /  _ \ / __ |/  _ \ /  _ \_/ ___\/  _ \ /     \ 
+            \     (  <_> |  <_> ) /_/ (  <_> |  <_> )  \__(  <_> )  Y Y  \
+             \___/ \____/ \____/\____ |\____/ \____/ \___  >____/|__|_|  /
+                                     \/                  \/            \/
+`
 
 // serveur privé de la communication satellite
 var legba_satcom = Server{

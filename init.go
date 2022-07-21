@@ -201,7 +201,24 @@ var legba_satcom = Server{
 	Credentials: []Cred{
 		{"admin", "satcom9876", 5},
 	},
+	Description: satDesc,
 }
+var satDesc = `
+SATCOM, une division externalisée de
+ ____                ___  
+|    |    ____   ____\_ |__ _____   
+|    |  _/ __ \ / ___\| __ \\__  \  
+|    |__\  ___// /_/  > \_\ \/ __ \_
+|_______ \___  >___  /|___  (____  /
+ ____   \/_  \/_____/     \/___  \/ 
+ \   \ /   /___   ____   __| _/____   ____   ____  ____   _____           
+  \   Y   /  _ \ /  _ \ / __ |/  _ \ /  _ \_/ ___\/  _ \ /     \          
+   \     (  <_> |  <_> ) /_/ (  <_> |  <_> )  \__(  <_> )  Y Y  \         
+    \___/ \____/ \____/\____ |\____/ \____/ \___  >____/|__|_|  /         
+                            \/                  \/            \/          
+
+[Accès Restreint]         >>>>>>> entrez vos identifiants <<<<<<<
+`
 
 // serveur archive de Silicon Spirit
 var legba_archive = Server{

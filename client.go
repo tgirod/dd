@@ -27,7 +27,7 @@ type Client struct {
 }
 
 func NewClient(width, height int, game *Game) *Client {
-	return &Client{
+	c := &Client{
 		width:  width,
 		height: height,
 		input: Input{
@@ -38,6 +38,8 @@ func NewClient(width, height int, game *Game) *Client {
 		Game:    game,
 		Console: NewConsole(),
 	}
+	c.output.Style = outputStyle
+	return c
 }
 
 func (c *Client) Init() tea.Cmd {

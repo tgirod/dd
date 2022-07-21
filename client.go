@@ -56,6 +56,11 @@ type ResultMsg struct {
 
 type SecurityMsg struct{}
 
+func (c *Client) Wrap(output string) string {
+	w := c.output.Width - outputStyle.GetHorizontalFrameSize()
+	return wordwrap.String(output, w)
+}
+
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
@@ -72,8 +77,12 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			fmt.Fprintf(&b, "%s\n\n", msg.Error.Error())
 		}
 		fmt.Fprintf(&b, "%s\n", msg.Output)
-		curOutput := b.String()
-		c.output.SetContent(c.prevOutput + "\n" + curOutput)
+		curOutput := c.Wrap(b.String())
+		if c.prevOutput == "" {
+			c.output.SetContent(curOutput)
+		} else {
+			c.output.SetContent(c.prevOutput + "\n" + curOutput)
+		}
 		c.output.GotoBottom()
 		c.prevOutput = curOutput
 		return c, nil

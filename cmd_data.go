@@ -86,7 +86,7 @@ func (d DataView) ParseName() string {
 }
 
 func (d DataView) ShortHelp() string {
-	return "view -- affiche le contenu d'une entrée"
+	return "view\taffiche le contenu d'une entrée"
 }
 
 func (d DataView) LongHelp() string {
@@ -95,7 +95,7 @@ func (d DataView) LongHelp() string {
 	b.WriteString("USAGE\n")
 	b.WriteString("  data view <ID>\n")
 	b.WriteString("ARGUMENTS\n")
-	b.WriteString("  ID -- l'identifiant de l'entrée à afficher\n\n")
+	b.WriteString("  ID -- l'identifiant de l'entrée à afficher\n")
 	return b.String()
 }
 

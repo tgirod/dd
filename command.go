@@ -39,12 +39,14 @@ func (n Node) ShortHelp() string {
 func (n Node) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(n.ShortHelp() + "\n")
-	b.WriteString("USAGE\n")
+	b.WriteString("\nUSAGE\n")
 	fmt.Fprintf(&b, "  %s <SOUS-COMMANDE>\n", n.Name)
 	b.WriteString("SOUS-COMMANDES\n")
+	tw := tw(&b)
 	for _, s := range n.Sub {
-		b.WriteString("  " + s.ShortHelp() + "\n")
+		fmt.Fprintf(tw, s.ShortHelp()+"\t\n")
 	}
+	tw.Flush()
 	b.WriteString("\n")
 	return b.String()
 }
@@ -61,6 +63,7 @@ func (n Node) Run(c *Client, args []string) tea.Msg {
 	match := n.Match(args[0])
 	if len(match) == 0 {
 		return ResultMsg{
+			Cmd:    strings.Join(args, " "),
 			Error:  fmt.Errorf("%s : %w", args[0], errInvalidCommand),
 			Output: n.LongHelp(),
 		}

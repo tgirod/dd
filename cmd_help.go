@@ -24,7 +24,7 @@ func (c Help) LongHelp() string {
 	b.WriteString("\nUSAGE\n")
 	b.WriteString("  help <COMMAND>\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  COMMAND -- nom d'une commande\n")
+	b.WriteString("  COMMAND -- nom d'une commande\n\n")
 	return b.String()
 }
 

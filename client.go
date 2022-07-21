@@ -120,6 +120,12 @@ var (
 			Margin(0, 1, 0, 1).
 			Foreground(lg.Color("0")).
 			Background(lg.Color("10"))
+	// historique
+	histStyle = lg.NewStyle().
+		        Padding(0, 1, 0, 1).
+			Margin(0, 1, 0, 1).
+			Foreground(lg.Color("10")).
+			Background(lg.Color("0"))
 
 	// affichage de la dernière commande
 	outputStyle = lg.NewStyle().
@@ -191,7 +197,7 @@ func (c Client) debugView() string {
 	// disposer le texte dans un espace qui remplit l'écran
 	content = lg.Place(width, height, lg.Left, lg.Top, content)
 
-	return outputStyle.Render(content)
+	return histStyle.Render(content)
 }
 func (c Client) outputView() string {
 	// dimensions de l'espace d'affichage

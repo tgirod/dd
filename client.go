@@ -8,17 +8,19 @@ import (
 	"text/tabwriter"
 	"time"
 
+	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
 )
 
 type Client struct {
-	width   int    // largeur de l'affichage
-	height  int    // hauteur de l'affichage
-	input   Input  // invite de commande
-	output  string // résultat de la dernière commande
-	lastCmd string // dernière commande saisie
+	width      int            // largeur de l'affichage
+	height     int            // hauteur de l'affichage
+	input      Input          // invite de commande
+	output     viewport.Model // affichage de la sortie des commandes
+	prevOutput string         // sortie de la commande précédente
+	lastCmd    string         // dernière commande saisie
 
 	*Game    // état interne du jeu
 	*Console // console enregistrée dans le jeu
@@ -32,6 +34,7 @@ func NewClient(width, height int, game *Game) *Client {
 			Focus:       true,
 			Placeholder: "help",
 		},
+		output:  viewport.New(width, height-2),
 		Game:    game,
 		Console: NewConsole(),
 	}
@@ -58,6 +61,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		c.height = msg.Height
 		c.width = msg.Width
+		c.output.Height = msg.Height - 2
 		return c, nil
 
 	case ResultMsg:
@@ -66,7 +70,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			fmt.Fprintf(&b, "%s\n\n", msg.Error.Error())
 		}
 		fmt.Fprintf(&b, "%s\n", msg.Output)
-		c.output = b.String()
+		curOutput := b.String()
+		c.output.SetContent(c.prevOutput + "\n" + curOutput)
+		c.output.GotoBottom()
+		c.prevOutput = curOutput
 		return c, nil
 
 	case SecurityMsg:
@@ -86,10 +93,14 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return c, cmd
 		}
 
+		// viewport
+		output, cmdOutput := c.output.Update(msg)
+		c.output = output
+
 		// laisser le prompt gérer
-		input, cmd := c.input.Update(msg)
+		input, cmdInput := c.input.Update(msg)
 		c.input = input.(Input)
-		return c, cmd
+		return c, tea.Batch(cmdOutput, cmdInput)
 	}
 
 	return c, cmd
@@ -108,7 +119,8 @@ func (c *Client) View() string {
 	return lg.JoinVertical(lg.Left,
 		c.statusView(),
 		// c.debugView(),
-		c.outputView(),
+		// c.outputView(),
+		c.output.View(),
 		c.inputView(),
 	)
 }
@@ -205,31 +217,31 @@ func (c Client) debugView() string {
 	return histStyle.Render(content)
 }
 
-func (c Client) outputView() string {
-	// dimensions de l'espace d'affichage
-	width := c.width - outputStyle.GetHorizontalFrameSize()
-	// Need vertical space for debug
-	height := c.height - 2 - outputStyle.GetVerticalFrameSize()
+// func (c Client) outputView() string {
+// 	// dimensions de l'espace d'affichage
+// 	width := c.width - outputStyle.GetHorizontalFrameSize()
+// 	// Need vertical space for debug
+// 	height := c.height - 2 - outputStyle.GetVerticalFrameSize()
 
-	// dernière commande + output
-	content := ""
-	if c.lastCmd != "" {
-		content = lg.JoinVertical(lg.Left,
-			fmt.Sprintf("> %s\n", c.lastCmd),
-			c.output,
-		)
-	} else {
-		content = c.output
-	}
+// 	// dernière commande + output
+// 	content := ""
+// 	if c.lastCmd != "" {
+// 		content = lg.JoinVertical(lg.Left,
+// 			fmt.Sprintf("> %s\n", c.lastCmd),
+// 			c.output.View()
+// 		)
+// 	} else {
+// 		content = c.output
+// 	}
 
-	// wrap au cas ou certaines lignes seraient trop longues
-	content = wordwrap.String(content, width)
+// 	// wrap au cas ou certaines lignes seraient trop longues
+// 	content = wordwrap.String(content, width)
 
-	// disposer le texte dans un espace qui remplit l'écran
-	content = lg.Place(width, height, lg.Left, lg.Bottom, content)
+// 	// disposer le texte dans un espace qui remplit l'écran
+// 	content = lg.Place(width, height, lg.Left, lg.Bottom, content)
 
-	return outputStyle.Render(content)
-}
+// 	return outputStyle.Render(content)
+// }
 
 func (c Client) inputView() string {
 	content := c.input.View()

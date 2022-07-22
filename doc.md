@@ -1,5 +1,6 @@
 ---
 title: Le Net, comment ça marche ?
+documentclass: scrartcl
 ---
 
 Le **Net** est une série de tubes reliant de nombreuses machines à travers le monde. Une fois connecté au réseau, il suffit d'entrer la bonne adresse pour vous connecter à n'importe quelle machine, n'importe où.

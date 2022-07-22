@@ -190,6 +190,18 @@ var justice = Server {
 		{"@escobar", []string{escobar}, 1, "", "Jonathan BRANSON", "- néant"},
 		{"@cageot", []string{cageot}, 1, "", "John MacFRIGHT", "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D21/rc#12785234452 rupture contrat\n\n\n$$$SPECIAL$$$ contacter cont4yes@kitsu.eu, ¥€$ en rapport."},	
 		{"@lafouine", []string{lafouine}, 1, "", "Sylvia Kemija MIHALEC", "- néant"},
+		{"@eva", []string{eva}, 1, "", "Pamela TODO", "***** Personne recherchée, mandat inter-district PF/1437/PM/02 *****\n- D21/rc#6542867 rupture contrat"},
+		{"@fatmike", []string{fatmike}, 1, "", "Michael DUBIAN", "- D22/vm#23842834: vol à l'étalage\n- D22/vm#54327653: vol recette épicerie nuit\n- D22/vm#543299873: vol simple\n- D22/vm#547699823: vol graviscooter\n- D22/vm#753296671: vol à l'étalage"},
+		{"@kennedy", []string{kennedy}, 1, "", "Carlotta MIHALEC", "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D22/vd#765428736: vol données confidentielles "},
+		{"@savagegirl", []string{savagegirl}, 1, "", "Sabrina JOHANNESEN", "- néant TODO"},
+		{"@raoulcool", []string{raoulcool}, 1, "", "Raoul MICHU", "- néant TODO"},
+		{"@greenglass", []string{greenglass}, 1, "", "Rupert GLASS", "- néant"},
+		{"@chillydaisy", []string{chillydaisy}, 1, "", "Daisy JOHANNESEN", "TODO"},
+		{"@frereping", []string{frereping}, 1, "", "Désiré BONENFANT", "- néant"},
+		{"@papaproxy", []string{papaproxy}, 1, "", "Harald PROSKYCHEV", "***** Personne recherchée, mandat inter-district PF/2964/EP/98254 *****\n- D22/vd#89875357678: vol données avec copyright"},
+		{"@nikki", []string{nikki}, 1, "", "Nicole JASINSKI", "***** Personne recherchée, mandat inter-district PF/7253/EP/90271 *****\n- D22/vd#1100298735: vol données sous brevet"},
+		{"@celine", []string{celine}, 1, "", "Franz-Ferdinand CÉLINE", "***** Personne recherchée, mandat inter-district PF/1001/EP/98682 *****\n- D22/pi#9867356873: piratage informatique\n- D22/am#18763725: association malfaiteurs"},
+		{"@cramille", []string{cramille}, 1, "", "Camelia MILLS", "- néant"},
 	
 		
 

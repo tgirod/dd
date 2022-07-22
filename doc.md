@@ -54,10 +54,18 @@ La base de l'utilisation du Net, c'est d'explorer. Les commandes les plus couran
 - `quit` permet de fermer proprement la connexion au serveur courant.
 - `back` permet de revenir au serveur précédent.
 
+## Interaction
+
+En plus des liens, les serveurs fournissent des données et des registres.
+
+La commande `data` permet d'effectuer des recherches par mot clef (`data search`), et d'afficher le contenu d'une donnée (`data view`). A noter que vous ne pouvez pas afficher la liste de toutes les données du serveur - il faut donc avoir une petite idée de ce qu'on recherche. De même, toutes les données ne sont pas nécessairement accessibles à tous (niveau de privilège requis).
+
+La commande `registry` permet d'interagir avec les périphériques connectés au serveur. Vous pouvez lister les registres (`registry view`) ou les modifier (`registry edit`). A noter que tous les registres ne sont pas accessibles à tous (niveau de privilège requis).
+
 ## Hacking
 
 Le hacking c'est l'art d'imposer sa volonté à la machine, de lui faire faire des choses pour lesquelles elle n'a pas été conçue. Dans la pratique, ça consister beaucoup à aller là où on n'est pas censé aller. Pour commetre leurs méfaits, les hackers ont quelques outils à leur disposition.
 
 **L'interface Neuronale Directe** permet au hacker de se brancher directement à sa console, et d'agir beaucoup plus vite sur le réseau - très pratique quand on vient de déclencher une alerte et que ce n'est qu'une question de minutes avant que le scan de sécurité vous mette à la porte. Pour pouvoir l'utiliser, il faut en avoir une (implant cyber) et l'activer avec la commande `plug`. Le désavantage de cette interface, c'est que si vous vous faites déconnecter de force par la sécurité, vous vous prenez des dégats.
 
-**Les commandes de hacking** permettent de faire des actions illégales, comme augmenter son niveau de privilège, se connecter sans mot de passe, ou encore jouer au chat et à la souris avec le scan de sécurité ... Pour utiliser une commande, il faut avoir la puce (objet physique) et utiliser la commande `load` pour charger la commande dans la console.
+**Les commandes de hacking** permettent de faire des actions illégales, comme augmenter son niveau de privilège (`rise`), se connecter sans mot de passe (`jack`), ou encore jouer au chat et à la souris avec le scan de sécurité (`evade`) ... Pour utiliser une commande, il faut avoir la puce (objet physique) et utiliser la commande `load` pour charger la commande dans la console.

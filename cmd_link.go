@@ -25,7 +25,7 @@ func (l Link) LongHelp() string {
 	b.WriteString("  link [ID]\n")
 	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  aucun -- liste les liens disponibles\n")
-	b.WriteString("  ID    -- suit le lien ID\n\n")
+	b.WriteString("  ID    -- suit le lien ID")
 	return b.String()
 }
 

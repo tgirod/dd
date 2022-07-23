@@ -13,14 +13,14 @@ func (q Quit) ParseName() string {
 }
 
 func (q Quit) ShortHelp() string {
-	return "quit\tferme la connexion au serveur courant"
+	return "ferme la connexion au serveur courant"
 }
 
 func (q Quit) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(q.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  quit\n\n")
+	b.WriteString("  quit")
 	return b.String()
 }
 

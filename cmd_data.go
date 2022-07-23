@@ -32,7 +32,7 @@ func (d DataSearch) LongHelp() string {
 	b.WriteString("\nUSAGE\n")
 	b.WriteString("  data search <KEYWORD>\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  KEYWORD -- mot-clef à rechercher\n\n")
+	b.WriteString("  KEYWORD -- mot-clef à rechercher")
 	return b.String()
 }
 

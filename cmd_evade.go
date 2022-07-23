@@ -24,7 +24,7 @@ func (e Evade) LongHelp() string {
 	b.WriteString("  evade [ZONE]\n")
 	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  aucun -- lister les zones mémoire disponibles\n")
-	b.WriteString("  ZONE  -- évasion vers la zone mémoire\n")
+	b.WriteString("  ZONE  -- évasion vers la zone mémoire")
 	return b.String()
 }
 

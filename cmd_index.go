@@ -14,14 +14,14 @@ func (i Index) ParseName() string {
 }
 
 func (i Index) ShortHelp() string {
-	return "index\tliste les services du serveur courant"
+	return "liste les services du serveur courant"
 }
 
 func (i Index) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(i.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  index\n\n")
+	b.WriteString("  index")
 	return b.String()
 }
 

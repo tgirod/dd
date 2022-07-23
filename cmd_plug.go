@@ -13,7 +13,7 @@ func (p Plug) ParseName() string {
 }
 
 func (p Plug) ShortHelp() string {
-	return "plug\tactive l'interface neuronale hors connexion"
+	return "active l'interface neuronale hors connexion"
 }
 
 func (p Plug) LongHelp() string {

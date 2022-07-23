@@ -14,7 +14,7 @@ func (l Load) ParseName() string {
 }
 
 func (l Load) ShortHelp() string {
-	return "load\tcharge une nouvelle commande"
+	return "charge une nouvelle commande"
 }
 
 func (l Load) LongHelp() string {

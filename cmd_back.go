@@ -15,7 +15,7 @@ func (cmd Back) ParseName() string {
 }
 
 func (cmd Back) ShortHelp() string {
-	return "back\tquitte le serveur actuel et se reconnecte au serveur précédent"
+	return "quitte le serveur actuel et se reconnecte au serveur précédent"
 }
 
 func (cmd Back) LongHelp() string {

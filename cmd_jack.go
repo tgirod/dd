@@ -15,7 +15,7 @@ func (j Jack) ParseName() string {
 }
 
 func (j Jack) ShortHelp() string {
-	return "jack\tforce l'accès à un lien"
+	return "force l'accès à un lien"
 }
 
 func (j Jack) LongHelp() string {

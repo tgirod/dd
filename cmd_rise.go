@@ -14,7 +14,7 @@ func (r Rise) ParseName() string {
 }
 
 func (r Rise) ShortHelp() string {
-	return "rise\taugmente les privilèges d'un niveau"
+	return "augmente les privilèges d'un niveau"
 }
 
 func (r Rise) LongHelp() string {

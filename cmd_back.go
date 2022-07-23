@@ -29,14 +29,14 @@ func (cmd Back) LongHelp() string {
 func (cmd Back) Run(client *Client, args []string) tea.Msg {
 
 	// récupérer le serveur précédent
-	client.Console.History.Pop()
-	prev_target, res := client.Console.History.Peek()
+	prev_target, res := client.Console.History.Pop()
 	if res != nil {
 		return ResultMsg{
 			Cmd:   "back",
 			Error: res,
 		}
 	}
+
 	// récupérer le serveur
 	server, err := client.Game.FindServer(prev_target.Address)
 	if err != nil {

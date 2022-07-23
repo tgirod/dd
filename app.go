@@ -31,7 +31,8 @@ var (
 	errLowPrivilege       = errors.New("niveau de privilège insuffisant")
 	errEntryNotFound      = errors.New("entrée introuvable")
 	errMemNotFound        = errors.New("zone mémoire introuvable")
-	errMemUnavailable     = errors.New("zone mémoie indisponible")
+	errMemUnavailable     = errors.New("zone mémoire indisponible")
+	errEmptyHistory       = errors.New("historique de navigation vide")
 )
 
 type App struct {

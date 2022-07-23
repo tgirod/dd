@@ -15,7 +15,7 @@ func (j Jack) ParseName() string {
 }
 
 func (j Jack) ShortHelp() string {
-	return "jack\tforce l'accès à un lien"
+	return "force l'accès à un lien"
 }
 
 func (j Jack) LongHelp() string {
@@ -25,7 +25,7 @@ func (j Jack) LongHelp() string {
 	b.WriteString("  jack [ID]\n")
 	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  aucun -- liste les liens disponibles\n")
-	b.WriteString("  ID    -- force l'accès au lien ID\n\n")
+	b.WriteString("  ID    -- force l'accès au lien ID")
 	return b.String()
 }
 

@@ -15,14 +15,14 @@ func (cmd Back) ParseName() string {
 }
 
 func (cmd Back) ShortHelp() string {
-	return "back\tquitte le serveur actuel et se reconnecte au serveur précédent"
+	return "quitte le serveur actuel et se reconnecte au serveur précédent"
 }
 
 func (cmd Back) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(cmd.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  back\n\n")
+	b.WriteString("  back")
 	return b.String()
 }
 

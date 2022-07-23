@@ -14,7 +14,7 @@ func (l Load) ParseName() string {
 }
 
 func (l Load) ShortHelp() string {
-	return "load\tcharge une nouvelle commande"
+	return "charge une nouvelle commande"
 }
 
 func (l Load) LongHelp() string {
@@ -23,7 +23,7 @@ func (l Load) LongHelp() string {
 	b.WriteString("\nUSAGE\n")
 	b.WriteString("  load <CODE>\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  CODE -- code de la commande\n\n")
+	b.WriteString("  CODE -- code de la commande")
 	return b.String()
 }
 

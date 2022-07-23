@@ -15,7 +15,7 @@ func (c Connect) ParseName() string {
 }
 
 func (c Connect) ShortHelp() string {
-	return "connect\tétablit la connexion avec un serveur"
+	return "établit la connexion avec un serveur"
 }
 
 func (c Connect) LongHelp() string {
@@ -26,7 +26,7 @@ func (c Connect) LongHelp() string {
 	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  ADDRESS  -- adresse du serveur sur le Net\n")
 	b.WriteString("  LOGIN    -- identifiant utilisateur\n")
-	b.WriteString("  PASSWORD -- mot de passe utilisateur\n")
+	b.WriteString("  PASSWORD -- mot de passe utilisateur")
 	return b.String()
 }
 

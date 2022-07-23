@@ -20,7 +20,6 @@ type Client struct {
 	input      Input          // invite de commande
 	output     viewport.Model // affichage de la sortie des commandes
 	prevOutput string         // sortie de la commande précédente
-	lastCmd    string         // dernière commande saisie
 
 	*Game    // état interne du jeu
 	*Console // console enregistrée dans le jeu
@@ -100,7 +99,6 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		if msg.Type == tea.KeyEnter {
 			// valider la commande
-			c.lastCmd = c.input.Value
 			cmd = c.Run()
 			c.input.Value = ""
 			return c, cmd

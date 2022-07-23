@@ -13,14 +13,14 @@ func (p Plug) ParseName() string {
 }
 
 func (p Plug) ShortHelp() string {
-	return "plug\tactive l'interface neuronale hors connexion"
+	return "active l'interface neuronale hors connexion"
 }
 
 func (p Plug) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(p.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  plug\n\n")
+	b.WriteString("  plug")
 	return b.String()
 }
 

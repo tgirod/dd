@@ -14,14 +14,14 @@ func (r Rise) ParseName() string {
 }
 
 func (r Rise) ShortHelp() string {
-	return "rise\taugmente les privilèges d'un niveau"
+	return "augmente les privilèges d'un niveau"
 }
 
 func (r Rise) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(r.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  rise\n\n")
+	b.WriteString("  rise")
 	return b.String()
 }
 

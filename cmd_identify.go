@@ -14,7 +14,7 @@ func (i Identify) ParseName() string {
 }
 
 func (i Identify) ShortHelp() string {
-	return "identify\tvalidation d'identité avec le login/password"
+	return "validation d'identité avec le login/password"
 }
 
 func (i Identify) LongHelp() string {
@@ -24,7 +24,7 @@ func (i Identify) LongHelp() string {
 	b.WriteString("  identify <LOGIN> <PASSWORD>\n")
 	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  LOGIN    -- identifiant utilisateur\n")
-	b.WriteString("  PASSWORD -- mot de passe utilisateur\n\n")
+	b.WriteString("  PASSWORD -- mot de passe utilisateur")
 	return b.String()
 }
 

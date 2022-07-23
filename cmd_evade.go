@@ -14,7 +14,7 @@ func (e Evade) ParseName() string {
 }
 
 func (e Evade) ShortHelp() string {
-	return "evade\tmanoeuvre d'évasion pour gagner un peu de temps"
+	return "manoeuvre d'évasion pour gagner un peu de temps"
 }
 
 func (e Evade) LongHelp() string {
@@ -24,7 +24,7 @@ func (e Evade) LongHelp() string {
 	b.WriteString("  evade [ZONE]\n")
 	b.WriteString("\nARGUMENTS\n")
 	b.WriteString("  aucun -- lister les zones mémoire disponibles\n")
-	b.WriteString("  ZONE  -- évasion vers la zone mémoire\n")
+	b.WriteString("  ZONE  -- évasion vers la zone mémoire")
 	return b.String()
 }
 

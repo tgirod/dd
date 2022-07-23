@@ -175,7 +175,30 @@ var kramps_priv = Server{
 		{kramps_sec.Address, "Serveur central de sécurité", 5, "admin", "lkjqsod"},
 	},
 	Detection: SEC3,
+	Description: kperDesc,
 }
+
+var kperDesc = `
+      ___           ___           ___           ___           ___         ___     
+     /__/|         /  /\         /  /\         /__/\         /  /\       /  /\    
+    |  |:|        /  /::\       /  /::\       |  |::\       /  /::\     /  /:/_   
+    |  |:|       /  /:/\:\     /  /:/\:\      |  |:|:\     /  /:/\:\   /  /:/ /\  
+  __|  |:|      /  /:/~/:/    /  /:/~/::\   __|__|:|\:\   /  /:/~/:/  /  /:/ /::\ 
+ /__/\_|:|____ /__/:/ /:/___ /__/:/ /:/\:\ /__/::::| \:\ /__/:/ /:/  /__/:/ /:/\:\
+ \  \:\/:::::/ \  \:\/:::::/ \  \:\/:/__\/ \  \:\~~\__\/ \  \:\/:/   \  \:\/:/~/:/
+  \  \::/~~~~   \  \::/~~~~   \  \::/       \  \:\        \  \::/     \  \::/ /:/ 
+   \  \:\        \  \:\        \  \:\        \  \:\        \  \:\      \__\/ /:/  
+    \  \:\        \  \:\        \  \:\        \  \:\        \  \:\       /__/:/   
+     \__\/         \__\/         \__\/         \__\/         \__\/       \__\/    
+                                                                 
+  [-> Serveur du personnel <-]++ toutes les transaction sont loguées (SecLvl 4)
+
+  18/07: StuKa est la 3° organisation du personnel (spécialisée Tech niv 1-3) à 
+         déposer le bilan cette année.
+
+  02/07: Rappel ! Les dossiers de promotions pour SecAgent, tout niveau, sont à
+         renvoyer avant le 31/07. Tarif habituel, voir agence comptable.
+`
 
 // serveur de sécurité de la kramps
 var kramps_sec = Server{
@@ -184,25 +207,70 @@ var kramps_sec = Server{
 		{"admin", "lkjqsod", 5},
 	},
 	Detection: SEC4,
+	Description: ksecDesc,
 }
 
+var ksecDesc = `
+      ___           ___           ___           ___           ___         ___     
+     /__/|         /  /\         /  /\         /__/\         /  /\       /  /\    
+    |  |:|        /  /::\       /  /::\       |  |::\       /  /::\     /  /:/_   
+    |  |:|       /  /:/\:\     /  /:/\:\      |  |:|:\     /  /:/\:\   /  /:/ /\  
+  __|  |:|      /  /:/~/:/    /  /:/~/::\   __|__|:|\:\   /  /:/~/:/  /  /:/ /::\ 
+ /__/\_|:|____ /__/:/ /:/___ /__/:/ /:/\:\ /__/::::| \:\ /__/:/ /:/  /__/:/ /:/\:\
+ \  \:\/:::::/ \  \:\/:::::/ \  \:\/:/__\/ \  \:\~~\__\/ \  \:\/:/   \  \:\/:/~/:/
+  \  \::/~~~~   \  \::/~~~~   \  \::/       \  \:\        \  \::/     \  \::/ /:/ 
+   \  \:\        \  \:\        \  \:\        \  \:\        \  \:\      \__\/ /:/  
+    \  \:\        \  \:\        \  \:\        \  \:\        \  \:\       /__/:/   
+     \__\/         \__\/         \__\/         \__\/         \__\/       \__\/    
+                                                                 
+  [-> Serveur Sécurité <-]        ++ toutes les transaction sont loguées (SecLvl 4)
+  
+  Vous avez suivi la formation <sécurité> obligatoire, mais nous vous rappelons les
+  règles essentielles :
+       #1) Respectez la vie privée des autres.
+       #2) Réfléchissez avant de taper.
+       #3) De grands pouvoirs impliquent de grandes responsabilités.
+
+
+`
 // serveur des services corporatistes D22
 var corp = Server{
 	Address: "corp.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
 	},
+	Description: cd22Desc,
 	Targets: []Target{
 		{justice.Address, "services judiciaires", 1, "public", "public"},
 	},
 }
 
+var cd22Desc = `
+
+   ((ervices  ((orporatistes
+   ''                       
+    _                       
+   [|)istrict  22           
+
+   Ce service **public** vous est proposé **gratuitement** par la Cours Corporatiste.
+
+   Ce service est livré en l'état, et la Cours Corporatiste décline toute responsabilité
+   en ce qui concerne les données présentes et l'usage qui en est fait.
+
+   Ce site existe gràce à la généreuse participation de Weyland-Yutani Corp,
+   Tyrel Corp, Tessier-Ashpool SA, Disney Dassault, Arasaka, Renraku, Ubik,
+   Legba Voodoocom, Avalon, Association des Banques Unifiées Suisses (ABUS).
+
+                      
+`
+
 // serveur judiciaire
 var justice = Server {
 	Address: "justice.corp.d22.eu",
-		Credentials: []Cred{
+	Credentials: []Cred{
 		{"public", "public", 1},
-	},		
+	},
+	Description: cd22justDesc,	
 	Entries: []Entry{
 		{"@mel", []string{mel}, 1, "", "Mélody MATHISON", "Disparue - Incident 16485-4346B, Nexkemia Petrochemicals, 07/07/2000"},
 		{"@rocky", []string{rocky}, 1, "", "TODO", "- D22/de#867533654: encours de dettes, cumul 4.463 ¥€$\n- D22/ou#7578538765: outrage et rébellion, EuroPol\n- D22/ou#65432446543: outrage et rébellion, LegbaSecurity" },
@@ -234,13 +302,54 @@ var justice = Server {
 	},
 }
 
+var cd22justDesc = `
+
+   ((ervices  ((orporatistes
+   ''                       
+    _                       
+   [|)istrict  22   === Département JUDICIAIRE ===
+
+   Ce service **public** vous est proposé **gratuitement** par la Cours Corporatiste.
+
+   Ce service est livré en l'état, et la Cours Corporatiste décline toute responsabilité
+   en ce qui concerne les données présentes et l'usage qui en est fait.
+
+   Ce site existe gràce à la généreuse participation de Weyland-Yutani Corp,
+   Tyrel Corp, Tessier-Ashpool SA, Disney Dassault, Arasaka, Renraku, Ubik,
+   Legba Voodoocom, Avalon, Association des Banques Unifiées Suisses (ABUS).
+
+                      
+`
+
+
 // serveur bancaire du D22
 var abus = Server{
 	Address: "abus.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
 	},
+	Description: cd22bankDesc,
 }
+
+var cd22bankDesc = `
+
+   ((ervices  ((orporatistes
+   ''                       
+    _                       
+   [|)istrict  22   === Département BANCAIRE ===        
+
+   Ce service **public** est assuré par
+                                          _______     ______                 _______ 
+                       Association       (  ___  )   (  ___ \   |\     /|   (  ____ \
+                                         | (   ) |   | (   ) )  | )   ( |   | (    \/
+                       des Banques       | (___) |   | (__/ /   | |   | |   | (_____ 
+                                         |  ___  |   |  __ (    | |   | |   (_____  )
+                          Unifiées       | (   ) |   | (  \ \   | |   | |         ) |
+                                         | )   ( | _ | )___) )_ | (___) | _ /\____) |
+                           Suisses       |/     \|(¥)|/ \___/(€)(_______)($)\_______)
+
+
+`
 
 // serveur public de Legba Voodoocom
 var legba = Server{
@@ -350,15 +459,69 @@ var greendata = Server{
 	Credentials: []Cred{
 		{"public", "public", 1},
 	},
+	Description: greenDesc,
 }
 
-// serveur privé de Crunch
-var leet = Server{
-	Address: "l33t.darknet",
-	Credentials: []Cred{
+var greenDesc = `
+   
+                                   
+                             %      ____                        __  __     
+                         %%%%%%    /\  _ \                     /\ \/\ \    
+                %%%%%%%%%%%%%%%%   \ \ \L\_\  _ __    __     __\ \  \\ \   
+            %%%%%%%%%%%%%% %%%%%    \ \ \L_L /\  __\/ __ \ / __ \ \ ,   \  
+          %%%%%%%%%%%%% *%%%%%%%     \ \ \/, \ \ \//\  __//\  __/\ \ \ \ \ 
+         %%%%%%%%%   %%%%%%%%%%       \ \____/\ \_\\ \____\ \____\\ \_\ \_\
+         %%%%   %%%%%%%%%%%%%%         \/___/  \/_/ \/____/\/____/ \/_/\/_/
+            .%%%%%%%%%%%%%%%       
+          %%%%%%%%%%%%%%%               ____              __    ______     
+        %%%                            /\  _ \           /\ \__/\  _  \    
+        %%                             \ \ \/\ \     __  \ \ ,_\ \ \L\ \   
+                                        \ \ \ \ \  / __ \ \ \ \/\ \  __ \  
+       Analyses / Diagnostics            \ \ \_\ \/\ \L\ \_\ \ \_\ \ \/\ \ 
+                                          \ \____/\ \__/ \_\\ \__\\ \_\ \_\
+       Certifié ISO-56-52-100              \/___/  \/__/\/_/ \/__/ \/_/\/_/
+
+
+`
+
+var invertedLeaf = `
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@.@@@@@
+@@@@@@@@@@@@@@@@@@@@......@@@@
+@@@@@@@@@@@................@@@
+@@@@@@@..............@.....@@@
+@@@@@.............@&.......@@@
+@@@@.........@@@..........@@@@
+@@@@....@@@..............@@@@@
+@@@@@@@@...............@@@@@@@
+@@@@@...............@@@@@@@@@@
+@@@...@@@@@@@@@@@@@@@@@@@@@@@@
+@@@..@@@@@@@@@@@@@@@@@@@@@@@@@
+`
+
+// serveur privé de Crunch	       
+var leet = Server{		       
+	Address: "l33t.darknet",	       
+	Credentials: []Cred{		       
 		{"crunch", "hacktheplanet", 5},
 	},
-}
+	Description: cruDesc,
+}                                        
+
+
+var cruDesc = `
+
+                                                                      
+         _/_/_/  _/_/_/    _/    _/  _/      _/    _/_/_/  _/    _/   
+      _/        _/    _/  _/    _/  _/_/    _/  _/        _/    _/    
+     _/        _/_/_/    _/    _/  _/  _/  _/  _/        _/_/_/_/     
+    _/        _/    _/  _/    _/  _/    _/_/  _/        _/    _/      
+     _/_/_/  _/    _/    _/_/    _/      _/    _/_/_/  _/    _/       
+                                                                      
+    is NOT watching you... No need for that.... :o) 
+
+
+`
 
 // serveur privé de Céline
 var lair = Server{

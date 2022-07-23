@@ -46,7 +46,7 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 			if c.Console.Privilege >= t.Restricted {
 				fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
 			} else {
-				fmt.Fprintf(tw, "\t%d\t%s\t\n", i, "Accès restreint")
+				fmt.Fprintf(tw, "%d\t%s\t\n", i, "Accès restreint")
 			}
 		}
 		tw.Flush()

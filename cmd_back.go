@@ -29,12 +29,28 @@ func (cmd Back) LongHelp() string {
 func (cmd Back) Run(client *Client, args []string) tea.Msg {
 
 	// récupérer le serveur précédent
-	prev_target, res := client.Console.History.Pop()
+	// 1 enlever le lien actuel
+	client.Console.History.Pop()
+	// 2 have a Peek at the link that allowed to get to previous server
+	prev_target, res := client.Console.History.Peek()
 	if res != nil {
+		// disconnect !!
+		client.Console.Server = nil
+		client.Console.Login = ""
+		client.Console.Privilege = 0
+		client.Console.Alert = 0
+		client.Console.DNI = false
+		client.Console.History.Clear()
+
 		return ResultMsg{
-			Cmd:   "back",
-			Error: res,
+			Cmd:    "back",
+			Output: "déconnexion effectuée",
 		}
+
+		// return ResultMsg{
+		// 	Cmd:   "back",
+		// 	Error: res,
+		// }
 	}
 
 	// récupérer le serveur

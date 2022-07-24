@@ -32,7 +32,7 @@ loc = ["AC1", "AC2", "AC3", "DZ", "RR", "CE"]
 hh = ["10", "14", "16"]
 
 def form_register( key, val, desc, priv ):
-    reg = '{"'+key+', '+str(val)+', "'+desc+'", '+str(priv)+'},'
+    reg = '{"'+key+'", '+str(val)+', "'+desc+'", '+str(priv)+'},'
     return reg
 
 # generate edt-pers

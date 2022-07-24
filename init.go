@@ -193,6 +193,9 @@ var kperDesc = `
                                                                  
   [-> Serveur du personnel <-]++ toutes les transaction sont loguées (SecLvl 4)
 
+  20/07: Rappel ! Les EdT sont calculés chaque nuit pour le lendemain.
+         (PT et DT). Aucune réclamation n'est recevable.
+
   18/07: StuKa est la 3° organisation du personnel (spécialisée Tech niv 1-3) à 
          déposer le bilan cette année.
 

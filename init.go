@@ -8,47 +8,51 @@ const (
 	SEC5 = 0.8
 )
 
-var ids = map[string]Cred{
-	"alan": {Login: "amathison", Password: "GGCGGTAGCCCCTCTCGAGC", Privilege: 1},
-	"mel":  {Login: "mmathison", Password: "GGCCAAAGCTCCTTCGGAGC", Privilege: 1},
-	// "rocky":          {Login: "", Password: "CCGCGCAGAATCATAGCTGT", Privilege: 1},
-	"rita":           {Login: "mbellamy", Password: "CAAAGTTCTAGGCATAGGGA", Privilege: 1},
-	"styx":           {Login: "sbronner", Password: "TTAGCTCGATATCCTAACCC", Privilege: 1},
-	"kapo":           {Login: "cbellamy", Password: "GAACTGCTTTAGTTGACGGA", Privilege: 1},
-	"scalpel":        {Login: "jvillanova", Password: "TGAAAGAGACATGATGCCTT", Privilege: 1},
-	"greko":          {Login: "", Password: "TCTGAGGTTTATTGATTTCG", Privilege: 1}, // TODO
-	"jesus":          {Login: "ejohannesen", Password: "TTCGGGATTACTGCGTGCTG", Privilege: 1},
-	"escobar":        {Login: "jbranson", Password: "GGAGGACACCCCAAACGCAT", Privilege: 1},
-	"cageot":         {Login: "", Password: "GCCCTTGTCATGTACTTAGT", Privilege: 1}, // TODO
-	"lafouine":       {Login: "skmihalec", Password: "CTGTCACCCAATCTACAGCG", Privilege: 1},
-	"eva":            {Login: "", Password: "CTGTTGTAGTGACATGTTTC", Privilege: 1}, // TODO
-	"fatmike":        {Login: "mdubian", Password: "AACCTTGGGCACGGTCGGTA", Privilege: 1},
-	"kennedy":        {Login: "", Password: "CCCGCGGGCAAAGCTGACAG", Privilege: 1}, // TODO
-	"savagegirl":     {Login: "sjohannesen", Password: "GGGTCTATAGGTCAAACGGT", Privilege: 1},
-	"raoulcool":      {Login: "rmichu", Password: "GTCACAAGGTTGTTTAATGG", Privilege: 1},
-	"greenglass":     {Login: "rglass", Password: "ATGCCTACCTCCAATGATTA", Privilege: 1},
-	"chillydaisy":    {Login: "djohannesen", Password: "CGGGAGACACGTTCAGTCTT", Privilege: 1},
-	"frereping":      {Login: "dbonenfant", Password: "GCATGGCCGAATTCCTCATT", Privilege: 1},
-	"papaproxy":      {Login: "hproskychev", Password: "CGATTTGTATTGGATACGGA", Privilege: 1},
-	"nikki":          {Login: "njasinski", Password: "ACGAACCTAGAGCCGCACGC", Privilege: 1},
-	"celine":         {Login: "ffceline", Password: "CGCTCCCATTTCATGTCAGC", Privilege: 1},
-	"cramille":       {Login: "cmills", Password: "TTTGGGAGAAGCTTATGCAC", Privilege: 1},
-	"tigerdoll":      {Login: "mli", Password: "ATATGTTGAGCGTAAAGGCG", Privilege: 1},
-	"sistermorphine": {Login: "edubian", Password: "CCATCCGGCGGACCTTATGC", Privilege: 1},
-	"zilmir":         {Login: "zabasolo", Password: "GACGGGATACCTACTCTCGA", Privilege: 1},
-	"bettyb":         {Login: "ebranson", Password: "ATTCCGACTCAGGGTACCGG", Privilege: 1},
-	"abraham":        {Login: "", Password: "TGGCGTCTCTAATTCTTGCC", Privilege: 1}, // TODO
-	"crunch":         {Login: "", Password: "TTCAAGCTGAATATGAAAGG", Privilege: 1}, // TODO
-	"onekick":        {Login: "", Password: "GTCAAATCTGAGACTCTTGC", Privilege: 1}, // TODO
-	"jacob":          {Login: "", Password: "TGAAAGAGACAGTATGCCGT", Privilege: 1}, // TODO
-	"gang1":          {Login: "", Password: "TTCGACTGAATGTTTGATGT", Privilege: 1}, // TODO
-	"gang2":          {Login: "", Password: "TATCGACGCACGGGACTTGG", Privilege: 1}, // TODO
-	"gang3":          {Login: "", Password: "CGAGAAATGACAGAGTTGTA", Privilege: 1}, // TODO
-	// "paula":          {Login: "", Password: "GGGTGATCTGTTGCCCCCTG", Privilege: 1},
-	// "ringo":          {Login: "", Password: "AACTGACGGATTCGATCATG", Privilege: 1},
-	// "georges":        {Login: "", Password: "GTTTGCACGGAACATGCAAC", Privilege: 1},
-	// "jeanne":         {Login: "", Password: "GACCCGTATTTCGCTGATTG", Privilege: 1},
-	"oggy": {Login: "rwhite", Password: "TCAGCTTCTAACGTTCGGGA", Privilege: 1},
+var ids = map[string]struct {
+	Login    string
+	Password string
+	Name     string
+}{
+	"alan":           {"amathison", "GGCGGTAGCCCCTCTCGAGC", "Alan Mathison"},
+	"mel":            {"mmathison", "GGCCAAAGCTCCTTCGGAGC", "Mélody Mathison"},
+	"rocky":          {"", "CCGCGCAGAATCATAGCTGT", ""}, // pas d'ID
+	"rita":           {"mbellamy", "CAAAGTTCTAGGCATAGGGA", "Margherita Bellamy"},
+	"styx":           {"sbronner", "TTAGCTCGATATCCTAACCC", "Sebastian Bronner"},
+	"kapo":           {"cbellamy", "GAACTGCTTTAGTTGACGGA", "Camélia Bellamy"},
+	"scalpel":        {"jvillanova", "TGAAAGAGACATGATGCCTT", "Julius Villanova"},
+	"greko":          {"", "TCTGAGGTTTATTGATTTCG", "Eddy"}, // TODO
+	"jesus":          {"ejohannesen", "TTCGGGATTACTGCGTGCTG", "Edwin Johannesen"},
+	"escobar":        {"jbranson", "GGAGGACACCCCAAACGCAT", "Jonathan Branson"},
+	"cageot":         {"", "GCCCTTGTCATGTACTTAGT", ""}, // TODO
+	"lafouine":       {"skmihalec", "CTGTCACCCAATCTACAGCG", "Sylvia Kemija Mihalec"},
+	"eva":            {"", "CTGTTGTAGTGACATGTTTC", ""}, // TODO
+	"fatmike":        {"mdubian", "AACCTTGGGCACGGTCGGTA", "Michael Dubian"},
+	"kennedy":        {"", "CCCGCGGGCAAAGCTGACAG", ""}, // TODO
+	"savagegirl":     {"sjohannesen", "GGGTCTATAGGTCAAACGGT", "Sabrina Johannesen"},
+	"raoulcool":      {"rmichu", "GTCACAAGGTTGTTTAATGG", "Raoul Michu"},
+	"greenglass":     {"rglass", "ATGCCTACCTCCAATGATTA", "Rupert Glass"},
+	"chillydaisy":    {"djohannesen", "CGGGAGACACGTTCAGTCTT", "Daisy Johannesen"},
+	"frereping":      {"dbonenfant", "GCATGGCCGAATTCCTCATT", "Désiré Bonenfant"},
+	"papaproxy":      {"hproskychev", "CGATTTGTATTGGATACGGA", "Harald Proskychev"},
+	"nikki":          {"njasinski", "ACGAACCTAGAGCCGCACGC", "Nikole Jasinski"},
+	"celine":         {"ffceline", "CGCTCCCATTTCATGTCAGC", "Franz-Ferdinand Celine"},
+	"cramille":       {"cmills", "TTTGGGAGAAGCTTATGCAC", "Camélia Mills"},
+	"tigerdoll":      {"mli", "ATATGTTGAGCGTAAAGGCG", "Mei Li"},
+	"sistermorphine": {"edubian", "CCATCCGGCGGACCTTATGC", "Eloïse Dubian"},
+	"zilmir":         {"zabasolo", "GACGGGATACCTACTCTCGA", "Zilmir Abasolo"},
+	"bettyb":         {"ebranson", "ATTCCGACTCAGGGTACCGG", "Elisabeth Branson"},
+	"abraham":        {"", "TGGCGTCTCTAATTCTTGCC", ""}, // TODO
+	"crunch":         {"", "TTCAAGCTGAATATGAAAGG", ""}, // TODO
+	"onekick":        {"", "GTCAAATCTGAGACTCTTGC", ""}, // TODO
+	"jacob":          {"", "TGAAAGAGACAGTATGCCGT", ""}, // TODO
+	"gang1":          {"", "TTCGACTGAATGTTTGATGT", ""}, // TODO
+	"gang2":          {"", "TATCGACGCACGGGACTTGG", ""}, // TODO
+	"gang3":          {"", "CGAGAAATGACAGAGTTGTA", ""}, // TODO
+	"paula":          {"", "GGGTGATCTGTTGCCCCCTG", ""}, // pas d'ID
+	"ringo":          {"", "AACTGACGGATTCGATCATG", ""}, // pas d'ID
+	"georges":        {"", "GTTTGCACGGAACATGCAAC", ""}, // pas d'ID
+	"jeanne":         {"", "GACCCGTATTTCGCTGATTG", ""}, // pas d'ID
+	"oggy":           {"rwhite", "TCAGCTTCTAACGTTCGGGA", "Richard White"},
 }
 
 const (

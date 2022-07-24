@@ -295,13 +295,25 @@ var justice = Server {
 		{"@nikki", []string{nikki}, 1, "", "Nicole JASINSKI", "***** Personne recherchée, mandat inter-district PF/7253/EP/90271 *****\n- D22/vd#1100298735: vol données sous brevet"},
 		{"@celine", []string{celine}, 1, "", "Franz-Ferdinand CÉLINE", "***** Personne recherchée, mandat inter-district PF/1001/EP/98682 *****\n- D22/pi#9867356873: piratage informatique\n- D22/am#18763725: association malfaiteurs"},
 		{"@cramille", []string{cramille}, 1, "", "Camelia MILLS", "- néant"},
-	
-		
-
-		
+		{"@tigerdoll", []string{tigerdoll}, 1, "", "Mei-Li Lilas TODO", "- néant"},
+		{"@sistermorphine", []string{sistermorphine}, 1, "", "Eloïse DUBIAN", "- D22/ou#7578538765: outrage et rébellion, EuroPol\n- D22/va#325363552: vandalisme\n- D22/td#89765363: tapage diurne répété\n- D22/tn#101002543: tapage nocturne"},
+		{"@zilmir", []string{zilmir}, 1, "", "Zilmir Abasolo", "- néant"},
+		{"@bettyb", []string{bettyb}, 1, "", "Elisabeth BRANSON", "- néant"},
+		{"@abraham", []string{abraham}, 1, "", "TODO", "- néant"},
+		{"@crunch", []string{crunch}, 1, "", "TODO", "- néant"},
+		{"@onekick", []string{onekick}, 1, "", "Rodolphe KIÉVAIN", "- néant\n>>> automated procedure: contact@kramps.eu | #line>2"},
+		{"@jacob", []string{jacob}, 1, "", "Pete TODO", "- néant"},
+		{"@cyrano", []string{gang1}, 1, "", "Adrien JOLIVET", "TODO"},
+		{"@smalljoe", []string{gang2}, 1, "", "Mickael KLEBERT", "TODO"},
+		{"@ironmike", []string{gang3}, 1, "", "Joseph VAZZANNA", "TODO"},
+		{"@paula", []string{paula}, 1, "", "Paula TODO", "TODO NON"},
+		{"@ringo", []string{ringo}, 1, "", "Ringo TODO", "TODO NON"},
+		{"@georges", []string{georges}, 1, "", "Georges TODO", "TODO NON"},
+		{"@jeanne", []string{jeanne}, 1, "", "Jeanne TODO", "TODO NON"},
+		{"@joggy", []string{oggy}, 1, "", "Richard WHITE", "- néant"},
 	},
 }
-
+	
 var cd22justDesc = `
 
    ((ervices  ((orporatistes

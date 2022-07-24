@@ -8,7 +8,55 @@ const (
 	SEC5 = 0.8
 )
 
+var ids = map[string]struct {
+	Login    string
+	Password string
+	Name     string
+}{
+	"alan":           {"amathison", "GGCGGTAGCCCCTCTCGAGC", "Alan Mathison"},
+	"mel":            {"mmathison", "GGCCAAAGCTCCTTCGGAGC", "Mélody Mathison"},
+	"rocky":          {"", "CCGCGCAGAATCATAGCTGT", ""}, // pas d'ID
+	"rita":           {"mbellamy", "CAAAGTTCTAGGCATAGGGA", "Margherita Bellamy"},
+	"styx":           {"sbronner", "TTAGCTCGATATCCTAACCC", "Sebastian Bronner"},
+	"kapo":           {"cbellamy", "GAACTGCTTTAGTTGACGGA", "Camélia Bellamy"},
+	"scalpel":        {"jvillanova", "TGAAAGAGACATGATGCCTT", "Julius Villanova"},
+	"greko":          {"", "TCTGAGGTTTATTGATTTCG", "Eddy"}, // TODO
+	"jesus":          {"ejohannesen", "TTCGGGATTACTGCGTGCTG", "Edwin Johannesen"},
+	"escobar":        {"jbranson", "GGAGGACACCCCAAACGCAT", "Jonathan Branson"},
+	"cageot":         {"", "GCCCTTGTCATGTACTTAGT", ""}, // TODO
+	"lafouine":       {"skmihalec", "CTGTCACCCAATCTACAGCG", "Sylvia Kemija Mihalec"},
+	"eva":            {"", "CTGTTGTAGTGACATGTTTC", ""}, // TODO
+	"fatmike":        {"mdubian", "AACCTTGGGCACGGTCGGTA", "Michael Dubian"},
+	"kennedy":        {"", "CCCGCGGGCAAAGCTGACAG", ""}, // TODO
+	"savagegirl":     {"sjohannesen", "GGGTCTATAGGTCAAACGGT", "Sabrina Johannesen"},
+	"raoulcool":      {"rmichu", "GTCACAAGGTTGTTTAATGG", "Raoul Michu"},
+	"greenglass":     {"rglass", "ATGCCTACCTCCAATGATTA", "Rupert Glass"},
+	"chillydaisy":    {"djohannesen", "CGGGAGACACGTTCAGTCTT", "Daisy Johannesen"},
+	"frereping":      {"dbonenfant", "GCATGGCCGAATTCCTCATT", "Désiré Bonenfant"},
+	"papaproxy":      {"hproskychev", "CGATTTGTATTGGATACGGA", "Harald Proskychev"},
+	"nikki":          {"njasinski", "ACGAACCTAGAGCCGCACGC", "Nikole Jasinski"},
+	"celine":         {"ffceline", "CGCTCCCATTTCATGTCAGC", "Franz-Ferdinand Celine"},
+	"cramille":       {"cmills", "TTTGGGAGAAGCTTATGCAC", "Camélia Mills"},
+	"tigerdoll":      {"mli", "ATATGTTGAGCGTAAAGGCG", "Mei Li"},
+	"sistermorphine": {"edubian", "CCATCCGGCGGACCTTATGC", "Eloïse Dubian"},
+	"zilmir":         {"zabasolo", "GACGGGATACCTACTCTCGA", "Zilmir Abasolo"},
+	"bettyb":         {"ebranson", "ATTCCGACTCAGGGTACCGG", "Elisabeth Branson"},
+	"abraham":        {"", "TGGCGTCTCTAATTCTTGCC", ""}, // TODO
+	"crunch":         {"", "TTCAAGCTGAATATGAAAGG", ""}, // TODO
+	"onekick":        {"", "GTCAAATCTGAGACTCTTGC", ""}, // TODO
+	"jacob":          {"", "TGAAAGAGACAGTATGCCGT", ""}, // TODO
+	"gang1":          {"", "TTCGACTGAATGTTTGATGT", ""}, // TODO
+	"gang2":          {"", "TATCGACGCACGGGACTTGG", ""}, // TODO
+	"gang3":          {"", "CGAGAAATGACAGAGTTGTA", ""}, // TODO
+	"paula":          {"", "GGGTGATCTGTTGCCCCCTG", ""}, // pas d'ID
+	"ringo":          {"", "AACTGACGGATTCGATCATG", ""}, // pas d'ID
+	"georges":        {"", "GTTTGCACGGAACATGCAAC", ""}, // pas d'ID
+	"jeanne":         {"", "GACCCGTATTTCGCTGATTG", ""}, // pas d'ID
+	"oggy":           {"rwhite", "TCAGCTTCTAACGTTCGGGA", "Richard White"},
+}
+
 const (
+	alan           = "GGCGGTAGCCCCTCTCGAGC"
 	mel            = "GGCCAAAGCTCCTTCGGAGC"
 	rocky          = "CCGCGCAGAATCATAGCTGT"
 	rita           = "CAAAGTTCTAGGCATAGGGA"
@@ -105,7 +153,6 @@ var d22 = Server{
 	Detection: SEC2,
 }
 var dd22Desc = `
-
                     _____                            _                       
                    |  ___|                          | |                      
                    | |__ _   _ _ __ ___  _ __   ___ | | ___                  
@@ -124,7 +171,6 @@ var dd22Desc = `
 
            Bienvenue sur le serveur public du District 22 d'Europole.
            Un noeud du plus grand fournisseur d'accès de Méga-Europe. 
-                                                                                                
 `
 
 // serveur public de la kramps
@@ -138,7 +184,7 @@ var kramps = Server{
 		{kramps_priv.Address, "Serveur réservé au personnel", 3, "personnel", "kramps1234"},
 	},
 	Description: kpubDesc,
-	Detection: SEC2,
+	Detection:   SEC2,
 }
 
 var kpubDesc = `
@@ -174,7 +220,7 @@ var kramps_priv = Server{
 	Targets: []Target{
 		{kramps_sec.Address, "Serveur central de sécurité", 5, "admin", "lkjqsod"},
 	},
-	Detection: SEC3,
+	Detection:   SEC3,
 	Description: kperDesc,
 }
 
@@ -209,7 +255,7 @@ var kramps_sec = Server{
 	Credentials: []Cred{
 		{"admin", "lkjqsod", 5},
 	},
-	Detection: SEC4,
+	Detection:   SEC4,
 	Description: ksecDesc,
 }
 
@@ -233,9 +279,8 @@ var ksecDesc = `
        #1) Respectez la vie privée des autres.
        #2) Réfléchissez avant de taper.
        #3) De grands pouvoirs impliquent de grandes responsabilités.
-
-
 `
+
 // serveur des services corporatistes D22
 var corp = Server{
 	Address: "corp.d22.eu",
@@ -255,7 +300,7 @@ var cd22Desc = `
     _                       
    [|)istrict  22           
 
-   Ce service **public** vous est proposé **gratuitement** par la Cours Corporatiste.
+   Ce service **public** vous est proposé **gratuitement** par la Cour Corporatiste.
 
    Ce service est livré en l'état, et la Cours Corporatiste décline toute responsabilité
    en ce qui concerne les données présentes et l'usage qui en est fait.
@@ -263,20 +308,18 @@ var cd22Desc = `
    Ce site existe gràce à la généreuse participation de Weyland-Yutani Corp,
    Tyrel Corp, Tessier-Ashpool SA, Disney Dassault, Arasaka, Renraku, Ubik,
    Legba Voodoocom, Avalon, Association des Banques Unifiées Suisses (ABUS).
-
-                      
 `
 
 // serveur judiciaire
-var justice = Server {
+var justice = Server{
 	Address: "justice.corp.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
 	},
-	Description: cd22justDesc,	
+	Description: cd22justDesc,
 	Entries: []Entry{
 		{"@mel", []string{mel}, 1, "", "Mélody MATHISON", "Disparue - Incident 16485-4346B, Nexkemia Petrochemicals, 07/07/2000"},
-		{"@rocky", []string{rocky}, 1, "", "TODO", "- D22/de#867533654: encours de dettes, cumul 4.463 ¥€$\n- D22/ou#7578538765: outrage et rébellion, EuroPol\n- D22/ou#65432446543: outrage et rébellion, LegbaSecurity" },
+		{"@rocky", []string{rocky}, 1, "", "TODO", "- D22/de#867533654: encours de dettes, cumul 4.463 ¥€$\n- D22/ou#7578538765: outrage et rébellion, EuroPol\n- D22/ou#65432446543: outrage et rébellion, LegbaSecurity"},
 		{"@rita", []string{rita}, 1, "", "Margherita BELLAMY", "- néant"},
 		{"@styx", []string{styx}, 1, "", "Sébastien BRONNER", "TODO"},
 		{"@kapo", []string{kapo}, 1, "", "Carmélia BELLAMY", "TODO"},
@@ -284,7 +327,7 @@ var justice = Server {
 		{"@greko", []string{greko}, 1, "", "Eddy TODO", "- néant"},
 		{"@jesus", []string{jesus}, 1, "", "Edwin JOHANNESEN", "- néant"},
 		{"@escobar", []string{escobar}, 1, "", "Jonathan BRANSON", "- néant"},
-		{"@cageot", []string{cageot}, 1, "", "John MacFRIGHT", "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D21/rc#12785234452 rupture contrat\n\n\n$$$SPECIAL$$$ contacter cont4yes@kitsu.eu, ¥€$ en rapport."},	
+		{"@cageot", []string{cageot}, 1, "", "John MacFRIGHT", "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D21/rc#12785234452 rupture contrat\n\n\n$$$SPECIAL$$$ contacter cont4yes@kitsu.eu, ¥€$ en rapport."},
 		{"@lafouine", []string{lafouine}, 1, "", "Sylvia Kemija MIHALEC", "- néant"},
 		{"@eva", []string{eva}, 1, "", "Pamela TODO", "***** Personne recherchée, mandat inter-district PF/1437/PM/02 *****\n- D21/rc#6542867 rupture contrat"},
 		{"@fatmike", []string{fatmike}, 1, "", "Michael DUBIAN", "- D22/vm#23842834: vol à l'étalage\n- D22/vm#54327653: vol recette épicerie nuit\n- D22/vm#543299873: vol simple\n- D22/vm#547699823: vol graviscooter\n- D22/vm#753296671: vol à l'étalage"},
@@ -316,9 +359,8 @@ var justice = Server {
 		{"@joggy", []string{oggy}, 1, "", "Richard WHITE", "- néant"},
 	},
 }
-	
-var cd22justDesc = `
 
+var cd22justDesc = `
    ((ervices  ((orporatistes
    ''                       
     _                       
@@ -332,22 +374,34 @@ var cd22justDesc = `
    Ce site existe gràce à la généreuse participation de Weyland-Yutani Corp,
    Tyrel Corp, Tessier-Ashpool SA, Disney Dassault, Arasaka, Renraku, Ubik,
    Legba Voodoocom, Avalon, Association des Banques Unifiées Suisses (ABUS).
-
-                      
 `
-
 
 // serveur bancaire du D22
 var abus = Server{
 	Address: "abus.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
+		{"amathison", alan, 1},
+		{"mmathison", mel, 1},
+		{"mbellamy", rita, 1},
 	},
 	Description: cd22bankDesc,
+	Entries: []Entry{
+		{
+			ID:         "amathison",
+			Keywords:   []string{"propriété"},
+			Restricted: 1,
+			Owner:      "amathison",
+			Title:      "Titre immobilier DZ8-7687",
+			Content: `DZ8-7687 : immeuble-local commercial, District 22.
+
+2000 : ce titre a fait l'objet d'une offre publique d'achat suite à l'incident Nexkemia. M Mathison n'a pas donné suite.
+2019 : M Mathison n'a eu aucune activité enregistrée par nos services depuis 2000. Castle Corp souhaite se porter acquéreur du bien. Conformément au cadre légal concernant les personnes portées disparues, M Mathison ou son héritier a jusqu'au 2020-08-01 pour se manifester. Passée cette date, le titre sera remis en vente, au profit de Castle Corp.`,
+		},
+	},
 }
 
 var cd22bankDesc = `
-
    ((ervices  ((orporatistes
    ''                       
     _                       
@@ -362,8 +416,6 @@ var cd22bankDesc = `
                           Unifiées       | (   ) |   | (  \ \   | |   | |         ) |
                                          | )   ( | _ | )___) )_ | (___) | _ /\____) |
                            Suisses       |/     \|(¥)|/ \___/(€)(_______)($)\_______)
-
-
 `
 
 // serveur public de Legba Voodoocom
@@ -514,15 +566,14 @@ var invertedLeaf = `
 @@@..@@@@@@@@@@@@@@@@@@@@@@@@@
 `
 
-// serveur privé de Crunch	       
-var leet = Server{		       
-	Address: "l33t.darknet",	       
-	Credentials: []Cred{		       
+// serveur privé de Crunch
+var leet = Server{
+	Address: "l33t.darknet",
+	Credentials: []Cred{
 		{"crunch", "hacktheplanet", 5},
 	},
 	Description: cruDesc,
-}                                        
-
+}
 
 var cruDesc = `
 

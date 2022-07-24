@@ -54,6 +54,10 @@ type ResultMsg struct {
 	Output string
 }
 
+type TickMsg struct {
+	Wait time.Duration // écoulement du temps
+}
+
 type SecurityMsg struct{}
 
 func (c *Client) Wrap(output string) string {

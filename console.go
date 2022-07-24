@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
 
 // Console représente le terminal depuis lequel le joueur accède au net
@@ -18,8 +19,11 @@ type Console struct {
 	// niveau de privilège dans le serveur actuel
 	Privilege int
 
-	// niveau d'alerte du serveur
-	Alert int
+	// l'alerte est-elle activée ?
+	Alert bool
+
+	// durée avant la déconnexion forcée
+	Countdown time.Duration
 
 	// zones mémoires disponibles pour une évasion
 	Mem map[string]bool

@@ -6,7 +6,10 @@ import (
 
 type Stack []Target
 
-
+// Size of the stack
+func (s *Stack) Size() int {
+	return len(*s)
+}
 
 // IsEmpty: check if stack is empty
 func (s *Stack) IsEmpty() bool {

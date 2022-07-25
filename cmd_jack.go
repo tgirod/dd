@@ -78,6 +78,7 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	co.Privilege = 1
 	co.Alert++
 	co.InitMem()
+	co.History.Push(target)
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)

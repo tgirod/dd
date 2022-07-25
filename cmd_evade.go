@@ -74,6 +74,7 @@ func (e Evade) Run(c *Client, args []string) tea.Msg {
 
 	// évasion effectuée
 	c.Console.Mem[addr] = false
+	c.Console.Countdown = c.Console.Server.Scan
 
 	return ResultMsg{
 		Cmd:     "evade " + strings.Join(args, " "),

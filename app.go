@@ -15,6 +15,8 @@ import (
 	bm "github.com/charmbracelet/wish/bubbletea"
 	lm "github.com/charmbracelet/wish/logging"
 	"github.com/gliderlabs/ssh"
+
+	//"encoding/json"
 )
 
 var (
@@ -62,6 +64,24 @@ func NewApp() *App {
 
 // Start démarre le serveur, en attente de connexions
 func (a *App) Start() {
+
+	// bytes, err := json.Marshal(a.Game)
+    // if err != nil {
+    //     fmt.Println("Can't serislize", a.Game)
+    // }
+	// fmt.Println(string(bytes))
+	// fmt.Println(a.Game.Network[0].Address)
+	// a.Game.Network[0].Address = "dd.l"
+	// a.Game.Serialize()
+	a.Game.UnSerialize()
+	// Deserialize Game
+	fmt.Println(a.Game.Network[0].Address)
+	// var ng Game;
+	// err = json.Unmarshal(bytes, &ng)
+	// if err != nil {
+    //     fmt.Println("Can't deserislize", bytes)
+    // }
+	
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	log.Printf("Starting SSH server on %s:%d", host, port)

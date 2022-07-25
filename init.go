@@ -1,11 +1,13 @@
 package main
 
+import "time"
+
 const (
-	SEC1 = 0.05
-	SEC2 = 0.1
-	SEC3 = 0.2
-	SEC4 = 0.4
-	SEC5 = 0.8
+	SEC1 = time.Minute * 10
+	SEC2 = time.Minute * 5
+	SEC3 = time.Minute * 2
+	SEC4 = time.Minute * 1
+	SEC5 = time.Second * 30
 )
 
 var ids = map[string]struct {
@@ -117,7 +119,7 @@ var dd = Server{
 		{"bluemars", []string{"boisson"}, 1, "jesus", "Blue Mars - le cocktail parfait", "la recette"},
 		{"mojito", []string{"boisson"}, 1, "", "Mojito - le cocktail classique", "Menthe, glace pilée, citron vert et plein de rhum"},
 	},
-	Detection: SEC1,
+	Scan: SEC1,
 }
 
 var ddDesc = `
@@ -150,7 +152,7 @@ var d22 = Server{
 		{abus.Address, "Association des Banques Unifiées Suisses", 1, "public", "public"},
 		{greendata.Address, "Green Data, solution environnementale", 1, "public", "public"},
 	},
-	Detection: SEC2,
+	Scan: SEC2,
 }
 var dd22Desc = `
                     _____                            _                       
@@ -184,7 +186,7 @@ var kramps = Server{
 		{kramps_priv.Address, "Serveur réservé au personnel", 3, "personnel", "kramps1234"},
 	},
 	Description: kpubDesc,
-	Detection:   SEC2,
+	Scan:        SEC2,
 }
 
 var kpubDesc = `
@@ -220,7 +222,7 @@ var kramps_priv = Server{
 	Targets: []Target{
 		{kramps_sec.Address, "Serveur central de sécurité", 5, "admin", "lkjqsod"},
 	},
-	Detection:   SEC3,
+	Scan:        SEC3,
 	Description: kperDesc,
 }
 
@@ -255,7 +257,7 @@ var kramps_sec = Server{
 	Credentials: []Cred{
 		{"admin", "lkjqsod", 5},
 	},
-	Detection:   SEC4,
+	Scan:        SEC4,
 	Description: ksecDesc,
 }
 

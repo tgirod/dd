@@ -63,7 +63,9 @@ func (c Connect) Run(client *Client, args []string) tea.Msg {
 	// récupérer le serveur
 	server, err := client.Game.FindServer(address)
 	if err != nil {
-		return ResultMsg{err, "", ""}
+		return ResultMsg{
+			Error: err,
+		}
 	}
 
 	if priv, err := server.CheckCredentials(login, password); err != nil {

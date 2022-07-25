@@ -35,7 +35,7 @@ func (q Quit) Run(c *Client, args []string) tea.Msg {
 	c.Console.Server = nil
 	c.Console.Login = ""
 	c.Console.Privilege = 0
-	c.Console.Alert = 0
+	c.Console.Alert = false
 	c.Console.DNI = false
 	c.Console.History.Clear()
 

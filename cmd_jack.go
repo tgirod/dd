@@ -76,7 +76,6 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	co.Server = server
 	co.Login = "illegal"
 	co.Privilege = 1
-	co.Alert++
 	co.InitMem()
 	co.History.Push(target)
 
@@ -85,7 +84,8 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	fmt.Fprintf(&b, "%s\n", server.Description)
 
 	return ResultMsg{
-		Cmd:    "jack " + strings.Join(args, " "),
-		Output: b.String(),
+		Cmd:     "jack " + strings.Join(args, " "),
+		Output:  b.String(),
+		Illegal: true,
 	}
 }

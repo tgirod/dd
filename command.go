@@ -33,7 +33,7 @@ func (n Node) ParseName() string {
 }
 
 func (n Node) ShortHelp() string {
-	return fmt.Sprintf("%s\t%s", n.Name, n.Help)
+	return n.Help
 }
 
 func (n Node) LongHelp() string {
@@ -44,7 +44,7 @@ func (n Node) LongHelp() string {
 	b.WriteString("SOUS-COMMANDES\n")
 	tw := tw(&b)
 	for _, s := range n.Sub {
-		fmt.Fprintf(tw, s.ShortHelp()+"\t\n")
+		fmt.Fprintf(tw, "%s\t%s\t\n", s.ParseName(), s.ShortHelp())
 	}
 	tw.Flush()
 	b.WriteString("\n")

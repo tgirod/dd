@@ -58,7 +58,7 @@ func (cmd Back) Run(client *Client, args []string) tea.Msg {
 		co.Privilege = priv
 		co.Login = prev_target.Login
 		co.Server = server
-		co.Alert = co.Alert / 2 //Alain : back n'est pas sans soucis
+		// co.Alert = co.Alert / 2 //Alain : back n'est pas sans soucis
 		co.InitMem()
 
 		b := strings.Builder{}

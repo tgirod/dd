@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 type Stack []Target
 
 // Size of the stack

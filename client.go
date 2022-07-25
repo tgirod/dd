@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"math/rand"
 	"strings"
 	"text/tabwriter"
 	"time"
@@ -13,6 +12,8 @@ import (
 	lg "github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
 )
+
+const DNISpeed = 5
 
 type Client struct {
 	width      int            // largeur de l'affichage
@@ -49,16 +50,15 @@ func (c *Client) Init() tea.Cmd {
 
 // affiche le résultat d'une commande
 type ResultMsg struct {
-	Error  error
-	Cmd    string
-	Output string
+	Error   error
+	Cmd     string
+	Output  string
+	Illegal bool
 }
 
-type TickMsg struct {
-	Wait time.Duration // écoulement du temps
+type SecurityMsg struct {
+	Wait time.Duration // temps avant de relancer la routine de sécurité
 }
-
-type SecurityMsg struct{}
 
 func (c *Client) Wrap(output string) string {
 	w := c.output.Width - outputStyle.GetHorizontalFrameSize()
@@ -76,6 +76,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return c, nil
 
 	case ResultMsg:
+		// mettre à jour la sortie
 		b := strings.Builder{}
 		if msg.Error != nil {
 			fmt.Fprintf(&b, "%s\n\n", errorTextStyle.Render(msg.Error.Error()))
@@ -90,10 +91,19 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		c.output.GotoBottom()
 		c.prevOutput = curOutput
+
+		// déclencher le scan si la commande est illégale
+		if msg.Illegal {
+			return c, c.StartSecurity
+		}
+
 		return c, nil
 
 	case SecurityMsg:
-		return c, tea.Every(c.SecurityDelay(), c.Security)
+		if c.Console.Alert {
+			// l'alerte est toujours là, on relance la routine de sécurité pour un tour
+			return c, tea.Every(msg.Wait, c.Security)
+		}
 
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
@@ -119,15 +129,6 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	return c, cmd
-}
-
-// temps entre deux scans de sécurité - plus long si le hacker a activé la DNI
-func (c *Client) SecurityDelay() time.Duration {
-	delay := time.Second
-	if c.Console.DNI {
-		delay *= 3
-	}
-	return delay
 }
 
 func (c *Client) View() string {
@@ -198,7 +199,12 @@ var (
 func (c Client) statusView() string {
 	login := fmt.Sprintf("👤[%s]", c.Console.Login)
 	priv := fmt.Sprintf("✪[%d]", c.Console.Privilege)
-	alarm := fmt.Sprintf("💀[%d]", c.Console.Alert)
+	timer := "😀[--:--]"
+	if c.Console.Alert {
+		min := int(c.Countdown.Minutes())
+		sec := int(c.Countdown.Seconds()) - min*60
+		timer = fmt.Sprintf("💀[%02d:%02d]", min, sec)
+	}
 
 	b := strings.Builder{}
 	if len(c.Console.History) == 0 {
@@ -209,7 +215,7 @@ func (c Client) statusView() string {
 	}
 	hist := fmt.Sprintf("🖧[%s]", b.String())
 
-	left := fmt.Sprintf("%s %s %s ", login, priv, alarm)
+	left := fmt.Sprintf("%s %s %s ", login, priv, timer)
 	histWidth := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(left)
 	status := left + lg.PlaceHorizontal(histWidth, lg.Left, hist)
 	return statusStyle.Render(status)
@@ -275,27 +281,41 @@ func (c *Client) Run() tea.Cmd {
 	}
 }
 
+func (c Client) Delay() time.Duration {
+	if c.Console.DNI {
+		return time.Second * DNISpeed
+	} else {
+		return time.Second
+	}
+}
+
+func (c Client) StartSecurity() tea.Msg {
+	if !c.Console.Alert {
+		c.Console.Alert = true
+		c.Console.Countdown = c.Console.Server.Scan
+		return SecurityMsg{c.Delay()}
+	}
+
+	return nil
+}
+
 func (c Client) Security(t time.Time) tea.Msg {
-	// tenter d'augementer le niveau d'alarme
-	if c.Console.Alert > 0 && rand.Float64() < c.Console.Server.Detection {
-		c.Console.Alert++
+	// décrémenter d'une seconde
+	c.Countdown -= time.Second
+
+	if c.Countdown > 0 {
+		// on continue de faire tourner la routine de sécurité
+		return SecurityMsg{c.Delay()}
 	}
 
-	if c.Console.Alert > 5 {
-		// hacker repéré, il se fait kicker du serveur
-		c.Console.Server = nil
-		c.Console.Login = ""
-		c.Console.Privilege = 0
-		c.Console.Alert = 0
-		c.Console.History.Clear()
-
-		return ResultMsg{
-			Output: "coupure forcée de la connexion",
-		}
+	c.Console.Server = nil
+	c.Console.Login = ""
+	c.Console.Privilege = 0
+	c.Console.Alert = false
+	c.Console.History.Clear()
+	return ResultMsg{
+		Output: "coupure forcée de la connexion",
 	}
-
-	// on continue de faire tourner la routine de sécurité
-	return SecurityMsg{}
 }
 
 func tw(output io.Writer) *tabwriter.Writer {

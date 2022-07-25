@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+	"time"
 	"unicode"
 
 	"golang.org/x/text/runes"
@@ -21,8 +22,8 @@ type Server struct {
 	// informations affichées lors de la connexion
 	Description string
 
-	// niveau de détection. plus il est élevé, plus vite on se fait repérer
-	Detection float64
+	// durée du scan avant de se faire repérer par le serveur
+	Scan time.Duration
 
 	// liste des liens fournis par le serveur
 	Targets []Target

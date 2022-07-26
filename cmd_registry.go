@@ -11,36 +11,36 @@ var Registry = Node{
 	Name: "registry",
 	Help: "manipuler les périphériques connectés au serveur",
 	Sub: []Command{
-		RegistryView{},
+		RegistrySearch{},
 		RegistryEdit{},
 	},
 }
 
-type RegistryView struct{}
+type RegistrySearch struct{}
 
-func (r RegistryView) ParseName() string {
-	return "view"
+func (r RegistrySearch) ParseName() string {
+	return "search"
 }
 
-func (r RegistryView) ShortHelp() string {
-	return "affiche les registres correspondant à la recherche"
+func (r RegistrySearch) ShortHelp() string {
+	return "recherche des registres par nom et affiche leur état"
 }
 
-func (r RegistryView) LongHelp() string {
+func (r RegistrySearch) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(r.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  registry view [PREFIX]\n")
+	b.WriteString("  registry search [NAME]\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  aucun   -- liste tous les registres\n")
-	b.WriteString("  PREFIX  -- premières lettres du nom du registre")
+	b.WriteString("  aucun -- liste tous les registres\n")
+	b.WriteString("  NAME  -- nom complet ou partiel")
 	return b.String()
 }
 
-func (r RegistryView) Run(c *Client, args []string) tea.Msg {
+func (r RegistrySearch) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
 		return ResultMsg{
-			Cmd:   "registry view " + strings.Join(args, " "),
+			Cmd:   "registry search " + strings.Join(args, " "),
 			Error: errNotConnected}
 	}
 
@@ -64,7 +64,7 @@ func (r RegistryView) Run(c *Client, args []string) tea.Msg {
 	}
 	tw.Flush()
 	return ResultMsg{
-		Cmd:    "registry view " + strings.Join(args, " "),
+		Cmd:    "registry search " + strings.Join(args, " "),
 		Output: b.String(),
 	}
 }

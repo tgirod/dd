@@ -1,7 +1,6 @@
 package main
 
 import (
-	"strings"
 	"time"
 	"unicode"
 
@@ -136,14 +135,14 @@ type Register struct {
 	Restricted  int
 }
 
-func (r *Register) Match(prefix string) bool {
-	return strings.HasPrefix(r.Name, prefix)
+func (r *Register) Match(name string) bool {
+	return fuzzy.MatchNormalizedFold(name, r.Name)
 }
 
-func (s *Server) RegisterSearch(prefix string) []Register {
+func (s *Server) RegisterSearch(name string) []Register {
 	result := make([]Register, 0, len(s.Registers))
 	for _, r := range s.Registers {
-		if r.Match(prefix) {
+		if r.Match(name) {
 			result = append(result, r)
 		}
 	}

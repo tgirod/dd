@@ -15,7 +15,6 @@ import (
 	bm "github.com/charmbracelet/wish/bubbletea"
 	lm "github.com/charmbracelet/wish/logging"
 	"github.com/gliderlabs/ssh"
-
 	//"encoding/json"
 )
 
@@ -67,10 +66,10 @@ func (a *App) Start(filename string) {
 
 	// UnSerialize from given file
 	if filename != "" {
-		a.Game.UnSerialize( filename )
+		a.Game.UnSerialize(filename)
 		log.Printf("Reading Game Stat from %s", filename)
 	}
-	
+
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	log.Printf("Starting SSH server on %s:%d", host, port)

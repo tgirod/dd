@@ -32,7 +32,7 @@ func (d DataSearch) LongHelp() string {
 	b.WriteString("\nUSAGE\n")
 	b.WriteString("  data search <KEYWORD>\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  KEYWORD -- mot-clef à rechercher")
+	b.WriteString("  KEYWORD -- mot-clef à rechercher, minimum 3 caractères")
 	return b.String()
 }
 
@@ -52,6 +52,15 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 	}
 
 	keyword := args[0]
+
+	if len([]rune(keyword)) < 3 {
+		return ResultMsg{
+			Cmd:    "data search " + strings.Join(args, " "),
+			Error:  fmt.Errorf("%s : %w", keyword, errKeywordTooShort),
+			Output: d.LongHelp(),
+		}
+
+	}
 
 	entries := c.Server.DataSearch(keyword, c.Login)
 

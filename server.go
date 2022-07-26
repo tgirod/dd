@@ -5,10 +5,10 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/lithammer/fuzzysearch/fuzzy"
 	"golang.org/x/text/runes"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
-	//"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
 // Server représente un serveur sur le Net
@@ -124,16 +124,8 @@ func (s *Server) FindEntry(id string, owner string) (Entry, error) {
 
 // Match détermine si l'entrée contient le mot-clef
 func (e Entry) Match(keyword string) bool {
-	keyword = normalize(keyword)
-
-	// FIXME est-ce qu'on utilise strings.HasPrefix (plus facile) ?
-	for _, k := range e.Keywords {
-		if k == keyword {
-			return true
-		}
-	}
-
-	return false
+	match := fuzzy.FindNormalizedFold(keyword, e.Keywords)
+	return len(match) > 0
 }
 
 // Register représente registre mémoire qui peut être modifié pour contrôler quelque chose

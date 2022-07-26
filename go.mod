@@ -8,6 +8,7 @@ require (
 	github.com/charmbracelet/lipgloss v0.5.0
 	github.com/charmbracelet/wish v0.5.0
 	github.com/gliderlabs/ssh v0.3.4
+	github.com/lithammer/fuzzysearch v1.1.5
 	github.com/muesli/reflow v0.3.0
 	golang.org/x/text v0.3.7
 )

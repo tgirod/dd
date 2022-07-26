@@ -36,8 +36,8 @@ func (g Game) Serialize() {
 	}
 }
 
-func (g Game) UnSerialize() {
-	content, err := ioutil.ReadFile("network.json")
+func (g Game) UnSerialize(filename string) {
+	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		fmt.Println("Cannot open JSON file")
 	}

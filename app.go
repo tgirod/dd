@@ -63,24 +63,13 @@ func NewApp() *App {
 }
 
 // Start démarre le serveur, en attente de connexions
-func (a *App) Start() {
+func (a *App) Start(filename string) {
 
-	// bytes, err := json.Marshal(a.Game)
-    // if err != nil {
-    //     fmt.Println("Can't serislize", a.Game)
-    // }
-	// fmt.Println(string(bytes))
-	// fmt.Println(a.Game.Network[0].Address)
-	// a.Game.Network[0].Address = "dd.l"
-	// a.Game.Serialize()
-	a.Game.UnSerialize()
-	// Deserialize Game
-	fmt.Println(a.Game.Network[0].Address)
-	// var ng Game;
-	// err = json.Unmarshal(bytes, &ng)
-	// if err != nil {
-    //     fmt.Println("Can't deserislize", bytes)
-    // }
+	// UnSerialize from given file
+	if filename != "" {
+		a.Game.UnSerialize( filename )
+		log.Printf("Reading Game Stat from %s", filename)
+	}
 	
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)

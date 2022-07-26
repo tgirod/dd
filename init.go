@@ -180,7 +180,6 @@ var kramps = Server{
 	Address: "kramps.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
-		{"joe", "password", 3}, // utilisateur lambda, accès direct
 	},
 	Targets: []Target{
 		{kramps_priv.Address, "Serveur réservé au personnel", 3, "personnel", "kramps1234"},
@@ -217,10 +216,12 @@ var kpubDesc = `
 var kramps_priv = Server{
 	Address: "priv.kramps.d22.eu",
 	Credentials: []Cred{
-		{"personnel", "kramps1234", 3},
+		{"personnel", "kramps1234", 3}, // accès depuis le serveur public
+		{"akremmer", "sexgod22", 3},    // backdoor, vol de compte utilisateur
 	},
 	Targets: []Target{
-		{kramps_sec.Address, "Serveur central de sécurité", 5, "admin", "lkjqsod"},
+		{kramps_inmates.Address, "Gestion des prisonniers", 3, "personnel", "kramps1234"},
+		{kramps_sec.Address, "Sécurité des installations", 5, "admin", "lkjqsod"},
 	},
 	Scan:        SEC3,
 	Description: kperDesc,
@@ -251,6 +252,31 @@ var kperDesc = `
          renvoyer avant le 31/07. Tarif habituel, voir agence comptable.
 `
 
+var kramps_inmates = Server{
+	Address:     "inmates.kramps.d22.eu",
+	Credentials: []Cred{},
+	Scan:        SEC3,
+	Description: kinmatesDesc,
+	Entries:     []Entry{},    // TODO liste associant prisonnier / matricule / numéro de cellule
+	Registers:   []Register{}, // TODO emploi du temps des prisonniers (extérieur / cellule)
+}
+
+var kinmatesDesc = `
+      ___           ___           ___           ___           ___         ___     
+     /__/|         /  /\         /  /\         /__/\         /  /\       /  /\    
+    |  |:|        /  /::\       /  /::\       |  |::\       /  /::\     /  /:/_   
+    |  |:|       /  /:/\:\     /  /:/\:\      |  |:|:\     /  /:/\:\   /  /:/ /\  
+  __|  |:|      /  /:/~/:/    /  /:/~/::\   __|__|:|\:\   /  /:/~/:/  /  /:/ /::\ 
+ /__/\_|:|____ /__/:/ /:/___ /__/:/ /:/\:\ /__/::::| \:\ /__/:/ /:/  /__/:/ /:/\:\
+ \  \:\/:::::/ \  \:\/:::::/ \  \:\/:/__\/ \  \:\~~\__\/ \  \:\/:/   \  \:\/:/~/:/
+  \  \::/~~~~   \  \::/~~~~   \  \::/       \  \:\        \  \::/     \  \::/ /:/ 
+   \  \:\        \  \:\        \  \:\        \  \:\        \  \:\      \__\/ /:/  
+    \  \:\        \  \:\        \  \:\        \  \:\        \  \:\       /__/:/   
+     \__\/         \__\/         \__\/         \__\/         \__\/       \__\/    
+                                                                 
+  [-> Serveur Prisonniers <-]    ++ toutes les transaction sont loguées (SecLvl 4)
+`
+
 // serveur de sécurité de la kramps
 var kramps_sec = Server{
 	Address: "sec.kramps.d22.eu",
@@ -259,6 +285,7 @@ var kramps_sec = Server{
 	},
 	Scan:        SEC4,
 	Description: ksecDesc,
+	Registers:   []Register{}, // TODO contrôle du verrouillage des portes
 }
 
 var ksecDesc = `

@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	SEC1 = time.Minute * 10
-	SEC2 = time.Minute * 5
+	SEC1 = time.Minute * 5
+	SEC2 = time.Minute * 3
 	SEC3 = time.Minute * 2
 	SEC4 = time.Minute * 1
 	SEC5 = time.Second * 30
@@ -26,7 +26,7 @@ func (i ID) Keywords() []string {
 var (
 	alan           = ID{"amathison", "GGCGGTAGCCCCTCTCGAGC", "Alan Mathison"}
 	mel            = ID{"mmathison", "GGCCAAAGCTCCTTCGGAGC", "Mélody Mathison"}
-	rocky          = ID{"jdoe7624", "CCGCGCAGAATCATAGCTGT", "John Doe 7624"} // pas d'ID
+	rocky          = ID{"jdoe7624", "CCGCGCAGAATCATAGCTGT", "John Doe 7624"}
 	rita           = ID{"mbellamy", "CAAAGTTCTAGGCATAGGGA", "Margherita Bellamy"}
 	styx           = ID{"sbronner", "TTAGCTCGATATCCTAACCC", "Sebastian Bronner"}
 	kapo           = ID{"cbellamy", "GAACTGCTTTAGTTGACGGA", "Camélia Bellamy"}
@@ -2177,8 +2177,6 @@ var greendata = Server{
 }
 
 var greenDesc = `
-   
-                                   
                              %      ____                        __  __     
                          %%%%%%    /\  _ \                     /\ \/\ \    
                 %%%%%%%%%%%%%%%%   \ \ \L\_\  _ __    __     __\ \  \\ \   
@@ -2194,8 +2192,6 @@ var greenDesc = `
        Analyses / Diagnostics            \ \ \_\ \/\ \L\ \_\ \ \_\ \ \/\ \ 
                                           \ \____/\ \__/ \_\\ \__\\ \_\ \_\
        Certifié ISO-56-52-100              \/___/  \/__/\/_/ \/__/ \/_/\/_/
-
-
 `
 
 var invertedLeaf = `
@@ -2223,8 +2219,6 @@ var leet = Server{
 }
 
 var cruDesc = `
-
-                                                                      
          _/_/_/  _/_/_/    _/    _/  _/      _/    _/_/_/  _/    _/   
       _/        _/    _/  _/    _/  _/_/    _/  _/        _/    _/    
      _/        _/_/_/    _/    _/  _/  _/  _/  _/        _/_/_/_/     
@@ -2232,8 +2226,6 @@ var cruDesc = `
      _/_/_/  _/    _/    _/_/    _/      _/    _/_/_/  _/    _/       
                                                                       
     is NOT watching you... No need for that.... :o) 
-
-
 `
 
 // serveur privé de Céline

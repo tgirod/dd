@@ -206,20 +206,30 @@ func (c Client) statusView() string {
 		timer = fmt.Sprintf("💀[%02d:%02d]", min, sec)
 	}
 
+	left := fmt.Sprintf("%s %s %s ", login, priv, timer)
+	
+	// longueur max pour l'historique
+	max := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(left)
+
+	// historique complet
 	b := strings.Builder{}
 	if len(c.Console.History) == 0 {
 		b.WriteString("déconnecté")
 	}
 	for _, h := range c.Console.History {
-		fmt.Fprintf(&b, "%s/", h.Address)
+		fmt.Fprintf(&b, "%s@%s/", h.Login, h.Address)
 	}
-	hist := fmt.Sprintf("🖧[%s]", b.String())
+	hist := []rune(fmt.Sprintf("🖧[%s]", b.String()))
 
-	left := fmt.Sprintf("%s %s %s ", login, priv, timer)
-	histWidth := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(left)
-	status := left + lg.PlaceHorizontal(histWidth, lg.Left, hist)
-	return statusStyle.Render(status)
+	if len(hist) > max {
+		hist = hist[len(hist)-max:len(hist)]
+	}
+
+	status := left + lg.PlaceHorizontal(max, lg.Left, string(hist))
+	return statusStyle.Inline(true).Render(status)
 }
+
+var xxx = lg.NewStyle()
 
 func (c Client) debugView() string {
 	//Alain : debug Stack

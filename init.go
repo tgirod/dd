@@ -26,20 +26,20 @@ func (i ID) Keywords() []string {
 var (
 	alan           = ID{"amathison", "GGCGGTAGCCCCTCTCGAGC", "Alan Mathison"}
 	mel            = ID{"mmathison", "GGCCAAAGCTCCTTCGGAGC", "Mélody Mathison"}
-	rocky          = ID{"", "CCGCGCAGAATCATAGCTGT", ""} // pas d'ID
+	rocky          = ID{"jdoe7624", "CCGCGCAGAATCATAGCTGT", "John Doe 7624"} // pas d'ID
 	rita           = ID{"mbellamy", "CAAAGTTCTAGGCATAGGGA", "Margherita Bellamy"}
 	styx           = ID{"sbronner", "TTAGCTCGATATCCTAACCC", "Sebastian Bronner"}
 	kapo           = ID{"cbellamy", "GAACTGCTTTAGTTGACGGA", "Camélia Bellamy"}
 	scalpel        = ID{"jvillanova", "TGAAAGAGACATGATGCCTT", "Julius Villanova"}
-	greko          = ID{"", "TCTGAGGTTTATTGATTTCG", "Eddy"} // TODO
+	greko          = ID{"ecanto", "TCTGAGGTTTATTGATTTCG", "Eddy Canto"}
 	jesus          = ID{"ejohannesen", "TTCGGGATTACTGCGTGCTG", "Edwin Johannesen"}
 	escobar        = ID{"jbranson", "GGAGGACACCCCAAACGCAT", "Jonathan Branson"}
 	cageot         = ID{"", "GCCCTTGTCATGTACTTAGT", ""} // TODO
 	lafouine       = ID{"skmihalec", "CTGTCACCCAATCTACAGCG", "Sylvia Kemija Mihalec"}
-	eva            = ID{"", "CTGTTGTAGTGACATGTTTC", ""} // TODO
+	eva            = ID{"", "CTGTTGTAGTGACATGTTTC", "Eva"} // TODO
 	fatmike        = ID{"mdubian", "AACCTTGGGCACGGTCGGTA", "Michael Dubian"}
 	kennedy        = ID{"", "CCCGCGGGCAAAGCTGACAG", ""} // TODO
-	savagegirl     = ID{"sjohannesen", "GGGTCTATAGGTCAAACGGT", "Sabrina Johannesen"}
+	savagegirl     = ID{"jdoe", "GGGTCTATAGGTCAAACGGT", "Jane Doe 2645"}
 	raoulcool      = ID{"rmichu", "GTCACAAGGTTGTTTAATGG", "Raoul Michu"}
 	greenglass     = ID{"rglass", "ATGCCTACCTCCAATGATTA", "Rupert Glass"}
 	chillydaisy    = ID{"djohannesen", "CGGGAGACACGTTCAGTCTT", "Daisy Johannesen"}
@@ -48,21 +48,21 @@ var (
 	nikki          = ID{"njasinski", "ACGAACCTAGAGCCGCACGC", "Nikole Jasinski"}
 	celine         = ID{"ffceline", "CGCTCCCATTTCATGTCAGC", "Franz-Ferdinand Celine"}
 	cramille       = ID{"cmills", "TTTGGGAGAAGCTTATGCAC", "Camélia Mills"}
-	tigerdoll      = ID{"mli", "ATATGTTGAGCGTAAAGGCG", "Mei Li"}
+	tigerdoll      = ID{"lseptembre", "ATATGTTGAGCGTAAAGGCG", "Lilas Septembre"}
 	sistermorphine = ID{"edubian", "CCATCCGGCGGACCTTATGC", "Eloïse Dubian"}
 	zilmir         = ID{"zabasolo", "GACGGGATACCTACTCTCGA", "Zilmir Abasolo"}
 	bettyb         = ID{"ebranson", "ATTCCGACTCAGGGTACCGG", "Elisabeth Branson"}
-	abraham        = ID{"", "TGGCGTCTCTAATTCTTGCC", ""} // TODO
-	crunch         = ID{"", "TTCAAGCTGAATATGAAAGG", ""} // TODO
-	onekick        = ID{"", "GTCAAATCTGAGACTCTTGC", ""} // TODO
-	jacob          = ID{"", "TGAAAGAGACAGTATGCCGT", ""} // TODO
-	cyrano         = ID{"", "TTCGACTGAATGTTTGATGT", ""} // TODO
-	smalljoe       = ID{"", "TATCGACGCACGGGACTTGG", ""} // TODO
-	ironmike       = ID{"", "CGAGAAATGACAGAGTTGTA", ""} // TODO
-	paula          = ID{"", "GGGTGATCTGTTGCCCCCTG", ""} // pas d'ID
-	ringo          = ID{"", "AACTGACGGATTCGATCATG", ""} // pas d'ID
-	georges        = ID{"", "GTTTGCACGGAACATGCAAC", ""} // pas d'ID
-	jeanne         = ID{"", "GACCCGTATTTCGCTGATTG", ""} // pas d'ID
+	abraham        = ID{"jkievain", "TGGCGTCTCTAATTCTTGCC", "Jordan Kievain"}
+	crunch         = ID{"", "TTCAAGCTGAATATGAAAGG", ""}
+	onekick        = ID{"rkievain", "GTCAAATCTGAGACTCTTGC", "Rodolph Kievain"}
+	jacob          = ID{"", "TGAAAGAGACAGTATGCCGT", "Pete"}
+	cyrano         = ID{"ajolivet", "TTCGACTGAATGTTTGATGT", "Adrien Jolivet"}
+	smalljoe       = ID{"jvazzanna", "TATCGACGCACGGGACTTGG", "Joseph Vazzanna"}
+	ironmike       = ID{"mklebert", "CGAGAAATGACAGAGTTGTA", "Mickael Klebert"}
+	paula          = ID{"pjolivet", "GGGTGATCTGTTGCCCCCTG", "Paula Jolivet"}
+	ringo          = ID{"rjolivet", "AACTGACGGATTCGATCATG", "Ringo Jolivet"}
+	georges        = ID{"gchang", "GTTTGCACGGAACATGCAAC", "Georges Chang"}
+	jeanne         = ID{"jkolinsky", "GACCCGTATTTCGCTGATTG", "Jeanne Kolinsky"}
 	oggy           = ID{"rwhite", "TCAGCTTCTAACGTTCGGGA", "Richard White"}
 )
 
@@ -251,7 +251,7 @@ var kramps_sec = Server{
 	},
 	Scan:        SEC4,
 	Description: ksecDesc,
-	Registers: []Register{ // AC1/3 DZ RR CE
+	Registers: []Register{
 		// caméras dans les ateliers (AC1/2/3)
 		{"CAM-AC1-01", true, "", 5},
 		{"CAM-AC1-02", true, "", 5},
@@ -288,10 +288,14 @@ var kramps_sec = Server{
 		{"VER-CE-03", true, "", 5},
 		{"VER-CE-04", true, "", 5},
 		{"VER-CE-05", true, "", 5},
-		// caméras bonus à désactiver pendant la run ?
+		// caméra de la pièce ou il y a le coffre
 		{"CAM-DIV-01", true, "", 5},
-		{"CAM-DIV-02", true, "", 5},
-		{"CAM-DIV-03", true, "", 5},
+		// alarmes des divers secteurs
+		{"ALM-AC1", false, "", 5},
+		{"ALM-AC2", false, "", 5},
+		{"ALM-AC3", false, "", 5},
+		{"ALM-RR", false, "", 5},
+		{"ALM-CE", false, "", 5},
 	},
 }
 

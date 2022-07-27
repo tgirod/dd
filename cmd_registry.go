@@ -119,7 +119,9 @@ func (r RegistryEdit) Run(c *Client, args []string) tea.Msg {
 		}
 	}
 	reg.State = !reg.State
-
+	// Persistent: save new game state
+	c.Game.Serialize()
+	
 	return ResultMsg{
 		Cmd:    "registry edit " + strings.Join(args, " "),
 		Output: fmt.Sprintf("registre %s est désormais sur l'état '%t'\n", reg.Name, reg.State),

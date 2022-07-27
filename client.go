@@ -83,7 +83,8 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		fmt.Fprintf(&b, "> %s\n\n", msg.Cmd)
 		fmt.Fprintf(&b, "%s\n", msg.Output)
-		curOutput := c.Wrap(b.String())
+		// curOutput := c.Wrap(b.String())
+		curOutput := b.String()
 		if c.prevOutput == "" {
 			c.output.SetContent(curOutput)
 		} else {

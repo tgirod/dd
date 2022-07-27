@@ -62,3 +62,17 @@ Tous les serveurs du Net disposent de système de sécurité pour éviter que n'
 - Les identifiants/mots de passe permettent de restreindre l'accès aux seuls utilisateurs disposant d'un identifiant valide.
 - Chaque identifiant possède un **niveau de privilège** qui lui permet d'accéder à certains services et pas d'autres.
 - En cas d'intrusion, le **scan de sécurité** finit toujours par mettre la main sur l'intrus pour le déconnecter.
+
+## Hacking
+
+Le hacking c'est l'art d'imposer sa volonté à la machine, de lui faire faire des choses pour lesquelles elle n'a pas été conçue. Dans la pratique, ça consister beaucoup à aller là où on n'est pas censé aller. Pour commetre leurs méfaits, les hackers ont quelques outils à leur disposition.
+
+**L'interface Neuronale Directe** permet au hacker de se brancher directement à sa console, et d'agir beaucoup plus vite sur le réseau - très pratique quand on vient de déclencher une alerte et que ce n'est qu'une question de minutes avant que le scan de sécurité vous mette à la porte. Pour pouvoir l'utiliser, il faut en avoir une (implant cyber) et l'activer avec la commande `plug`. Le désavantage de cette interface, c'est que si vous vous faites déconnecter de force par la sécurité, vous vous prenez des dégats.
+
+**Les commandes de hacking** permettent de faire des actions illégales. Ces commandes représentent des outils mais aussi des talents propres aux personnages. Toutes les commandes ne sont pas accessibles à tous.
+
+- `rise` permet d'augmenter le niveau de privilège sur un serveur 
+- `jack` permet de suivre un lien pour lequel on n'a pas le niveau de privilège requis
+- `evade` permet de retarder la déconnexion forcée du scan de sécurité (`evade`)
+
+Pour plus d'infos, utilisez la commande `help` !

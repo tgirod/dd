@@ -288,6 +288,10 @@ var kramps_sec = Server{
 		{"VER-CE-03", true, "", 5},
 		{"VER-CE-04", true, "", 5},
 		{"VER-CE-05", true, "", 5},
+		// caméras bonus à désactiver pendant la run ?
+		{"CAM-DIV-01", true, "", 5},
+		{"CAM-DIV-02", true, "", 5},
+		{"CAM-DIV-03", true, "", 5},
 	},
 }
 

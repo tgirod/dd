@@ -1858,7 +1858,48 @@ var kramps_sec = Server{
 	},
 	Scan:        SEC4,
 	Description: ksecDesc,
-	Registers:   []Register{}, // TODO contrôle du verrouillage des portes
+	Registers: []Register{ // AC1/3 DZ RR CE
+		// caméras dans les ateliers (AC1/2/3)
+		{"CAM-AC1-01", true, "", 5},
+		{"CAM-AC1-02", true, "", 5},
+		{"CAM-AC1-03", true, "", 5},
+		{"CAM-AC2-01", true, "", 5},
+		{"CAM-AC2-02", true, "", 5},
+		{"CAM-AC2-03", true, "", 5},
+		{"CAM-AC3-01", true, "", 5},
+		{"CAM-AC3-02", true, "", 5},
+		{"CAM-AC3-03", true, "", 5},
+		// caméras dans la zone de repos
+		{"CAM-RR-01", true, "", 5},
+		{"CAM-RR-02", true, "", 5},
+		{"CAM-RR-03", true, "", 5},
+		{"CAM-RR-04", true, "", 5},
+		{"CAM-RR-05", true, "", 5},
+		// caméras dans les couloirs des cellules
+		{"CAM-CE-01", true, "", 5},
+		{"CAM-CE-02", true, "", 5},
+		{"CAM-CE-03", true, "", 5},
+		{"CAM-CE-04", true, "", 5},
+		{"CAM-CE-05", true, "", 5},
+		// verrouillage des portes des ateliers
+		{"VER-AC1", true, "", 5},
+		{"VER-AC2", true, "", 5},
+		{"VER-AC3", true, "", 5},
+		// verrouillage  des portes de la zone de repos
+		{"VER-RR-01", true, "", 5},
+		{"VER-RR-02", true, "", 5},
+		{"VER-RR-03", true, "", 5},
+		// verrouillage des portes des couloirs des cellules
+		{"VER-CE-01", true, "", 5},
+		{"VER-CE-02", true, "", 5},
+		{"VER-CE-03", true, "", 5},
+		{"VER-CE-04", true, "", 5},
+		{"VER-CE-05", true, "", 5},
+		// caméras bonus à désactiver pendant la run ?
+		{"CAM-DIV-01", true, "", 5},
+		{"CAM-DIV-02", true, "", 5},
+		{"CAM-DIV-03", true, "", 5},
+	},
 }
 
 var ksecDesc = `

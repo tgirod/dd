@@ -17,6 +17,7 @@ pip install Faker
 
 
 """
+import sys
 import faker
 from datetime import date
 
@@ -31,7 +32,7 @@ import string
 
 # ******************************************************************* form_entry
 def form_entry( id, entry ):
-    ent = '{"'+id+', []string{'
+    ent = '{"'+id+'", []string{'
     for k in entry["keys"]:
         ent += '"'+k+'", '
     ent += '}'
@@ -62,14 +63,16 @@ for p in per:
     msg += " - " + f"{date.day}/{date.month}/{date.year}"
     msg += " - " + str(misc)
     
-    per_dict[p] = { "keys": ['agent','gardien'],
+    per_dict[p] = { "keys": name.split(" "),
                     "priv": 1,
                     "owner": "",
                     "title": name,
                     "content": msg }
 per_dict["G-A37"]["title"] = "Jonathan Swift"
+per_dict["G-A37"]["keys"] = ["Jonathan", "Swift"]
 per_dict["G-A37"]["content"] = "Jonathan Swift  - 11/4/1984 - 383de3ff-56eb-4745-b472-e046ff8e552e"
 per_dict["G-C3"]["title"] = "Harvey Zimmermann"
+per_dict["G-C3"]["keys"] = ["Harvey", "Zimmermann"]
 per_dict["G-C3"]["content"] = "Harvey Zimmermann  - 15/11/1961 - a37dd901-6526-4913-8900-daf9af5f8fab"
 per = list(per_dict.keys())
 random.shuffle(per)
@@ -82,8 +85,8 @@ for k in per:
 # ****************************************************************** Prisonniers
 # ******************************************************************************
 # table des prisonniers id = P[AF][1-300]
-nb_cap = 20
-cap = ["P"+str(mat)+str(nb) for mat,nb in zip([random.choice(string.ascii_uppercase) for _ in range(nb_cap)],
+nb_cap = 50
+cap = ["P"+str(mat)+'-'+str(nb) for mat,nb in zip([random.choice(string.ascii_uppercase) for _ in range(nb_cap)],
                                               random.choices( range(1,300), k=nb_cap))]
 cap += ["PA-21", "PF-47"]
 
@@ -96,22 +99,22 @@ for id in cap:
     msg += " - " + f"{date.day}/{date.month}/{date.year}"
     msg += " - " + str(misc)
     
-    cap_dict[id] = { "keys": ['détenu'],
+    cap_dict[id] = { "keys": name.split(" "),
                     "priv": 1,
                     "owner": "",
                     "title": name,
                     "content": msg }
 cap_dict["PA-21"]["title"] = "Pedro Ramirez"
+cap_dict["PA-21"]["keys"] = ["Pedro", "Ramirez"]
 cap_dict["PA-21"]["content"] = "Pedro Ramirez - 8/7/1991 - 383ca3ff-58eb-4745-efff-e046ff8e552e"
 cap_dict["PF-47"]["title"] = "Stefan Jasinski"
+cap_dict["PF-47"]["keys"] = ["Stefan", "Jasinski"]
 cap_dict["PF-47"]["content"] = "Stefan Jasinski - 15/3/1988 - c54dd982-6526-cd42-8900-cbe27f5f8fab"
 cap = list(cap_dict.keys())
 random.shuffle(cap)
 # print in random order
 for k in cap: 
     print( form_entry( k, cap_dict[k] ))
-
-
 
 #print( "per", per)
 #print( "cap", cap)
@@ -120,7 +123,7 @@ for k in cap:
 loc = ["AC1", "AC2", "AC3", "DZ", "RR", "CE"]
 
 # table des heures
-hh = ["10", "14", "16"]
+hh = ["10", "14", "16", "20"]
 
 def form_register( key, val, desc, priv ):
     reg = '{"'+key+'", '+str(val)+', "'+desc+'", '+str(priv)+'},'
@@ -133,7 +136,7 @@ def gen_edt( start, id, loc, hh):
         for h in hh:
             sel_l = random.choice( loc )
             for l in loc:
-                key = start+'_'+p+'_'+l+'_'+h
+                key = p+'_'+l+'_'+h
                 val = (l == sel_l)
                 edt[key] = val
     return edt

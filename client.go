@@ -208,7 +208,7 @@ func (c Client) statusView() string {
 	}
 
 	left := fmt.Sprintf("%s %s %s ", login, priv, timer)
-	
+
 	// longueur max pour l'historique
 	max := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(left)
 
@@ -223,7 +223,7 @@ func (c Client) statusView() string {
 	hist := []rune(fmt.Sprintf("🖧[%s]", b.String()))
 
 	if len(hist) > max {
-		hist = hist[len(hist)-max:len(hist)]
+		hist = hist[len(hist)-max : len(hist)]
 	}
 
 	status := left + lg.PlaceHorizontal(max, lg.Left, string(hist))

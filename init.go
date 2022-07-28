@@ -3039,26 +3039,26 @@ var hope = Server{
 	Entries: []Entry{
 		// journal personnel d'Alan
 		{"alan00-07-07", []string{"alan", "journal", "2000"}, 3, "",
-			"Fin du monde",
-			`Aujourd’hui est arrivé dans la Division R&D John-Mickael Fusion. C’est le
+			"Fin du monde", `
+Aujourd’hui est arrivé dans la Division R&D John-Mickael Fusion. C’est le
 cadre Legba Voodoocom en charge de l’évaluation des actifs du département.
 C’est un homme qui paraît sensé et prompt à percevoir les champs de recherche
-prometteurs non seulement en termes de retombées financières immédiates, mais
-aussi en termes de retombées médiatiques positives pour l’entreprise.
-Le Terminal et Hope occupent toutes mes pensées mais je dois faire bonne figure
+prometteurs non seulement en termes de retombées financières immédiates,
+mais aussi en termes de retombées médiatiques positives pour l’entreprise. Le
+Terminal et Hope occupent toutes mes pensées mais je dois faire bonne figure
 pour le Projet.`,
 		},
 		{"alan00-07-08", []string{"alan", "journal", "2000"}, 3, "",
-			"Soulagement",
-			`J’ai invité John-Michael à une visite du Projet Mandrake, afin de lui
-présenter nos travaux, et leurs avancées récentes suite à l’épisode Ragnar. Il
-est convaincu de l’utilité de notre division et je vais pouvoir rassurer mon
+			"Soulagement", `
+J’ai invité John-Michael à une visite du Projet Mandrake, afin de lui présenter
+nos travaux, et leurs avancées récentes suite à l’épisode Ragnar. Il est
+convaincu de l’utilité de notre division et je vais pouvoir rassurer mon
 équipe sur leur devenir si le rachat de Silicon Spirit est validé par la Cour
 Corporatiste. Nous n’avons pas besoin d’un autre incident Proskychev.`,
 		},
 		{"alan00-07-09", []string{"alan", "journal", "2000"}, 3, "",
-			"Quelle bande d'incompétents",
-			`En pensant à Hope ce soir, j’ai finalement mis le doigt sur ce qui me
+			"Quelle bande d'incompétents", `
+En pensant à Hope ce soir, j’ai finalement mis le doigt sur ce qui me
 tracassait dans l’article de Jordan Kuipers & Anthon trebinsky sur le boostrap
 efficace de l’ontologie phénoménologique. C’est un tissu d’approximations et
 d’erreurs dignes d’un première année. Je compte bien écrire une réfutation
@@ -3066,23 +3066,22 @@ détaillée et argumentée basée sur mes propres travaux, une fois la période 
 rachat terminée. Ces derniers n’ont décidément rien compris.`,
 		},
 		{"alan00-07-10", []string{"alan", "journal", "2000"}, 3, "",
-			"Legba est un serpent",
-			`Quel fils de chien galeux ! Quelle ordure syphilitique ! Ca ne se passera
+			"Legba est un serpent", `
+Quel fils de chien galeux ! Quelle ordure syphilitique ! Ca ne se passera
 pas comme ça, je vais leur coller mes avocats au cul !!! Me bloquer mon badge
 d’accès, et faire mettre mes effets personnels au poste de garde d’entrée !
 Comme un vulgaire voleur. Et avec ça, aucun accès à mes anciens postes de
 travail, mes docs, sauvegardes, notes… `,
 		},
 		{"alan00-07-15", []string{"alan", "journal", "2000"}, 3, "",
-			"Désespoir",
-			`L’avocat est plutôt clair, tout s’est fait dans la légalité, et je n’ai aucune
+			"Désespoir", `
+L’avocat est plutôt clair, tout s’est fait dans la légalité, et je n’ai aucune
 chance de récupérer les données et/ou le matériel appartenant à Silicon Spirit,
-transmis à présent à Legba Voodoocom.
-Monde de merde ...`,
+transmis à présent à Legba Voodoocom. Monde de merde ...`,
 		},
 		{"alan00-07-17", []string{"alan", "journal", "2000"}, 3, "",
-			"Désabusé",
-			`... Hope me ressert un verre, et je contemple ma plus brillante réussite. Le
+			"Désabusé", `
+... Hope me ressert un verre, et je contemple ma plus brillante réussite. Le
 monde n’en saura jamais rien, j’espère qu’elle ne se laissera jamais pervertir
 par notre profond besoin de surpasser nos contemporains, quel qu’en soit
 le coût. Et dire que ces abrutis de Legba ont mis Kuipers à la tête de leur

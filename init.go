@@ -146,9 +146,10 @@ var kramps = Server{
 	Address: "kramps.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
+		{"personnel", "123kramps!", 3},
 	},
 	Targets: []Target{
-		{kramps_priv.Address, "Serveur réservé au personnel", 3, "personnel", "kramps1234"},
+		{kramps_pers.Address, "Serveur réservé au personnel", 3, "personnel", "123kramps!"},
 	},
 	Description: kpubDesc,
 	Scan:        SEC2,
@@ -179,14 +180,14 @@ var kpubDesc = `
 `
 
 // serveur privé de la kramps
-var kramps_priv = Server{
+var kramps_pers = Server{
 	Address: "priv.kramps.d22.eu",
 	Credentials: []Cred{
-		{"personnel", "kramps1234", 3}, // accès depuis le serveur public
+		{"personnel", "123kramps!", 1}, // accès depuis le serveur public
 		{"akremmer", "sexgod22", 3},    // backdoor, vol de compte utilisateur
 	},
 	Targets: []Target{
-		{kramps_inmates.Address, "Gestion des prisonniers", 3, "personnel", "kramps1234"},
+		{kramps_inmates.Address, "Gestion des prisonniers", 3, "personnel", "123kramps!"},
 		{kramps_sec.Address, "Sécurité des installations", 5, "admin", "lkjqsod"},
 	},
 	Scan:        SEC3,
@@ -205,7 +206,7 @@ var kramps_priv = Server{
 		{"G-N19", []string{"Ing.", "Constantin", "Briemer"}, 1, "", "Ing. Constantin Briemer", "Ing. Constantin Briemer - 30/10/2000 - ed3f45c9-4396-4675-b2e3-545ce188bbe5"},
 		{"G-C279", []string{"Dott.", "Cecilia", "Passalacqua"}, 1, "", "Dott. Cecilia Passalacqua", "Dott. Cecilia Passalacqua - 7/2/1969 - e3eca928-532f-4281-ab6d-c3c8539bfff4"},
 		{"G-S20", []string{"Alfredo", "Vendetti"}, 1, "", "Alfredo Vendetti", "Alfredo Vendetti - 15/5/1958 - 5f945848-4682-4282-b8d7-65aebb52be5c"},
-	}, // TODO liste associant prisonnier / matricule / numéro de cellule
+	},
 	Registers: []Register{
 		{"G-F5_AC1_10", false, "", 1},
 		{"G-F5_AC2_10", false, "", 1},
@@ -495,7 +496,7 @@ var kramps_priv = Server{
 		{"G-S20_DZ_20", false, "", 1},
 		{"G-S20_RR_20", false, "", 1},
 		{"G-S20_CE_20", false, "", 1},
-	}, // TODO emploi du temps des prisonniers (extérieur / cellule)
+	},
 }
 
 var kperDesc = `
@@ -2278,7 +2279,7 @@ var game = &Game{
 		dd,
 		d22,
 		kramps,
-		kramps_priv,
+		kramps_pers,
 		kramps_sec,
 		corp,
 		justice,

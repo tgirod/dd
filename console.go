@@ -39,9 +39,9 @@ type Console struct {
 }
 
 var Hack = map[string]Command{
-	"jack":  Jack{},
-	"rise":  Rise{},
-	"evade": Evade{},
+	"yyqz": Jack{},
+	"hfed": Rise{},
+	"zfcq": Evade{},
 }
 
 func NewConsole() *Console {

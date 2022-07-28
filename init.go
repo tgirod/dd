@@ -2066,19 +2066,10 @@ var cd22bankDesc = `
                            Suisses       |/     \|(¥)|/ \___/(€)(_______)($)\_______)
 `
 
-// serveur public de Legba Voodoocom
-var legba = Server{
-	Address: "legba.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-	},
-	Description: lbDesc,
-	Targets: []Target{
-		{legba_satcom.Address, "division sat-com", 5, "admin", "satcom9876"},
-		{legba_archive.Address, "archives", 3, "personnel", "archive6543"},
-	},
-}
-var lbDesc = `
+var (
+	legbaPersonnel = Cred{"personnel", "paparezo", 3}
+	legbaAdmin     = Cred{"admin", "foh5wuoh", 5}
+	lbDesc         = `
                  ......                 
            .',,,,,,,,,,,,,,,.           
         .;;,'.            .',;;'        
@@ -2106,16 +2097,7 @@ var lbDesc = `
              \___/ \____/ \____/\____ |\____/ \____/ \___  >____/|__|_|  /
                                      \/                  \/            \/
 `
-
-// serveur privé de la communication satellite
-var legba_satcom = Server{
-	Address: "satcom.legba.d22.eu",
-	Credentials: []Cred{
-		{"admin", "satcom9876", 5},
-	},
-	Description: satDesc,
-}
-var satDesc = `
+	satDesc = `
 SATCOM, une division externalisée de
  ____                ___  
 |    |    ____   ____\_ |__ _____   
@@ -2131,16 +2113,7 @@ SATCOM, une division externalisée de
 
 [Accès Restreint]         >>>>>>> entrez vos identifiants <<<<<<<
 `
-
-// serveur archive de Silicon Spirit
-var legba_archive = Server{
-	Address: "archive.legba.d22.eu",
-	Credentials: []Cred{
-		{"personnel", "archive6543", 3},
-	},
-	Description: arcDesc,
-}
-var arcDesc = `
+	arcDesc = `
 *********************************************************************************
 Legba Voodoocom ne peut être tenu responsable de l'usage et des données stockées.
 **** WARNING **** : ce service n'est plus maintenu.
@@ -2159,6 +2132,42 @@ Legba Voodoocom ne peut être tenu responsable de l'usage et des données stock�
 *********************************************************************************
 [Beware MalvolentKiIA, hack@45EBG56#EACD M@dJ0k3r;3/4/206]
 `
+)
+
+// serveur public de Legba Voodoocom
+var legba = Server{
+	Address: "legba.d22.eu",
+	Credentials: []Cred{
+		{"public", "public", 1},
+		legbaPersonnel,
+	},
+	Description: lbDesc,
+	Targets: []Target{
+		{legba_satcom.Address, "division sat-com", 3, legbaPersonnel.Login, legbaPersonnel.Password},
+		{legba_archive.Address, "archives", 3, legbaPersonnel.Login, legbaPersonnel.Password},
+	},
+}
+
+// serveur privé de la communication satellite
+var legba_satcom = Server{
+	Address: "satcom.legba.d22.eu",
+	Credentials: []Cred{
+		legbaPersonnel,
+		legbaAdmin,
+	},
+	Description: satDesc,
+} // TODO intrigue retransmission
+
+// serveur archive de Silicon Spirit
+var legba_archive = Server{
+	Address: "archive.legba.d22.eu",
+	Credentials: []Cred{
+		legbaPersonnel,
+		legbaAdmin,
+	},
+	Description: arcDesc,
+} // TODO intrigue Silicon Spirit
+// fichier personnel : alan, harald, ragnar
 
 // serveur le bon district
 var lbd = Server{

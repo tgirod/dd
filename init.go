@@ -3027,13 +3027,68 @@ var celDesc = `
 ...... Dernier avertissement ............................
 `
 
-// serveur mémoriel de Hope
+// serveur de Hope
 var hope = Server{
 	Address: "hope.local",
 	Credentials: []Cred{
 		{"hope", "tearsintherain", 5},
+		{"mel", "xxx", 3},
 	},
 	Description: hopDesc,
+	Scan:        SEC5,
+	Entries: []Entry{
+		// journal personnel d'Alan
+		{"alan00-07-07", []string{"alan", "journal", "2000"}, 3, "",
+			"Fin du monde",
+			`Aujourd’hui est arrivé dans la Division R&D John-Mickael Fusion. C’est le
+cadre Legba Voodoocom en charge de l’évaluation des actifs du département.
+C’est un homme qui paraît sensé et prompt à percevoir les champs de recherche
+prometteurs non seulement en termes de retombées financières immédiates, mais
+aussi en termes de retombées médiatiques positives pour l’entreprise.
+Le Terminal et Hope occupent toutes mes pensées mais je dois faire bonne figure
+pour le Projet.`,
+		},
+		{"alan00-07-08", []string{"alan", "journal", "2000"}, 3, "",
+			"Soulagement",
+			`J’ai invité John-Michael à une visite du Projet Mandrake, afin de lui
+présenter nos travaux, et leurs avancées récentes suite à l’épisode Ragnar. Il
+est convaincu de l’utilité de notre division et je vais pouvoir rassurer mon
+équipe sur leur devenir si le rachat de Silicon Spirit est validé par la Cour
+Corporatiste. Nous n’avons pas besoin d’un autre incident Proskychev.`,
+		},
+		{"alan00-07-09", []string{"alan", "journal", "2000"}, 3, "",
+			"Quelle bande d'incompétents",
+			`En pensant à Hope ce soir, j’ai finalement mis le doigt sur ce qui me
+tracassait dans l’article de Jordan Kuipers & Anthon trebinsky sur le boostrap
+efficace de l’ontologie phénoménologique. C’est un tissu d’approximations et
+d’erreurs dignes d’un première année. Je compte bien écrire une réfutation
+détaillée et argumentée basée sur mes propres travaux, une fois la période de
+rachat terminée. Ces derniers n’ont décidément rien compris.`,
+		},
+		{"alan00-07-10", []string{"alan", "journal", "2000"}, 3, "",
+			"Legba est un serpent",
+			`Quel fils de chien galeux ! Quelle ordure syphilitique ! Ca ne se passera
+pas comme ça, je vais leur coller mes avocats au cul !!! Me bloquer mon badge
+d’accès, et faire mettre mes effets personnels au poste de garde d’entrée !
+Comme un vulgaire voleur. Et avec ça, aucun accès à mes anciens postes de
+travail, mes docs, sauvegardes, notes… `,
+		},
+		{"alan00-07-15", []string{"alan", "journal", "2000"}, 3, "",
+			"Désespoir",
+			`L’avocat est plutôt clair, tout s’est fait dans la légalité, et je n’ai aucune
+chance de récupérer les données et/ou le matériel appartenant à Silicon Spirit,
+transmis à présent à Legba Voodoocom.
+Monde de merde ...`,
+		},
+		{"alan00-07-17", []string{"alan", "journal", "2000"}, 3, "",
+			"Désabusé",
+			`... Hope me ressert un verre, et je contemple ma plus brillante réussite. Le
+monde n’en saura jamais rien, j’espère qu’elle ne se laissera jamais pervertir
+par notre profond besoin de surpasser nos contemporains, quel qu’en soit
+le coût. Et dire que ces abrutis de Legba ont mis Kuipers à la tête de leur
+version de MON Projet Mandrake !`,
+		},
+	},
 }
 
 // Project "Hope"
@@ -3043,11 +3098,21 @@ var hope = Server{
 // - contenu infix normalisé
 // - (c) A.M
 var hopDesc = `
-01010000 01110010 01101111 01101010 01100101 01100011 01110100  00100010 01001000 01101111 01110000 01100101 00100010                                                                                                                                                                               
-01000100 11101001 01110000 01101111 01110100  01101101 11101001 01101101 01101111 01110010 01101001 01100101 01101100                                                                                                                                                                               
-00101101  01100110 01100101 01101110 11101010 01110100 01110010 01100101  01110100 01100101 01101101 01110000 01101111 01110010 01100101 01101100 01101100 01100101  01100111 01101100 01101001 01110011 01110011 01100001 01101110 01110100 01100101  01110110 00110001 00110010 00101110 00110101 
-00101101  01100011 01101111 01101101 01110000 01110010 01100101 01110011 01110011 01101001 01101111 01101110  01001101 01100011 01010110 01100001 01110101 01100111 01101000 00101101 01001011 01101111 01110010 01100010 01100001 00101101 01011001 01100001 01101110 01100111                     
-00101101  01100011 01101111 01101110 01110100 01100101 01101110 01110101  01101001 01101110 01100110 01101001 01111000  01101110 01101111 01110010 01101101 01100001 01101100 01101001 01110011 11101001                                                                                            
+01010000 01110010 01101111 01101010 01100101 01100011
+01110100  00100010 01001000 01101111 01110000 01100101 00100010
+01000100 11101001 01110000 01101111 01110100  01101101
+11101001 01101101 01101111 01110010 01101001 01100101 01101100
+00101101  01100110 01100101 01101110 11101010 01110100 01110010
+01100101  01110100 01100101 01101101 01110000 01101111 01110010 01100101
+01101100 01101100 01100101  01100111 01101100 01101001 01110011 01110011
+01100001 01101110 01110100 01100101  01110110 00110001 00110010 00101110
+00110101  00101101  01100011 01101111 01101101 01110000 01110010
+01100101 01110011 01110011 01101001 01101111 01101110  01001101 01100011
+01010110 01100001 01110101 01100111 01101000 00101101 01001011 01101111
+01110010 01100010 01100001 00101101 01011001 01100001 01101110 01100111
+00101101  01100011 01101111 01101110 01110100 01100101 01101110 01110101
+01101001 01101110 01100110 01101001 01111000  01101110 01101111 01110010
+01101101 01100001 01101100 01101001 01110011 11101001
 00101101  00101000 01100011 00101001  01000001 00101110 01001101                                                                                                                                                                                                                                    
 `
 

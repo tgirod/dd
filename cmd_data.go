@@ -59,7 +59,6 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 			Error:  fmt.Errorf("%s : %w", keyword, errKeywordTooShort),
 			Output: d.LongHelp(),
 		}
-
 	}
 
 	entries := c.Server.DataSearch(keyword, c.Login)

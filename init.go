@@ -2114,6 +2114,7 @@ SATCOM, une division externalisée de
 [Accès Restreint]         >>>>>>> entrez vos identifiants <<<<<<<
 `
 	arcDesc = `
+
 *********************************************************************************
 Legba Voodoocom ne peut être tenu responsable de l'usage et des données stockées.
 **** WARNING **** : ce service n'est plus maintenu.
@@ -2923,7 +2924,104 @@ var legba_archive = Server{
 		legbaAdmin,
 	},
 	Description: arcDesc,
-} // TODO intrigue Silicon Spirit
+	Entries: []Entry{
+		{"art27", []string{"Mandrake", "Yuong", "Herswing", "Mathison"}, 1, "", "Transcendance sous co-routines", `Titre: Transcendance sous co-routines.
+
+Auteurs: D. Yuong, E. Herswing et A. Mathison
+
+Résumé: Des expériences préliminaires sur la Transcendance Numérique (TN)
+permettent la formulation d'une nouvelle conjoncture. Lors des phases terminales
+d'auto-corections des caractéristiques de personnalité, il paraît primordial de
+passer par des co-routines évolutionnaires de Spinksy-Yuong avec des timeout
+ré-évalués par adaptation prodonde. Nos premiers résultats montrent en effet
+que sans l'interlaçage de ces co-routines, un effondrement neuro-dépressif
+acquiert une vraissemblance voisinant les 92.34 pourcents. Notrons que nos
+expériences ont été réalisées in vitro, sur le cluster de calcul SaberSapience
+v 3.0.23.`},
+		{"art95", []string{"Mandrake", "Mathison"}, 1, "", "Transcendance et effondrement neuro-psychologique", `Titre: Transcendance et effondrement neuro-psychologique.
+
+Auteur: A. Mathison
+
+Résumé: Nous présentons une review de la littérature récentes sur la 
+«dégénérescence accélérée» issues de la théorie formulée par le laboratoire
+@HigherMind(sous mécénat de Legba Voodoocom). Ces travaux, concommitants à
+ceux réalisées par notre propre équipe de SiliconSpirit, ont l'avantage
+d'avoir défrichés des pistes non-viables. Il ressort en effet de notre
+analyse que la complexité des algorithmes de compressions des aires
+thalamiques n'est pas un élément essentiel sur la voie de l'élévation de la
+conscience numérique. Cela renforce notre hypothèse selon laquelle l'alignement
+mémoriel de classe IV est une cont²rainte incontournable malgré le surcoût
+computationnel certain.`},
+
+		{"art164", []string{"Mandrake", "Levain", "Revertin", "Galakievicz"}, 1, "", "Deux encodages mémoriels pour les aires thalamiques intérmédiaires", `Titre: Deux encodages mémoriels pour les aires thalamiques intérmédiaires.
+
+Auteurs: Y. Levain, A.P. Revertin, et J.O. Galakievicz.
+
+Résumé: Nous présentons deux algorithmes en Oo( n2+log(g) ), probablement
+epsilon-corrects, pour l'encodage numérique in vivo des activités mémorielles
+et sous-conscentes des aires thalammiques humaines du cerveau humain. Le premier
+s'appuie sur la librairie sous licence de Gantrell-HypeX, (récemment acquise par
+Legba Voodoocom). Le second, dont l'espérence en fiabilité est légèrement
+inférieure, sauf pour certains sous-types d'aires thalamiques, est entièrement
+nouveau, et libre de droit de propriété.`},
+		{"art652", []string{"Mandrake", "Kuipers", "Trebinsky"}, 1, "", "Un bootstrap efficace de l'ontologie phénoménologique", `Titre: Un bootstrap efficace de l'ontologie phénoménologique.
+
+Auteurs: J. Kuipers et A. Trebinsky.
+
+Résumé: L'un des écueils dans la Transcendance Numérique Forte est en passe
+d'être levé. Nos premiers résultats expérimentaux, en simulation, montrent en
+effet que notre méthode de bootstrap de l'ontologie phénoménologique primaire
+permet une croissance quasi-exponentielle de la concordance proto-symbolique.
+Il en découle logiquement une voie ouverte et prometteuse pour des
+extraction-compressions réussie de la conscience humaine. Soulignons que cette
+méta-accroissement peut se réaliser sans alignemnt mémoriel bas-niveaux, un
+processus dont la compléxité doublement-exponentielle rend l'application pour
+le moins délicate.`},
+		{"art841", []string{"Mandrake", "Saint-Janvier", "Yu", "Wu", "Wellit-Ashley", "Modina"}, 1, "", "Une voie nouvelle pour la Conscience Numérique : la trans-fusion", `Titre: Une voie nouvelle pour la Conscience Numérique : la trans-fusion.
+
+Auteurs: L. Saint-Janvier, D.L. Yu, C. Wu, O. Wellit-Ashley et L. Modina.
+
+Résumé: A rebours des recherches "mainstream" dans le domaine de la Transcendance
+Numérique (TN), nous présentons un cadre formel pour une voie originale et sobre
+vers une Conscience Numérique Forte (au sens de Lashley). Notre idée, formulée
+dans la logique épistémique modale de second ordre, s'appuie sur la fusion
+multi-modale d'une IA de type A et d'une proto-numérisation des couches
+superficielles et intermédiaire d'une personnalité humain handi-adaptée. Nous
+avons passé notre proposition dans tous les vérificateurs symboliques de la base
+de Lashley et tous donnent une probabilité de réussite dépassant les 60%.`},
+		{"art9641", []string{"Mandrake", "San-Jorgeu", "Kuipers", "Trebinsky"}, 1, "", "Du déficit phénoménologique inéluctable des IA de classe A", `Titre: Du déficit phénoménologique inéluctable des IA de classe A.
+
+Auteurs: R.D. San-Jorgeu, J. Kuipers et A. Trebinsky.
+
+Résumé: Nos travaux sur le déficit phénoménologique des IA de classe A montrent
+la faiblesse des approches trans-humain et handi-humaines. Nous argumentons
+notamment sur les dangers, éthiques et moraux, des travaux mêlant handi-adaption
+et ancrage artificielle pour l'émergence de conscience. Au delà de considérations
+éthiques, nous mettons en exergue une analyse réfutatoire, par la méthode des
+quanta-qbits transitionnels, qui démontre l'imfaisabilité des travaux de
+[Saint-Janvier et. al] sur cette trans-fusion.`},
+		{"art4251", []string{"Mandrake", "Pernu", "Itchinson", "Kanakuna"}, 1, "", "Symposium Inter-Coprporatiste sur la Transcendance Numérique", `Titre: Symposium Inter-Coprporatiste sur la Transcendance Numérique.
+
+Editeurs: A. Pernu, C.H. Itchinson et P. Kanakuna.
+
+Résumé: Ces deux journées de dialogues sur les dernières avancées en matie de
+Transcendance Numériques furent profitables et porteuses de nouvelles voies de
+recherche. Nous avons eu l'honneur d'animer ces journées qui permis des
+propositions originales et pertinentes. Citons notamment les bootstrap
+phénoménologiques de [Juipers et. al.], la trans-fusion IA/handihumanité
+[Saint-Janvier et al.] et l'alignement thalamique de [A. Mathison].
+Ce symposiuma eu lieu sous le patronnage de Legba Voodoocom et de SiliconSpirit.`},
+		{"note99", []string{"Mandrake", "Kuipers"}, 1, "", "Fermeture du Projet Mandrake", `Titre: Fermeture du Projet Mandrake
+
+Auteur: J. Kuipers.
+
+Résumé: Après une analyse des travaux du Projet «Mandrake», j'ai décidé de le
+clore et de transferer son budget au Projet «Phénomos». Le Dr. Alan Mathison
+est relevé de son poste de directeur et ses accès révoqués. A toutes fin utiles,
+j'ai demandé l'archivages du Projet «Mandrake».`},
+	},
+}
+
 // fichier personnel : alan, harald, ragnar
 
 // serveur le bon district

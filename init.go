@@ -34,7 +34,7 @@ var (
 	greko          = ID{"ecanto", "TCTGAGGTTTATTGATTTCG", "Eddy Canto"}
 	jesus          = ID{"ejohannesen", "TTCGGGATTACTGCGTGCTG", "Edwin Johannesen"}
 	escobar        = ID{"jbranson", "GGAGGACACCCCAAACGCAT", "Jonathan Branson"}
-	cageot         = ID{"", "GCCCTTGTCATGTACTTAGT", ""} // TODO
+	cageot         = ID{"jmfright", "GCCCTTGTCATGTACTTAGT", "John Mac Fright"}
 	lafouine       = ID{"skmihalec", "CTGTCACCCAATCTACAGCG", "Sylvia Kemija Mihalec"}
 	eva            = ID{"", "CTGTTGTAGTGACATGTTTC", "Eva"} // TODO
 	fatmike        = ID{"mdubian", "AACCTTGGGCACGGTCGGTA", "Michael Dubian"}
@@ -53,7 +53,7 @@ var (
 	zilmir         = ID{"zabasolo", "GACGGGATACCTACTCTCGA", "Zilmir Abasolo"}
 	bettyb         = ID{"ebranson", "ATTCCGACTCAGGGTACCGG", "Elisabeth Branson"}
 	abraham        = ID{"jkievain", "TGGCGTCTCTAATTCTTGCC", "Jordan Kievain"}
-	crunch         = ID{"", "TTCAAGCTGAATATGAAAGG", ""}
+	crunch         = ID{"fmanson", "TTCAAGCTGAATATGAAAGG", "Frédéric Manson"}
 	onekick        = ID{"rkievain", "GTCAAATCTGAGACTCTTGC", "Rodolph Kievain"}
 	jacob          = ID{"", "TGAAAGAGACAGTATGCCGT", "Pete"}
 	cyrano         = ID{"ajolivet", "TTCGACTGAATGTTTGATGT", "Adrien Jolivet"}
@@ -1974,8 +1974,8 @@ var justice = Server{
 		{scalpel.Login, scalpel.Keywords(), 1, "", "Julius VILLANOVA", "***** Personne recherchée, mandat inter-district PJ/676/ER/65534 *****\n- D22/cm#5674243: complicité de meurtre"},
 		{greko.Login, greko.Keywords(), 1, "", "Eddy CANTO", "- néant"},
 		{jesus.Login, jesus.Keywords(), 1, "", "Edwin JOHANNESEN", "- néant"},
-		{escobar.Login, escobar.Keywords(), 1, "", "Jonathan BRANSON", "- néant TODO"},
-		{cageot.Login, cageot.Keywords(), 1, "", "John MacFRIGHT", "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D21/rc#12785234452 rupture contrat\n\n\n$$$SPECIAL$$$ contacter cont4yes@kitsu.Keywordseu, ¥€$ en rapport.Keywords"},
+		{escobar.Login, escobar.Keywords(), 1, "", "Jonathan BRANSON", "- néant"},
+		{cageot.Login, cageot.Keywords(), 1, "", "John Mac Fright", "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D21/rc#12785234452 rupture de contrat\n\n\n$$$SPECIAL$$$ contacter cont4yes@kitsu.d22.eu, ¥€$ en rapport"},
 		{lafouine.Login, lafouine.Keywords(), 1, "", "Sylvia Kemija MIHALEC", "- néant"},
 		{eva.Login, eva.Keywords(), 1, "", "Pamela TODO", "***** Personne recherchée, mandat inter-district PF/1437/PM/02 *****\n- D21/rc#6542867 rupture contrat"},
 		{fatmike.Login, fatmike.Keywords(), 1, "", "Michael DUBIAN", "- D22/vm#23842834: vol à l'étalage\n- D22/vm#54327653: vol recette épicerie nuit\n- D22/vm#543299873: vol simple\n- D22/vm#547699823: vol graviscooter\n- D22/vm#753296671: vol à l'étalage"},
@@ -1994,8 +1994,8 @@ var justice = Server{
 		{zilmir.Login, zilmir.Keywords(), 1, "", "Zilmir ABASOLO", "- néant"},
 		{bettyb.Login, bettyb.Keywords(), 1, "", "Elisabeth BRANSON", "- néant"},
 		{abraham.Login, abraham.Keywords(), 1, "", abraham.Name, "- néant"},
-		{crunch.Login, crunch.Keywords(), 1, "", "TODO", "- néant"},
-		{onekick.Login, onekick.Keywords(), 1, "", "Rodolphe KIÉVAIN", "- néant\n>>> automated procedure: contact@kramps.Keywordseu | #line>2"},
+		{crunch.Login, crunch.Keywords(), 1, "", crunch.Name, "- néant"},
+		{onekick.Login, onekick.Keywords(), 1, "", "Rodolphe KIÉVAIN", "- néant\n>>> automated procedure: contact@kramps.d22.eu | #line>2"},
 		{jacob.Login, jacob.Keywords(), 1, "", "Pete TODO", "- néant"},
 		{cyrano.Login, cyrano.Keywords(), 1, "", "Adrien JOLIVET", "- néant"},
 		{smalljoe.Login, smalljoe.Keywords(), 1, "", "Joseph VAZZANNA", "- néant"},
@@ -2950,7 +2950,7 @@ d'avoir défrichés des pistes non-viables. Il ressort en effet de notre
 analyse que la complexité des algorithmes de compressions des aires
 thalamiques n'est pas un élément essentiel sur la voie de l'élévation de la
 conscience numérique. Cela renforce notre hypothèse selon laquelle l'alignement
-mémoriel de classe IV est une cont²rainte incontournable malgré le surcoût
+mémoriel de classe IV est une contrainte incontournable malgré le surcoût
 computationnel certain.`},
 
 		{"art164", []string{"Mandrake", "Levain", "Revertin", "Galakievicz"}, 1, "", "Deux encodages mémoriels pour les aires thalamiques intérmédiaires", `Titre: Deux encodages mémoriels pour les aires thalamiques intérmédiaires.

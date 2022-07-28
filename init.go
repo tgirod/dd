@@ -2981,8 +2981,19 @@ var leet = Server{
 	Address: "l33t.darknet",
 	Credentials: []Cred{
 		{"crunch", "hacktheplanet", 5},
+		{"celine", "", 4},
+		{"nikki", "", 4},
 	},
 	Description: cruDesc,
+	Scan:        SEC3,
+	Entries: []Entry{
+		// ID keywords restricted owner title content
+		{"vlope20", []string{"flr", "porn"}, 3, "", "vanessalope", `login: green pass: nait5zee`},
+		{"bitecoin19", []string{"flr", "porn"}, 3, "", "lebitecoin", `login: green pass: ohphe0cu`},
+		{"qtf20", []string{"flr", "porn"}, 3, "", "QueTesFans", `login: green pass: aesahm0l`},
+		{"pndr20", []string{"flr", "porn"}, 3, "", "Pinederer", `login: green pass: ohdaf9uo`},
+		{"jm20", []string{"flr", "porn"}, 3, "", "Jockey & Micheline", `login: green pass: eig0thob`},
+	},
 }
 
 var cruDesc = `

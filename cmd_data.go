@@ -53,7 +53,7 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 
 	keyword := args[0]
 
-	if len([]rune(keyword)) < 3 {
+	if len([]rune(keyword)) < 2 {
 		return ResultMsg{
 			Cmd:    "data search " + strings.Join(args, " "),
 			Error:  fmt.Errorf("%s : %w", keyword, errKeywordTooShort),

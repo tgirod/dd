@@ -305,6 +305,10 @@ func (c Client) StartSecurity() tea.Msg {
 		c.Console.Alert = true
 		c.Console.Countdown = c.Console.Server.Scan
 		return SecurityMsg{c.Delay()}
+	} else {
+		// l'alerte est déjà activée, l'avancer
+		malus := (c.Scan / 10).Round(time.Second)
+		c.Countdown = c.Countdown - malus
 	}
 
 	return nil

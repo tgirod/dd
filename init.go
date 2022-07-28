@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	SEC1 = time.Minute * 10
-	SEC2 = time.Minute * 5
+	SEC1 = time.Minute * 5
+	SEC2 = time.Minute * 3
 	SEC3 = time.Minute * 2
 	SEC4 = time.Minute * 1
 	SEC5 = time.Second * 30
@@ -26,7 +26,7 @@ func (i ID) Keywords() []string {
 var (
 	alan           = ID{"amathison", "GGCGGTAGCCCCTCTCGAGC", "Alan Mathison"}
 	mel            = ID{"mmathison", "GGCCAAAGCTCCTTCGGAGC", "Mélody Mathison"}
-	rocky          = ID{"jdoe7624", "CCGCGCAGAATCATAGCTGT", "John Doe 7624"} // pas d'ID
+	rocky          = ID{"jdoe7624", "CCGCGCAGAATCATAGCTGT", "John Doe 7624"}
 	rita           = ID{"mbellamy", "CAAAGTTCTAGGCATAGGGA", "Margherita Bellamy"}
 	styx           = ID{"sbronner", "TTAGCTCGATATCCTAACCC", "Sebastian Bronner"}
 	kapo           = ID{"cbellamy", "GAACTGCTTTAGTTGACGGA", "Camélia Bellamy"}
@@ -146,9 +146,10 @@ var kramps = Server{
 	Address: "kramps.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
+		{"personnel", "123kramps!", 3},
 	},
 	Targets: []Target{
-		{kramps_priv.Address, "Serveur réservé au personnel", 3, "personnel", "kramps1234"},
+		{kramps_pers.Address, "Serveur réservé au personnel", 3, "personnel", "123kramps!"},
 	},
 	Description: kpubDesc,
 	Scan:        SEC2,
@@ -179,14 +180,14 @@ var kpubDesc = `
 `
 
 // serveur privé de la kramps
-var kramps_priv = Server{
+var kramps_pers = Server{
 	Address: "priv.kramps.d22.eu",
 	Credentials: []Cred{
-		{"personnel", "kramps1234", 3}, // accès depuis le serveur public
+		{"personnel", "123kramps!", 1}, // accès depuis le serveur public
 		{"akremmer", "sexgod22", 3},    // backdoor, vol de compte utilisateur
 	},
 	Targets: []Target{
-		{kramps_inmates.Address, "Gestion des prisonniers", 3, "personnel", "kramps1234"},
+		{kramps_inmates.Address, "Gestion des prisonniers", 3, "personnel", "123kramps!"},
 		{kramps_sec.Address, "Sécurité des installations", 5, "admin", "lkjqsod"},
 	},
 	Scan:        SEC3,
@@ -205,7 +206,7 @@ var kramps_priv = Server{
 		{"G-N19", []string{"Ing.", "Constantin", "Briemer"}, 1, "", "Ing. Constantin Briemer", "Ing. Constantin Briemer - 30/10/2000 - ed3f45c9-4396-4675-b2e3-545ce188bbe5"},
 		{"G-C279", []string{"Dott.", "Cecilia", "Passalacqua"}, 1, "", "Dott. Cecilia Passalacqua", "Dott. Cecilia Passalacqua - 7/2/1969 - e3eca928-532f-4281-ab6d-c3c8539bfff4"},
 		{"G-S20", []string{"Alfredo", "Vendetti"}, 1, "", "Alfredo Vendetti", "Alfredo Vendetti - 15/5/1958 - 5f945848-4682-4282-b8d7-65aebb52be5c"},
-	}, // TODO liste associant prisonnier / matricule / numéro de cellule
+	},
 	Registers: []Register{
 		{"G-F5_AC1_10", false, "", 1},
 		{"G-F5_AC2_10", false, "", 1},
@@ -495,7 +496,7 @@ var kramps_priv = Server{
 		{"G-S20_DZ_20", false, "", 1},
 		{"G-S20_RR_20", false, "", 1},
 		{"G-S20_CE_20", false, "", 1},
-	}, // TODO emploi du temps des prisonniers (extérieur / cellule)
+	},
 }
 
 var kperDesc = `
@@ -2065,19 +2066,10 @@ var cd22bankDesc = `
                            Suisses       |/     \|(¥)|/ \___/(€)(_______)($)\_______)
 `
 
-// serveur public de Legba Voodoocom
-var legba = Server{
-	Address: "legba.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-	},
-	Description: lbDesc,
-	Targets: []Target{
-		{legba_satcom.Address, "division sat-com", 5, "admin", "satcom9876"},
-		{legba_archive.Address, "archives", 3, "personnel", "archive6543"},
-	},
-}
-var lbDesc = `
+var (
+	legbaPersonnel = Cred{"personnel", "paparezo", 3}
+	legbaAdmin     = Cred{"admin", "foh5wuoh", 5}
+	lbDesc         = `
                  ......                 
            .',,,,,,,,,,,,,,,.           
         .;;,'.            .',;;'        
@@ -2105,16 +2097,7 @@ var lbDesc = `
              \___/ \____/ \____/\____ |\____/ \____/ \___  >____/|__|_|  /
                                      \/                  \/            \/
 `
-
-// serveur privé de la communication satellite
-var legba_satcom = Server{
-	Address: "satcom.legba.d22.eu",
-	Credentials: []Cred{
-		{"admin", "satcom9876", 5},
-	},
-	Description: satDesc,
-}
-var satDesc = `
+	satDesc = `
 SATCOM, une division externalisée de
  ____                ___  
 |    |    ____   ____\_ |__ _____   
@@ -2130,12 +2113,815 @@ SATCOM, une division externalisée de
 
 [Accès Restreint]         >>>>>>> entrez vos identifiants <<<<<<<
 `
+	arcDesc = `
+
+*********************************************************************************
+Legba Voodoocom ne peut être tenu responsable de l'usage et des données stockées.
+**** WARNING **** : ce service n'est plus maintenu.
+*********************************************************************************
+━━━╮╭╮╱╱╱╱╱╱╱╱╱╱╱╭━━━╮╱╱╱╱╱╱╭╮    
+┃╭━╮┃┃┃╱╱╱╱╱╱╱╱╱╱╱┃╭━╮┃╱╱╱╱╱╭╯╰╮     Division: R&D, Unité 2772
+┃╰━━┳┫┃╭┳━━┳━━┳━╮╱┃╰━━┳━━┳┳━╋╮╭╯               Projets spéciaux
+╰━━╮┣┫┃┣┫╭━┫╭╮┃╭╮╮╰━━╮┃╭╮┣┫╭╋┫┃                (dir: A.M)
+┃╰━╯┃┃╰┫┃╰━┫╰╯┃┃┃┃┃╰━╯┃╰╯┃┃┃┃┃╰╮
+╰━━━┻┻━┻┻━━┻━━┻╯╰╯╰━━━┫╭━┻┻╯╰┻━╯     
+╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃
+╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰╯
+*********************************************************************************
+**** WARNING **** : ce service n'est plus maintenu.
+Legba Voodoocom ne peut être tenu responsable de l'usage et des données stockées.
+*********************************************************************************
+[Beware MalvolentKiIA, hack@45EBG56#EACD M@dJ0k3r;3/4/206]
+`
+)
+
+// serveur public de Legba Voodoocom
+var legba = Server{
+	Address: "legba.d22.eu",
+	Credentials: []Cred{
+		{"public", "public", 1},
+		legbaPersonnel,
+	},
+	Description: lbDesc,
+	Targets: []Target{
+		{legba_satcom.Address, "division sat-com", 3, legbaPersonnel.Login, legbaPersonnel.Password},
+		{legba_archive.Address, "archives", 3, legbaPersonnel.Login, legbaPersonnel.Password},
+	},
+}
+
+// serveur privé de la communication satellite
+var legba_satcom = Server{
+	Address: "satcom.legba.d22.eu",
+	Credentials: []Cred{
+		legbaPersonnel,
+		legbaAdmin,
+	},
+	Description: satDesc,
+	Scan:        SEC4,
+	Entries: []Entry{
+		{"GEO-EU-D01", []string{"GEO", "EU", "D01"}, 3, "", "Europole D01", `azimut:222.473862
+altitude:57.545902
+Europole District D01`},
+		{"GEO-EU-D02", []string{"GEO", "EU", "D02"}, 3, "", "Europole D02", `azimut:239.324897
+altitude:40.278407
+Europole District D02`},
+		{"GEO-EU-D03", []string{"GEO", "EU", "D03"}, 3, "", "Europole D03", `azimut:109.366561
+altitude:76.071807
+Europole District D03`},
+		{"GEO-EU-D04", []string{"GEO", "EU", "D04"}, 3, "", "Europole D04", `azimut:329.297929
+altitude:27.991250
+Europole District D04`},
+		{"GEO-EU-D05", []string{"GEO", "EU", "D05"}, 3, "", "Europole D05", `azimut:196.971308
+altitude:89.923900
+Europole District D05`},
+		{"GEO-EU-D06", []string{"GEO", "EU", "D06"}, 3, "", "Europole D06", `azimut:128.213744
+altitude:72.986507
+Europole District D06`},
+		{"GEO-EU-D07", []string{"GEO", "EU", "D07"}, 3, "", "Europole D07", `azimut:188.000197
+altitude:25.475341
+Europole District D07`},
+		{"GEO-EU-D08", []string{"GEO", "EU", "D08"}, 3, "", "Europole D08", `azimut:18.387379
+altitude:39.189764
+Europole District D08`},
+		{"GEO-EU-D09", []string{"GEO", "EU", "D09"}, 3, "", "Europole D09", `azimut:25.997548
+altitude:2.442340
+Europole District D09`},
+		{"GEO-EU-D10", []string{"GEO", "EU", "D10"}, 3, "", "Europole D10", `azimut:63.563148
+altitude:15.524259
+Europole District D10`},
+		{"GEO-EU-D11", []string{"GEO", "EU", "D11"}, 3, "", "Europole D11", `azimut:45.742992
+altitude:66.014371
+Europole District D11`},
+		{"GEO-EU-D12", []string{"GEO", "EU", "D12"}, 3, "", "Europole D12", `azimut:347.864768
+altitude:52.184109
+Europole District D12`},
+		{"GEO-EU-D13", []string{"GEO", "EU", "D13"}, 3, "", "Europole D13", `azimut:243.115459
+altitude:82.627421
+Europole District D13`},
+		{"GEO-EU-D14", []string{"GEO", "EU", "D14"}, 3, "", "Europole D14", `azimut:116.483503
+altitude:18.400539
+Europole District D14`},
+		{"GEO-EU-D15", []string{"GEO", "EU", "D15"}, 3, "", "Europole D15", `azimut:340.027907
+altitude:44.906145
+Europole District D15`},
+		{"GEO-EU-D16", []string{"GEO", "EU", "D16"}, 3, "", "Europole D16", `azimut:156.679333
+altitude:59.225136
+Europole District D16`},
+		{"GEO-EU-D17", []string{"GEO", "EU", "D17"}, 3, "", "Europole D17", `azimut:98.859250
+altitude:70.193535
+Europole District D17`},
+		{"GEO-EU-D18", []string{"GEO", "EU", "D18"}, 3, "", "Europole D18", `azimut:249.598879
+altitude:35.274047
+Europole District D18`},
+		{"GEO-EU-D19", []string{"GEO", "EU", "D19"}, 3, "", "Europole D19", `azimut:39.792230
+altitude:84.093000
+Europole District D19`},
+		{"GEO-EU-D20", []string{"GEO", "EU", "D20"}, 3, "", "Europole D20", `azimut:181.817280
+altitude:44.512595
+Europole District D20`},
+		{"GEO-EU-D21", []string{"GEO", "EU", "D21"}, 3, "", "Europole D21", `azimut:150.167960
+altitude:85.991215
+Europole District D21`},
+		{"GEO-EU-D22", []string{"GEO", "EU", "D22"}, 3, "", "Europole D22", `azimut:239.977281
+altitude:75.689278
+Europole District D22`},
+		{"GEO-EU-D23", []string{"GEO", "EU", "D23"}, 3, "", "Europole D23", `azimut:351.246429
+altitude:34.655470
+Europole District D23`},
+		{"GEO-EU-D24", []string{"GEO", "EU", "D24"}, 3, "", "Europole D24", `azimut:160.687062
+altitude:65.748652
+Europole District D24`},
+		{"GEO-EU-D25", []string{"GEO", "EU", "D25"}, 3, "", "Europole D25", `azimut:199.657318
+altitude:16.504889
+Europole District D25`},
+		{"GEO-EU-D26", []string{"GEO", "EU", "D26"}, 3, "", "Europole D26", `azimut:113.082227
+altitude:70.553254
+Europole District D26`},
+		{"GEO-EU-D27", []string{"GEO", "EU", "D27"}, 3, "", "Europole D27", `azimut:149.928442
+altitude:38.723569
+Europole District D27`},
+		{"GEO-EU-D28", []string{"GEO", "EU", "D28"}, 3, "", "Europole D28", `azimut:195.343852
+altitude:66.718099
+Europole District D28`},
+		{"GEO-EU-D29", []string{"GEO", "EU", "D29"}, 3, "", "Europole D29", `azimut:68.053002
+altitude:59.244626
+Europole District D29`},
+		{"GEO-EU-D30", []string{"GEO", "EU", "D30"}, 3, "", "Europole D30", `azimut:109.773570
+altitude:75.527002
+Europole District D30`},
+		{"GEO-AM-D01", []string{"GEO", "AM", "D01"}, 3, "", "Amerique D01", `azimut:73.597028
+altitude:49.878709
+Amerique District D01`},
+		{"GEO-AM-D02", []string{"GEO", "AM", "D02"}, 3, "", "Amerique D02", `azimut:123.021633
+altitude:17.279446
+Amerique District D02`},
+		{"GEO-AM-D03", []string{"GEO", "AM", "D03"}, 3, "", "Amerique D03", `azimut:343.543004
+altitude:40.210107
+Amerique District D03`},
+		{"GEO-AM-D04", []string{"GEO", "AM", "D04"}, 3, "", "Amerique D04", `azimut:118.704682
+altitude:30.886185
+Amerique District D04`},
+		{"GEO-AM-D05", []string{"GEO", "AM", "D05"}, 3, "", "Amerique D05", `azimut:332.719647
+altitude:66.663091
+Amerique District D05`},
+		{"GEO-AM-D06", []string{"GEO", "AM", "D06"}, 3, "", "Amerique D06", `azimut:170.711919
+altitude:38.124117
+Amerique District D06`},
+		{"GEO-AM-D07", []string{"GEO", "AM", "D07"}, 3, "", "Amerique D07", `azimut:95.659856
+altitude:19.927787
+Amerique District D07`},
+		{"GEO-AM-D08", []string{"GEO", "AM", "D08"}, 3, "", "Amerique D08", `azimut:112.172492
+altitude:19.548745
+Amerique District D08`},
+		{"GEO-AM-D09", []string{"GEO", "AM", "D09"}, 3, "", "Amerique D09", `azimut:45.613917
+altitude:51.208722
+Amerique District D09`},
+		{"GEO-AM-D10", []string{"GEO", "AM", "D10"}, 3, "", "Amerique D10", `azimut:330.125659
+altitude:73.166312
+Amerique District D10`},
+		{"GEO-AM-D11", []string{"GEO", "AM", "D11"}, 3, "", "Amerique D11", `azimut:87.738024
+altitude:46.632757
+Amerique District D11`},
+		{"GEO-AM-D12", []string{"GEO", "AM", "D12"}, 3, "", "Amerique D12", `azimut:155.679631
+altitude:89.617381
+Amerique District D12`},
+		{"GEO-AM-D13", []string{"GEO", "AM", "D13"}, 3, "", "Amerique D13", `azimut:175.463825
+altitude:13.228532
+Amerique District D13`},
+		{"GEO-AM-D14", []string{"GEO", "AM", "D14"}, 3, "", "Amerique D14", `azimut:182.310405
+altitude:12.549442
+Amerique District D14`},
+		{"GEO-AM-D15", []string{"GEO", "AM", "D15"}, 3, "", "Amerique D15", `azimut:79.390452
+altitude:5.071440
+Amerique District D15`},
+		{"GEO-AM-D16", []string{"GEO", "AM", "D16"}, 3, "", "Amerique D16", `azimut:110.318744
+altitude:33.526340
+Amerique District D16`},
+		{"GEO-AM-D17", []string{"GEO", "AM", "D17"}, 3, "", "Amerique D17", `azimut:298.195798
+altitude:84.808764
+Amerique District D17`},
+		{"GEO-AM-D18", []string{"GEO", "AM", "D18"}, 3, "", "Amerique D18", `azimut:2.873332
+altitude:51.596388
+Amerique District D18`},
+		{"GEO-AM-D19", []string{"GEO", "AM", "D19"}, 3, "", "Amerique D19", `azimut:296.794890
+altitude:71.677123
+Amerique District D19`},
+		{"GEO-AM-D20", []string{"GEO", "AM", "D20"}, 3, "", "Amerique D20", `azimut:231.170081
+altitude:30.647222
+Amerique District D20`},
+		{"GEO-AM-D21", []string{"GEO", "AM", "D21"}, 3, "", "Amerique D21", `azimut:89.500920
+altitude:30.522516
+Amerique District D21`},
+		{"GEO-AM-D22", []string{"GEO", "AM", "D22"}, 3, "", "Amerique D22", `azimut:323.958919
+altitude:30.437744
+Amerique District D22`},
+		{"GEO-AM-D23", []string{"GEO", "AM", "D23"}, 3, "", "Amerique D23", `azimut:253.869255
+altitude:30.920316
+Amerique District D23`},
+		{"GEO-AM-D24", []string{"GEO", "AM", "D24"}, 3, "", "Amerique D24", `azimut:186.124318
+altitude:62.824878
+Amerique District D24`},
+		{"GEO-AM-D25", []string{"GEO", "AM", "D25"}, 3, "", "Amerique D25", `azimut:341.876998
+altitude:86.569408
+Amerique District D25`},
+		{"GEO-AM-D26", []string{"GEO", "AM", "D26"}, 3, "", "Amerique D26", `azimut:345.379005
+altitude:56.438396
+Amerique District D26`},
+		{"GEO-AM-D27", []string{"GEO", "AM", "D27"}, 3, "", "Amerique D27", `azimut:286.611533
+altitude:62.474308
+Amerique District D27`},
+		{"GEO-AM-D28", []string{"GEO", "AM", "D28"}, 3, "", "Amerique D28", `azimut:153.424171
+altitude:2.944232
+Amerique District D28`},
+		{"GEO-AM-D29", []string{"GEO", "AM", "D29"}, 3, "", "Amerique D29", `azimut:300.060128
+altitude:70.495054
+Amerique District D29`},
+		{"GEO-AM-D30", []string{"GEO", "AM", "D30"}, 3, "", "Amerique D30", `azimut:213.636218
+altitude:8.239724
+Amerique District D30`},
+		{"GEO-AS-D01", []string{"GEO", "AS", "D01"}, 3, "", "Asie D01", `azimut:342.051745
+altitude:42.218323
+Asie District D01`},
+		{"GEO-AS-D02", []string{"GEO", "AS", "D02"}, 3, "", "Asie D02", `azimut:250.259304
+altitude:71.493491
+Asie District D02`},
+		{"GEO-AS-D03", []string{"GEO", "AS", "D03"}, 3, "", "Asie D03", `azimut:95.251740
+altitude:48.210691
+Asie District D03`},
+		{"GEO-AS-D04", []string{"GEO", "AS", "D04"}, 3, "", "Asie D04", `azimut:183.859707
+altitude:76.592457
+Asie District D04`},
+		{"GEO-AS-D05", []string{"GEO", "AS", "D05"}, 3, "", "Asie D05", `azimut:333.600815
+altitude:61.490801
+Asie District D05`},
+		{"GEO-AS-D06", []string{"GEO", "AS", "D06"}, 3, "", "Asie D06", `azimut:33.457971
+altitude:64.460645
+Asie District D06`},
+		{"GEO-AS-D07", []string{"GEO", "AS", "D07"}, 3, "", "Asie D07", `azimut:205.287459
+altitude:21.342705
+Asie District D07`},
+		{"GEO-AS-D08", []string{"GEO", "AS", "D08"}, 3, "", "Asie D08", `azimut:290.712095
+altitude:83.393417
+Asie District D08`},
+		{"GEO-AS-D09", []string{"GEO", "AS", "D09"}, 3, "", "Asie D09", `azimut:129.804248
+altitude:56.810036
+Asie District D09`},
+		{"GEO-AS-D10", []string{"GEO", "AS", "D10"}, 3, "", "Asie D10", `azimut:181.933236
+altitude:82.832447
+Asie District D10`},
+		{"GEO-AS-D11", []string{"GEO", "AS", "D11"}, 3, "", "Asie D11", `azimut:1.056958
+altitude:46.733304
+Asie District D11`},
+		{"GEO-AS-D12", []string{"GEO", "AS", "D12"}, 3, "", "Asie D12", `azimut:130.245444
+altitude:38.701721
+Asie District D12`},
+		{"GEO-AS-D13", []string{"GEO", "AS", "D13"}, 3, "", "Asie D13", `azimut:11.754200
+altitude:29.779863
+Asie District D13`},
+		{"GEO-AS-D14", []string{"GEO", "AS", "D14"}, 3, "", "Asie D14", `azimut:63.656253
+altitude:50.797300
+Asie District D14`},
+		{"GEO-AS-D15", []string{"GEO", "AS", "D15"}, 3, "", "Asie D15", `azimut:240.014087
+altitude:64.780596
+Asie District D15`},
+		{"GEO-AS-D16", []string{"GEO", "AS", "D16"}, 3, "", "Asie D16", `azimut:185.696595
+altitude:44.346859
+Asie District D16`},
+		{"GEO-AS-D17", []string{"GEO", "AS", "D17"}, 3, "", "Asie D17", `azimut:204.779937
+altitude:13.827560
+Asie District D17`},
+		{"GEO-AS-D18", []string{"GEO", "AS", "D18"}, 3, "", "Asie D18", `azimut:92.243999
+altitude:9.715407
+Asie District D18`},
+		{"GEO-AS-D19", []string{"GEO", "AS", "D19"}, 3, "", "Asie D19", `azimut:199.837823
+altitude:58.591530
+Asie District D19`},
+		{"GEO-AS-D20", []string{"GEO", "AS", "D20"}, 3, "", "Asie D20", `azimut:53.849202
+altitude:36.692392
+Asie District D20`},
+		{"GEO-AS-D21", []string{"GEO", "AS", "D21"}, 3, "", "Asie D21", `azimut:142.217905
+altitude:76.522163
+Asie District D21`},
+		{"GEO-AS-D22", []string{"GEO", "AS", "D22"}, 3, "", "Asie D22", `azimut:75.695987
+altitude:62.240956
+Asie District D22`},
+		{"GEO-AS-D23", []string{"GEO", "AS", "D23"}, 3, "", "Asie D23", `azimut:285.624536
+altitude:57.488524
+Asie District D23`},
+		{"GEO-AS-D24", []string{"GEO", "AS", "D24"}, 3, "", "Asie D24", `azimut:274.254944
+altitude:45.720608
+Asie District D24`},
+		{"GEO-AS-D25", []string{"GEO", "AS", "D25"}, 3, "", "Asie D25", `azimut:357.594847
+altitude:36.241697
+Asie District D25`},
+		{"GEO-AS-D26", []string{"GEO", "AS", "D26"}, 3, "", "Asie D26", `azimut:87.273324
+altitude:84.761897
+Asie District D26`},
+		{"GEO-AS-D27", []string{"GEO", "AS", "D27"}, 3, "", "Asie D27", `azimut:192.987743
+altitude:39.505095
+Asie District D27`},
+		{"GEO-AS-D28", []string{"GEO", "AS", "D28"}, 3, "", "Asie D28", `azimut:330.694254
+altitude:67.430962
+Asie District D28`},
+		{"GEO-AS-D29", []string{"GEO", "AS", "D29"}, 3, "", "Asie D29", `azimut:127.146828
+altitude:19.723466
+Asie District D29`},
+		{"GEO-AS-D30", []string{"GEO", "AS", "D30"}, 3, "", "Asie D30", `azimut:74.864500
+altitude:75.241127
+Asie District D30`},
+		{"GEO-AU-D01", []string{"GEO", "AU", "D01"}, 3, "", "Australie D01", `azimut:292.083689
+altitude:88.194980
+Australie District D01`},
+		{"GEO-AU-D02", []string{"GEO", "AU", "D02"}, 3, "", "Australie D02", `azimut:82.831966
+altitude:21.731413
+Australie District D02`},
+		{"GEO-AU-D03", []string{"GEO", "AU", "D03"}, 3, "", "Australie D03", `azimut:154.231428
+altitude:1.419308
+Australie District D03`},
+		{"GEO-AU-D04", []string{"GEO", "AU", "D04"}, 3, "", "Australie D04", `azimut:24.530170
+altitude:89.837985
+Australie District D04`},
+		{"GEO-AU-D05", []string{"GEO", "AU", "D05"}, 3, "", "Australie D05", `azimut:57.894963
+altitude:45.076034
+Australie District D05`},
+		{"GEO-AU-D06", []string{"GEO", "AU", "D06"}, 3, "", "Australie D06", `azimut:342.363100
+altitude:21.464879
+Australie District D06`},
+		{"GEO-AU-D07", []string{"GEO", "AU", "D07"}, 3, "", "Australie D07", `azimut:78.005193
+altitude:5.087446
+Australie District D07`},
+		{"GEO-AU-D08", []string{"GEO", "AU", "D08"}, 3, "", "Australie D08", `azimut:225.866362
+altitude:67.567458
+Australie District D08`},
+		{"GEO-AU-D09", []string{"GEO", "AU", "D09"}, 3, "", "Australie D09", `azimut:167.444574
+altitude:61.857512
+Australie District D09`},
+		{"GEO-AU-D10", []string{"GEO", "AU", "D10"}, 3, "", "Australie D10", `azimut:255.402402
+altitude:36.556867
+Australie District D10`},
+		{"GEO-AU-D11", []string{"GEO", "AU", "D11"}, 3, "", "Australie D11", `azimut:140.726251
+altitude:11.197472
+Australie District D11`},
+		{"GEO-AU-D12", []string{"GEO", "AU", "D12"}, 3, "", "Australie D12", `azimut:161.236059
+altitude:36.436500
+Australie District D12`},
+		{"GEO-AU-D13", []string{"GEO", "AU", "D13"}, 3, "", "Australie D13", `azimut:17.379168
+altitude:33.483234
+Australie District D13`},
+		{"GEO-AU-D14", []string{"GEO", "AU", "D14"}, 3, "", "Australie D14", `azimut:51.559107
+altitude:18.235380
+Australie District D14`},
+		{"GEO-AU-D15", []string{"GEO", "AU", "D15"}, 3, "", "Australie D15", `azimut:108.356927
+altitude:73.259122
+Australie District D15`},
+		{"GEO-AU-D16", []string{"GEO", "AU", "D16"}, 3, "", "Australie D16", `azimut:165.263461
+altitude:1.147638
+Australie District D16`},
+		{"GEO-AU-D17", []string{"GEO", "AU", "D17"}, 3, "", "Australie D17", `azimut:316.051053
+altitude:70.737982
+Australie District D17`},
+		{"GEO-AU-D18", []string{"GEO", "AU", "D18"}, 3, "", "Australie D18", `azimut:76.158201
+altitude:64.184684
+Australie District D18`},
+		{"GEO-AU-D19", []string{"GEO", "AU", "D19"}, 3, "", "Australie D19", `azimut:110.508745
+altitude:49.884585
+Australie District D19`},
+		{"GEO-AU-D20", []string{"GEO", "AU", "D20"}, 3, "", "Australie D20", `azimut:255.635603
+altitude:77.332306
+Australie District D20`},
+		{"GEO-AU-D21", []string{"GEO", "AU", "D21"}, 3, "", "Australie D21", `azimut:277.905640
+altitude:72.924568
+Australie District D21`},
+		{"GEO-AU-D22", []string{"GEO", "AU", "D22"}, 3, "", "Australie D22", `azimut:239.945763
+altitude:45.988657
+Australie District D22`},
+		{"GEO-AU-D23", []string{"GEO", "AU", "D23"}, 3, "", "Australie D23", `azimut:44.763104
+altitude:87.511096
+Australie District D23`},
+		{"GEO-AU-D24", []string{"GEO", "AU", "D24"}, 3, "", "Australie D24", `azimut:288.379136
+altitude:78.406113
+Australie District D24`},
+		{"GEO-AU-D25", []string{"GEO", "AU", "D25"}, 3, "", "Australie D25", `azimut:130.566795
+altitude:26.739230
+Australie District D25`},
+		{"GEO-AU-D26", []string{"GEO", "AU", "D26"}, 3, "", "Australie D26", `azimut:122.319196
+altitude:86.855428
+Australie District D26`},
+		{"GEO-AU-D27", []string{"GEO", "AU", "D27"}, 3, "", "Australie D27", `azimut:259.975290
+altitude:21.280427
+Australie District D27`},
+		{"GEO-AU-D28", []string{"GEO", "AU", "D28"}, 3, "", "Australie D28", `azimut:96.620961
+altitude:41.302436
+Australie District D28`},
+		{"GEO-AU-D29", []string{"GEO", "AU", "D29"}, 3, "", "Australie D29", `azimut:146.349130
+altitude:81.275968
+Australie District D29`},
+		{"GEO-AU-D30", []string{"GEO", "AU", "D30"}, 3, "", "Australie D30", `azimut:75.093528
+altitude:80.022612
+Australie District D30`},
+		{"LEO-SATCOM", []string{"LEO", "SATCOM"}, 3, "", "Constellation SATCOM orbite LEO", "6a8e2a76-b0b7-42e4-aec4-9af7d0b1339e"},
+		{"LEO-STARLINK", []string{"LEO", "STARLINK"}, 3, "", "Constellation STARLINK orbite LEO", "39a4c6ac-3710-4aca-b802-8ab7bce8b6fa"},
+		{"LEO-VIASAT", []string{"LEO", "VIASAT"}, 3, "", "Constellation VIASAT orbite LEO", "843521bc-30f7-4d73-b68c-a1ea707da880"},
+		{"LEO-IRIDIUM", []string{"LEO", "IRIDIUM"}, 3, "", "Constellation IRIDIUM orbite LEO", "10e77c5c-ee5e-4324-9547-f2856ea3e3ac"},
+		{"MEO-SATCOM", []string{"MEO", "SATCOM"}, 3, "", "Constellation SATCOM orbite MEO", "fbc01335-8224-43e0-a175-298e43832f96"},
+		{"MEO-STARLINK", []string{"MEO", "STARLINK"}, 3, "", "Constellation STARLINK orbite MEO", "704cf5b2-1ccd-42ae-a93a-054fa65f7950"},
+		{"MEO-VIASAT", []string{"MEO", "VIASAT"}, 3, "", "Constellation VIASAT orbite MEO", "7ba9b084-442f-445e-97ce-b3936c368079"},
+		{"MEO-IRIDIUM", []string{"MEO", "IRIDIUM"}, 3, "", "Constellation IRIDIUM orbite MEO", "c65c0fe2-0ada-4555-b641-439239426488"},
+	},
+	Registers: []Register{
+		{"GEO-EU-D01-600MHZ", false, "", 5},
+		{"GEO-EU-D01-800MHZ", true, "", 5},
+		{"GEO-EU-D01-1200MHZ", true, "", 5},
+		{"GEO-EU-D02-600MHZ", false, "", 5},
+		{"GEO-EU-D02-800MHZ", false, "", 5},
+		{"GEO-EU-D02-1200MHZ", true, "", 5},
+		{"GEO-EU-D03-600MHZ", false, "", 5},
+		{"GEO-EU-D03-800MHZ", false, "", 5},
+		{"GEO-EU-D03-1200MHZ", false, "", 5},
+		{"GEO-EU-D04-600MHZ", false, "", 5},
+		{"GEO-EU-D04-800MHZ", false, "", 5},
+		{"GEO-EU-D04-1200MHZ", false, "", 5},
+		{"GEO-EU-D05-600MHZ", false, "", 5},
+		{"GEO-EU-D05-800MHZ", false, "", 5},
+		{"GEO-EU-D05-1200MHZ", false, "", 5},
+		{"GEO-EU-D06-600MHZ", false, "", 5},
+		{"GEO-EU-D06-800MHZ", true, "", 5},
+		{"GEO-EU-D06-1200MHZ", false, "", 5},
+		{"GEO-EU-D07-600MHZ", false, "", 5},
+		{"GEO-EU-D07-800MHZ", true, "", 5},
+		{"GEO-EU-D07-1200MHZ", false, "", 5},
+		{"GEO-EU-D08-600MHZ", false, "", 5},
+		{"GEO-EU-D08-800MHZ", true, "", 5},
+		{"GEO-EU-D08-1200MHZ", false, "", 5},
+		{"GEO-EU-D09-600MHZ", false, "", 5},
+		{"GEO-EU-D09-800MHZ", true, "", 5},
+		{"GEO-EU-D09-1200MHZ", false, "", 5},
+		{"GEO-EU-D10-600MHZ", false, "", 5},
+		{"GEO-EU-D10-800MHZ", true, "", 5},
+		{"GEO-EU-D10-1200MHZ", true, "", 5},
+		{"GEO-EU-D11-600MHZ", false, "", 5},
+		{"GEO-EU-D11-800MHZ", true, "", 5},
+		{"GEO-EU-D11-1200MHZ", false, "", 5},
+		{"GEO-EU-D12-600MHZ", false, "", 5},
+		{"GEO-EU-D12-800MHZ", true, "", 5},
+		{"GEO-EU-D12-1200MHZ", false, "", 5},
+		{"GEO-EU-D13-600MHZ", false, "", 5},
+		{"GEO-EU-D13-800MHZ", true, "", 5},
+		{"GEO-EU-D13-1200MHZ", true, "", 5},
+		{"GEO-EU-D14-600MHZ", false, "", 5},
+		{"GEO-EU-D14-800MHZ", false, "", 5},
+		{"GEO-EU-D14-1200MHZ", true, "", 5},
+		{"GEO-EU-D15-600MHZ", false, "", 5},
+		{"GEO-EU-D15-800MHZ", true, "", 5},
+		{"GEO-EU-D15-1200MHZ", false, "", 5},
+		{"GEO-EU-D16-600MHZ", false, "", 5},
+		{"GEO-EU-D16-800MHZ", true, "", 5},
+		{"GEO-EU-D16-1200MHZ", true, "", 5},
+		{"GEO-EU-D17-600MHZ", false, "", 5},
+		{"GEO-EU-D17-800MHZ", false, "", 5},
+		{"GEO-EU-D17-1200MHZ", true, "", 5},
+		{"GEO-EU-D18-600MHZ", false, "", 5},
+		{"GEO-EU-D18-800MHZ", false, "", 5},
+		{"GEO-EU-D18-1200MHZ", true, "", 5},
+		{"GEO-EU-D19-600MHZ", false, "", 5},
+		{"GEO-EU-D19-800MHZ", true, "", 5},
+		{"GEO-EU-D19-1200MHZ", false, "", 5},
+		{"GEO-EU-D20-600MHZ", false, "", 5},
+		{"GEO-EU-D20-800MHZ", false, "", 5},
+		{"GEO-EU-D20-1200MHZ", false, "", 5},
+		{"GEO-EU-D21-600MHZ", false, "", 5},
+		{"GEO-EU-D21-800MHZ", false, "", 5},
+		{"GEO-EU-D21-1200MHZ", true, "", 5},
+		{"GEO-EU-D22-600MHZ", false, "", 5},
+		{"GEO-EU-D22-800MHZ", false, "", 5},
+		{"GEO-EU-D22-1200MHZ", false, "", 5},
+		{"GEO-EU-D23-600MHZ", false, "", 5},
+		{"GEO-EU-D23-800MHZ", true, "", 5},
+		{"GEO-EU-D23-1200MHZ", false, "", 5},
+		{"GEO-EU-D24-600MHZ", false, "", 5},
+		{"GEO-EU-D24-800MHZ", true, "", 5},
+		{"GEO-EU-D24-1200MHZ", true, "", 5},
+		{"GEO-EU-D25-600MHZ", false, "", 5},
+		{"GEO-EU-D25-800MHZ", false, "", 5},
+		{"GEO-EU-D25-1200MHZ", true, "", 5},
+		{"GEO-EU-D26-600MHZ", false, "", 5},
+		{"GEO-EU-D26-800MHZ", false, "", 5},
+		{"GEO-EU-D26-1200MHZ", true, "", 5},
+		{"GEO-EU-D27-600MHZ", false, "", 5},
+		{"GEO-EU-D27-800MHZ", true, "", 5},
+		{"GEO-EU-D27-1200MHZ", false, "", 5},
+		{"GEO-EU-D28-600MHZ", false, "", 5},
+		{"GEO-EU-D28-800MHZ", true, "", 5},
+		{"GEO-EU-D28-1200MHZ", false, "", 5},
+		{"GEO-EU-D29-600MHZ", false, "", 5},
+		{"GEO-EU-D29-800MHZ", true, "", 5},
+		{"GEO-EU-D29-1200MHZ", true, "", 5},
+		{"GEO-EU-D30-600MHZ", false, "", 5},
+		{"GEO-EU-D30-800MHZ", false, "", 5},
+		{"GEO-EU-D30-1200MHZ", true, "", 5},
+		{"GEO-AM-D01-600MHZ", false, "", 5},
+		{"GEO-AM-D01-800MHZ", true, "", 5},
+		{"GEO-AM-D01-1200MHZ", true, "", 5},
+		{"GEO-AM-D02-600MHZ", false, "", 5},
+		{"GEO-AM-D02-800MHZ", true, "", 5},
+		{"GEO-AM-D02-1200MHZ", false, "", 5},
+		{"GEO-AM-D03-600MHZ", false, "", 5},
+		{"GEO-AM-D03-800MHZ", true, "", 5},
+		{"GEO-AM-D03-1200MHZ", false, "", 5},
+		{"GEO-AM-D04-600MHZ", false, "", 5},
+		{"GEO-AM-D04-800MHZ", true, "", 5},
+		{"GEO-AM-D04-1200MHZ", true, "", 5},
+		{"GEO-AM-D05-600MHZ", false, "", 5},
+		{"GEO-AM-D05-800MHZ", true, "", 5},
+		{"GEO-AM-D05-1200MHZ", false, "", 5},
+		{"GEO-AM-D06-600MHZ", false, "", 5},
+		{"GEO-AM-D06-800MHZ", false, "", 5},
+		{"GEO-AM-D06-1200MHZ", false, "", 5},
+		{"GEO-AM-D07-600MHZ", false, "", 5},
+		{"GEO-AM-D07-800MHZ", false, "", 5},
+		{"GEO-AM-D07-1200MHZ", true, "", 5},
+		{"GEO-AM-D08-600MHZ", false, "", 5},
+		{"GEO-AM-D08-800MHZ", true, "", 5},
+		{"GEO-AM-D08-1200MHZ", false, "", 5},
+		{"GEO-AM-D09-600MHZ", false, "", 5},
+		{"GEO-AM-D09-800MHZ", false, "", 5},
+		{"GEO-AM-D09-1200MHZ", false, "", 5},
+		{"GEO-AM-D10-600MHZ", false, "", 5},
+		{"GEO-AM-D10-800MHZ", false, "", 5},
+		{"GEO-AM-D10-1200MHZ", false, "", 5},
+		{"GEO-AM-D11-600MHZ", false, "", 5},
+		{"GEO-AM-D11-800MHZ", false, "", 5},
+		{"GEO-AM-D11-1200MHZ", false, "", 5},
+		{"GEO-AM-D12-600MHZ", false, "", 5},
+		{"GEO-AM-D12-800MHZ", false, "", 5},
+		{"GEO-AM-D12-1200MHZ", false, "", 5},
+		{"GEO-AM-D13-600MHZ", false, "", 5},
+		{"GEO-AM-D13-800MHZ", true, "", 5},
+		{"GEO-AM-D13-1200MHZ", true, "", 5},
+		{"GEO-AM-D14-600MHZ", false, "", 5},
+		{"GEO-AM-D14-800MHZ", false, "", 5},
+		{"GEO-AM-D14-1200MHZ", false, "", 5},
+		{"GEO-AM-D15-600MHZ", false, "", 5},
+		{"GEO-AM-D15-800MHZ", true, "", 5},
+		{"GEO-AM-D15-1200MHZ", false, "", 5},
+		{"GEO-AM-D16-600MHZ", false, "", 5},
+		{"GEO-AM-D16-800MHZ", false, "", 5},
+		{"GEO-AM-D16-1200MHZ", false, "", 5},
+		{"GEO-AM-D17-600MHZ", false, "", 5},
+		{"GEO-AM-D17-800MHZ", true, "", 5},
+		{"GEO-AM-D17-1200MHZ", true, "", 5},
+		{"GEO-AM-D18-600MHZ", false, "", 5},
+		{"GEO-AM-D18-800MHZ", false, "", 5},
+		{"GEO-AM-D18-1200MHZ", false, "", 5},
+		{"GEO-AM-D19-600MHZ", false, "", 5},
+		{"GEO-AM-D19-800MHZ", true, "", 5},
+		{"GEO-AM-D19-1200MHZ", true, "", 5},
+		{"GEO-AM-D20-600MHZ", false, "", 5},
+		{"GEO-AM-D20-800MHZ", true, "", 5},
+		{"GEO-AM-D20-1200MHZ", true, "", 5},
+		{"GEO-AM-D21-600MHZ", false, "", 5},
+		{"GEO-AM-D21-800MHZ", true, "", 5},
+		{"GEO-AM-D21-1200MHZ", false, "", 5},
+		{"GEO-AM-D22-600MHZ", false, "", 5},
+		{"GEO-AM-D22-800MHZ", true, "", 5},
+		{"GEO-AM-D22-1200MHZ", true, "", 5},
+		{"GEO-AM-D23-600MHZ", false, "", 5},
+		{"GEO-AM-D23-800MHZ", false, "", 5},
+		{"GEO-AM-D23-1200MHZ", false, "", 5},
+		{"GEO-AM-D24-600MHZ", false, "", 5},
+		{"GEO-AM-D24-800MHZ", true, "", 5},
+		{"GEO-AM-D24-1200MHZ", true, "", 5},
+		{"GEO-AM-D25-600MHZ", false, "", 5},
+		{"GEO-AM-D25-800MHZ", false, "", 5},
+		{"GEO-AM-D25-1200MHZ", true, "", 5},
+		{"GEO-AM-D26-600MHZ", false, "", 5},
+		{"GEO-AM-D26-800MHZ", true, "", 5},
+		{"GEO-AM-D26-1200MHZ", false, "", 5},
+		{"GEO-AM-D27-600MHZ", false, "", 5},
+		{"GEO-AM-D27-800MHZ", true, "", 5},
+		{"GEO-AM-D27-1200MHZ", false, "", 5},
+		{"GEO-AM-D28-600MHZ", false, "", 5},
+		{"GEO-AM-D28-800MHZ", false, "", 5},
+		{"GEO-AM-D28-1200MHZ", false, "", 5},
+		{"GEO-AM-D29-600MHZ", false, "", 5},
+		{"GEO-AM-D29-800MHZ", false, "", 5},
+		{"GEO-AM-D29-1200MHZ", true, "", 5},
+		{"GEO-AM-D30-600MHZ", false, "", 5},
+		{"GEO-AM-D30-800MHZ", true, "", 5},
+		{"GEO-AM-D30-1200MHZ", false, "", 5},
+		{"GEO-AS-D01-600MHZ", false, "", 5},
+		{"GEO-AS-D01-800MHZ", false, "", 5},
+		{"GEO-AS-D01-1200MHZ", true, "", 5},
+		{"GEO-AS-D02-600MHZ", false, "", 5},
+		{"GEO-AS-D02-800MHZ", true, "", 5},
+		{"GEO-AS-D02-1200MHZ", true, "", 5},
+		{"GEO-AS-D03-600MHZ", false, "", 5},
+		{"GEO-AS-D03-800MHZ", false, "", 5},
+		{"GEO-AS-D03-1200MHZ", false, "", 5},
+		{"GEO-AS-D04-600MHZ", false, "", 5},
+		{"GEO-AS-D04-800MHZ", true, "", 5},
+		{"GEO-AS-D04-1200MHZ", false, "", 5},
+		{"GEO-AS-D05-600MHZ", false, "", 5},
+		{"GEO-AS-D05-800MHZ", false, "", 5},
+		{"GEO-AS-D05-1200MHZ", true, "", 5},
+		{"GEO-AS-D06-600MHZ", false, "", 5},
+		{"GEO-AS-D06-800MHZ", true, "", 5},
+		{"GEO-AS-D06-1200MHZ", false, "", 5},
+		{"GEO-AS-D07-600MHZ", false, "", 5},
+		{"GEO-AS-D07-800MHZ", true, "", 5},
+		{"GEO-AS-D07-1200MHZ", true, "", 5},
+		{"GEO-AS-D08-600MHZ", false, "", 5},
+		{"GEO-AS-D08-800MHZ", true, "", 5},
+		{"GEO-AS-D08-1200MHZ", false, "", 5},
+		{"GEO-AS-D09-600MHZ", false, "", 5},
+		{"GEO-AS-D09-800MHZ", false, "", 5},
+		{"GEO-AS-D09-1200MHZ", false, "", 5},
+		{"GEO-AS-D10-600MHZ", false, "", 5},
+		{"GEO-AS-D10-800MHZ", false, "", 5},
+		{"GEO-AS-D10-1200MHZ", true, "", 5},
+		{"GEO-AS-D11-600MHZ", false, "", 5},
+		{"GEO-AS-D11-800MHZ", true, "", 5},
+		{"GEO-AS-D11-1200MHZ", true, "", 5},
+		{"GEO-AS-D12-600MHZ", false, "", 5},
+		{"GEO-AS-D12-800MHZ", false, "", 5},
+		{"GEO-AS-D12-1200MHZ", true, "", 5},
+		{"GEO-AS-D13-600MHZ", false, "", 5},
+		{"GEO-AS-D13-800MHZ", true, "", 5},
+		{"GEO-AS-D13-1200MHZ", true, "", 5},
+		{"GEO-AS-D14-600MHZ", false, "", 5},
+		{"GEO-AS-D14-800MHZ", true, "", 5},
+		{"GEO-AS-D14-1200MHZ", false, "", 5},
+		{"GEO-AS-D15-600MHZ", false, "", 5},
+		{"GEO-AS-D15-800MHZ", false, "", 5},
+		{"GEO-AS-D15-1200MHZ", false, "", 5},
+		{"GEO-AS-D16-600MHZ", false, "", 5},
+		{"GEO-AS-D16-800MHZ", false, "", 5},
+		{"GEO-AS-D16-1200MHZ", false, "", 5},
+		{"GEO-AS-D17-600MHZ", false, "", 5},
+		{"GEO-AS-D17-800MHZ", false, "", 5},
+		{"GEO-AS-D17-1200MHZ", true, "", 5},
+		{"GEO-AS-D18-600MHZ", false, "", 5},
+		{"GEO-AS-D18-800MHZ", false, "", 5},
+		{"GEO-AS-D18-1200MHZ", true, "", 5},
+		{"GEO-AS-D19-600MHZ", false, "", 5},
+		{"GEO-AS-D19-800MHZ", true, "", 5},
+		{"GEO-AS-D19-1200MHZ", true, "", 5},
+		{"GEO-AS-D20-600MHZ", false, "", 5},
+		{"GEO-AS-D20-800MHZ", true, "", 5},
+		{"GEO-AS-D20-1200MHZ", true, "", 5},
+		{"GEO-AS-D21-600MHZ", false, "", 5},
+		{"GEO-AS-D21-800MHZ", true, "", 5},
+		{"GEO-AS-D21-1200MHZ", false, "", 5},
+		{"GEO-AS-D22-600MHZ", false, "", 5},
+		{"GEO-AS-D22-800MHZ", false, "", 5},
+		{"GEO-AS-D22-1200MHZ", false, "", 5},
+		{"GEO-AS-D23-600MHZ", false, "", 5},
+		{"GEO-AS-D23-800MHZ", true, "", 5},
+		{"GEO-AS-D23-1200MHZ", true, "", 5},
+		{"GEO-AS-D24-600MHZ", false, "", 5},
+		{"GEO-AS-D24-800MHZ", false, "", 5},
+		{"GEO-AS-D24-1200MHZ", false, "", 5},
+		{"GEO-AS-D25-600MHZ", false, "", 5},
+		{"GEO-AS-D25-800MHZ", false, "", 5},
+		{"GEO-AS-D25-1200MHZ", true, "", 5},
+		{"GEO-AS-D26-600MHZ", false, "", 5},
+		{"GEO-AS-D26-800MHZ", true, "", 5},
+		{"GEO-AS-D26-1200MHZ", false, "", 5},
+		{"GEO-AS-D27-600MHZ", false, "", 5},
+		{"GEO-AS-D27-800MHZ", false, "", 5},
+		{"GEO-AS-D27-1200MHZ", false, "", 5},
+		{"GEO-AS-D28-600MHZ", false, "", 5},
+		{"GEO-AS-D28-800MHZ", true, "", 5},
+		{"GEO-AS-D28-1200MHZ", true, "", 5},
+		{"GEO-AS-D29-600MHZ", false, "", 5},
+		{"GEO-AS-D29-800MHZ", true, "", 5},
+		{"GEO-AS-D29-1200MHZ", true, "", 5},
+		{"GEO-AS-D30-600MHZ", false, "", 5},
+		{"GEO-AS-D30-800MHZ", false, "", 5},
+		{"GEO-AS-D30-1200MHZ", false, "", 5},
+		{"GEO-AU-D01-600MHZ", false, "", 5},
+		{"GEO-AU-D01-800MHZ", true, "", 5},
+		{"GEO-AU-D01-1200MHZ", false, "", 5},
+		{"GEO-AU-D02-600MHZ", false, "", 5},
+		{"GEO-AU-D02-800MHZ", false, "", 5},
+		{"GEO-AU-D02-1200MHZ", false, "", 5},
+		{"GEO-AU-D03-600MHZ", false, "", 5},
+		{"GEO-AU-D03-800MHZ", true, "", 5},
+		{"GEO-AU-D03-1200MHZ", false, "", 5},
+		{"GEO-AU-D04-600MHZ", false, "", 5},
+		{"GEO-AU-D04-800MHZ", true, "", 5},
+		{"GEO-AU-D04-1200MHZ", true, "", 5},
+		{"GEO-AU-D05-600MHZ", false, "", 5},
+		{"GEO-AU-D05-800MHZ", false, "", 5},
+		{"GEO-AU-D05-1200MHZ", true, "", 5},
+		{"GEO-AU-D06-600MHZ", false, "", 5},
+		{"GEO-AU-D06-800MHZ", true, "", 5},
+		{"GEO-AU-D06-1200MHZ", false, "", 5},
+		{"GEO-AU-D07-600MHZ", false, "", 5},
+		{"GEO-AU-D07-800MHZ", true, "", 5},
+		{"GEO-AU-D07-1200MHZ", false, "", 5},
+		{"GEO-AU-D08-600MHZ", false, "", 5},
+		{"GEO-AU-D08-800MHZ", true, "", 5},
+		{"GEO-AU-D08-1200MHZ", false, "", 5},
+		{"GEO-AU-D09-600MHZ", false, "", 5},
+		{"GEO-AU-D09-800MHZ", false, "", 5},
+		{"GEO-AU-D09-1200MHZ", true, "", 5},
+		{"GEO-AU-D10-600MHZ", false, "", 5},
+		{"GEO-AU-D10-800MHZ", false, "", 5},
+		{"GEO-AU-D10-1200MHZ", false, "", 5},
+		{"GEO-AU-D11-600MHZ", false, "", 5},
+		{"GEO-AU-D11-800MHZ", false, "", 5},
+		{"GEO-AU-D11-1200MHZ", false, "", 5},
+		{"GEO-AU-D12-600MHZ", false, "", 5},
+		{"GEO-AU-D12-800MHZ", true, "", 5},
+		{"GEO-AU-D12-1200MHZ", false, "", 5},
+		{"GEO-AU-D13-600MHZ", false, "", 5},
+		{"GEO-AU-D13-800MHZ", false, "", 5},
+		{"GEO-AU-D13-1200MHZ", true, "", 5},
+		{"GEO-AU-D14-600MHZ", false, "", 5},
+		{"GEO-AU-D14-800MHZ", true, "", 5},
+		{"GEO-AU-D14-1200MHZ", false, "", 5},
+		{"GEO-AU-D15-600MHZ", false, "", 5},
+		{"GEO-AU-D15-800MHZ", false, "", 5},
+		{"GEO-AU-D15-1200MHZ", false, "", 5},
+		{"GEO-AU-D16-600MHZ", false, "", 5},
+		{"GEO-AU-D16-800MHZ", false, "", 5},
+		{"GEO-AU-D16-1200MHZ", true, "", 5},
+		{"GEO-AU-D17-600MHZ", false, "", 5},
+		{"GEO-AU-D17-800MHZ", false, "", 5},
+		{"GEO-AU-D17-1200MHZ", true, "", 5},
+		{"GEO-AU-D18-600MHZ", false, "", 5},
+		{"GEO-AU-D18-800MHZ", false, "", 5},
+		{"GEO-AU-D18-1200MHZ", false, "", 5},
+		{"GEO-AU-D19-600MHZ", false, "", 5},
+		{"GEO-AU-D19-800MHZ", true, "", 5},
+		{"GEO-AU-D19-1200MHZ", false, "", 5},
+		{"GEO-AU-D20-600MHZ", false, "", 5},
+		{"GEO-AU-D20-800MHZ", true, "", 5},
+		{"GEO-AU-D20-1200MHZ", true, "", 5},
+		{"GEO-AU-D21-600MHZ", false, "", 5},
+		{"GEO-AU-D21-800MHZ", true, "", 5},
+		{"GEO-AU-D21-1200MHZ", false, "", 5},
+		{"GEO-AU-D22-600MHZ", false, "", 5},
+		{"GEO-AU-D22-800MHZ", false, "", 5},
+		{"GEO-AU-D22-1200MHZ", false, "", 5},
+		{"GEO-AU-D23-600MHZ", false, "", 5},
+		{"GEO-AU-D23-800MHZ", false, "", 5},
+		{"GEO-AU-D23-1200MHZ", true, "", 5},
+		{"GEO-AU-D24-600MHZ", false, "", 5},
+		{"GEO-AU-D24-800MHZ", false, "", 5},
+		{"GEO-AU-D24-1200MHZ", true, "", 5},
+		{"GEO-AU-D25-600MHZ", false, "", 5},
+		{"GEO-AU-D25-800MHZ", true, "", 5},
+		{"GEO-AU-D25-1200MHZ", false, "", 5},
+		{"GEO-AU-D26-600MHZ", false, "", 5},
+		{"GEO-AU-D26-800MHZ", true, "", 5},
+		{"GEO-AU-D26-1200MHZ", true, "", 5},
+		{"GEO-AU-D27-600MHZ", false, "", 5},
+		{"GEO-AU-D27-800MHZ", false, "", 5},
+		{"GEO-AU-D27-1200MHZ", true, "", 5},
+		{"GEO-AU-D28-600MHZ", false, "", 5},
+		{"GEO-AU-D28-800MHZ", false, "", 5},
+		{"GEO-AU-D28-1200MHZ", true, "", 5},
+		{"GEO-AU-D29-600MHZ", false, "", 5},
+		{"GEO-AU-D29-800MHZ", true, "", 5},
+		{"GEO-AU-D29-1200MHZ", true, "", 5},
+		{"GEO-AU-D30-600MHZ", false, "", 5},
+		{"GEO-AU-D30-800MHZ", true, "", 5},
+		{"GEO-AU-D30-1200MHZ", false, "", 5},
+		{"LEO-SATCOM-600MHZ", false, "", 5},
+		{"LEO-SATCOM-800MHZ", false, "", 5},
+		{"LEO-SATCOM-1200MHZ", true, "", 5},
+		{"LEO-STARLINK-600MHZ", false, "", 5},
+		{"LEO-STARLINK-800MHZ", true, "", 5},
+		{"LEO-STARLINK-1200MHZ", false, "", 5},
+		{"LEO-VIASAT-600MHZ", false, "", 5},
+		{"LEO-VIASAT-800MHZ", true, "", 5},
+		{"LEO-VIASAT-1200MHZ", false, "", 5},
+		{"LEO-IRIDIUM-600MHZ", false, "", 5},
+		{"LEO-IRIDIUM-800MHZ", true, "", 5},
+		{"LEO-IRIDIUM-1200MHZ", true, "", 5},
+		{"MEO-SATCOM-600MHZ", false, "", 5},
+		{"MEO-SATCOM-800MHZ", true, "", 5},
+		{"MEO-SATCOM-1200MHZ", false, "", 5},
+		{"MEO-STARLINK-600MHZ", false, "", 5},
+		{"MEO-STARLINK-800MHZ", true, "", 5},
+		{"MEO-STARLINK-1200MHZ", true, "", 5},
+		{"MEO-VIASAT-600MHZ", false, "", 5},
+		{"MEO-VIASAT-800MHZ", false, "", 5},
+		{"MEO-VIASAT-1200MHZ", true, "", 5},
+		{"MEO-IRIDIUM-600MHZ", false, "", 5},
+		{"MEO-IRIDIUM-800MHZ", false, "", 5},
+		{"MEO-IRIDIUM-1200MHZ", true, "", 5},
+	},
+}
 
 // serveur archive de Silicon Spirit
 var legba_archive = Server{
 	Address: "archive.legba.d22.eu",
 	Credentials: []Cred{
-		{"personnel", "archive6543", 3},
+		legbaPersonnel,
+		legbaAdmin,
 	},
 	Description: arcDesc,
 	Entries: []Entry{
@@ -2235,25 +3021,8 @@ est relevé de son poste de directeur et ses accès révoqués. A toutes fin uti
 j'ai demandé l'archivages du Projet «Mandrake».`},
 	},
 }
-var arcDesc = `
-*********************************************************************************
-Legba Voodoocom ne peut être tenu responsable de l'usage et des données stockées.
-**** WARNING **** : ce service n'est plus maintenu.
-*********************************************************************************
-━━━╮╭╮╱╱╱╱╱╱╱╱╱╱╱╭━━━╮╱╱╱╱╱╱╭╮    
-┃╭━╮┃┃┃╱╱╱╱╱╱╱╱╱╱╱┃╭━╮┃╱╱╱╱╱╭╯╰╮     Division: R&D, Unité 2772
-┃╰━━┳┫┃╭┳━━┳━━┳━╮╱┃╰━━┳━━┳┳━╋╮╭╯               Projets spéciaux
-╰━━╮┣┫┃┣┫╭━┫╭╮┃╭╮╮╰━━╮┃╭╮┣┫╭╋┫┃                (dir: A.M)
-┃╰━╯┃┃╰┫┃╰━┫╰╯┃┃┃┃┃╰━╯┃╰╯┃┃┃┃┃╰╮
-╰━━━┻┻━┻┻━━┻━━┻╯╰╯╰━━━┫╭━┻┻╯╰┻━╯     
-╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃
-╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰╯
-*********************************************************************************
-**** WARNING **** : ce service n'est plus maintenu.
-Legba Voodoocom ne peut être tenu responsable de l'usage et des données stockées.
-*********************************************************************************
-[Beware MalvolentKiIA, hack@45EBG56#EACD M@dJ0k3r;3/4/206]
-`
+
+// fichier personnel : alan, harald, ragnar
 
 // serveur le bon district
 var lbd = Server{
@@ -2273,8 +3042,6 @@ var greendata = Server{
 }
 
 var greenDesc = `
-   
-                                   
                              %      ____                        __  __     
                          %%%%%%    /\  _ \                     /\ \/\ \    
                 %%%%%%%%%%%%%%%%   \ \ \L\_\  _ __    __     __\ \  \\ \   
@@ -2290,8 +3057,6 @@ var greenDesc = `
        Analyses / Diagnostics            \ \ \_\ \/\ \L\ \_\ \ \_\ \ \/\ \ 
                                           \ \____/\ \__/ \_\\ \__\\ \_\ \_\
        Certifié ISO-56-52-100              \/___/  \/__/\/_/ \/__/ \/_/\/_/
-
-
 `
 
 var invertedLeaf = `
@@ -2314,13 +3079,22 @@ var leet = Server{
 	Address: "l33t.darknet",
 	Credentials: []Cred{
 		{"crunch", "hacktheplanet", 5},
+		{"celine", "", 4},
+		{"nikki", "", 4},
 	},
 	Description: cruDesc,
+	Scan:        SEC3,
+	Entries: []Entry{
+		// ID keywords restricted owner title content
+		{"vlope20", []string{"flr", "porn"}, 3, "", "vanessalope", `login: green pass: nait5zee`},
+		{"bitecoin19", []string{"flr", "porn"}, 3, "", "lebitecoin", `login: green pass: ohphe0cu`},
+		{"qtf20", []string{"flr", "porn"}, 3, "", "QueTesFans", `login: green pass: aesahm0l`},
+		{"pndr20", []string{"flr", "porn"}, 3, "", "Pinederer", `login: green pass: ohdaf9uo`},
+		{"jm20", []string{"flr", "porn"}, 3, "", "Jockey & Micheline", `login: green pass: eig0thob`},
+	},
 }
 
 var cruDesc = `
-
-                                                                      
          _/_/_/  _/_/_/    _/    _/  _/      _/    _/_/_/  _/    _/   
       _/        _/    _/  _/    _/  _/_/    _/  _/        _/    _/    
      _/        _/_/_/    _/    _/  _/  _/  _/  _/        _/_/_/_/     
@@ -2328,8 +3102,6 @@ var cruDesc = `
      _/_/_/  _/    _/    _/_/    _/      _/    _/_/_/  _/    _/       
                                                                       
     is NOT watching you... No need for that.... :o) 
-
-
 `
 
 // serveur privé de Céline
@@ -2353,13 +3125,67 @@ var celDesc = `
 ...... Dernier avertissement ............................
 `
 
-// serveur mémoriel de Hope
+// serveur de Hope
 var hope = Server{
 	Address: "hope.local",
 	Credentials: []Cred{
 		{"hope", "tearsintherain", 5},
+		{"mel", "xxx", 3},
 	},
 	Description: hopDesc,
+	Scan:        SEC5,
+	Entries: []Entry{
+		// journal personnel d'Alan
+		{"alan00-07-07", []string{"alan", "journal", "2000"}, 3, "",
+			"Fin du monde", `
+Aujourd’hui est arrivé dans la Division R&D John-Mickael Fusion. C’est le
+cadre Legba Voodoocom en charge de l’évaluation des actifs du département.
+C’est un homme qui paraît sensé et prompt à percevoir les champs de recherche
+prometteurs non seulement en termes de retombées financières immédiates,
+mais aussi en termes de retombées médiatiques positives pour l’entreprise. Le
+Terminal et Hope occupent toutes mes pensées mais je dois faire bonne figure
+pour le Projet.`,
+		},
+		{"alan00-07-08", []string{"alan", "journal", "2000"}, 3, "",
+			"Soulagement", `
+J’ai invité John-Michael à une visite du Projet Mandrake, afin de lui présenter
+nos travaux, et leurs avancées récentes suite à l’épisode Ragnar. Il est
+convaincu de l’utilité de notre division et je vais pouvoir rassurer mon
+équipe sur leur devenir si le rachat de Silicon Spirit est validé par la Cour
+Corporatiste. Nous n’avons pas besoin d’un autre incident Proskychev.`,
+		},
+		{"alan00-07-09", []string{"alan", "journal", "2000"}, 3, "",
+			"Quelle bande d'incompétents", `
+En pensant à Hope ce soir, j’ai finalement mis le doigt sur ce qui me
+tracassait dans l’article de Jordan Kuipers & Anthon trebinsky sur le boostrap
+efficace de l’ontologie phénoménologique. C’est un tissu d’approximations et
+d’erreurs dignes d’un première année. Je compte bien écrire une réfutation
+détaillée et argumentée basée sur mes propres travaux, une fois la période de
+rachat terminée. Ces derniers n’ont décidément rien compris.`,
+		},
+		{"alan00-07-10", []string{"alan", "journal", "2000"}, 3, "",
+			"Legba est un serpent", `
+Quel fils de chien galeux ! Quelle ordure syphilitique ! Ca ne se passera
+pas comme ça, je vais leur coller mes avocats au cul !!! Me bloquer mon badge
+d’accès, et faire mettre mes effets personnels au poste de garde d’entrée !
+Comme un vulgaire voleur. Et avec ça, aucun accès à mes anciens postes de
+travail, mes docs, sauvegardes, notes… `,
+		},
+		{"alan00-07-15", []string{"alan", "journal", "2000"}, 3, "",
+			"Désespoir", `
+L’avocat est plutôt clair, tout s’est fait dans la légalité, et je n’ai aucune
+chance de récupérer les données et/ou le matériel appartenant à Silicon Spirit,
+transmis à présent à Legba Voodoocom. Monde de merde ...`,
+		},
+		{"alan00-07-17", []string{"alan", "journal", "2000"}, 3, "",
+			"Désabusé", `
+... Hope me ressert un verre, et je contemple ma plus brillante réussite. Le
+monde n’en saura jamais rien, j’espère qu’elle ne se laissera jamais pervertir
+par notre profond besoin de surpasser nos contemporains, quel qu’en soit
+le coût. Et dire que ces abrutis de Legba ont mis Kuipers à la tête de leur
+version de MON Projet Mandrake !`,
+		},
+	},
 }
 
 // Project "Hope"
@@ -2369,11 +3195,21 @@ var hope = Server{
 // - contenu infix normalisé
 // - (c) A.M
 var hopDesc = `
-01010000 01110010 01101111 01101010 01100101 01100011 01110100  00100010 01001000 01101111 01110000 01100101 00100010                                                                                                                                                                               
-01000100 11101001 01110000 01101111 01110100  01101101 11101001 01101101 01101111 01110010 01101001 01100101 01101100                                                                                                                                                                               
-00101101  01100110 01100101 01101110 11101010 01110100 01110010 01100101  01110100 01100101 01101101 01110000 01101111 01110010 01100101 01101100 01101100 01100101  01100111 01101100 01101001 01110011 01110011 01100001 01101110 01110100 01100101  01110110 00110001 00110010 00101110 00110101 
-00101101  01100011 01101111 01101101 01110000 01110010 01100101 01110011 01110011 01101001 01101111 01101110  01001101 01100011 01010110 01100001 01110101 01100111 01101000 00101101 01001011 01101111 01110010 01100010 01100001 00101101 01011001 01100001 01101110 01100111                     
-00101101  01100011 01101111 01101110 01110100 01100101 01101110 01110101  01101001 01101110 01100110 01101001 01111000  01101110 01101111 01110010 01101101 01100001 01101100 01101001 01110011 11101001                                                                                            
+01010000 01110010 01101111 01101010 01100101 01100011
+01110100  00100010 01001000 01101111 01110000 01100101 00100010
+01000100 11101001 01110000 01101111 01110100  01101101
+11101001 01101101 01101111 01110010 01101001 01100101 01101100
+00101101  01100110 01100101 01101110 11101010 01110100 01110010
+01100101  01110100 01100101 01101101 01110000 01101111 01110010 01100101
+01101100 01101100 01100101  01100111 01101100 01101001 01110011 01110011
+01100001 01101110 01110100 01100101  01110110 00110001 00110010 00101110
+00110101  00101101  01100011 01101111 01101101 01110000 01110010
+01100101 01110011 01110011 01101001 01101111 01101110  01001101 01100011
+01010110 01100001 01110101 01100111 01101000 00101101 01001011 01101111
+01110010 01100010 01100001 00101101 01011001 01100001 01101110 01100111
+00101101  01100011 01101111 01101110 01110100 01100101 01101110 01110101
+01101001 01101110 01100110 01101001 01111000  01101110 01101111 01110010
+01101101 01100001 01101100 01101001 01110011 11101001
 00101101  00101000 01100011 00101001  01000001 00101110 01001101                                                                                                                                                                                                                                    
 `
 
@@ -2382,7 +3218,7 @@ var game = &Game{
 		dd,
 		d22,
 		kramps,
-		kramps_priv,
+		kramps_pers,
 		kramps_sec,
 		corp,
 		justice,

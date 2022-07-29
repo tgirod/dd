@@ -37,12 +37,13 @@ var (
 	escobar        = ID{"jbranson", "GGAGGACACCCCAAACGCAT", "Jonathan Branson"}
 	cageot         = ID{"jmfright", "GCCCTTGTCATGTACTTAGT", "John Mac Fright"}
 	lafouine       = ID{"skmihalec", "CTGTCACCCAATCTACAGCG", "Sylvia Kemija Mihalec"}
-	eva            = ID{"", "CTGTTGTAGTGACATGTTTC", "Eva"} // TODO
+	eva            = ID{"emartin", "CTGTTGTAGTGACATGTTTC", "Eva Martin"}
 	fatmike        = ID{"mdubian", "AACCTTGGGCACGGTCGGTA", "Michael Dubian"}
-	kennedy        = ID{"", "CCCGCGGGCAAAGCTGACAG", ""} // TODO
+	kennedy        = ID{"cmihalec", "CCCGCGGGCAAAGCTGACAG", "Carlotta Mihalec"}
 	savagegirl     = ID{"jdoe", "GGGTCTATAGGTCAAACGGT", "Jane Doe 2645"}
 	raoulcool      = ID{"rmichu", "GTCACAAGGTTGTTTAATGG", "Raoul Michu"}
 	greenglass     = ID{"rglass", "ATGCCTACCTCCAATGATTA", "Rupert Glass"}
+	steffie        = ID{"sglass", "ATCGCTACGTCCATAGACTA", "Steffie Glass"}
 	chillydaisy    = ID{"djohannesen", "CGGGAGACACGTTCAGTCTT", "Daisy Johannesen"}
 	frereping      = ID{"dbonenfant", "GCATGGCCGAATTCCTCATT", "Désiré Bonenfant"}
 	papaproxy      = ID{"hproskychev", "CGATTTGTATTGGATACGGA", "Harald Proskychev"}
@@ -56,7 +57,7 @@ var (
 	abraham        = ID{"jkievain", "TGGCGTCTCTAATTCTTGCC", "Jordan Kievain"}
 	crunch         = ID{"fmanson", "TTCAAGCTGAATATGAAAGG", "Frédéric Manson"}
 	onekick        = ID{"rkievain", "GTCAAATCTGAGACTCTTGC", "Rodolph Kievain"}
-	jacob          = ID{"", "TGAAAGAGACAGTATGCCGT", "Pete"}
+	jacob          = ID{"pdoberty", "TGAAAGAGACAGTATGCCGT", "Pete Doberty"}
 	cyrano         = ID{"ajolivet", "TTCGACTGAATGTTTGATGT", "Adrien Jolivet"}
 	smalljoe       = ID{"jvazzanna", "TATCGACGCACGGGACTTGG", "Joseph Vazzanna"}
 	ironmike       = ID{"mklebert", "CGAGAAATGACAGAGTTGTA", "Mickael Klebert"}
@@ -2063,6 +2064,14 @@ var abus = Server{
 			Title:      "Ligne budgétaire pour Margherita Bellamy, Headshot Records",
 			Content:    `Solde courant : 10.000Y€S`,
 		},
+		{
+			ID:         "EENG3M",
+			Keywords:   []string{"compte"},
+			Restricted: 1,
+			Owner:      kennedy.Login,
+			Title:      "Compte anonyme",
+			Content:    `Solde courant : 50.000Y€S \\ Date de création : 2007-05-21`,
+		},
 	},
 }
 
@@ -3093,21 +3102,26 @@ var invertedLeaf = `
 
 // serveur privé de Crunch
 var leet = Server{
-	Address: "l33t.darknet",
+	Address: "leet.darknet",
 	Credentials: []Cred{
 		{"crunch", "hacktheplanet", 5},
 		{"celine", "", 4},
 		{"nikki", "", 4},
+		{"greenglass", "brianglass", 3},
 	},
 	Description: cruDesc,
 	Scan:        SEC3,
 	Entries: []Entry{
-		// ID keywords restricted owner title content
-		{"vlope20", []string{"flr", "porn"}, 3, "", "vanessalope", `login: green pass: nait5zee`},
-		{"bitecoin19", []string{"flr", "porn"}, 3, "", "lebitecoin", `login: green pass: ohphe0cu`},
-		{"qtf20", []string{"flr", "porn"}, 3, "", "QueTesFans", `login: green pass: aesahm0l`},
-		{"pndr20", []string{"flr", "porn"}, 3, "", "Pinederer", `login: green pass: ohdaf9uo`},
-		{"jm20", []string{"flr", "porn"}, 3, "", "Jockey & Micheline", `login: green pass: eig0thob`},
+		// les logins porn de green glass
+		{"bitecoin19", []string{"flr", "porn"}, 3, "", "lebitecoin.porn", `Leurs queues ne sont pas virtuelles ...
+login: green pass: ohphe0cu`},
+		{"vlope20", []string{"flr", "porn", "maman"}, 3, "", "vanessalope.porn", `Elles ne s'appellent pas toutes Vanessa.
+login: green pass: nait5zee`},
+		{"qtf20", []string{"flr", "porn"}, 3, "", "queuetesfans.porn", `login: green pass: aesahm0l`},
+		{"pndr20", []string{"flr", "porn"}, 3, "", "pinederer.porn", `login: green pass: ohdaf9uo`},
+		{"jm20", []string{"flr", "porn", "maman"}, 3, "", "jockeymicheline.porn", `Jockey & Micheline, le site des gens qui aiment les chevaux qui prennent le train
+login: green pass: eig0thob`},
+		// TODO les entrées sur les runners
 	},
 }
 

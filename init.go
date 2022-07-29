@@ -3128,6 +3128,43 @@ var lair = Server{
 		{"celine", "waytoocool", 5},
 	},
 	Description: celDesc,
+	Entries: []Entry{
+		// id, keys, priv, owner, title, content
+		{"hack874", []string{"bitlord", "privé", "assurance", "exit", "strategy"}, 5, "", "b>i>tlord", `
+nom: Zhao Yung Wa
+
+- serveur d'hébergement payant de films, séries, animés (voir attached file: list des ayant-droit lésés)
+`},
+		{"noob02", []string{"green", "glass", "privé", "assurance", "exit", "strategy"}, 5, "", "Green Glass", `
+nom: Ruppert-Green Glass
+
+- revente d'id (login/passd) sur réseau sociaux, pr0n, public corporate net 
+
+`},
+		{"hack66", []string{"dark", "sephiroth", "privé", "assurance", "exit", "strategy"}, 5, "", "Dark Sephiroth66", `
+nom: Alexandre Pinchard
+
+- hack Zelda «Final Chapter» (voir attached log files 276t5443) 
+`},
+
+		{"hack32", []string{"nikki", "privé", "assurance", "exit", "strategy"}, 5, "", "Nikki", `
+nom: Nikole Jasinski
+
+- hack Legba Voodoo Phone (voir attached log file 653BE32)
+- denial of service, Disney Dassault, 02/15 (voir attached log file dass_54ab65)
+- run sur Techmint, D22, 07/19, (voir attached log files ru6296EB, ru6296ec)
+
+`},
+		{"hack61", []string{"crunch", "privé", "assurance", "exit", "strategy"}, 5, "", "Crunch", `
+nom: Frédéric Manson
+
+- hack Legba Voodoo Phone (voir attached log file 653BE32)
+- admin du l33t.darknet
+- concepteur des software pirates leech3.5A, defile_v2.0 (see source files)
+- run sur Techmint, D22, 07/19, (voir attached log files ru6296EB, ru6296ec)
+
+`},
+	},
 }
 var celDesc = `
   ******               *******                    **    

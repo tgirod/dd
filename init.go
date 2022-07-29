@@ -66,6 +66,7 @@ var (
 	georges        = ID{"gchang", "GTTTGCACGGAACATGCAAC", "Georges Chang"}
 	jeanne         = ID{"jkolinsky", "GACCCGTATTTCGCTGATTG", "Jeanne Kolinsky"}
 	oggy           = ID{"rwhite", "TCAGCTTCTAACGTTCGGGA", "Richard White"}
+	anton          = ID{"afrieman","ACGTTGCAAACCTGGTACGT", "Anton Frieman"}
 )
 
 // serveur local du dirty district
@@ -3063,8 +3064,14 @@ var greendata = Server{
 	Address: "greendata.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
+	
 	},
 	Description: greenDesc,
+	Entries : []Entry {
+	{"propal01", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Castle Corp: 1000 YES/m2"},
+	{"propal02", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Leisure United: 980 YES/m2"},
+	{"propal03", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Kramps: 500 YES/m2"},
+},	
 }
 
 var greenDesc = `

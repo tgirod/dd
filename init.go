@@ -3098,16 +3098,74 @@ var leet = Server{
 		{"crunch", "hacktheplanet", 5},
 		{"celine", "", 4},
 		{"nikki", "", 4},
+		{"greenglass", "brianglass", 3},
 	},
 	Description: cruDesc,
 	Scan:        SEC3,
 	Entries: []Entry{
 		// ID keywords restricted owner title content
-		{"vlope20", []string{"flr", "porn"}, 3, "", "vanessalope", `login: green pass: nait5zee`},
-		{"bitecoin19", []string{"flr", "porn"}, 3, "", "lebitecoin", `login: green pass: ohphe0cu`},
-		{"qtf20", []string{"flr", "porn"}, 3, "", "QueTesFans", `login: green pass: aesahm0l`},
-		{"pndr20", []string{"flr", "porn"}, 3, "", "Pinederer", `login: green pass: ohdaf9uo`},
-		{"jm20", []string{"flr", "porn"}, 3, "", "Jockey & Micheline", `login: green pass: eig0thob`},
+		{"vlope20", []string{"flr", "pr0n"}, 3, "", "vanessalope", `login: green pass: nait5zee`},
+		{"bitecoin19", []string{"flr", "pr0n"}, 3, "", "lebitecoin", `login: green pass: ohphe0cu`},
+		{"qtf20", []string{"flr", "pr0n"}, 3, "", "QueTesFans", `login: green pass: aesahm0l`},
+		{"pndr20", []string{"flr", "pr0n"}, 3, "", "Pinederer", `login: green pass: ohdaf9uo`},
+		{"jm20", []string{"flr", "pr0n"}, 3, "", "Jockey & Micheline", `login: green pass: eig0thob`},
+		{"005672bR1An ", []string{"maman", "grocery"}, 3, "greenglass", "grocetag458", `tiger power, cheetos`},
+
+		{"005673bR1An", []string{"maman", "pr0n"}, 3, "greenglass", "pr0n", `fistfukdenaines2mains.mov`},
+
+		{"005674bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag006", `2006-2006 - The Solsburry Four - NeoLondon - LD-Aurora*Cobalt*Grim*Slice* - Validated contracts 17 - Estimated total number of contracts: 18 - Contract unfulfilled on 2006-06-07 Reason: Aurora Terminated On Duty | estimated error: 8.6%`},
+
+		{"005675bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag459", `cotton tiges, beignets, chouquettes, semoule, cheetos`},
+
+		{"005676bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag007", `2009-2014 - I Volteggiatori -NuevaRoma - LD-Phase*Pins*ShallowWater*Bull* - Validated contracts 7 - Estimated total number of contracts: 8 - Contract unfulfilled on 2009-09-14 Reason: Phase*ShallowWater Terminated On Duty | estimated error: 0.4%`},
+
+		{"005677bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag460", `steaks hachés, poulet frit, dentifrice`},
+
+		{"005678bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag461", `cheetos`},
+
+		{"005679bR1An", []string{"maman", "pr0n", "movie"}, 3, "greenglass", "pr0n", `Mummypees.mov`},
+
+		{"005680bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag008", `2012-2012 - Kanibale - VecchiaFirenze - Ego*Stitches*ZenHook*BlankSheet - Validated contracts 2 - Estimated total number of contracts: 4 - Contract unfulfilled on 2012-06-18 Reason: Blanksheet*Ego*Zenhook Terminated On Duty | estimated error: 16.005%`},
+
+		{"005681bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag009", `2013-2015 - Credo zabójcy - NowaWarszawa - LD-Design*DoubleFeature*ShinyBone*Arch*DeadZone - Validated contracts 19 - Estimated total number of contracts: 19 - Contract unfulfilled 0 `},
+
+		{"005682bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag462", `lingettes, saucisson, mozzarella, cheetos`},
+
+		{"005683bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag463", `tomates, sparadra, bacon, oeufs, chocolat dur, cheetos`},
+
+		{"005684bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag010", `2015-2018 - Liberty-Damen - NordenBerlin - LD-FlukeAnt*LibertyBell*Pins*Design - Validated contracts 31 - Estimated total number of contracts: 32 - Contract unfulfilled on 2018-05-16 Reason: Design*FlukeAnt Terminated On Duty | estimated error: 23.8%`},
+
+		{"005685bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag464", `chaussettes, ceinture, poivron, poires, mousse, lait, steak de petits pois, escalope de carottes, cheetos (les nouveaux au goût vanille)`},
+
+		{"005686bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2015-2019 - Wonton Soup - OldParis - LD-Cobalt*ImpPulse*Ink*SamouraiShowdown*SliceNDice - Validated contracts 28 - Estimated total number of contracts: 29 - Contract unfulfilled on 2019-01-24 Reason: Ink*SamouraiShodown Terminated On Duty | estimated error: 2.93%`},
+
+		{"005687bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2018-2019 - King Kong Five - Europole - LD-AlcoLine*Bull*Mirror*PoisonClock - Validated contracts 5 - Estimated total number of contracts: 6 - Contract unfulfilled on 2019-12-01 Reason: Alcoline Missing On Duty | estimated error: 44.5%`},
+
+		{"005688bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2018-2019 - RoadRunners - Europole -  LD-Mamasita*Pins*ZenHook*BrashBeast - Validated contracts 14 - Estimated total number of contracts: 14 - Contract unfulfilled 0`},
+
+		{"005689bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag465", `Tampons, lingettes, mascara noire, mascara bleu, lait démaquillant, cheetos`},
+
+		{"005690bR1An", []string{"maman", "pr0n"}, 3, "greenglass", "pr0n", `mummycums.mp3`},
+
+		{"005691bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2018-2019 - BlastingRogues - Europole -  LD-Design*Silverpath*Stitches - Validated contracts 8 - Estimated total number of contracts: 9 - Contract unfulfilled on 2019-10-15 Reason: Cancelled contract | estimated error: 0.09%`},
+
+		{"005692bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag466", `pain, crème pour le cul (hydratante, pas celle qui pique), yaourts hypoallergéniques, bananes roses, gin, whisky`},
+
+		{"005693bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag467", `cheetos`},
+
+		{"005694bR1An", []string{"maman", "music"}, 3, "greenglass", "musicbadass", `blackwavefullalbum.7zip`},
+
+		{"005695bR1An", []string{"maman", "pr0n"}, 3, "greenglass", "pr0n", `fuckedbyherdogs.mov`},
+
+		{"005696bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag468", `crème solaire, nougats, gants de vaisselle, frozeloops, petits sachets plastique, lait, cheetos`},
+
+		{"005697bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2019-12-31+ -Trigger Legacy - Europole - LD-Cobalt*Design*Pins*Stitches*Bull* - Validated contracts 4 - Estimated total number of contracts: 5 - Contract unfulfilled 0 - Current Contracts: Contract A = Castle Corp. [Disney-Dassault] / estimated ¥€$ = 50.000 end 2020-07-31 | Contract B = Ubink Inc. [MetaSoft] / estimated ¥€$ = 25.000 / end 2020-08-10 |`},
+
+		{"005698bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `07/20/2020 x: [...] nb entrées 0 | total data: 10 | data hypothèses = estimation erreur: 0.002% au 07/20/2020`},
+
+		{"005699bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag469", `cola, cheetos`},
+
+		{"005700bR1An", []string{"maman", "pr0n"}, 3, "greenglass", "pr0n", `MummyshitsonDaddy.mov`},
 	},
 }
 

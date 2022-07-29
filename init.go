@@ -66,7 +66,7 @@ var (
 	georges        = ID{"gchang", "GTTTGCACGGAACATGCAAC", "Georges Chang"}
 	jeanne         = ID{"jkolinsky", "GACCCGTATTTCGCTGATTG", "Jeanne Kolinsky"}
 	oggy           = ID{"rwhite", "TCAGCTTCTAACGTTCGGGA", "Richard White"}
-	anton          = ID{"afrieman","ACGTTGCAAACCTGGTACGT", "Anton Frieman"}
+	anton          = ID{"afrieman", "ACGTTGCAAACCTGGTACGT", "Anton Frieman"}
 )
 
 // serveur local du dirty district
@@ -528,8 +528,10 @@ var kperDesc = `
 `
 
 var kramps_inmates = Server{
-	Address:     "inmates.kramps.d22.eu",
-	Credentials: []Cred{},
+	Address: "inmates.kramps.d22.eu",
+	Credentials: []Cred{
+		{"personnel", "123kramps!", 1}, // accès depuis le serveur public
+	},
 	Scan:        SEC3,
 	Description: kinmatesDesc,
 	Entries: []Entry{
@@ -3064,14 +3066,13 @@ var greendata = Server{
 	Address: "greendata.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
-	
 	},
 	Description: greenDesc,
-	Entries : []Entry {
-	{"propal01", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Castle Corp: 1000 YES/m2"},
-	{"propal02", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Leisure United: 980 YES/m2"},
-	{"propal03", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Kramps: 500 YES/m2"},
-},	
+	Entries: []Entry{
+		{"propal01", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Castle Corp: 1000 YES/m2"},
+		{"propal02", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Leisure United: 980 YES/m2"},
+		{"propal03", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Kramps: 500 YES/m2"},
+	},
 }
 
 var greenDesc = `
@@ -3348,6 +3349,7 @@ var game = &Game{
 		kramps,
 		kramps_pers,
 		kramps_sec,
+		kramps_inmates,
 		corp,
 		justice,
 		abus,

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 	"time"
 )
@@ -2036,8 +2037,8 @@ var abus = Server{
 	Description: cd22bankDesc,
 	Entries: []Entry{
 		{
-			ID:         alan.Login,
-			Keywords:   []string{"propriété"},
+			ID:         fmt.Sprintf("%s_KI8FEI", alan.Login),
+			Keywords:   []string{"titre"},
 			Restricted: 1,
 			Owner:      alan.Login,
 			Title:      "Titre immobilier DZ8-7687",
@@ -2045,6 +2046,22 @@ var abus = Server{
 
 2000 : ce titre a fait l'objet d'une offre publique d'achat suite à l'incident Nexkemia. M Mathison n'a pas donné suite.
 2019 : M Mathison n'a eu aucune activité enregistrée par nos services depuis 2000. Castle Corp souhaite se porter acquéreur du bien. Conformément au cadre légal concernant les personnes portées disparues, M Mathison ou son héritier a jusqu'au 2020-08-01 pour se manifester. Passée cette date, le titre sera remis en vente, au profit de Castle Corp.`,
+		},
+		{
+			ID:         fmt.Sprintf("%s_UGAEH9", rita.Login),
+			Keywords:   []string{"compte"},
+			Restricted: 1,
+			Owner:      rita.Login,
+			Title:      "Compte personnel de Margherita Bellamy",
+			Content:    `Solde courant : 10.000Y€S`,
+		},
+		{
+			ID:         fmt.Sprintf("%s_EASHO6", rita.Login),
+			Keywords:   []string{"compte"},
+			Restricted: 1,
+			Owner:      rita.Login,
+			Title:      "Ligne budgétaire pour Margherita Bellamy, Headshot Records",
+			Content:    `Solde courant : 10.000Y€S`,
 		},
 	},
 }

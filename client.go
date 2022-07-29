@@ -323,13 +323,20 @@ func (c Client) Security(t time.Time) tea.Msg {
 		return SecurityMsg{c.Delay()}
 	}
 
+	c.Disconnect()
+	return ResultMsg{
+		Output: "coupure forcée de la connexion",
+	}
+}
+
+func (c Client) Disconnect() {
 	c.Console.Server = nil
 	c.Console.Login = ""
 	c.Console.Privilege = 0
 	c.Console.Alert = false
 	c.Console.History.Clear()
-	return ResultMsg{
-		Output: "coupure forcée de la connexion",
+	if len(c.Console.Sub) > 11 {
+		c.Console.Sub = c.Console.Sub[0:11]
 	}
 }
 

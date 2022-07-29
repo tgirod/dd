@@ -3105,7 +3105,7 @@ var leet = Server{
 	Address: "leet.darknet",
 	Credentials: []Cred{
 		{"crunch", "hacktheplanet", 5},
-		{"celine", "iath4v", 4},
+		{"celine", "waytoocool", 4},
 		{"nikki", "bohw4k", 4},
 		{"greenglass", "brianglass", 3},
 	},

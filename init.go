@@ -3356,7 +3356,7 @@ var game = &Game{
 		legba,
 		legba_satcom,
 		legba_archive,
-		lbd,
+		// lbd,
 		greendata,
 		leet,
 		lair,

@@ -324,8 +324,9 @@ func (c Client) Security(t time.Time) tea.Msg {
 	}
 
 	c.Disconnect()
-	return ResultMsg{
-		Output: `
+	if c.DNI {
+		return ResultMsg{
+			Output: `
 			     DUMPSHOCK !!!!
                      _____
                     /     \
@@ -338,6 +339,13 @@ func (c Client) Security(t time.Time) tea.Msg {
 
 coupure de la connexion au réseau.
 `,
+		}
+	}
+
+	return ResultMsg{
+		Output:`
+coupure de la connexion au réseau.
+`
 	}
 }
 

@@ -325,7 +325,19 @@ func (c Client) Security(t time.Time) tea.Msg {
 
 	c.Disconnect()
 	return ResultMsg{
-		Output: "coupure forcée de la connexion",
+		Output: `
+			     DUMPSHOCK !!!!
+                     _____
+                    /     \
+                   | () () |
+                    \  ^  /
+                     |||||
+                     |||||
+
+			PERDS UN POINT DE VIE
+
+coupure de la connexion au réseau.
+`,
 	}
 }
 

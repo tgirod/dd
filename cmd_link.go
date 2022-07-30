@@ -98,6 +98,9 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	c.Console.Login = target.Login
 	c.Console.InitMem()
 	c.Console.History.Push(target)
+	if c.Alert && c.Scan < c.Countdown {
+		c.Countdown = c.Scan
+	}
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)

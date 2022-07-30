@@ -343,9 +343,9 @@ coupure de la connexion au réseau.
 	}
 
 	return ResultMsg{
-		Output:`
+		Output: `
 coupure de la connexion au réseau.
-`
+`,
 	}
 }
 

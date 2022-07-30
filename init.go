@@ -1944,6 +1944,7 @@ var corp = Server{
 	Targets: []Target{
 		{justice.Address, "services judiciaires", 1, "public", "public"},
 	},
+	Scan: SEC3,
 }
 
 var cd22Desc = `
@@ -1970,6 +1971,7 @@ var justice = Server{
 		{"public", "public", 1},
 	},
 	Description: cd22justDesc,
+	Scan:        SEC5,
 	Entries: []Entry{
 		{mel.Login, mel.Keywords(), 1, "", mel.Name, "Disparue - Incident 16485-4346B, Nexkemia Petrochemicals, 07/07/2000"},
 		{rocky.Login, rocky.Keywords(), 1, "", rocky.Name, "- D22/ag#867533654: agression à main armée (victime Sony HAARTZ)"},
@@ -2038,6 +2040,7 @@ var abus = Server{
 		{mel.Login, mel.Password, 1},
 		{rita.Login, rita.Password, 1},
 	},
+	Scan:        SEC5,
 	Description: cd22bankDesc,
 	Entries: []Entry{
 		{
@@ -2171,6 +2174,7 @@ var legba = Server{
 		{"public", "public", 1},
 		legbaPersonnel,
 	},
+	Scan:        SEC4,
 	Description: lbDesc,
 	Targets: []Target{
 		{legba_satcom.Address, "division sat-com", 3, legbaPersonnel.Login, legbaPersonnel.Password},
@@ -2953,6 +2957,7 @@ var legba_archive = Server{
 		legbaAdmin,
 	},
 	Description: arcDesc,
+	Scan:        SEC4,
 	Entries: []Entry{
 		{"art27", []string{"Mandrake", "Yuong", "Herswing", "Mathison"}, 1, "", "Transcendance sous co-routines", `Titre: Transcendance sous co-routines.
 
@@ -3066,8 +3071,10 @@ var greendata = Server{
 	Address: "greendata.d22.eu",
 	Credentials: []Cred{
 		{"public", "public", 1},
+		{"afrieman", "theblackwaverocks", 2},
 	},
 	Description: greenDesc,
+	Scan:        SEC3,
 	Entries: []Entry{
 		{"propal01", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Castle Corp: 1000 YES/m2"},
 		{"propal02", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Leisure United: 980 YES/m2"},
@@ -3203,6 +3210,7 @@ var lair = Server{
 		{"celine", "waytoocool", 5},
 	},
 	Description: celDesc,
+	Scan:        SEC3,
 	Entries: []Entry{
 		// id, keys, priv, owner, title, content
 		{"hack874", []string{"bitlord", "privé", "assurance", "exit", "strategy"}, 5, "", "b>i>tlord", `

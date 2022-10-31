@@ -48,6 +48,7 @@ var (
 	frereping      = ID{"dbonenfant", "GCATGGCCGAATTCCTCATT", "Désiré Bonenfant"}
 	papaproxy      = ID{"hproskychev", "CGATTTGTATTGGATACGGA", "Harald Proskychev"}
 	nikki          = ID{"njasinski", "ACGAACCTAGAGCCGCACGC", "Nikole Jasinski"}
+	sasquatch      = ID{"sjasinski", "ACGAGTAGAGATGTACACGC", "Stefan Jasinski"}
 	celine         = ID{"ffceline", "CGCTCCCATTTCATGTCAGC", "Franz-Ferdinand Celine"}
 	cramille       = ID{"cmills", "TTTGGGAGAAGCTTATGCAC", "Camélia Mills"}
 	tigerdoll      = ID{"lseptembre", "ATATGTTGAGCGTAAAGGCG", "Lilas Septembre"}
@@ -1993,7 +1994,7 @@ var justice = Server{
 		{chillydaisy.Login, chillydaisy.Keywords(), 1, "", chillydaisy.Name, "***** Personne recherchée, mandat inter-district PF/0415/EG/55323 *****\n- D22/me#1275436253: double meurtre, arme à feu\n"},
 		{frereping.Login, frereping.Keywords(), 1, "", frereping.Name, "- néant"},
 		{papaproxy.Login, papaproxy.Keywords(), 1, "", papaproxy.Name, "***** Personne recherchée, mandat inter-district PF/2964/EP/98254 *****\n- D22/vd#89875357678: vol données avec copyright"},
-		{nikki.Login, nikki.Keywords(), 1, "", nikki.Name, "***** Personne recherchée, mandat inter-district PF/7253/EP/90271 *****\n- D22/vd#1100298735: vol données sous brevet"},
+		{sasquatch.Login, sasquatch.Keywords(), 1, "", sasquatch.Name, "***** Personne recherchée, mandat inter-district PF/7253/EP/90271 *****\n- D22/vd#1100298735: vol données sous brevet"},
 		{celine.Login, celine.Keywords(), 1, "", celine.Name, "***** Personne recherchée, mandat inter-district PF/1001/EP/98682 *****\n- D22/pi#9867356873: piratage informatique\n- D22/am#18763725: association malfaiteurs"},
 		{cramille.Login, cramille.Keywords(), 1, "", cramille.Name, "- néant"},
 		{tigerdoll.Login, tigerdoll.Keywords(), 1, "", tigerdoll.Name, "- néant"},

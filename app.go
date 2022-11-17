@@ -89,11 +89,6 @@ func (a *App) Start(filename string) {
 	}
 }
 
-// TODO piste pour que le client ait accès à l'objet tea.Program
-func (a *App) ProgramHandler(s ssh.Session) *tea.Program {
-	return nil
-}
-
 // Handler prend en charge la connexion entrante et créé les objets nécessaires
 func (a *App) Handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	// si le terminal qui tente de se connecter est invalide

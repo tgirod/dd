@@ -163,3 +163,8 @@ func normalize(s string) string {
 	out, _, _ := transform.String(t, s)
 	return out
 }
+
+// Deal with Forum
+func (s *Server) GetForum() (Forum, error) {
+	return GetForum( "toile/"+s.Address );
+}

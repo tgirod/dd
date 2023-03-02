@@ -34,7 +34,7 @@ func NewClient(width, height int, game *Game) *Client {
 			Focus:       true,
 			Placeholder: "help",
 		},
-		output:  viewport.New(width, height-2),
+		output:  viewport.New(width, height-3),
 		Game:    game,
 		Console: NewConsole(),
 	}
@@ -72,7 +72,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		c.height = msg.Height
 		c.width = msg.Width
-		c.output.Height = msg.Height - 2
+		c.output.Height = msg.Height - 3
 		return c, nil
 
 	case ResultMsg:
@@ -135,6 +135,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (c *Client) View() string {
 	return lg.JoinVertical(lg.Left,
 		c.statusView(),
+		c.forumView(),
 		// c.debugView(),
 		c.output.View(),
 		c.inputView(),
@@ -246,6 +247,18 @@ func (c Client) debugView() string {
 	content = lg.Place(width, height, lg.Left, lg.Top, content)
 
 	return histStyle.Render(content)
+}
+
+// A status bar for the forum topics, if any
+func (c Client) forumView() string {
+	forumStr := "  ";
+	if c.Console.Forum.Address != "" {
+		forumStr += "Forum: "+c.Console.Forum.Topic;
+	} else {
+		forumStr += "Forum: --";
+	}
+
+	return statusStyle.Inline(true).Render(forumStr);
 }
 
 // func (c Client) outputView() string {

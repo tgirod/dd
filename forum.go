@@ -15,9 +15,16 @@ type Forum struct {
 	// Topic en train d'être visité
 	Topic string
 
+	// InPost ?
+	InPost bool
+
 	// Tous les Topics actuellement accessibles
 	TopicList []fs.FileInfo
 }
+
+// TODO garder filename ouvert, comme ça Topic ne signale que les Topic
+// et InPost est plus simple (une propriété)
+// et permet d'ajouter une commande Forum show
 
 // var (
 // 	errAlreadyAtForumRoot = errors.New("")
@@ -30,13 +37,13 @@ func GetForum( serverAdress string ) (Forum, error) {
 		forum := Forum{}
         return forum, err
     }
-	forum := Forum{serverAdress+"/forum", "", nil}
+	forum := Forum{serverAdress+"/forum", "", false, nil}
 	err = forum.GetFiles( "" )
 	return forum, err
 }
 
 func (f Forum) Show() {
-	fmt.Printf("Forum @%s:%s %d topics\n", f.Address, f.Topic, len(f.TopicList))
+	fmt.Printf("Forum @%s:%s (%t) %d topics\n", f.Address, f.Topic, f.InPost, len(f.TopicList))
 }
 
 func (f *Forum) GetFiles( topicStr string ) error {
@@ -46,6 +53,7 @@ func (f *Forum) GetFiles( topicStr string ) error {
     }
 
 	f.TopicList, err = ff.Readdir(0); // all entries
+	f.InPost = false
 	return err
 }
 
@@ -69,6 +77,7 @@ func (f *Forum) EnterTopic( name string ) error {
 
 	f.Topic = f.Topic+"/"+name
 	f.TopicList, err = ff.Readdir(0); // all entries
+	f.InPost = false
 	return err
 }
 func (f *Forum) LeaveTopic() error {
@@ -99,6 +108,7 @@ func (f *Forum) EnterPost( name string ) error {
 		return err
 	}
 	f.Topic = f.Topic+"/"+name
+	f.InPost = true
 	fmt.Print(string(dat))
 	return nil
 }
@@ -129,6 +139,42 @@ func (f Forum) DisplayTopics() {
 		} else {
 			fmt.Printf( "%2d<P>: %s\n", i, DecodePostTitle(v.Name()))
 		}
+	}
+}
+func (f Forum) ListTopics() []string {
+	topics := make([]string, 0, len(f.TopicList))
+
+	for i, v := range f.TopicList {
+		if v.IsDir() {
+			topics = append(topics, fmt.Sprintf( "%2d<T>: %s", i, v.Name()))
+		} else {
+			topics = append(topics, fmt.Sprintf( "%2d<P>: %s", i, DecodePostTitle(v.Name())))
+		}
+	}
+	return topics
+}
+func (f Forum) DisplayPost() []string {
+	msg := make([]string, 0, 3)
+
+	// name of file
+	tokens := strings.Split( f.Topic, "/" )
+	name := tokens[len(tokens)-1]
+
+	msg = append(msg, DecodePostTitle(name))
+	msg = append(msg, "---")
+
+	// Display file
+	dat, _:= os.ReadFile( f.Address+"/"+f.Topic )
+	msg = append(msg, string(dat))
+
+	return msg
+}
+// Display, either as a list of Topics/Post or content of Post
+func (f Forum) Display() []string {
+	if f.InPost {
+		return f.DisplayPost()
+	} else {
+		return f.ListTopics()
 	}
 }
 

@@ -36,6 +36,9 @@ type Console struct {
 
 	// Pile de serveurs visités lors de cette connexion
 	History Stack
+
+	// Forum
+	Forum
 }
 
 var Hack = map[string]Command{
@@ -51,6 +54,7 @@ func NewConsole() *Console {
 				Back{},
 				Connect{},
 				Data,
+				ForumCmd,
 				Help{},
 				Identify{},
 				Index{},

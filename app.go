@@ -35,6 +35,9 @@ var (
 	errMemUnavailable     = errors.New("zone mémoire indisponible")
 	errEmptyHistory       = errors.New("historique de navigation vide")
 	errKeywordTooShort    = errors.New("mot clef trop court")
+
+	errForumUnreachable   = errors.New("forum injoignable")
+	errTopicExists        = errors.New("TOPIC existe déjà")
 )
 
 type App struct {

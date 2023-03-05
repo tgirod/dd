@@ -35,12 +35,19 @@ le jeu
 ## Forum
 - fichiers dans rep serveur/forum/topic/subtopic/...
 - fichier nom = date_hhmmss_title_origin
-- [ ] commandes
+- [~] commandes
 - [ ] functions basiques internes pour
   - [X] forum list
-  - [X] forum read (un post ou un topic)
+  - [~] forum read (un post ou un topic)
+    - [ ] trier/lister les réponses
+    - [ ] voir plus haut/plus bas/index 
   - [X] forum up (go up one topic)
-  - [X] forum post (write a post to a topic)
-  - [ ] create new topic
+  - [~] forum post (write a post to a topic)
+    - [~] générer une date compatible avec le GN
+    - [X] générer l'heure
+    - [X] Pk les lignes du message sont passés en Cmd (pd qu'on écrit)
+    - [ ] Vérifier que, si en train de lire un Post => AnswerPost 
+  - [ ] Answer a POST
+  - [X] create new topic
   - [ ] ADMIN remove post ? (rm is enough ?)
   - [ ] ADMIN remove topic ? (rm -rf is enough ?)

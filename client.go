@@ -7,6 +7,7 @@ import (
 	"text/tabwriter"
 	"time"
 
+	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
@@ -24,9 +25,25 @@ type Client struct {
 
 	*Game    // état interne du jeu
 	*Console // console enregistrée dans le jeu
+
+	inWriteMode bool
+	heading       string
+	callbackCmd   Command
+	msgWrite      []string
+	textarea      textarea.Model
 }
 
 func NewClient(width, height int, game *Game) *Client {
+
+	// some parameters for the textarea
+	ta := textarea.New()
+	ta.Placeholder = "Ecrivez votre Post pour le forum..."
+	ta.Prompt = "| "
+	ta.KeyMap.InsertNewline.SetEnabled(true) // allow Enter to put multiline
+	ta.SetWidth(width)
+	ta.SetHeight(height - 10)
+
+
 	c := &Client{
 		width:  width,
 		height: height,
@@ -37,6 +54,10 @@ func NewClient(width, height int, game *Game) *Client {
 		output:  viewport.New(width, height-3),
 		Game:    game,
 		Console: NewConsole(),
+
+		inWriteMode: false,
+		msgWrite: []string{},
+		textarea: ta,
 	}
 	c.output.Style = outputStyle
 	return c
@@ -56,6 +77,12 @@ type ResultMsg struct {
 	Illegal bool
 }
 
+// Pase en mode "writing"
+type WriteMsg struct {
+	Heading string
+	OkCmd   Command
+}
+
 type SecurityMsg struct {
 	Wait time.Duration // temps avant de relancer la routine de sécurité
 }
@@ -67,12 +94,28 @@ func (c *Client) Wrap(output string) string {
 
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
+
+	// textarea used to write Forum Messages
+	var tiCmd tea.Cmd
+	if c.inWriteMode {
+		c.textarea, tiCmd = c.textarea.Update(msg)
+	}
+
 	switch msg := msg.(type) {
 
 	case tea.WindowSizeMsg:
 		c.height = msg.Height
 		c.width = msg.Width
 		c.output.Height = msg.Height - 3
+		return c, nil
+
+	case WriteMsg:
+		c.heading = msg.Heading
+		c.callbackCmd = msg.OkCmd
+		if c.inWriteMode == false {
+			c.inWriteMode = true
+			c.textarea.Focus()
+		}
 		return c, nil
 
 	case ResultMsg:
@@ -112,6 +155,34 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return c, tea.Quit
 		}
 
+		// deal with writing for the Forum
+		if c.inWriteMode {
+
+			if msg.Type == tea.KeyEsc {
+				c.inWriteMode = false
+				c.input.Focus = true
+
+				// TODO make special msg to SendPost
+				fmt.Println("Cancel Writing Message")
+			}
+
+			if msg.Type == tea.KeyCtrlP {
+				c.msgWrite = append(c.msgWrite, c.textarea.Value())
+				c.inWriteMode = false
+				c.input.Focus = true
+
+				// TODO make special msg to SendPost
+				fmt.Println(c.msgWrite)
+
+				c.textarea.Reset()
+				// prepére une tea.Cmd qui exécutera la commande passée en Callback
+				cmd = func() tea.Msg {
+					return c.callbackCmd.Run(c, nil)
+				}
+				return c, cmd
+			}
+			return c, cmd
+		}
 		if msg.Type == tea.KeyEnter {
 			// valider la commande
 			cmd = c.Run()
@@ -126,20 +197,31 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// laisser le prompt gérer
 		input, cmdInput := c.input.Update(msg)
 		c.input = input.(Input)
-		return c, tea.Batch(cmdOutput, cmdInput)
+		return c, tea.Batch(cmdOutput, cmdInput, tiCmd)
 	}
 
 	return c, cmd
 }
 
 func (c *Client) View() string {
-	return lg.JoinVertical(lg.Left,
-		c.statusView(),
-		c.forumView(),
-		// c.debugView(),
-		c.output.View(),
-		c.inputView(),
-	)
+	if c.inWriteMode {
+	 	return lg.JoinVertical(lg.Left,
+			c.statusView(),
+			c.forumView(),
+			// c.debugView(),
+			c.WriteMsgView(),
+			//c.inputView(),
+		)
+
+	} else {
+		return lg.JoinVertical(lg.Left,
+			c.statusView(),
+			c.forumView(),
+			// c.debugView(),
+			c.output.View(),
+			c.inputView(),
+		)
+	}
 }
 
 var (
@@ -231,6 +313,13 @@ func (c Client) statusView() string {
 	return statusStyle.Inline(true).Render(status)
 }
 
+func (c* Client) WriteMsgView() string {
+	return fmt.Sprintf(
+		"%s\nESC=CANCEL, CtrlP=Send POST\n%s",
+		c.heading,
+		c.textarea.View(),
+	) + "\n"
+}
 var xxx = lg.NewStyle()
 
 func (c Client) debugView() string {

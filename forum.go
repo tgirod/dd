@@ -20,6 +20,9 @@ type Forum struct {
 
 	// Tous les Topics actuellement accessibles
 	TopicList []fs.FileInfo
+
+	// Titre du Post/Topic en train d'être ajouté
+	CurrentTitle string
 }
 
 // TODO garder filename ouvert, comme ça Topic ne signale que les Topic
@@ -37,7 +40,7 @@ func GetForum( serverAdress string ) (Forum, error) {
 		forum := Forum{}
         return forum, err
     }
-	forum := Forum{serverAdress+"/forum", "", false, nil}
+	forum := Forum{serverAdress+"/forum", "", false, nil, ""}
 	err = forum.GetFiles( "" )
 	return forum, err
 }
@@ -91,6 +94,18 @@ func (f *Forum) LeaveTopic() error {
 	// Remove last from f.Topic
 	tokens := strings.Split( f.Topic, "/" )
 	f.Topic = strings.Join( tokens[:len(tokens)-1], "/" )
+
+	return f.GetFiles(f.Topic)
+}
+func (f *Forum) AddTopic( name string ) error {
+	err := os.Mkdir( f.Address+"/"+f.Topic+"/"+name, 0755 )
+
+	if err != nil {
+		if os.IsExist(err) {
+			return errTopicExists
+		}
+		return err
+	}
 
 	return f.GetFiles(f.Topic)
 }

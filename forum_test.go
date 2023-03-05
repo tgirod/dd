@@ -149,3 +149,29 @@ func TestAddPost(t *testing.T) {
 		t.Fatalf(`Unable to MANUALLY remove added post, %v`, err )
 	}
 }
+
+// Test Add Topic
+func TestAddTopic(t *testing.T) {
+	fmt.Println("__forum '.'")
+	f, err := GetForum( "." )
+	if err != nil {
+		t.Fatalf(`Should be a Forum in ".", %v`, err )
+	}
+	f.Show()
+	//nbTopicHome := len(f.TopicList)
+
+	fmt.Println("__forum '.' => add topic 'ajout'")
+	err = f.AddTopic( "ajout" )
+	if err != nil {
+		t.Fatalf(`Unable to add topic 'ajout' in "." %v\n`, err )
+	}
+	f.DisplayTopics()
+
+	fmt.Println("__forum '.' => enter 'ajout'")
+	err = f.EnterTopic( "ajout" )
+	if err != nil {
+		t.Fatalf(`Unable to enter %s from %s ".", %v`, "ajout", ".", err )
+	}
+	f.Show()
+	f.DisplayTopics()
+}

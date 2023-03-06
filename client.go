@@ -396,9 +396,13 @@ func (c Client) debugView() string {
 func (c Client) forumView() string {
 	forumStr := "  ";
 	if c.Console.Forum.Address != "" {
-		forumStr += "Forum: "+c.Console.Forum.Topic;
+		forumStr += "Forum: in ~"
+		forumStr += c.Console.Forum.Topic;
+		if c.Console.Forum.InPost() {
+			forumStr += "   reading "+DecodePostTitle(c.Forum.Post)
+		}
 	} else {
-		forumStr += "Forum: --";
+		forumStr += "Forum: --PAS DE FORUM--";
 	}
 
 	return statusStyle.Inline(true).Render(forumStr);

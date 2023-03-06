@@ -18,6 +18,7 @@ var ForumCmd = Node{
 		ForumLeave{},
 		ForumShow{},
 		ForumWritePost{},
+		ForumAnswerPost{},
 		ForumAddTopic{},
 	},
 }
@@ -156,15 +157,15 @@ func (f ForumLeave) Run(c *Client, args []string) tea.Msg {
 	err := c.Console.Forum.LeaveTopic()
 
 	if err != nil {
-		return ResultMsg{
+		return ResultMsg {
 			Cmd:   "forum leave" + strings.Join(args, " "),
 			Error: err,
 		}
 	}
 	if c.Forum.Address == "" {
-		return ResultMsg{
-			Cmd:   "forum show " + strings.Join(args, " "),
-			Error: errForumUnreachable}
+		return ResultMsg {
+			Cmd:   "forum leave : Vous avez quitté le Forum",
+			}
 	}
 	return ShowForumInternal(c, fmt.Sprintf("Forum : leave: vous êtes maintenant dans %s\n",
 		c.Server.Address+c.Forum.Topic), 0)
@@ -447,6 +448,77 @@ func (f ForumWritePost) Run(c *Client, args []string) tea.Msg {
 	tw.Flush()
 
 	fmt.Printf("ForumWritePost: %s", b.String())
+	return WriteMsg{
+		Heading: b.String(),
+		OkCmd: ForumPostMsg{},
+	}
+}
+// *****************************************************************************
+// ************************************************************** ForumAnswerPost
+// *****************************************************************************
+type ForumAnswerPost struct{}
+
+func (f ForumAnswerPost) ParseName() string {
+	return "answer"
+}
+
+func (f ForumAnswerPost) ShortHelp() string {
+	return "répond au Post qui est actuellement lu"
+}
+
+func (f ForumAnswerPost) LongHelp() string {
+	b := strings.Builder{}
+	b.WriteString(f.ShortHelp() + "\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  forum answer\n")
+	return b.String()
+}
+
+func (f ForumAnswerPost) Run(c *Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
+		return ResultMsg{
+			Cmd:   "forum answer " + strings.Join(args, " "),
+			Error: errNotConnected}
+	}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum answer " + strings.Join(args, " "),
+			Error: errForumUnreachable}
+	}
+
+	// A Post must be selected
+	if c.Forum.InPost() == false {
+		return ResultMsg{
+			Cmd:   "forum answer " + strings.Join(args, " "),
+			Error: errNoPost}
+	}
+	// Title is build from chosen Post
+	title, err := c.Forum.GetTitleFromTopic()
+	if err != nil {
+		return ResultMsg{
+			Cmd:   "forum answer " + title,
+			Error: err,
+		}
+	}
+	if !strings.HasPrefix(title, "Re: ") {
+		title = "Re: "+title
+	}
+	c.Forum.CurrentTitle = title
+	// if c.enterWriteMod == false {
+	// 	c.enterWriteMod = true
+	// 	c.textarea.Focus()
+	// }
+	// construire la réponse à afficher
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "\nForum : in Topic <%s>\n  Write answer <%s>\n",
+		c.Server.Address+c.Forum.Topic,
+		title,
+	)
+
+	tw.Flush()
+
+	fmt.Printf("ForumAnswerPost: %s", b.String())
 	return WriteMsg{
 		Heading: b.String(),
 		OkCmd: ForumPostMsg{},

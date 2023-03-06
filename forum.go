@@ -17,8 +17,11 @@ type Forum struct {
 	// Topic en train d'être visité
 	Topic string
 
+	// Post en train d'être lu
+	Post string
+
 	// InPost ?
-	InPost bool
+	//DEL InPost bool
 
 	// Tous les Topics actuellement accessibles
 	TopicList []fs.FileInfo
@@ -38,6 +41,10 @@ type Forum struct {
 // 	errAlreadyAtForumRoot = errors.New("")
 // )
 
+func (f Forum) InPost() bool {
+	return f.Post != ""
+}
+
 func GetForum( serverAdress string ) (Forum, error) {
 	_, err := os.Open(serverAdress+"/forum")
     if err != nil {
@@ -45,7 +52,7 @@ func GetForum( serverAdress string ) (Forum, error) {
 		forum := Forum{}
         return forum, err
     }
-	forum := Forum{serverAdress+"/forum", "", false, nil, "", 0}
+	forum := Forum{serverAdress+"/forum", "", "", nil, "", 0}
 	err = forum.GetFiles( "" )
 	return forum, err
 }
@@ -61,12 +68,12 @@ func (f *Forum) GetFiles( topicStr string ) error {
     }
 
 	f.TopicList, err = ff.Readdir(0); // all entries
-	f.InPost = false
+	f.Post = ""
     if err != nil {
         return err
     }
 
-	// Sort files: Topics, the InPost
+	// Sort files: Topics, then Posts
 	// From Old to New
 	sort.Slice(f.TopicList,
 		func(i, j int) bool {
@@ -119,20 +126,27 @@ func (f *Forum) EnterTopic( name string ) error {
 
 	f.Topic = f.Topic+"/"+name
 	f.TopicList, err = ff.Readdir(0); // all entries
-	f.InPost = false
+	f.Post = ""
 	return err
 }
 func (f *Forum) LeaveTopic() error {
-	// cannot leave "server/forum"
-	if f.Topic == "" {
-		fmt.Println( "[LeaveTopic] Leaving Forum")
-		*f = Forum{}
-		return nil
-	}
 
-	// Remove last from f.Topic
-	tokens := strings.Split( f.Topic, "/" )
-	f.Topic = strings.Join( tokens[:len(tokens)-1], "/" )
+	// If in Post, just leave the pose
+	if f.InPost() {
+		f.Post = ""
+	} else {
+		// Leaving "server/forum"
+		// TODO can we leave the forum if it exists ?
+		if f.Topic == "" {
+			fmt.Println( "[LeaveTopic] Leaving Forum")
+			*f = Forum{}
+			return nil
+		}
+
+		// Remove last from f.Topic
+		tokens := strings.Split( f.Topic, "/" )
+		f.Topic = strings.Join( tokens[:len(tokens)-1], "/" )
+	}
 
 	return f.GetFiles(f.Topic)
 }
@@ -161,8 +175,7 @@ func (f *Forum) EnterPost( name string ) error {
 	if err != nil {
 		return err
 	}
-	f.Topic = f.Topic+"/"+name
-	f.InPost = true
+	f.Post = name
 	fmt.Print(string(dat))
 	return nil
 }
@@ -249,14 +262,13 @@ func (f *Forum) DisplayPost() []string {
 	msg := make([]string, 0, 3)
 
 	// name of file
-	tokens := strings.Split( f.Topic, "/" )
-	name := tokens[len(tokens)-1]
+	name := f.Post
 
 	msg = append(msg, DecodePostTitle(name))
 	msg = append(msg, "---")
 
 	// Display file
-	dat, _:= os.ReadFile( f.Address+"/"+f.Topic )
+	dat, _:= os.ReadFile( f.Address+"/"+f.Topic+f.Post )
 	msg = append(msg, string(dat))
 
 	return msg
@@ -264,7 +276,7 @@ func (f *Forum) DisplayPost() []string {
 // Display, either as a list of Topics/Post or content of Post
 // index < 0 => use f.IndexShow
 func (f *Forum) Display(index int) []string {
-	if f.InPost {
+	if f.InPost() {
 		return f.DisplayPost()
 	} else {
 		if index < 0 {
@@ -299,6 +311,11 @@ func GetElements(name string) (time.Time, string, string, error) {
 
 	t, err := time.Parse("060102150405", date+timeStr)
 	return t, topic, author, err
+}
+func (f Forum) GetTitleFromTopic() (string, error) {
+	_, title, _, err := GetElements(f.Post)
+
+	return title, err
 }
 
 func FormatDate(rawdate string) string {

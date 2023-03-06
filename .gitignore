@@ -3,3 +3,5 @@ dd
 game.db
 *.pdf
 network.json
+# directory used for testing Forum
+forum/

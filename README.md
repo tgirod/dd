@@ -36,19 +36,24 @@ le jeu
 - fichiers dans rep serveur/forum/topic/subtopic/...
 - fichier nom = date_hhmmss_title_origin
 - [ ] tester title avec des '_' dedans !!!!
+- [ ] deconnexion ne change pas le ForumView !!
+- [ ] tester en changeant de server
 - [~] commandes
 - [ ] functions basiques internes pour
   - [X] forum list
   - [X] forum read (un post ou un topic)
     - [X] trier/lister les réponses
     - [X] voir plus haut/plus bas/index 
+    - [ ] changer commandes Ctrl quand lit un Post
+      - [ ] Next/Previous in Thread ?????
   - [X] forum up (go up one topic)
   - [~] forum post (write a post to a topic)
     - [~] générer une date compatible avec le GN
     - [X] générer l'heure
     - [X] Pk les lignes du message sont passés en Cmd (pd qu'on écrit)
     - [ ] Vérifier que, si en train de lire un Post => AnswerPost 
-  - [ ] Answer a POST
+  - [X] Answer a POST
+  - [ ] Fonction pour quiter un Mode (Writing/Reading) proprement
   - [X] create new topic
   - [ ] ADMIN remove post ? (rm is enough ?)
   - [ ] ADMIN remove topic ? (rm -rf is enough ?)

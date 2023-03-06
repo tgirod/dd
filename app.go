@@ -38,6 +38,7 @@ var (
 
 	errForumUnreachable   = errors.New("forum injoignable")
 	errTopicExists        = errors.New("TOPIC existe déjà")
+	errNoPost             = errors.New("Il faut choisir un Post pour y répondre")
 )
 
 type App struct {

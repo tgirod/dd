@@ -107,6 +107,8 @@ func (a *App) Handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 		pty.Window.Height,
 		a.Game,
 	)
+	// DEV - DEBUG : autoconnect to dd.local as public
+	client.Console.Node.Sub[1].Run( client, []string{"dd.local", "public", "public"} )
 
 	return client, []tea.ProgramOption{tea.WithAltScreen()}
 }

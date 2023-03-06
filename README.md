@@ -35,12 +35,13 @@ le jeu
 ## Forum
 - fichiers dans rep serveur/forum/topic/subtopic/...
 - fichier nom = date_hhmmss_title_origin
+- [ ] tester title avec des '_' dedans !!!!
 - [~] commandes
 - [ ] functions basiques internes pour
   - [X] forum list
-  - [~] forum read (un post ou un topic)
-    - [ ] trier/lister les réponses
-    - [ ] voir plus haut/plus bas/index 
+  - [X] forum read (un post ou un topic)
+    - [X] trier/lister les réponses
+    - [X] voir plus haut/plus bas/index 
   - [X] forum up (go up one topic)
   - [~] forum post (write a post to a topic)
     - [~] générer une date compatible avec le GN

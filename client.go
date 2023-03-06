@@ -26,12 +26,24 @@ type Client struct {
 	*Game    // état interne du jeu
 	*Console // console enregistrée dans le jeu
 
-	inWriteMode bool
+	state      ClientState
+	//inWriteMode bool
 	heading       string
 	callbackCmd   Command
 	msgWrite      []string
 	textarea      textarea.Model
+	readCallbacks []CmdMapping
 }
+
+// Kind of Enum Type for the State of the Client
+type ClientState int
+const (
+	Normal    ClientState = iota
+	WritingMsg
+	ReadingTopic
+	ReadingPost
+)
+
 
 func NewClient(width, height int, game *Game) *Client {
 
@@ -55,7 +67,7 @@ func NewClient(width, height int, game *Game) *Client {
 		Game:    game,
 		Console: NewConsole(),
 
-		inWriteMode: false,
+		state: Normal,
 		msgWrite: []string{},
 		textarea: ta,
 	}
@@ -77,10 +89,19 @@ type ResultMsg struct {
 	Illegal bool
 }
 
-// Pase en mode "writing"
+// Passe en mode "writing"
 type WriteMsg struct {
 	Heading string
 	OkCmd   Command
+}
+// Passe en mode "Reading"
+type CmdMapping struct {
+	CallKey tea.KeyType
+	CallCmd Command
+}
+type ReadMsg struct {
+	Body string
+	Callbacks []CmdMapping
 }
 
 type SecurityMsg struct {
@@ -97,7 +118,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	// textarea used to write Forum Messages
 	var tiCmd tea.Cmd
-	if c.inWriteMode {
+	if c.state == WritingMsg {
 		c.textarea, tiCmd = c.textarea.Update(msg)
 	}
 
@@ -112,10 +133,21 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case WriteMsg:
 		c.heading = msg.Heading
 		c.callbackCmd = msg.OkCmd
-		if c.inWriteMode == false {
-			c.inWriteMode = true
+		if c.state != WritingMsg {
+			c.state = WritingMsg
 			c.textarea.Focus()
 		}
+		return c, nil
+
+	case ReadMsg:
+		if c.state != ReadingTopic {
+			c.state = ReadingTopic
+			// TODO transition function for leaving a state
+		}
+		// use c.output to display msg.Body
+		c.output.SetContent(msg.Body)
+		// and set callback
+		c.readCallbacks = msg.Callbacks
 		return c, nil
 
 	case ResultMsg:
@@ -156,10 +188,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		// deal with writing for the Forum
-		if c.inWriteMode {
+		if c.state == WritingMsg {
 
 			if msg.Type == tea.KeyEsc {
-				c.inWriteMode = false
+				c.state = Normal
 				c.input.Focus = true
 
 				// TODO make special msg to SendPost
@@ -168,7 +200,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			if msg.Type == tea.KeyCtrlP {
 				c.msgWrite = append(c.msgWrite, c.textarea.Value())
-				c.inWriteMode = false
+				c.state = Normal
 				c.input.Focus = true
 
 				// TODO make special msg to SendPost
@@ -182,6 +214,23 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return c, cmd
 			}
 			return c, cmd
+		}
+		// In ReadingMode, check for callbacks
+		if c.state == ReadingTopic {
+			for _, cbk := range c.readCallbacks {
+				if msg.Type == cbk.CallKey {
+					// tea.Cmd what will execute the callbackCmd
+					cmd = func() tea.Msg {
+						return cbk.CallCmd.Run(c, nil)
+					}
+					return c, cmd
+				}
+			}
+			// Si aucune callback n'est appelée, on sort de ce mode
+			// TODO function for leaving mode ?
+			c.state = Normal
+			// DEBUG
+			fmt.Printf("__client Moving out of ReadingTopic\n")
 		}
 		if msg.Type == tea.KeyEnter {
 			// valider la commande
@@ -204,7 +253,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (c *Client) View() string {
-	if c.inWriteMode {
+	if c.state == WritingMsg {
 	 	return lg.JoinVertical(lg.Left,
 			c.statusView(),
 			c.forumView(),
@@ -223,6 +272,11 @@ func (c *Client) View() string {
 		)
 	}
 }
+
+const (
+	// When in ReadMode, how many entries to show
+	maxEntryDisplay = 20
+)
 
 var (
 	// barre d'état

@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"sort"
 	"strings"
+	"time"
 	//"errors"
 )
 
@@ -23,6 +25,9 @@ type Forum struct {
 
 	// Titre du Post/Topic en train d'être ajouté
 	CurrentTitle string
+
+	// Index du Post/Topic qui est en "haut de page"
+	IndexShow int
 }
 
 // TODO garder filename ouvert, comme ça Topic ne signale que les Topic
@@ -40,7 +45,7 @@ func GetForum( serverAdress string ) (Forum, error) {
 		forum := Forum{}
         return forum, err
     }
-	forum := Forum{serverAdress+"/forum", "", false, nil, ""}
+	forum := Forum{serverAdress+"/forum", "", false, nil, "", 0}
 	err = forum.GetFiles( "" )
 	return forum, err
 }
@@ -57,6 +62,40 @@ func (f *Forum) GetFiles( topicStr string ) error {
 
 	f.TopicList, err = ff.Readdir(0); // all entries
 	f.InPost = false
+    if err != nil {
+        return err
+    }
+
+	// Sort files: Topics, the InPost
+	// From Old to New
+	sort.Slice(f.TopicList,
+		func(i, j int) bool {
+			fOne := f.TopicList[i]
+			fTwo := f.TopicList[j]
+
+			if fOne.IsDir() {
+				if fTwo.IsDir() {
+					return fOne.Name() < fTwo.Name()
+				} else {
+					return true
+				}
+			} else {
+				if fTwo.IsDir() {
+					return false
+				} else {
+					// Both are PostName, need to compare date, then Name
+					t1,n1,_,_ := GetElements(fOne.Name())
+					t2,n2,_,_ := GetElements(fTwo.Name())
+					if t1.Equal(t2) {
+						return n1 < n2
+					} else {
+						return t1.Before(t2)
+					}
+				}
+			}
+
+		})
+
 	return err
 }
 
@@ -128,7 +167,7 @@ func (f *Forum) EnterPost( name string ) error {
 	return nil
 }
 
-func (f* Forum) AddPost( date string,
+func (f *Forum) AddPost( date string,
 	time string,
 	title string,
 	author string,
@@ -146,9 +185,22 @@ func (f* Forum) AddPost( date string,
 
 // Enter a topic
 // WIP: read and print files+dir inpath'
-func (f Forum) DisplayTopics() {
+// index is optional (0 by default)
+func (f *Forum) DisplayTopics(index int) {
 
-	for i, v := range f.TopicList {
+	if index < 0 {
+		index = 0
+	}
+	if index > len(f.TopicList) {
+		index = len(f.TopicList)
+	}
+	// display AT MOST maxEntryDisplay entries
+	lastIndex := index+maxEntryDisplay
+	if lastIndex > len(f.TopicList) {
+		lastIndex = len(f.TopicList)
+	}
+
+	for i, v := range f.TopicList[index:lastIndex] {
 		if v.IsDir() {
 			fmt.Printf( "%2d<T>: %s\n", i, v.Name())
 		} else {
@@ -156,19 +208,44 @@ func (f Forum) DisplayTopics() {
 		}
 	}
 }
-func (f Forum) ListTopics() []string {
+// Display start at index, AT MOST maxEntryDisplay entries
+func (f *Forum) ListTopics(index int) []string {
 	topics := make([]string, 0, len(f.TopicList))
 
-	for i, v := range f.TopicList {
+	if index < 0 {
+		index = 0
+	}
+	if index > len(f.TopicList) {
+		index = len(f.TopicList)
+	}
+	f.IndexShow = index
+
+	// display AT MOST maxEntryDisplay entries
+	lastIndex := index+maxEntryDisplay
+	if lastIndex > len(f.TopicList) {
+		lastIndex = len(f.TopicList)
+	}
+
+	// Not at the beginning ?
+	if index > 0 {
+		topics = append(topics, "... : il y a des entrée avant !")
+	}
+	for i, v := range f.TopicList[index:lastIndex] {
 		if v.IsDir() {
-			topics = append(topics, fmt.Sprintf( "%2d<T>: %s", i, v.Name()))
+			topics = append(topics, fmt.Sprintf( "%2d<T>: %s",
+				i+index, v.Name()))
 		} else {
-			topics = append(topics, fmt.Sprintf( "%2d<P>: %s", i, DecodePostTitle(v.Name())))
+			topics = append(topics, fmt.Sprintf( "%2d<P>: %s",
+				i+index, DecodePostTitle(v.Name())))
 		}
+	}
+
+	if lastIndex < len(f.TopicList) {
+		topics = append(topics, "... : la liste n'est pas finie !")
 	}
 	return topics
 }
-func (f Forum) DisplayPost() []string {
+func (f *Forum) DisplayPost() []string {
 	msg := make([]string, 0, 3)
 
 	// name of file
@@ -185,14 +262,18 @@ func (f Forum) DisplayPost() []string {
 	return msg
 }
 // Display, either as a list of Topics/Post or content of Post
-func (f Forum) Display() []string {
+// index < 0 => use f.IndexShow
+func (f *Forum) Display(index int) []string {
 	if f.InPost {
 		return f.DisplayPost()
 	} else {
-		return f.ListTopics()
+		if index < 0 {
+			return f.ListTopics(f.IndexShow)
+		} else {
+			return f.ListTopics(index)
+		}
 	}
 }
-
 // WIP: decode filename
 func DecodePostTitle(name string) string {
 	tokens := strings.Split(name, "_")
@@ -206,6 +287,18 @@ func DecodePostTitle(name string) string {
 	msg += ", le "+ FormatDate(date)
 	msg += " à " + FormatTime(time) + "]"
 	return msg
+}
+
+func GetElements(name string) (time.Time, string, string, error) {
+	tokens := strings.Split(name, "_")
+
+	date := tokens[0]
+	timeStr := tokens[1]
+	topic := tokens[2]
+	author := tokens[3]
+
+	t, err := time.Parse("060102150405", date+timeStr)
+	return t, topic, author, err
 }
 
 func FormatDate(rawdate string) string {

@@ -21,6 +21,7 @@ var ForumCmd = Node{
 		ForumAddTopic{},
 	},
 }
+// By default, in
 
 // *****************************************************************************
 // ****************************************************************** ForumEnter
@@ -52,26 +53,13 @@ func (f ForumEnter) Run(c *Client, args []string) tea.Msg {
 
 	forum, err := c.Server.GetForum()
 	c.Console.Forum = forum
-
-	// construire la réponse à afficher
-	b := strings.Builder{}
-	tw := tw(&b)
 	if err != nil {
-		fmt.Fprintf(tw, "Forum injoignable : %s ", err)
-	} else {
-		fmt.Fprintf(tw, "Accès autorisé au Forum de %s\n",
-		c.Server.Address)
-
-		for _, t := range c.Console.Forum.ListTopics() {
-			fmt.Fprintf(tw, "%s\n", t)
-		}
+		return ResultMsg{
+			Cmd:   "forum enter " + strings.Join(args, " "),
+			Error: errForumUnreachable}
 	}
-	tw.Flush()
-
-	return ResultMsg{
-		Cmd:   "forum enter",
-		Output: b.String(),
-	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : you are authorized to enter %s\n",
+		c.Server.Address), 0)
 }
 
 // *****************************************************************************
@@ -100,13 +88,13 @@ func (f ForumRead) LongHelp() string {
 func (f ForumRead) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
 		return ResultMsg{
-			Cmd:   "forum read" + strings.Join(args, " "),
+			Cmd:   "forum read " + strings.Join(args, " "),
 			Error: errNotConnected}
 	}
 
 	if len(args) < 1 {
 		return ResultMsg{
-			Cmd:   "forum read" + strings.Join(args, " "),
+			Cmd:   "forum read " + strings.Join(args, " "),
 			Error:  errMissingArgument,
 			Output: f.LongHelp(),
 		}
@@ -115,7 +103,7 @@ func (f ForumRead) Run(c *Client, args []string) tea.Msg {
 	id, err := strconv.Atoi(args[0])
 	if err != nil {
 		return ResultMsg{
-			Cmd:   "forum read" + strings.Join(args, " "),
+			Cmd:   "forum read " + strings.Join(args, " "),
 			Error: err,
 		}
 	}
@@ -124,30 +112,17 @@ func (f ForumRead) Run(c *Client, args []string) tea.Msg {
 
 	if err != nil {
 		return ResultMsg{
-			Cmd:   "forum read" + strings.Join(args, " "),
+			Cmd:   "forum read " + strings.Join(args, " "),
 			Error: err,
 		}
 	}
-
-	// construire la réponse à afficher
-	b := strings.Builder{}
-	tw := tw(&b)
-	if err != nil {
-		fmt.Fprintf(tw, "Forum injoignable : %s ", err)
-	} else {
-		fmt.Fprintf(tw, "Forum : Lecture de %s\n",
-		c.Server.Address+c.Forum.Topic)
-
-		for _, t := range c.Console.Forum.Display() {
-			fmt.Fprintf(tw, "%s\n", t)
-		}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum read " + strings.Join(args, " "),
+			Error: errForumUnreachable}
 	}
-	tw.Flush()
-
-	return ResultMsg{
-		Cmd:   "forum read" + strings.Join(args, " "),
-		Output: b.String(),
-	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : read %s\n",
+		c.Server.Address+c.Forum.Topic), 0)
 }
 
 // *****************************************************************************
@@ -186,26 +161,13 @@ func (f ForumLeave) Run(c *Client, args []string) tea.Msg {
 			Error: err,
 		}
 	}
-
-	// construire la réponse à afficher
-	b := strings.Builder{}
-	tw := tw(&b)
-	if err != nil {
-		fmt.Fprintf(tw, "Forum injoignable : %s ", err)
-	} else {
-		fmt.Fprintf(tw, "Forum leave: vous êtes maintenant dans %s\n",
-		c.Server.Address+c.Forum.Topic)
-
-		for _, t := range c.Console.Forum.Display() {
-			fmt.Fprintf(tw, "%s\n", t)
-		}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum show " + strings.Join(args, " "),
+			Error: errForumUnreachable}
 	}
-	tw.Flush()
-
-	return ResultMsg{
-		Cmd:   "forum leave" + strings.Join(args, " "),
-		Output: b.String(),
-	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : leave: vous êtes maintenant dans %s\n",
+		c.Server.Address+c.Forum.Topic), 0)
 }
 
 // *****************************************************************************
@@ -225,35 +187,203 @@ func (f ForumShow) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(f.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  forum show\n")
+	b.WriteString("  forum show [INDEX]\n")
+	b.WriteString("ARGUMENTS\n")
+	b.WriteString("  [INDEX] -- l'index (optionnel) du premier élément à montrer\n")
+
 	return b.String()
 }
 
 func (f ForumShow) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
 		return ResultMsg{
-			Cmd:   "forum show" + strings.Join(args, " "),
+			Cmd:   "forum show " + strings.Join(args, " "),
 			Error: errNotConnected}
 	}
 
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum show " + strings.Join(args, " "),
+			Error: errForumUnreachable}
+	}
+
+	index :=-1
+	if len(args) >= 1 {
+		argInt, err := strconv.Atoi(args[0])
+
+		if err != nil {
+			return ResultMsg{
+				Cmd:   "forum show " + strings.Join(args, " "),
+				Error: err,
+			}
+		}
+		index = argInt
+	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : show %s\n",
+		c.Server.Address+c.Forum.Topic),
+		index)
+}
+// *************************************************************** ForumMoveStart
+// Une commande qui n'est PAS INTERACTIVE
+type ForumMoveStart struct{}
+func (f ForumMoveStart) ParseName() string {
+	return "moveStart"
+}
+func (f ForumMoveStart) ShortHelp() string {
+	return "met l'index de Show à la première entrée"
+}
+func (f ForumMoveStart) LongHelp() string {
+	b := strings.Builder{}
+	b.WriteString(f.ShortHelp() + "\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  forum moveStart\n")
+	return b.String()
+}
+func (f ForumMoveStart) Run(c *Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
+		return ResultMsg{
+			Cmd:   "forum moveStart " + strings.Join(args, " "),
+			Error: errNotConnected}
+	}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum moveStart " + strings.Join(args, " "),
+			Error: errForumUnreachable}
+	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : show %s\n",
+		c.Server.Address+c.Forum.Topic),
+		0)
+}
+// ***************************************************************** ForumMoveEnd
+// Une commande qui n'est PAS INTERACTIVE
+type ForumMoveEnd struct{}
+func (f ForumMoveEnd) ParseName() string {
+	return "moveStart"
+}
+func (f ForumMoveEnd) ShortHelp() string {
+	return "met l'index de Show à la première entrée"
+}
+func (f ForumMoveEnd) LongHelp() string {
+	b := strings.Builder{}
+	b.WriteString(f.ShortHelp() + "\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  forum moveStart\n")
+	return b.String()
+}
+func (f ForumMoveEnd) Run(c *Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
+		return ResultMsg{
+			Cmd:   "forum moveStart " + strings.Join(args, " "),
+			Error: errNotConnected}
+	}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum moveStart " + strings.Join(args, " "),
+			Error: errForumUnreachable}
+	}
+	index := len(c.Forum.TopicList) - maxEntryDisplay
+	if index < 0 {
+		index = 0
+	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : show %s\n",
+		c.Server.Address+c.Forum.Topic),
+		index)
+}
+// ***************************************************************** ForumNext
+// Une commande qui n'est PAS INTERACTIVE
+type ForumNext struct{}
+func (f ForumNext) ParseName() string {
+	return "next"
+}
+func (f ForumNext) ShortHelp() string {
+	return "met l'index de Show à la première entrée"
+}
+func (f ForumNext) LongHelp() string {
+	b := strings.Builder{}
+	b.WriteString(f.ShortHelp() + "\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  forum next\n")
+	return b.String()
+}
+func (f ForumNext) Run(c *Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
+		return ResultMsg{
+			Cmd:   "forum next " + strings.Join(args, " "),
+			Error: errNotConnected}
+	}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum next " + strings.Join(args, " "),
+			Error: errForumUnreachable}
+	}
+	index := c.Forum.IndexShow + maxEntryDisplay
+	if index > len(c.Forum.TopicList) - maxEntryDisplay {
+		 index = len(c.Forum.TopicList) - maxEntryDisplay
+	}
+	if index < 0 {
+		index = 0
+	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : show %s\n",
+		c.Server.Address+c.Forum.Topic),
+		index)
+}
+
+// ***************************************************************** ForumPrev
+// Une commande qui n'est PAS INTERACTIVE
+type ForumPrev struct{}
+func (f ForumPrev) ParseName() string {
+	return "prev"
+}
+func (f ForumPrev) ShortHelp() string {
+	return "met l'index de Show à la première entrée"
+}
+func (f ForumPrev) LongHelp() string {
+	b := strings.Builder{}
+	b.WriteString(f.ShortHelp() + "\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  forum prev\n")
+	return b.String()
+}
+func (f ForumPrev) Run(c *Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
+		return ResultMsg{
+			Cmd:   "forum prev " + strings.Join(args, " "),
+			Error: errNotConnected}
+	}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum prev " + strings.Join(args, " "),
+			Error: errForumUnreachable}
+	}
+	index := c.Forum.IndexShow - maxEntryDisplay
+	if index < 0 {
+		index = 0
+	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : show %s\n",
+		c.Server.Address+c.Forum.Topic),
+		index)
+}
+
+// *********************************************************** ShowForumInternal
+func ShowForumInternal(c *Client, heading string, index int ) ReadMsg {
 	// construire la réponse à afficher
 	b := strings.Builder{}
 	tw := tw(&b)
-	if c.Forum.Address != "" {
-		fmt.Fprintf(tw, "Forum : show %s\n",
-		c.Server.Address+c.Forum.Topic)
+	fmt.Fprintf(tw, "%s\n", heading)
+	fmt.Fprint(tw, "    => CtrlS = start, CtrlP = prev, CtrlN = next, CtrlE = end\n")
 
-		for _, t := range c.Console.Forum.Display() {
-			fmt.Fprintf(tw, "%s\n", t)
-		}
-	} else {
-		fmt.Fprintf(tw, "Forum injoignable ")
+	for _, t := range c.Console.Forum.Display(index) {
+		fmt.Fprintf(tw, "%s\n", t)
 	}
 	tw.Flush()
 
-	return ResultMsg{
-		Cmd:   "forum show" + strings.Join(args, " "),
-		Output: b.String(),
+	return ReadMsg{
+		Body: b.String(),
+		Callbacks: []CmdMapping{
+			{tea.KeyCtrlS, ForumMoveStart{}},
+			{tea.KeyCtrlP, ForumPrev{}},
+			{tea.KeyCtrlN, ForumNext{}},
+			{tea.KeyCtrlE, ForumMoveEnd{}}},
 	}
 }
 

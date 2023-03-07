@@ -44,8 +44,8 @@ le jeu
   - [X] forum read (un post ou un topic)
     - [X] trier/lister les réponses
     - [X] voir plus haut/plus bas/index 
-    - [ ] changer commandes Ctrl quand lit un Post
-      - [ ] Next/Previous in Thread ?????
+    - [X] changer commandes Ctrl quand lit un Post
+      - [X] Next/Previous in Thread ?????
   - [X] forum up (go up one topic)
   - [~] forum post (write a post to a topic)
     - [~] générer une date compatible avec le GN

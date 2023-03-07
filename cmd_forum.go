@@ -364,9 +364,113 @@ func (f ForumPrev) Run(c *Client, args []string) tea.Msg {
 		c.Server.Address+c.Forum.Topic),
 		index)
 }
+// ************************************************************ ForumNextPost
+// Une commande qui n'est PAS INTERACTIVE
+type ForumNextPost struct{}
+func (f ForumNextPost) ParseName() string {
+	return "nextPost"
+}
+func (f ForumNextPost) ShortHelp() string {
+	return "Incrémente index pour montrer le Post suivant, s'il existe"
+}
+func (f ForumNextPost) LongHelp() string {
+	b := strings.Builder{}
+	b.WriteString(f.ShortHelp() + "\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  forum nextPost\n")
+	return b.String()
+}
+func (f ForumNextPost) Run(c *Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
+		return ResultMsg{
+			Cmd:   "forum nextPost " + strings.Join(args, " "),
+			Error: errNotConnected}
+	}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum nextPost " + strings.Join(args, " "),
+			Error: errForumUnreachable}
+	}
+	index := c.Forum.IndexPost + 1
+	if index >= len(c.Forum.TopicList) {
+		 index = len(c.Forum.TopicList) - 1
+	}
+	if index < 0 {
+		index = 0
+	}
+
+	err := c.Forum.EnterTopicIndex(index)
+	if err != nil {
+		return ResultMsg{
+			Cmd:   "forum nextPost " + fmt.Sprintf("index=%d",index),
+			Error: err,
+		}
+	}
+
+	return ShowForumInternal(c, fmt.Sprintf("Forum : show %s\n",
+		c.Server.Address+c.Forum.Topic),
+		index)
+}
+
+// ************************************************************* ForumPrevPostPost
+// Une commande qui n'est PAS INTERACTIVE
+type ForumPrevPost struct{}
+func (f ForumPrevPost) ParseName() string {
+	return "prevPost"
+}
+func (f ForumPrevPost) ShortHelp() string {
+	return "Décrémente index pour montrer le Post précédent, s'il existe"
+}
+func (f ForumPrevPost) LongHelp() string {
+	b := strings.Builder{}
+	b.WriteString(f.ShortHelp() + "\n")
+	b.WriteString("\nUSAGE\n")
+	b.WriteString("  forum prevPost\n")
+	return b.String()
+}
+func (f ForumPrevPost) Run(c *Client, args []string) tea.Msg {
+	if !c.Console.IsConnected() {
+		return ResultMsg{
+			Cmd:   "forum prevPost " + strings.Join(args, " "),
+			Error: errNotConnected}
+	}
+	if c.Forum.Address == "" {
+		return ResultMsg{
+			Cmd:   "forum prevPost " + strings.Join(args, " "),
+			Error: errForumUnreachable}
+	}
+	index := c.Forum.IndexPost - 1
+	if index < 0 {
+		index = 0
+	} else {
+		// If a Topic, then increase again
+		if c.Forum.TopicList[index].IsDir() {
+			index = index + 1
+		}
+	}
+	err := c.Forum.EnterTopicIndex(index)
+	if err != nil {
+		return ResultMsg{
+			Cmd:   "forum prevPost " + fmt.Sprintf("index=%d",index),
+			Error: err,
+		}
+	}
+	return ShowForumInternal(c, fmt.Sprintf("Forum : show %s\n",
+		c.Server.Address+c.Forum.Topic),
+		index)
+}
 
 // *********************************************************** ShowForumInternal
 func ShowForumInternal(c *Client, heading string, index int ) ReadMsg {
+	if c.Forum.InPost() {
+		return ShowPostInternal(c, heading, index)
+
+	} else {
+		return ShowTopicInternal(c, heading, index)
+
+	}
+}
+func ShowTopicInternal(c *Client, heading string, index int ) ReadMsg {
 	// construire la réponse à afficher
 	b := strings.Builder{}
 	tw := tw(&b)
@@ -385,6 +489,28 @@ func ShowForumInternal(c *Client, heading string, index int ) ReadMsg {
 			{tea.KeyCtrlP, ForumPrev{}},
 			{tea.KeyCtrlN, ForumNext{}},
 			{tea.KeyCtrlE, ForumMoveEnd{}}},
+	}
+}
+// Bad construction, index is not important
+func ShowPostInternal(c *Client, heading string, index int ) ReadMsg {
+	// construire la réponse à afficher
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "%s\n", heading)
+	fmt.Fprint(tw, "    => ESC=> leave, CtrlP = prev, CtrlN = next, CtrlR = answer\n")
+
+	for _, t := range c.Console.Forum.Display(index) {
+		fmt.Fprintf(tw, "%s\n", t)
+	}
+	tw.Flush()
+
+	return ReadMsg{
+		Body: b.String(),
+		Callbacks: []CmdMapping{
+			{tea.KeyEscape, ForumLeave{}},
+			{tea.KeyCtrlP, ForumPrevPost{}},
+			{tea.KeyCtrlN, ForumNextPost{}},
+			{tea.KeyCtrlR, ForumAnswerPost{}}},
 	}
 }
 

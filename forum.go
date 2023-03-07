@@ -19,6 +19,7 @@ type Forum struct {
 
 	// Post en train d'être lu
 	Post string
+	IndexPost int
 
 	// InPost ?
 	//DEL InPost bool
@@ -33,14 +34,6 @@ type Forum struct {
 	IndexShow int
 }
 
-// TODO garder filename ouvert, comme ça Topic ne signale que les Topic
-// et InPost est plus simple (une propriété)
-// et permet d'ajouter une commande Forum show
-
-// var (
-// 	errAlreadyAtForumRoot = errors.New("")
-// )
-
 func (f Forum) InPost() bool {
 	return f.Post != ""
 }
@@ -52,7 +45,7 @@ func GetForum( serverAdress string ) (Forum, error) {
 		forum := Forum{}
         return forum, err
     }
-	forum := Forum{serverAdress+"/forum", "", "", nil, "", 0}
+	forum := Forum{serverAdress+"/forum", "", "", 0, nil, "", 0}
 	err = forum.GetFiles( "" )
 	return forum, err
 }
@@ -102,6 +95,15 @@ func (f *Forum) GetFiles( topicStr string ) error {
 			}
 
 		})
+	// Must preserve/restore IndexPost if needed
+	if f.InPost() {
+		newIndex := sort.Search( len(f.TopicList),
+			func(i int) bool { return f.TopicList[i].Name() == f.Post})
+		// Search return len(f.TopicList) if NOT found
+		if newIndex < len(f.TopicList) {
+			f.IndexPost = newIndex
+		}
+	}
 
 	return err
 }
@@ -113,21 +115,19 @@ func (f *Forum) EnterTopicIndex( index int ) error {
 	if finfo.IsDir() {
 		return f.EnterTopic( finfo.Name() )
 	} else {
-		return f.EnterPost( finfo.Name() )
+		return f.EnterPost( finfo.Name(), index )
 	}
 }
 // Updates f.TopicList if successful
 // Updates f.Topic if successful
 func (f *Forum) EnterTopic( name string ) error {
-	ff, err := os.Open( f.Address+"/"+f.Topic+"/"+name )
+	_, err := os.Open( f.Address+"/"+f.Topic+"/"+name )
 	if err != nil {
 		return err
 	}
 
 	f.Topic = f.Topic+"/"+name
-	f.TopicList, err = ff.Readdir(0); // all entries
-	f.Post = ""
-	return err
+	return f.GetFiles(f.Topic)
 }
 func (f *Forum) LeaveTopic() error {
 
@@ -165,7 +165,7 @@ func (f *Forum) AddTopic( name string ) error {
 
 // Does not change f.TopicList
 // Updates f.Topic if successful
-func (f *Forum) EnterPost( name string ) error {
+func (f *Forum) EnterPost( name string, index int) error {
 	// Display TitleBAR
 	fmt.Println(DecodePostTitle(name))
 	fmt.Println("---")
@@ -176,6 +176,7 @@ func (f *Forum) EnterPost( name string ) error {
 		return err
 	}
 	f.Post = name
+	f.IndexPost = index
 	fmt.Print(string(dat))
 	return nil
 }
@@ -268,7 +269,7 @@ func (f *Forum) DisplayPost() []string {
 	msg = append(msg, "---")
 
 	// Display file
-	dat, _:= os.ReadFile( f.Address+"/"+f.Topic+f.Post )
+	dat, _:= os.ReadFile( f.Address+"/"+f.Topic+"/"+f.Post )
 	msg = append(msg, string(dat))
 
 	return msg

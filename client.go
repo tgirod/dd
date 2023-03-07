@@ -399,7 +399,8 @@ func (c Client) forumView() string {
 		forumStr += "Forum: in ~"
 		forumStr += c.Console.Forum.Topic;
 		if c.Console.Forum.InPost() {
-			forumStr += "   reading "+DecodePostTitle(c.Forum.Post)
+			forumStr += "   reading "+fmt.Sprintf("<%d>", c.Forum.IndexPost)
+			forumStr += DecodePostTitle(c.Forum.Post)
 		}
 	} else {
 		forumStr += "Forum: --PAS DE FORUM--";

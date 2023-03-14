@@ -99,12 +99,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		if c.modal == nil {
 			switch msg.Type {
-			case tea.KeyPgUp:
-				// scroll le display vers le haut
-				c.output.ViewUp()
-			case tea.KeyPgDown:
-				// scroll le display vers le bas
-				c.output.ViewDown()
+			case tea.KeyPgUp, tea.KeyPgDown:
+				// scroll l'affichage
+				c.output, cmd = c.output.Update(msg)
+				cmds = append(cmds, cmd)
 			case tea.KeyEnter:
 				// valider une commande
 				input := c.prompt.Value()

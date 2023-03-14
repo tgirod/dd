@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
@@ -19,6 +18,32 @@ type client struct {
 	prompt        textinput.Model  // zone de saisie de commande
 	modal         tea.Model        // fenêtre modale
 }
+
+type Modal struct{}
+
+func (m *Modal) Init() tea.Cmd {
+	return nil
+}
+
+func (m *Modal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if msg.String() == "q" {
+			return m, func() tea.Msg {
+				return CloseModalMsg{}
+			}
+		}
+	}
+	return m, nil
+}
+
+func (m *Modal) View() string {
+	return "fenêtre modale : q pour quitter"
+}
+
+type OpenModalMsg tea.Model
+
+type CloseModalMsg struct{}
 
 // DisplayMsg fournit du contenu à afficher dans le display
 type DisplayMsg string
@@ -58,6 +83,14 @@ func (c *client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output.SetContent(string(msg))
 		c.output.GotoBottom()
 
+	case OpenModalMsg:
+		c.modal = msg.(tea.Model)
+		cmd = c.modal.Init()
+		cmds = append(cmds, cmd)
+
+	case CloseModalMsg:
+		c.modal = nil
+
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
 			// quitter l'application de force
@@ -83,7 +116,11 @@ func (c *client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.prompt, cmd = c.prompt.Update(msg)
 				cmds = append(cmds, cmd)
 			}
+		} else {
+			c.modal, cmd = c.modal.Update(msg)
+			cmds = append(cmds, cmd)
 		}
+
 	default:
 		if c.modal == nil {
 			c.prompt, cmd = c.prompt.Update(msg)
@@ -99,12 +136,18 @@ func (c *client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (c *client) Parse(input string) tea.Cmd {
 	return func() tea.Msg {
-		// FIXME parsing et exécution de la commande
+		if input == "mod" {
+			return OpenModalMsg(&Modal{})
+		}
 		return DisplayMsg(input)
 	}
 }
 
 func (c *client) View() string {
+	if c.modal != nil {
+		return c.modal.View()
+	}
+
 	return lg.JoinVertical(lg.Left,
 		c.status.View(),
 		c.output.View(),

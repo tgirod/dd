@@ -11,7 +11,7 @@ import (
 	"github.com/knipferrc/teacup/statusbar"
 )
 
-type client struct {
+type Client struct {
 	width, height int              // dimensions de la fenêtre
 	status        statusbar.Bubble // barre de statut en haut de la fenêtre
 	output        viewport.Model   // zone d'affichage des résultats
@@ -48,11 +48,11 @@ type CloseModalMsg struct{}
 // DisplayMsg fournit du contenu à afficher dans le display
 type DisplayMsg string
 
-func (c *client) Init() tea.Cmd {
+func (c *Client) Init() tea.Cmd {
 	return textinput.Blink
 }
 
-func (c *client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 
@@ -134,7 +134,7 @@ func (c *client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return c, tea.Batch(cmds...)
 }
 
-func (c *client) Parse(input string) tea.Cmd {
+func (c *Client) Parse(input string) tea.Cmd {
 	return func() tea.Msg {
 		if input == "mod" {
 			return OpenModalMsg(&Modal{})
@@ -143,7 +143,7 @@ func (c *client) Parse(input string) tea.Cmd {
 	}
 }
 
-func (c *client) View() string {
+func (c *Client) View() string {
 	if c.modal != nil {
 		return c.modal.View()
 	}
@@ -155,7 +155,7 @@ func (c *client) View() string {
 	)
 }
 
-func NewClient() *client {
+func NewClient() *Client {
 	status := statusbar.New(
 		statusbar.ColorConfig{
 			Foreground: lg.AdaptiveColor{Dark: "#ffffff", Light: "#ffffff"},
@@ -179,7 +179,7 @@ func NewClient() *client {
 	prompt := textinput.New()
 	prompt.Focus()
 
-	c := client{
+	c := Client{
 		status: status,
 		output: output,
 		prompt: prompt,

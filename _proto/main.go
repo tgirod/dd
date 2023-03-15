@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
@@ -21,6 +22,23 @@ type Client struct {
 
 type Modal struct {
 	width, height int
+	keymap        ModalKeymap
+}
+
+type ModalKeymap struct {
+	Quit key.Binding
+}
+
+func NewModal(width, height int) *Modal {
+	mod := new(Modal)
+	mod.width = width
+	mod.height = height
+	mod.keymap = ModalKeymap{
+		Quit: key.NewBinding(
+			key.WithKeys("q"), key.WithHelp("q", "quitter"),
+		),
+	}
+	return mod
 }
 
 func (m *Modal) Init() tea.Cmd {
@@ -34,10 +52,9 @@ func (m *Modal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 
 	case tea.KeyMsg:
-		if msg.String() == "q" {
-			return m, func() tea.Msg {
-				return CloseModalMsg{}
-			}
+		switch {
+		case key.Matches(msg, m.keymap.Quit):
+			return m, func() tea.Msg { return CloseModalMsg{} }
 		}
 	}
 	return m, nil
@@ -147,11 +164,8 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (c *Client) Parse(input string) tea.Cmd {
 	return func() tea.Msg {
 		if input == "mod" {
-			mod := Modal{
-				width:  c.width,
-				height: c.height,
-			}
-			return OpenModalMsg(&mod)
+			mod := NewModal(c.width, c.height)
+			return OpenModalMsg(mod)
 		}
 		return DisplayMsg(input)
 	}

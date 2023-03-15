@@ -76,6 +76,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case CloseModalMsg:
 		c.modal = nil
 		c.prompt.Focus()
+		cmds = append(cmds, textinput.Blink)
 
 	case tea.KeyMsg:
 		if c.modal != nil {

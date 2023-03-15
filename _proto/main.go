@@ -19,7 +19,9 @@ type Client struct {
 	modal         tea.Model        // fenêtre modale
 }
 
-type Modal struct{}
+type Modal struct {
+	width, height int
+}
 
 func (m *Modal) Init() tea.Cmd {
 	return nil
@@ -27,6 +29,10 @@ func (m *Modal) Init() tea.Cmd {
 
 func (m *Modal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.width = msg.Width
+		m.height = msg.Height
+
 	case tea.KeyMsg:
 		if msg.String() == "q" {
 			return m, func() tea.Msg {
@@ -37,8 +43,14 @@ func (m *Modal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
+var modalStyle = lg.NewStyle().
+	Border(lg.NormalBorder()).
+	Padding(1).
+	Margin(4)
+
 func (m *Modal) View() string {
-	return "fenêtre modale : q pour quitter"
+	str := "fenêtre modale : q pour quitter"
+	return lg.Place(m.width, m.height, lg.Center, lg.Center, modalStyle.Render(str))
 }
 
 type OpenModalMsg tea.Model
@@ -135,7 +147,11 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (c *Client) Parse(input string) tea.Cmd {
 	return func() tea.Msg {
 		if input == "mod" {
-			return OpenModalMsg(&Modal{})
+			mod := Modal{
+				width:  c.width,
+				height: c.height,
+			}
+			return OpenModalMsg(&mod)
 		}
 		return DisplayMsg(input)
 	}

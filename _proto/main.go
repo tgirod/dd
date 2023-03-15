@@ -60,7 +60,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// transmettre le message à la fenêtre modale
 		if c.modal != nil {
-			msg := tea.WindowSizeMsg{c.output.Width, c.output.Height}
+			msg := tea.WindowSizeMsg{c.width, c.height - 1}
 			c.modal, cmd = c.modal.Update(msg)
 			cmds = append(cmds, cmd)
 		}
@@ -124,7 +124,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (c *Client) Parse(input string) tea.Cmd {
 	return func() tea.Msg {
 		if input == "mod" {
-			mod := NewModal(c.output.Width, c.output.Height)
+			mod := NewModal(c.width, c.height-1)
 			log.Println("client", "NewModal", mod)
 			return OpenModalMsg(mod)
 		}
@@ -136,8 +136,7 @@ func (c *Client) View() string {
 	if c.modal != nil {
 		return lg.JoinVertical(lg.Left,
 			c.status.View(),
-			c.modal.View(),
-			c.prompt.View(),
+			c.modal.View(), // modal remplace output et prompt
 		)
 	}
 

@@ -13,6 +13,7 @@ import (
 	"github.com/knipferrc/teacup/statusbar"
 )
 
+// Client est le modèle principal
 type Client struct {
 	width, height int              // dimensions de la fenêtre
 	status        statusbar.Bubble // barre de statut en haut de la fenêtre
@@ -21,8 +22,10 @@ type Client struct {
 	modal         tea.Model        // fenêtre modale
 }
 
+// OpenModalMsg ouvre un modèle comme fenêtre modale
 type OpenModalMsg tea.Model
 
+// CloseModalMsg ferme la fenêtre modale
 type CloseModalMsg struct{}
 
 // DisplayMsg fournit du contenu à afficher dans le display

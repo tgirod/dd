@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/charmbracelet/bubbles/key"
@@ -35,8 +36,11 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 
+	log.Printf("%T %+v\n", msg, msg)
+
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
+		log.Println("client", msg)
 		// dimensions de la fenêtre
 		c.width = msg.Width
 		c.height = msg.Height
@@ -53,6 +57,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// transmettre le message à la fenêtre modale
 		if c.modal != nil {
+			msg := tea.WindowSizeMsg{c.output.Width, c.output.Height}
 			c.modal, cmd = c.modal.Update(msg)
 			cmds = append(cmds, cmd)
 		}
@@ -65,19 +70,23 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case OpenModalMsg:
 		c.modal = msg.(tea.Model)
 		cmd = c.modal.Init()
+		c.prompt.Blur()
 		cmds = append(cmds, cmd)
 
 	case CloseModalMsg:
 		c.modal = nil
+		c.prompt.Focus()
 
 	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
-			// quitter l'application de force
-			cmds = append(cmds, tea.Quit)
-		}
-
-		if c.modal == nil {
+		if c.modal != nil {
+			// la fenêtre modale gère le clavier
+			c.modal, cmd = c.modal.Update(msg)
+			cmds = append(cmds, cmd)
+		} else {
 			switch msg.Type {
+			case tea.KeyCtrlC:
+				// quitter l'application de force
+				cmds = append(cmds, tea.Quit)
 			case tea.KeyPgUp, tea.KeyPgDown:
 				// scroll l'affichage
 				c.output, cmd = c.output.Update(msg)
@@ -93,19 +102,16 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.prompt, cmd = c.prompt.Update(msg)
 				cmds = append(cmds, cmd)
 			}
-		} else {
+		}
+
+	default:
+		if c.modal != nil {
 			c.modal, cmd = c.modal.Update(msg)
 			cmds = append(cmds, cmd)
 		}
 
-	default:
-		if c.modal == nil {
-			c.prompt, cmd = c.prompt.Update(msg)
-			cmds = append(cmds, cmd)
-		} else {
-			c.modal, cmd = c.modal.Update(msg)
-			cmds = append(cmds, cmd)
-		}
+		c.prompt, cmd = c.prompt.Update(msg)
+		cmds = append(cmds, cmd)
 	}
 
 	return c, tea.Batch(cmds...)
@@ -114,7 +120,8 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (c *Client) Parse(input string) tea.Cmd {
 	return func() tea.Msg {
 		if input == "mod" {
-			mod := NewModal(c.width, c.height)
+			mod := NewModal(c.output.Width, c.output.Height)
+			log.Println("client", "NewModal", mod)
 			return OpenModalMsg(mod)
 		}
 		return DisplayMsg(input)
@@ -123,7 +130,11 @@ func (c *Client) Parse(input string) tea.Cmd {
 
 func (c *Client) View() string {
 	if c.modal != nil {
-		return c.modal.View()
+		return lg.JoinVertical(lg.Left,
+			c.status.View(),
+			c.modal.View(),
+			c.prompt.View(),
+		)
 	}
 
 	return lg.JoinVertical(lg.Left,
@@ -193,6 +204,7 @@ func (m *Modal) Init() tea.Cmd {
 func (m *Modal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
+		log.Println("modal", msg)
 		m.width = msg.Width
 		m.height = msg.Height
 
@@ -202,6 +214,7 @@ func (m *Modal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, func() tea.Msg { return CloseModalMsg{} }
 		}
 	}
+
 	return m, nil
 }
 
@@ -216,6 +229,13 @@ func (m *Modal) View() string {
 }
 
 func main() {
+	f, err := tea.LogToFile("debug.log", "debug")
+	if err != nil {
+		fmt.Println("fatal:", err)
+		os.Exit(1)
+	}
+	defer f.Close()
+
 	p := tea.NewProgram(NewClient(), tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)

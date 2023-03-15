@@ -20,56 +20,6 @@ type Client struct {
 	modal         tea.Model        // fenêtre modale
 }
 
-type Modal struct {
-	width, height int
-	keymap        ModalKeymap
-}
-
-type ModalKeymap struct {
-	Quit key.Binding
-}
-
-func NewModal(width, height int) *Modal {
-	mod := new(Modal)
-	mod.width = width
-	mod.height = height
-	mod.keymap = ModalKeymap{
-		Quit: key.NewBinding(
-			key.WithKeys("q"), key.WithHelp("q", "quitter"),
-		),
-	}
-	return mod
-}
-
-func (m *Modal) Init() tea.Cmd {
-	return nil
-}
-
-func (m *Modal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
-		m.width = msg.Width
-		m.height = msg.Height
-
-	case tea.KeyMsg:
-		switch {
-		case key.Matches(msg, m.keymap.Quit):
-			return m, func() tea.Msg { return CloseModalMsg{} }
-		}
-	}
-	return m, nil
-}
-
-var modalStyle = lg.NewStyle().
-	Border(lg.NormalBorder()).
-	Padding(1).
-	Margin(4)
-
-func (m *Modal) View() string {
-	str := "fenêtre modale : q pour quitter"
-	return lg.Place(m.width, m.height, lg.Center, lg.Center, modalStyle.Render(str))
-}
-
 type OpenModalMsg tea.Model
 
 type CloseModalMsg struct{}
@@ -213,6 +163,56 @@ func NewClient() *Client {
 		prompt: prompt,
 	}
 	return &c
+}
+
+type Modal struct {
+	width, height int
+	keymap        ModalKeymap
+}
+
+type ModalKeymap struct {
+	Quit key.Binding
+}
+
+func NewModal(width, height int) *Modal {
+	mod := new(Modal)
+	mod.width = width
+	mod.height = height
+	mod.keymap = ModalKeymap{
+		Quit: key.NewBinding(
+			key.WithKeys("q"), key.WithHelp("q", "quitter"),
+		),
+	}
+	return mod
+}
+
+func (m *Modal) Init() tea.Cmd {
+	return nil
+}
+
+func (m *Modal) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.width = msg.Width
+		m.height = msg.Height
+
+	case tea.KeyMsg:
+		switch {
+		case key.Matches(msg, m.keymap.Quit):
+			return m, func() tea.Msg { return CloseModalMsg{} }
+		}
+	}
+	return m, nil
+}
+
+var modalStyle = lg.NewStyle().
+	Border(lg.NormalBorder()).
+	Padding(1).
+	Margin(4)
+
+func (m *Modal) View() string {
+	str := "fenêtre modale : q pour quitter"
+	return lg.Place(m.width, m.height, lg.Center, lg.Center, modalStyle.Render(str))
 }
 
 func main() {

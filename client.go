@@ -7,45 +7,79 @@ import (
 	"text/tabwriter"
 	"time"
 
+	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
+	"github.com/knipferrc/teacup/statusbar"
 	"github.com/muesli/reflow/wordwrap"
 )
 
 const DNISpeed = 3
 
 type Client struct {
-	width      int            // largeur de l'affichage
-	height     int            // hauteur de l'affichage
-	input      Input          // invite de commande
-	output     viewport.Model // affichage de la sortie des commandes
-	prevOutput string         // sortie de la commande précédente
+	width      int              // largeur de l'affichage
+	height     int              // hauteur de l'affichage
+	input      textinput.Model  // invite de commande
+	output     viewport.Model   // affichage de la sortie des commandes
+	status     statusbar.Bubble // barre de statut
+	prevOutput string           // sortie de la commande précédente
 
 	*Game    // état interne du jeu
 	*Console // console enregistrée dans le jeu
 }
 
 func NewClient(width, height int, game *Game) *Client {
-	c := &Client{
-		width:  width,
-		height: height,
-		input: Input{
-			Focus:       true,
-			Placeholder: "help",
+	// barre de statut
+	status := statusbar.New(
+		statusbar.ColorConfig{
+			Foreground: lg.AdaptiveColor{Dark: "#ffffff", Light: "#ffffff"},
+			Background: lg.AdaptiveColor{Light: "#F25D94", Dark: "#F25D94"},
 		},
-		output:  viewport.New(width, height-2),
+		statusbar.ColorConfig{
+			Foreground: lg.AdaptiveColor{Light: "#ffffff", Dark: "#ffffff"},
+			Background: lg.AdaptiveColor{Light: "#3c3836", Dark: "#3c3836"},
+		},
+		statusbar.ColorConfig{
+			Foreground: lg.AdaptiveColor{Light: "#ffffff", Dark: "#ffffff"},
+			Background: lg.AdaptiveColor{Light: "#A550DF", Dark: "#A550DF"},
+		},
+		statusbar.ColorConfig{
+			Foreground: lg.AdaptiveColor{Light: "#ffffff", Dark: "#ffffff"},
+			Background: lg.AdaptiveColor{Light: "#6124DF", Dark: "#6124DF"},
+		},
+	)
+	status.SetSize(width)
+
+	// zone d'affichage des résultats
+	output := viewport.New(width, height-2)
+
+	// prompt
+	input := textinput.New()
+	input.Width = width
+	input.Focus()
+
+	c := &Client{
+		width:   width,
+		height:  height,
+		input:   input,
+		output:  output,
+		status:  status,
 		Game:    game,
 		Console: NewConsole(),
 	}
-	c.output.Style = outputStyle
 	return c
 }
 
+var startSecurity = tea.Every(time.Second, func(t time.Time) tea.Msg {
+	return SecurityMsg{}
+})
+
 func (c *Client) Init() tea.Cmd {
-	return tea.Every(time.Second, func(t time.Time) tea.Msg {
-		return SecurityMsg{}
-	})
+	return tea.Batch(
+		startSecurity,
+		textinput.Blink,
+	)
 }
 
 // affiche le résultat d'une commande
@@ -66,13 +100,19 @@ func (c *Client) Wrap(output string) string {
 }
 
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmds []tea.Cmd
 	var cmd tea.Cmd
+
 	switch msg := msg.(type) {
 
 	case tea.WindowSizeMsg:
-		c.height = msg.Height
+		// redimensionner les différentes parties de l'interface
 		c.width = msg.Width
+		c.height = msg.Height
+		c.status.Width = msg.Width
+		c.output.Width = msg.Width
 		c.output.Height = msg.Height - 2
+		c.input.Width = msg.Width
 		return c, nil
 
 	case ResultMsg:
@@ -95,49 +135,51 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// déclencher le scan si la commande est illégale
 		if msg.Illegal {
-			return c, c.StartSecurity
+			cmds = append(cmds, c.StartSecurity)
 		}
-
-		return c, nil
 
 	case SecurityMsg:
 		if c.Console.Alert {
 			// l'alerte est toujours là, on relance la routine de sécurité pour un tour
-			return c, tea.Every(msg.Wait, c.Security)
+			cmds = append(cmds, tea.Every(msg.Wait, c.Security))
 		}
 
 	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
+		switch msg.Type {
+		case tea.KeyCtrlC:
 			// quitter l'application client
-			return c, tea.Quit
-		}
-
-		if msg.Type == tea.KeyEnter {
+			cmds = append(cmds, tea.Quit)
+		case tea.KeyEnter:
 			// valider la commande
-			cmd = c.Run()
-			c.input.Value = ""
-			return c, cmd
+			input := c.input.Value()
+			c.input.Reset()
+			cmd = c.Parse(input)
+			cmds = append(cmds, cmd)
+		case tea.KeyPgUp, tea.KeyPgDown:
+			// scroll de la sortie
+			c.output, cmd = c.output.Update(msg)
+			cmds = append(cmds, cmd)
+		default:
+			// passer le KeyMsg au prompt
+			c.input, cmd = c.input.Update(msg)
+			cmds = append(cmds, cmd)
 		}
 
-		// viewport
-		output, cmdOutput := c.output.Update(msg)
-		c.output = output
-
-		// laisser le prompt gérer
-		input, cmdInput := c.input.Update(msg)
-		c.input = input.(Input)
-		return c, tea.Batch(cmdOutput, cmdInput)
+	default:
+		// passer tous les messages au prompt
+		c.input, cmd = c.input.Update(msg)
+		cmds = append(cmds, cmd)
 	}
 
-	return c, cmd
+	return c, tea.Batch(cmds...)
 }
 
 func (c *Client) View() string {
+	c.statusView() // mettre à jour la barre de statut
 	return lg.JoinVertical(lg.Left,
-		c.statusView(),
-		// c.debugView(),
+		c.status.View(),
 		c.output.View(),
-		c.inputView(),
+		c.input.View(),
 	)
 }
 
@@ -197,20 +239,15 @@ var (
 	redTextStyle    = lg.NewStyle().Foreground(lg.Color("0")).Background(lg.Color("9"))
 )
 
-func (c Client) statusView() string {
-	login := fmt.Sprintf("👤[%s]", c.Console.Login)
-	priv := fmt.Sprintf("✪[%d]", c.Console.Privilege)
-	timer := "😀[--:--]"
+func (c *Client) statusView() {
+	login := fmt.Sprintf("id=%s", c.Console.Login)
+	priv := fmt.Sprintf("priv=%d", c.Console.Privilege)
+	timer := "--:--"
 	if c.Console.Alert {
 		min := int(c.Countdown.Minutes())
 		sec := int(c.Countdown.Seconds()) - min*60
-		timer = fmt.Sprintf("💀[%02d:%02d]", min, sec)
+		timer = fmt.Sprintf("%02d:%02d", min, sec)
 	}
-
-	left := fmt.Sprintf("%s %s %s ", login, priv, timer)
-
-	// longueur max pour l'historique
-	max := c.width - statusStyle.GetHorizontalFrameSize() - lg.Width(left)
 
 	// historique complet
 	b := strings.Builder{}
@@ -220,70 +257,20 @@ func (c Client) statusView() string {
 	for _, h := range c.Console.History {
 		fmt.Fprintf(&b, "%s@%s/", h.Login, h.Address)
 	}
-	hist := []rune(fmt.Sprintf("🖧[%s]", b.String()))
 
-	if len(hist) > max {
-		hist = hist[len(hist)-max : len(hist)]
-	}
+	hist := fmt.Sprintf("net=%s", b.String())
 
-	status := left + lg.PlaceHorizontal(max, lg.Left, string(hist))
-	return statusStyle.Inline(true).Render(status)
-}
-
-var xxx = lg.NewStyle()
-
-func (c Client) debugView() string {
-	//Alain : debug Stack
-	hist := c.Console.History.AsString()
-
-	width := c.width - statusStyle.GetHorizontalFrameSize()
-	height := 5
-
-	content := hist
-	// wrap au cas ou certaines lignes seraient trop longues
-	content = wordwrap.String(content, width)
-	// disposer le texte dans un espace qui remplit l'écran
-	content = lg.Place(width, height, lg.Left, lg.Top, content)
-
-	return histStyle.Render(content)
-}
-
-// func (c Client) outputView() string {
-// 	// dimensions de l'espace d'affichage
-// 	width := c.width - outputStyle.GetHorizontalFrameSize()
-// 	// Need vertical space for debug
-// 	height := c.height - 2 - outputStyle.GetVerticalFrameSize()
-
-// 	// dernière commande + output
-// 	content := ""
-// 	if c.lastCmd != "" {
-// 		content = lg.JoinVertical(lg.Left,
-// 			fmt.Sprintf("> %s\n", c.lastCmd),
-// 			c.output.View()
-// 		)
-// 	} else {
-// 		content = c.output
-// 	}
-
-// 	// wrap au cas ou certaines lignes seraient trop longues
-// 	content = wordwrap.String(content, width)
-
-// 	// disposer le texte dans un espace qui remplit l'écran
-// 	content = lg.Place(width, height, lg.Left, lg.Bottom, content)
-
-// 	return outputStyle.Render(content)
-// }
-
-func (c Client) inputView() string {
-	content := c.input.View()
-	width := c.width - inputStyle.GetHorizontalFrameSize()
-	content = lg.PlaceHorizontal(width, lg.Left, "> "+content)
-	return inputStyle.Render(content)
+	c.status.SetContent(
+		timer,
+		hist,
+		login,
+		priv,
+	)
 }
 
 // Run parse et exécute la commande saisie par l'utilisateur
-func (c *Client) Run() tea.Cmd {
-	args := strings.Fields(c.input.Value)
+func (c *Client) Parse(input string) tea.Cmd {
+	args := strings.Fields(input)
 
 	// construire la tea.Cmd qui parse et exécute la commande
 	return func() tea.Msg {

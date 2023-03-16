@@ -12,7 +12,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
 	"github.com/knipferrc/teacup/statusbar"
-	"github.com/muesli/reflow/wordwrap"
 )
 
 const DNISpeed = 3
@@ -92,11 +91,6 @@ type ResultMsg struct {
 
 type SecurityMsg struct {
 	Wait time.Duration // temps avant de relancer la routine de sécurité
-}
-
-func (c *Client) Wrap(output string) string {
-	w := c.output.Width - outputStyle.GetHorizontalFrameSize()
-	return wordwrap.String(output, w)
 }
 
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -184,29 +178,6 @@ func (c *Client) View() string {
 }
 
 var (
-	// barre d'état
-	statusStyle = lg.NewStyle().
-			Padding(0, 1, 0, 1).
-			Margin(0, 1, 0, 1).
-			Foreground(lg.Color("0")).
-			Background(lg.Color("10"))
-	// historique
-	histStyle = lg.NewStyle().
-			Padding(0, 1, 0, 1).
-			Margin(0, 1, 0, 1).
-			Foreground(lg.Color("10")).
-			Background(lg.Color("0"))
-
-	// affichage de la dernière commande
-	outputStyle = lg.NewStyle().
-			Padding(0, 1, 0, 1).
-			Margin(0, 1, 0, 1)
-
-	// invite de commande
-	inputStyle = lg.NewStyle().
-			Padding(0, 1, 0, 1).
-			Margin(0, 1, 0, 1)
-
 	// fenêtre modale
 	modalStyle = lg.NewStyle().
 			Padding(0, 1, 0, 1).
@@ -214,29 +185,8 @@ var (
 			BorderStyle(lg.DoubleBorder()).
 			BorderForeground(lg.Color("10"))
 
-	focusFieldStyle = lg.NewStyle().
-			BorderStyle(lg.NormalBorder()).
-			BorderForeground(lg.Color("10"))
-
-	unfocusFieldStyle = lg.NewStyle().
-				BorderStyle(lg.NormalBorder()).
-				BorderForeground(lg.Color("8"))
-
-	// texte discret
-	mutedTextStyle = lg.NewStyle().Foreground(lg.Color("8"))
-
-	// texte normal
-	normalTextStyle = lg.NewStyle().Foreground(lg.Color("15"))
-
-	// curseur
-	cursorStyle = lg.NewStyle().Reverse(true)
-
 	// texte erreur
 	errorTextStyle = lg.NewStyle().Foreground(lg.Color("9")).Padding(1)
-
-	greenTextStyle  = lg.NewStyle().Foreground(lg.Color("0")).Background(lg.Color("10"))
-	yellowTextStyle = lg.NewStyle().Foreground(lg.Color("0")).Background(lg.Color("11"))
-	redTextStyle    = lg.NewStyle().Foreground(lg.Color("0")).Background(lg.Color("9"))
 )
 
 func (c *Client) statusView() {

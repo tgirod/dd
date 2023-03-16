@@ -23,6 +23,7 @@ type Client struct {
 	output     viewport.Model   // affichage de la sortie des commandes
 	status     statusbar.Bubble // barre de statut
 	prevOutput string           // sortie de la commande précédente
+	modal      tea.Model        // fenêtre modale
 
 	*Game    // état interne du jeu
 	*Console // console enregistrée dans le jeu
@@ -93,6 +94,10 @@ type SecurityMsg struct {
 	Wait time.Duration // temps avant de relancer la routine de sécurité
 }
 
+type OpenModalMsg tea.Model
+
+type CloseModalMsg struct{}
+
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	var cmd tea.Cmd
@@ -107,7 +112,22 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output.Width = msg.Width
 		c.output.Height = msg.Height - 2
 		c.input.Width = msg.Width
-		return c, nil
+		if c.modal != nil {
+			c.modal, cmd = c.modal.Update(msg)
+			cmds = append(cmds, cmd)
+		}
+
+	case OpenModalMsg:
+		// ouvrir une fenêtre modale
+		c.modal = msg.(tea.Model)
+		cmd = c.modal.Init()
+		c.input.Blur()
+		cmds = append(cmds, cmd)
+
+	case CloseModalMsg:
+		c.modal = nil
+		c.input.Focus()
+		cmds = append(cmds, textinput.Blink)
 
 	case ResultMsg:
 		// mettre à jour la sortie
@@ -139,30 +159,42 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case tea.KeyMsg:
-		switch msg.Type {
-		case tea.KeyCtrlC:
-			// quitter l'application client
-			cmds = append(cmds, tea.Quit)
-		case tea.KeyEnter:
-			// valider la commande
-			input := c.input.Value()
-			c.input.Reset()
-			cmd = c.Parse(input)
+		if c.modal != nil {
+			// la fenêtre modale prend le contrôle du clavier
+			c.modal, cmd = c.modal.Update(msg)
 			cmds = append(cmds, cmd)
-		case tea.KeyPgUp, tea.KeyPgDown:
-			// scroll de la sortie
-			c.output, cmd = c.output.Update(msg)
-			cmds = append(cmds, cmd)
-		default:
-			// passer le KeyMsg au prompt
-			c.input, cmd = c.input.Update(msg)
-			cmds = append(cmds, cmd)
+		} else {
+			switch msg.Type {
+			case tea.KeyCtrlC:
+				// quitter l'application client
+				cmds = append(cmds, tea.Quit)
+			case tea.KeyEnter:
+				// valider la commande
+				input := c.input.Value()
+				c.input.Reset()
+				cmd = c.Parse(input)
+				cmds = append(cmds, cmd)
+			case tea.KeyPgUp, tea.KeyPgDown:
+				// scroll de la sortie
+				c.output, cmd = c.output.Update(msg)
+				cmds = append(cmds, cmd)
+			default:
+				// passer le KeyMsg au prompt
+				c.input, cmd = c.input.Update(msg)
+				cmds = append(cmds, cmd)
+			}
 		}
 
 	default:
-		// passer tous les messages au prompt
-		c.input, cmd = c.input.Update(msg)
-		cmds = append(cmds, cmd)
+		if c.modal != nil {
+			// la fenêtre modale prend le contrôle du clavier
+			c.modal, cmd = c.modal.Update(msg)
+			cmds = append(cmds, cmd)
+		} else {
+			// passer tous les messages au prompt
+			c.input, cmd = c.input.Update(msg)
+			cmds = append(cmds, cmd)
+		}
 	}
 
 	return c, tea.Batch(cmds...)
@@ -170,6 +202,11 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (c *Client) View() string {
 	c.statusView() // mettre à jour la barre de statut
+
+	if c.modal != nil {
+		return c.modal.View()
+	}
+
 	return lg.JoinVertical(lg.Left,
 		c.status.View(),
 		c.output.View(),

@@ -59,6 +59,7 @@ func NewConsole() *Console {
 				Plug{},
 				Quit{},
 				Registry,
+				Pop{},
 			},
 		},
 	}

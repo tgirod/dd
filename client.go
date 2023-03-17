@@ -113,15 +113,28 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output.Height = msg.Height - 2
 		c.input.Width = msg.Width
 		if c.modal != nil {
+			w, h := modalStyle.GetFrameSize()
+			msg = tea.WindowSizeMsg{
+				Width:  c.width - w,
+				Height: c.height - h,
+			}
 			c.modal, cmd = c.modal.Update(msg)
 			cmds = append(cmds, cmd)
 		}
 
 	case OpenModalMsg:
+		c.input.Blur()
 		// ouvrir une fenêtre modale
 		c.modal = msg.(tea.Model)
 		cmd = c.modal.Init()
-		c.input.Blur()
+		cmds = append(cmds, cmd)
+		// envoyer un WindowSizeMsg
+		w, h := modalStyle.GetFrameSize()
+		wsm := tea.WindowSizeMsg{
+			Width:  c.width - w,
+			Height: c.height - h,
+		}
+		c.modal, cmd = c.modal.Update(wsm)
 		cmds = append(cmds, cmd)
 
 	case CloseModalMsg:
@@ -204,7 +217,8 @@ func (c *Client) View() string {
 	c.statusView() // mettre à jour la barre de statut
 
 	if c.modal != nil {
-		return c.modal.View()
+		content := modalStyle.Render(c.modal.View())
+		return lg.Place(c.width, c.height, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
 	}
 
 	return lg.JoinVertical(lg.Left,
@@ -215,14 +229,7 @@ func (c *Client) View() string {
 }
 
 var (
-	// fenêtre modale
-	modalStyle = lg.NewStyle().
-			Padding(0, 1, 0, 1).
-			Margin(0, 1, 0, 1).
-			BorderStyle(lg.DoubleBorder()).
-			BorderForeground(lg.Color("10"))
-
-	// texte erreur
+	modalStyle     = lg.NewStyle().Border(lg.DoubleBorder()).Padding(1)
 	errorTextStyle = lg.NewStyle().Foreground(lg.Color("9")).Padding(1)
 )
 

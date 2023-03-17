@@ -57,6 +57,5 @@ func (p *Pop) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 var border = lg.NewStyle().Border(lg.DoubleBorder()).Padding(1)
 
 func (p *Pop) View() string {
-	content := border.Render(wordwrap.String(p.msg, p.width-border.GetWidth()))
-	return lg.Place(p.width, p.height, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
+	return wordwrap.String(p.msg, p.width)
 }

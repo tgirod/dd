@@ -102,6 +102,14 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	var cmd tea.Cmd
 
+	var modalWindowSize = func() tea.Msg {
+		w, h := modalStyle.GetFrameSize()
+		return tea.WindowSizeMsg{
+			Width:  c.width - w,
+			Height: c.height - h,
+		}
+	}
+
 	switch msg := msg.(type) {
 
 	case tea.WindowSizeMsg:
@@ -113,12 +121,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output.Height = msg.Height - 2
 		c.input.Width = msg.Width
 		if c.modal != nil {
-			w, h := modalStyle.GetFrameSize()
-			msg = tea.WindowSizeMsg{
-				Width:  c.width - w,
-				Height: c.height - h,
-			}
-			c.modal, cmd = c.modal.Update(msg)
+			c.modal, cmd = c.modal.Update(modalWindowSize())
 			cmds = append(cmds, cmd)
 		}
 
@@ -129,12 +132,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmd = c.modal.Init()
 		cmds = append(cmds, cmd)
 		// envoyer un WindowSizeMsg
-		w, h := modalStyle.GetFrameSize()
-		wsm := tea.WindowSizeMsg{
-			Width:  c.width - w,
-			Height: c.height - h,
-		}
-		c.modal, cmd = c.modal.Update(wsm)
+		c.modal, cmd = c.modal.Update(modalWindowSize())
 		cmds = append(cmds, cmd)
 
 	case CloseModalMsg:

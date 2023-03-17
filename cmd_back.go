@@ -62,17 +62,15 @@ func (cmd Back) Run(client *Client, args []string) tea.Msg {
 		}
 	}
 
-	if priv, err := server.CheckCredentials(prev_target.Login, prev_target.Password); err != nil {
-		// échec de la connexion
+	if priv, err := server.CheckAccount(client.Console.Login); err != nil {
 		return ResultMsg{
-			Cmd:   "back",
 			Error: fmt.Errorf("back : %w", err),
+			Cmd:   "back",
 		}
 	} else {
 		// succès de la connexion
 		co := client.Console
 		co.Privilege = priv
-		co.Login = prev_target.Login
 		co.Server = server
 		// co.Alert = co.Alert / 2 //Alain : back n'est pas sans soucis
 		co.InitMem()

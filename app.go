@@ -27,6 +27,7 @@ var (
 	errMissingArgument    = errors.New("argument manquant")
 	errInvalidArgument    = errors.New("argument invalide")
 	errInvalidCredentials = errors.New("identifiant ou mot de passe invalide")
+	errInvalidIdentity    = errors.New("identifiant ou mot de passe invalide")
 	errNotConnected       = errors.New("la console n'est pas connectée")
 	errConnected          = errors.New("la console est connectée")
 	errLowPrivilege       = errors.New("niveau de privilège insuffisant")

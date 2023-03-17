@@ -10,13 +10,20 @@ import (
 	"golang.org/x/text/unicode/norm"
 )
 
+const (
+	PUBLIC_PRIVILEGE int = 1
+)
+
 // Server représente un serveur sur le Net
 type Server struct {
 	// Addresse du serveur sur le réseau
 	Address string
 
-	// liste de codes d'accès valides pour se connecter au serveur
-	Credentials []Cred
+	// ce serveur accepte-t-il des connexions anonymes ?
+	Public bool
+
+	// liste des comptes utilisateurs enregistrés
+	Accounts []Account
 
 	// informations affichées lors de la connexion
 	Description string
@@ -34,23 +41,24 @@ type Server struct {
 	Registers []Register
 }
 
-// Cred représente les droits d'accès d'un utilisateur à un serveur
-type Cred struct {
+// Account représente un compte utilisateur sur un serveur
+type Account struct {
 	Login     string
-	Password  string
 	Privilege int
 }
 
-// CheckCredentials vérifie la validité de la paire login/password
-// utilisé par la commande CONNECT
-func (s *Server) CheckCredentials(login, password string) (int, error) {
-	for _, c := range s.Credentials {
-		if c.Login == login && c.Password == password {
-			return c.Privilege, nil
+func (s *Server) CheckAccount(login string) (int, error) {
+	for _, a := range s.Accounts {
+		if a.Login == login {
+			return a.Privilege, nil
 		}
 	}
 
-	return 0, errInvalidCredentials
+	if s.Public {
+		return PUBLIC_PRIVILEGE, nil
+	}
+
+	return 0, errInvalidIdentity
 }
 
 type Target struct {
@@ -62,10 +70,6 @@ type Target struct {
 
 	// niveau de privilège nécessaire pour utiliser ce target
 	Restricted int
-
-	// identité utilisée pour se connecter
-	Login    string
-	Password string
 }
 
 func (s *Server) FindTarget(address string) (Target, error) {

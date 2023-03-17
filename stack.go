@@ -51,12 +51,3 @@ func (s *Stack) Pop() (Target, error) {
 		return element, nil
 	}
 }
-
-// Specific to dd
-func (s *Stack) AsString() string {
-	str := "Hist: "
-	for _, past := range *s {
-		str = str + past.Login + "@" + past.Address + ">> "
-	}
-	return str
-}

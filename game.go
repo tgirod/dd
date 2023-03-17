@@ -9,7 +9,23 @@ import (
 
 // Game contient l'état du jeu et les méthodes utiles pour en simplifier l'accès
 type Game struct {
-	Network []Server
+	Network    []Server
+	Identities []Identity
+}
+
+type Identity struct {
+	Login    string
+	Password string
+	Name     string
+}
+
+func (g *Game) CheckIdentity(login, password string) error {
+	for _, i := range g.Identities {
+		if i.Login == login && i.Password == password {
+			return nil
+		}
+	}
+	return errInvalidIdentity
 }
 
 func (g Game) FindServer(address string) (*Server, error) {

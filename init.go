@@ -73,13 +73,13 @@ var (
 // serveur local du dirty district
 var dd = Server{
 	Address: "dd.local",
-	Credentials: []Cred{
-		{"public", "public", 1},
-		{"jesus", "roxor", 5},
+	Public:  true,
+	Accounts: []Account{
+		{"jesus", 5},
 	},
 	Description: ddDesc,
 	Targets: []Target{
-		{d22.Address, "serveur public du District 22", 1, "public", "public"},
+		{d22.Address, "serveur public du District 22", 1},
 	},
 	Registers: []Register{
 		{"cafe", false, "machine à café", 1},
@@ -110,17 +110,16 @@ besoin d'aide, demande à ton nerd préféré.
 
 // serveur public du district 22
 var d22 = Server{
-	Address: "d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-	},
+	Address:     "d22.eu",
+	Public:      true,
+	Accounts:    []Account{},
 	Description: dd22Desc,
 	Targets: []Target{
-		{legba.Address, "Legba Voodoocom", 1, "public", "public"},
-		{kramps.Address, "Kramps Security", 1, "public", "public"},
-		{corp.Address, "Central Services", 1, "public", "public"},
-		{abus.Address, "Association des Banques Unifiées Suisses", 1, "public", "public"},
-		{greendata.Address, "Green Data, solution environnementale", 1, "public", "public"},
+		{legba.Address, "Legba Voodoocom", 1},
+		{kramps.Address, "Kramps Security", 1},
+		{corp.Address, "Central Services", 1},
+		{abus.Address, "Association des Banques Unifiées Suisses", 1},
+		{greendata.Address, "Green Data, solution environnementale", 1},
 	},
 	Scan: SEC2,
 }
@@ -147,13 +146,11 @@ var dd22Desc = `
 
 // serveur public de la kramps
 var kramps = Server{
-	Address: "kramps.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-		{"personnel", "123kramps!", 3},
-	},
+	Address:  "kramps.d22.eu",
+	Public:   true,
+	Accounts: []Account{},
 	Targets: []Target{
-		{kramps_pers.Address, "Serveur réservé au personnel", 3, "personnel", "123kramps!"},
+		{kramps_pers.Address, "Serveur réservé au personnel", 3},
 	},
 	Description: kpubDesc,
 	Scan:        SEC2,
@@ -186,13 +183,13 @@ var kpubDesc = `
 // serveur privé de la kramps
 var kramps_pers = Server{
 	Address: "priv.kramps.d22.eu",
-	Credentials: []Cred{
-		{"personnel", "123kramps!", 1}, // accès depuis le serveur public
-		{"akremmer", "sexgod22", 3},    // backdoor, vol de compte utilisateur
+	Public:  false,
+	Accounts: []Account{
+		{"akremmer", 3},
 	},
 	Targets: []Target{
-		{kramps_inmates.Address, "Gestion des prisonniers", 3, "personnel", "123kramps!"},
-		{kramps_sec.Address, "Sécurité des installations", 5, "admin", "lkjqsod"},
+		{kramps_inmates.Address, "Gestion des prisonniers", 3},
+		{kramps_sec.Address, "Sécurité des installations", 5},
 	},
 	Scan:        SEC3,
 	Description: kperDesc,
@@ -530,8 +527,8 @@ var kperDesc = `
 
 var kramps_inmates = Server{
 	Address: "inmates.kramps.d22.eu",
-	Credentials: []Cred{
-		{"personnel", "123kramps!", 1}, // accès depuis le serveur public
+	Accounts: []Account{
+		{"akremmer", 3},
 	},
 	Scan:        SEC3,
 	Description: kinmatesDesc,
@@ -1859,10 +1856,8 @@ var kinmatesDesc = `
 
 // serveur de sécurité de la kramps
 var kramps_sec = Server{
-	Address: "sec.kramps.d22.eu",
-	Credentials: []Cred{
-		{"admin", "lkjqsod", 5},
-	},
+	Address:     "sec.kramps.d22.eu",
+	Accounts:    []Account{},
 	Scan:        SEC4,
 	Description: ksecDesc,
 	Registers: []Register{
@@ -1937,13 +1932,12 @@ var ksecDesc = `
 
 // serveur des services corporatistes D22
 var corp = Server{
-	Address: "corp.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-	},
+	Address:     "corp.d22.eu",
+	Public:      true,
+	Accounts:    []Account{},
 	Description: cd22Desc,
 	Targets: []Target{
-		{justice.Address, "services judiciaires", 1, "public", "public"},
+		{justice.Address, "services judiciaires", 0},
 	},
 	Scan: SEC3,
 }
@@ -1967,10 +1961,9 @@ var cd22Desc = `
 
 // serveur judiciaire
 var justice = Server{
-	Address: "justice.corp.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-	},
+	Address:     "justice.corp.d22.eu",
+	Public:      true,
+	Accounts:    []Account{},
 	Description: cd22justDesc,
 	Scan:        SEC5,
 	Entries: []Entry{
@@ -2034,13 +2027,9 @@ var cd22justDesc = `
 
 // serveur bancaire du D22
 var abus = Server{
-	Address: "abus.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-		{alan.Login, alan.Password, 1},
-		{mel.Login, mel.Password, 1},
-		{rita.Login, rita.Password, 1},
-	},
+	Address:     "abus.d22.eu",
+	Public:      true,
+	Accounts:    []Account{},
 	Scan:        SEC5,
 	Description: cd22bankDesc,
 	Entries: []Entry{
@@ -2100,8 +2089,8 @@ var cd22bankDesc = `
 `
 
 var (
-	legbaPersonnel = Cred{"personnel", "paparezo", 3}
-	legbaAdmin     = Cred{"admin", "foh5wuoh", 5}
+	legbaPersonnel = Account{"hproskychev", 3}
+	legbaAdmin     = Account{"lgebadmin", 5}
 	lbDesc         = `
                  ......                 
            .',,,,,,,,,,,,,,,.           
@@ -2171,22 +2160,22 @@ Legba Voodoocom ne peut être tenu responsable de l'usage et des données stock�
 // serveur public de Legba Voodoocom
 var legba = Server{
 	Address: "legba.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
+	Public:  true,
+	Accounts: []Account{
 		legbaPersonnel,
 	},
 	Scan:        SEC4,
 	Description: lbDesc,
 	Targets: []Target{
-		{legba_satcom.Address, "division sat-com", 3, legbaPersonnel.Login, legbaPersonnel.Password},
-		{legba_archive.Address, "archives", 3, legbaPersonnel.Login, legbaPersonnel.Password},
+		{legba_satcom.Address, "division sat-com", 3},
+		{legba_archive.Address, "archives", 3},
 	},
 }
 
 // serveur privé de la communication satellite
 var legba_satcom = Server{
 	Address: "satcom.legba.d22.eu",
-	Credentials: []Cred{
+	Accounts: []Account{
 		legbaPersonnel,
 		legbaAdmin,
 	},
@@ -2953,7 +2942,7 @@ Australie District D30`},
 // serveur archive de Silicon Spirit
 var legba_archive = Server{
 	Address: "archive.legba.d22.eu",
-	Credentials: []Cred{
+	Accounts: []Account{
 		legbaPersonnel,
 		legbaAdmin,
 	},
@@ -3061,18 +3050,16 @@ j'ai demandé l'archivages du Projet «Mandrake».`},
 
 // serveur le bon district
 var lbd = Server{
-	Address: "lebondistrict.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-	},
+	Address:  "lebondistrict.d22.eu",
+	Public:   true,
+	Accounts: []Account{},
 }
 
 // green data
 var greendata = Server{
 	Address: "greendata.d22.eu",
-	Credentials: []Cred{
-		{"public", "public", 1},
-		{"afrieman", "theblackwaverocks", 2},
+	Accounts: []Account{
+		{"afrieman", 2},
 	},
 	Description: greenDesc,
 	Scan:        SEC3,
@@ -3119,11 +3106,11 @@ var invertedLeaf = `
 // serveur privé de Crunch
 var leet = Server{
 	Address: "leet.darknet",
-	Credentials: []Cred{
-		{"crunch", "hacktheplanet", 5},
-		{"celine", "waytoocool", 4},
-		{"nikki", "bohw4k", 4},
-		{"greenglass", "brianglass", 3},
+	Accounts: []Account{
+		{"crunch", 5},
+		{"celine", 4},
+		{"nikki", 4},
+		{"greenglass", 3},
 	},
 	Description: cruDesc,
 	Scan:        SEC3,
@@ -3207,8 +3194,8 @@ var cruDesc = `
 // serveur privé de Céline
 var lair = Server{
 	Address: "celine.darknet",
-	Credentials: []Cred{
-		{"celine", "waytoocool", 5},
+	Accounts: []Account{
+		{"celine", 5},
 	},
 	Description: celDesc,
 	Scan:        SEC3,
@@ -3266,9 +3253,9 @@ var celDesc = `
 // serveur de Hope
 var hope = Server{
 	Address: "hope.local",
-	Credentials: []Cred{
-		{"hope", "tearsintherain", 5},
-		{"mel", "xxx", 3},
+	Accounts: []Account{
+		{"hope", 5},
+		{"mel", 3},
 	},
 	Description: hopDesc,
 	Scan:        SEC5,
@@ -3351,6 +3338,21 @@ var hopDesc = `
 00101101  00101000 01100011 00101001  01000001 00101110 01001101                                                                                                                                                                                                                                    
 `
 
+// TODO remplir la liste des identités
+var identities = []Identity{
+	{"jesus", "roxor", ""},
+	{"crunch", "hacktheplanet", ""},
+	{"celine", "waytoocool", ""},
+	{"nikki", "bohw4k", ""},
+	{"greenglass", "brianglass", ""},
+	{"hope", "tearsintherain", ""},
+	{"mel", "xxx", ""},
+	{"akremmer", "sexgod22", "Alexandre Kremmer"}, // backdoor, vol de compte utilisateur
+	{papaproxy.Login, "paparezo", papaproxy.Name},
+	{"legbadmin", "foh5wuoh", "FIXME"},
+	{"afrieman", "theblackwaverocks", "FIXME"},
+}
+
 var game = &Game{
 	Network: []Server{
 		dd,
@@ -3371,4 +3373,5 @@ var game = &Game{
 		lair,
 		hope,
 	},
+	Identities: identities,
 }

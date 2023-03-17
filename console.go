@@ -13,6 +13,9 @@ type Console struct {
 	// racine de l'arbre des commandes
 	Node
 
+	// identité active sur la console
+	Identity string
+
 	// identifiant dans le serveur actuel
 	Login string
 
@@ -63,6 +66,12 @@ func NewConsole() *Console {
 			},
 		},
 	}
+}
+
+func (c *Console) Connect(s *Server, priv int) {
+	c.Privilege = priv
+	c.Server = s
+	c.InitMem()
 }
 
 func (c *Console) IsConnected() bool {

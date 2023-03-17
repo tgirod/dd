@@ -29,12 +29,6 @@ func (i Identify) LongHelp() string {
 }
 
 func (i Identify) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
-		return ResultMsg{
-			Error: errNotConnected,
-		}
-	}
-
 	if len(args) < 1 {
 		return ResultMsg{
 			Error:  fmt.Errorf("LOGIN : %w", errMissingArgument),
@@ -54,27 +48,29 @@ func (i Identify) Run(c *Client, args []string) tea.Msg {
 	// récupérer les arguments
 	login := args[0]
 	password := args[1]
-	server := c.Console.Server
 
-	if priv, err := server.CheckCredentials(login, password); err != nil {
-		// échec de la connexion
+	if err := c.CheckIdentity(login, password); err != nil {
+		// échec de l'identification
 		return ResultMsg{
 			Cmd:   fmt.Sprintf("identify %s %s", login, strings.Repeat("*", len(password))),
 			Error: fmt.Errorf("identify : %w", err),
 		}
-	} else {
-		// succès de la connexion
-		c.Console.Privilege = priv
-		c.Console.Login = login
-		c.Console.History.Push(Target{c.Console.Server.Address, "",
-			priv, login, password})
+	}
 
-		b := strings.Builder{}
-		fmt.Fprintf(&b, "identité établie. Bienvenue, %s.\n\n", login)
+	c.Console.Login = login
 
-		return ResultMsg{
-			Cmd:    fmt.Sprintf("identify %s %s", login, strings.Repeat("*", len(password))),
-			Output: b.String(),
+	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
+	if c.Console.Server != nil {
+		if priv, err := c.CheckAccount(login); err == nil {
+			c.Console.Privilege = priv
 		}
+	}
+
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "identité établie. Bienvenue, %s.\n\n", login)
+
+	return ResultMsg{
+		Cmd:    fmt.Sprintf("identify %s %s", login, strings.Repeat("*", len(password))),
+		Output: b.String(),
 	}
 }

@@ -247,7 +247,7 @@ func (c *Client) statusView() {
 		b.WriteString("déconnecté")
 	}
 	for _, h := range c.Console.History {
-		fmt.Fprintf(&b, "%s@%s/", h.Login, h.Address)
+		fmt.Fprintf(&b, "%s/", h.Address)
 	}
 
 	hist := fmt.Sprintf("net=%s", b.String())

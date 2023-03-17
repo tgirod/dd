@@ -84,30 +84,24 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 		}
 	}
 
-	// effectuer la connexion avec le serveur
-	priv, err := server.CheckCredentials(target.Login, target.Password)
-	if err != nil {
+	if priv, err := server.CheckAccount(c.Login); err != nil {
+		// échec de la connexion
 		return ResultMsg{
-			Cmd:   "link " + strings.Join(args, " "),
-			Error: errInternalError,
+			Error: fmt.Errorf("link : %w", err),
+			Cmd:   fmt.Sprintf("link %d", id),
 		}
-	}
+	} else {
+		// succès de la connexion
+		c.Console.Connect(server, priv)
+		c.Console.History.Push(Target{server.Address, "", priv})
 
-	c.Console.Server = server
-	c.Console.Privilege = priv
-	c.Console.Login = target.Login
-	c.Console.InitMem()
-	c.Console.History.Push(target)
-	if c.Alert && c.Scan < c.Countdown {
-		c.Countdown = c.Scan
-	}
+		b := strings.Builder{}
+		fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
+		fmt.Fprintf(&b, "%s\n", server.Description)
 
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
-	fmt.Fprintf(&b, "%s\n", server.Description)
-
-	return ResultMsg{
-		Cmd:    "link " + strings.Join(args, " "),
-		Output: b.String(),
+		return ResultMsg{
+			Cmd:    fmt.Sprintf("link %d", id),
+			Output: b.String(),
+		}
 	}
 }

@@ -100,7 +100,7 @@ type CloseModalMsg struct{}
 
 func (c *Client) modalWindowSize() (int, int) {
 	w, h := modalStyle.GetFrameSize()
-	return c.width - w, c.height - h
+	return c.width - w, c.height - h - 1
 }
 
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -215,7 +215,11 @@ func (c *Client) View() string {
 
 	if c.modal != nil {
 		content := modalStyle.Render(c.modal.View())
-		return lg.Place(c.width, c.height, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
+		modal := lg.Place(c.width, c.height-1, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
+		return lg.JoinVertical(lg.Left,
+			c.status.View(),
+			modal,
+		)
 	}
 
 	return lg.JoinVertical(lg.Left,

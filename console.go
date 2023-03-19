@@ -47,23 +47,25 @@ var Hack = map[string]Command{
 	"zfcq": Evade{},
 }
 
+var baseCmds = []Command{
+	Back{},
+	Connect{},
+	Data,
+	Help{},
+	Identify{},
+	Index{},
+	Link{},
+	Load{},
+	Plug{},
+	Quit{},
+	Registry,
+	Pop{},
+}
+
 func NewConsole() *Console {
 	return &Console{
 		Node: Node{
-			Sub: []Command{
-				Back{},
-				Connect{},
-				Data,
-				Help{},
-				Identify{},
-				Index{},
-				Link{},
-				Load{},
-				Plug{},
-				Quit{},
-				Registry,
-				Pop{},
-			},
+			Sub: baseCmds,
 		},
 	}
 }
@@ -84,4 +86,13 @@ func (c *Console) InitMem() {
 		addr := fmt.Sprintf("%08x", rand.Uint32())
 		c.Mem[addr] = true
 	}
+}
+
+func (c *Console) Disconnect() {
+	c.Server = nil
+	c.Login = ""
+	c.Privilege = 0
+	c.Alert = false
+	c.History.Clear()
+	c.Node.Sub = baseCmds
 }

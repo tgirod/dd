@@ -331,17 +331,6 @@ coupure de la connexion au réseau.
 	}
 }
 
-func (c Client) Disconnect() {
-	c.Console.Server = nil
-	c.Console.Login = ""
-	c.Console.Privilege = 0
-	c.Console.Alert = false
-	c.Console.History.Clear()
-	if len(c.Console.Sub) > 11 {
-		c.Console.Sub = c.Console.Sub[0:11]
-	}
-}
-
 func tw(output io.Writer) *tabwriter.Writer {
 	return tabwriter.NewWriter(output, 8, 1, 2, ' ', 0)
 }

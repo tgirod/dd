@@ -4,10 +4,13 @@ package main
 // du Client
 
 import (
+	//"errors"
 	"fmt"
-	"strconv"
+	"io"
+	"io/fs"
+	//"strconv"
 	"strings"
-	"time"
+	//"time"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -33,6 +36,13 @@ import (
 // *****************************************************************************
 // ********************************************************* ForumCmd as Command
 // *****************************************************************************
+type StateForum int
+
+const (
+	TopicMode StateForum = iota
+	ThreadMode
+)
+
 type ForumCmd struct {
 	list list.Model
 	Forum
@@ -87,10 +97,11 @@ func (f ForumCmd) Run(c *Client, args []string) tea.Msg {
 	l.Styles.HelpStyle = helpStyle
 
 	return OpenModalMsg(&ForumCmd{
-		list:  l,
-		Forum: fo,
-		state: TopicMode,
-		c.width, c.height})
+		list:   l,
+		Forum:  fo,
+		state:  TopicMode,
+		width:  c.width,
+		height: c.height})
 	// return ShowForumInternal(c, fmt.Sprintf("Forum : you are authorized to enter %s\n",
 	// 	c.Server.Address), 0)
 }
@@ -115,7 +126,7 @@ func (m ForumCmd) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.String() == "enter" {
 			switch m.state {
 			case TopicMode:
-				i, ok := m.list.SelectedItem().(ItemForum)
+				i, ok := m.list.SelectedItem().(ForumItem)
 				if ok {
 					if i.IsTopic {
 						m.Forum.EnterTopicIndex(i.Index)
@@ -128,7 +139,7 @@ func (m ForumCmd) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				return m, nil
 			case ThreadMode:
-				i, ok := m.list.SelectedItem().(ItemForum)
+				i, ok := m.list.SelectedItem().(ForumItem)
 				if ok {
 					fmt.Printf("SELECT %s\n", i.Title)
 				}
@@ -173,8 +184,8 @@ var (
 	helpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
 	quitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
 
-	errTopicExists   = errors.New("TOPIC existe déjà")
-	errEntryNotFound = errors.New("entrée introuvable")
+	// errTopicExists   = errors.New("TOPIC existe déjà")
+	// errEntryNotFound = errors.New("entrée introuvable")
 )
 
 type ForumItem struct {
@@ -209,12 +220,12 @@ func NewThreadForumItem(title string, idx int) ForumItem {
 	return ForumItem{title, idx, false, true, nil}
 }
 
-// Find ItemForum with postTtitle
-func IncItemForumWithPost(listIF []list.Item, listInfo []fs.FileInfo,
+// Find ForumItem with postTtitle
+func IncForumItemWithPost(listIF []list.Item, listInfo []fs.FileInfo,
 	postname string, idAnswer int) (int, error) {
 	for id, itfo := range listIF {
-		// an ItemForum ?
-		if i, ok := itfo.(ItemForum); ok {
+		// an ForumItem ?
+		if i, ok := itfo.(ForumItem); ok {
 			if !i.IsTopic {
 				_, oriTitle, _, _ := GetElements(listInfo[i.Index].Name())
 				//fmt.Printf("Check with -%s-\n", oriTitle)
@@ -234,20 +245,20 @@ func GenFromTopic(fo Forum) []list.Item {
 	Items := make([]list.Item, 0, len(fo.TopicList))
 	for id, v := range fo.TopicList {
 		if v.IsDir() {
-			item := NewTopicItemForum(v.Name(), id)
+			item := NewTopicForumItem(v.Name(), id)
 			Items = append(Items, item)
 		} else {
 			_, title, _, _ := GetElements(v.Name())
 			// a "real" Post
 			if !strings.HasPrefix(title, "Re: ") {
 				//fmt.Printf("Adding %s\n", title)
-				item := NewPostItemForum(DecodePostTitle(v.Name()), id)
+				item := NewPostForumItem(DecodePostTitle(v.Name()), id)
 				Items = append(Items, item)
 			} else {
 				orig_name := title[4:len(title)]
 				//fmt.Printf("Answer to -%s-\n", orig_name)
 				// find item with this title
-				IncItemForumWithPost(Items,
+				IncForumItemWithPost(Items,
 					fo.TopicList,
 					orig_name, id)
 			}
@@ -260,11 +271,11 @@ func GenFromPost(fo Forum, idPost int, idList []int) []list.Item {
 	// Develop Answers, already in order
 	Items := make([]list.Item, 0, len(idList)+1)
 	// First Post
-	item := NewThreadItemForum(DecodePostTitle(fo.TopicList[idPost].Name()), idPost)
+	item := NewThreadForumItem(DecodePostTitle(fo.TopicList[idPost].Name()), idPost)
 	Items = append(Items, item)
 	// Then all Answers
 	for _, idA := range idList {
-		item := NewThreadItemForum(DecodePostTitle(fo.TopicList[idA].Name()), idA)
+		item := NewThreadForumItem(DecodePostTitle(fo.TopicList[idA].Name()), idA)
 		Items = append(Items, item)
 	}
 	return Items

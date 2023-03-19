@@ -51,6 +51,7 @@ var baseCmds = []Command{
 	Back{},
 	Connect{},
 	Data,
+	ForumCmd{},
 	Help{},
 	Identify{},
 	Index{},

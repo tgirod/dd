@@ -36,7 +36,8 @@ func (p Pop) Run(c *Client, args []string) tea.Msg {
 	if len(args) == 0 {
 		msg = "ceci est une fenêtre modale"
 	}
-	return OpenModalMsg(&Pop{msg, c.width, c.height})
+	w, h := c.modalWindowSize()
+	return OpenModalMsg(&Pop{msg, w, h})
 }
 
 func (p *Pop) Init() tea.Cmd {

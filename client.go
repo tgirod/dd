@@ -98,17 +98,14 @@ type OpenModalMsg tea.Model
 
 type CloseModalMsg struct{}
 
+func (c *Client) modalWindowSize() (int, int) {
+	w, h := modalStyle.GetFrameSize()
+	return c.width - w, c.height - h - 1
+}
+
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	var cmd tea.Cmd
-
-	var modalWindowSize = func() tea.Msg {
-		w, h := modalStyle.GetFrameSize()
-		return tea.WindowSizeMsg{
-			Width:  c.width - w,
-			Height: c.height - h,
-		}
-	}
 
 	switch msg := msg.(type) {
 
@@ -121,7 +118,8 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output.Height = msg.Height - 2
 		c.input.Width = msg.Width
 		if c.modal != nil {
-			c.modal, cmd = c.modal.Update(modalWindowSize())
+			w, h := c.modalWindowSize()
+			c.modal, cmd = c.modal.Update(tea.WindowSizeMsg{Width: w, Height: h})
 			cmds = append(cmds, cmd)
 		}
 
@@ -132,7 +130,8 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmd = c.modal.Init()
 		cmds = append(cmds, cmd)
 		// envoyer un WindowSizeMsg
-		c.modal, cmd = c.modal.Update(modalWindowSize())
+		w, h := c.modalWindowSize()
+		c.modal, cmd = c.modal.Update(tea.WindowSizeMsg{Width: w, Height: h})
 		cmds = append(cmds, cmd)
 
 	case CloseModalMsg:
@@ -216,7 +215,11 @@ func (c *Client) View() string {
 
 	if c.modal != nil {
 		content := modalStyle.Render(c.modal.View())
-		return lg.Place(c.width, c.height, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
+		modal := lg.Place(c.width, c.height-1, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
+		return lg.JoinVertical(lg.Left,
+			c.status.View(),
+			modal,
+		)
 	}
 
 	return lg.JoinVertical(lg.Left,
@@ -325,17 +328,6 @@ coupure de la connexion au réseau.
 		Output: `
 coupure de la connexion au réseau.
 `,
-	}
-}
-
-func (c Client) Disconnect() {
-	c.Console.Server = nil
-	c.Console.Login = ""
-	c.Console.Privilege = 0
-	c.Console.Alert = false
-	c.Console.History.Clear()
-	if len(c.Console.Sub) > 11 {
-		c.Console.Sub = c.Console.Sub[0:11]
 	}
 }
 

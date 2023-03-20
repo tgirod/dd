@@ -12,6 +12,7 @@ import (
 	"strings"
 	//"time"
 
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -45,9 +46,11 @@ const (
 
 type ForumCmd struct {
 	list list.Model
+	keys *listKeyMap
 	Forum
-	state         StateForum
-	width, height int
+	state StateForum
+
+	//width, height int
 }
 
 func (f ForumCmd) ParseName() string {
@@ -85,7 +88,8 @@ func (f ForumCmd) Run(c *Client, args []string) tea.Msg {
 
 	const defaultWidth = 50
 
-	l := list.New(Items, ForumDelegate{}, defaultWidth, listHeight)
+	listKeys := newListKeyMap()
+	l := list.New(Items, ForumDelegate{}, 5, 5) // DEL defaultWidth, listHeight)
 	// TODO Change Key => remove ForceQuit
 	l.DisableQuitKeybindings()
 
@@ -95,13 +99,25 @@ func (f ForumCmd) Run(c *Client, args []string) tea.Msg {
 	l.Styles.Title = titleStyle
 	l.Styles.PaginationStyle = paginationStyle
 	l.Styles.HelpStyle = helpStyle
+	l.AdditionalFullHelpKeys = func() []key.Binding {
+		return []key.Binding{
+			listKeys.enterTopic,
+			listKeys.exitTopic,
+			listKeys.addTopic,
+			listKeys.addPost,
+			listKeys.answerPost,
+			listKeys.quitForum,
+		}
+	}
 
 	return OpenModalMsg(&ForumCmd{
-		list:   l,
-		Forum:  fo,
-		state:  TopicMode,
-		width:  c.width,
-		height: c.height})
+		list:  l,
+		keys:  listKeys,
+		Forum: fo,
+		state: TopicMode,
+	})
+	//width:  l.list.Width(),
+	//height: l.list.Height()})
 	// return ShowForumInternal(c, fmt.Sprintf("Forum : you are authorized to enter %s\n",
 	// 	c.Server.Address), 0)
 }
@@ -109,6 +125,44 @@ func (f ForumCmd) Run(c *Client, args []string) tea.Msg {
 // ***************************************************************************
 // ************************************************ ForumCmd as BubleTea.Model
 // ***************************************************************************
+type listKeyMap struct {
+	enterTopic key.Binding // also enterPost
+	exitTopic  key.Binding // also exitPost
+	addTopic   key.Binding
+	addPost    key.Binding
+	answerPost key.Binding
+	quitForum  key.Binding
+}
+
+func newListKeyMap() *listKeyMap {
+	return &listKeyMap{
+		enterTopic: key.NewBinding(
+			key.WithKeys("enter"),
+			key.WithHelp("enter", "enter Topic/Post"),
+		),
+		exitTopic: key.NewBinding(
+			key.WithKeys("backspace"),
+			key.WithHelp("backspace", "exit Topic/Post"),
+		),
+		addTopic: key.NewBinding(
+			key.WithKeys("t"),
+			key.WithHelp("t", "add Topic"),
+		),
+		addPost: key.NewBinding(
+			key.WithKeys("p"),
+			key.WithHelp("p", "add Post"),
+		),
+		answerPost: key.NewBinding(
+			key.WithKeys("a"),
+			key.WithHelp("a", "answer Post"),
+		),
+		quitForum: key.NewBinding(
+			key.WithKeys("q", "esc"),
+			key.WithHelp("Esc/q", "exit Forum"),
+		),
+	}
+}
+
 func (m ForumCmd) Init() tea.Cmd {
 	return nil
 }
@@ -116,14 +170,21 @@ func (m ForumCmd) Init() tea.Cmd {
 func (m ForumCmd) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.list.SetWidth(msg.Width)
+		fmt.Print("__forum Size=", msg, "\n")
+		//m.list.SetWidth(msg.Width)
+		m.list.SetSize(msg.Width, msg.Height)
 		return m, nil
 
 	case tea.KeyMsg:
 		if msg.String() == "ctrl+c" {
 			return m, tea.Quit
 		}
-		if msg.String() == "enter" {
+
+		switch {
+		case key.Matches(msg, m.keys.quitForum):
+			return m, func() tea.Msg { return CloseModalMsg{} }
+
+		case key.Matches(msg, m.keys.enterTopic):
 			switch m.state {
 			case TopicMode:
 				i, ok := m.list.SelectedItem().(ForumItem)
@@ -146,8 +207,8 @@ func (m ForumCmd) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			return m, nil
-		}
-		if msg.String() == "backspace" {
+
+		case key.Matches(msg, m.keys.exitTopic):
 			switch m.state {
 			case TopicMode:
 				m.Forum.LeaveTopic()
@@ -166,6 +227,9 @@ func (m ForumCmd) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 func (m ForumCmd) View() string {
+	// DEBUG
+	fmt.Printf("__ForumCmdView size=%d, %d\n", m.list.Width(), m.list.Height())
+
 	return "\n" + m.list.View()
 }
 
@@ -283,6 +347,7 @@ func GenFromPost(fo Forum, idPost int, idList []int) []list.Item {
 
 // ************************************************************* ForumDelegate
 // For list.Model, delegate the rendering an updating of a ForumItem
+// FIXME Maybe ? enterPost/exitPost as keys for Delegate ??
 
 type ForumDelegate struct{}
 

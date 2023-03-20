@@ -100,7 +100,10 @@ type CloseModalMsg struct{}
 
 func (c *Client) modalWindowSize() (int, int) {
 	w, h := modalStyle.GetFrameSize()
-	return c.width - w, c.height - h - 1
+	// DEBUG
+	fmt.Printf("__clientModalWSize size=%d, %d\n", w, h)
+
+	return c.width - w, c.height - h - 2 // Alain
 }
 
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -110,6 +113,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tea.WindowSizeMsg:
+		fmt.Print("__client Size=", msg, "\n")
 		// redimensionner les différentes parties de l'interface
 		c.width = msg.Width
 		c.height = msg.Height
@@ -131,6 +135,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, cmd)
 		// envoyer un WindowSizeMsg
 		w, h := c.modalWindowSize()
+		fmt.Printf("__client:OpenModal size=%d, %d\n", w, h)
 		c.modal, cmd = c.modal.Update(tea.WindowSizeMsg{Width: w, Height: h})
 		cmds = append(cmds, cmd)
 
@@ -214,6 +219,10 @@ func (c *Client) View() string {
 	c.statusView() // mettre à jour la barre de statut
 
 	if c.modal != nil {
+		// DEBUG
+		if fo, ok := c.modal.(ForumCmd); ok {
+			fmt.Printf("__clientView size=%d, %d\n", fo.list.Width(), fo.list.Height())
+		}
 		content := modalStyle.Render(c.modal.View())
 		modal := lg.Place(c.width, c.height-1, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
 		return lg.JoinVertical(lg.Left,

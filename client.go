@@ -71,13 +71,9 @@ func NewClient(width, height int, game *Game) *Client {
 	return c
 }
 
-var startSecurity = tea.Every(time.Second, func(t time.Time) tea.Msg {
-	return SecurityMsg{}
-})
-
 func (c *Client) Init() tea.Cmd {
 	return tea.Batch(
-		startSecurity,
+		c.StartSecurity,
 		textinput.Blink,
 	)
 }

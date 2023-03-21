@@ -211,30 +211,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (c *Client) View() string {
-	c.statusView() // mettre à jour la barre de statut
-
-	if c.modal != nil {
-		content := modalStyle.Render(c.modal.View())
-		modal := lg.Place(c.width, c.height-1, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
-		return lg.JoinVertical(lg.Left,
-			c.status.View(),
-			modal,
-		)
-	}
-
-	return lg.JoinVertical(lg.Left,
-		c.status.View(),
-		c.output.View(),
-		c.input.View(),
-	)
-}
-
-var (
-	modalStyle     = lg.NewStyle().Border(lg.DoubleBorder()).Padding(1)
-	errorTextStyle = lg.NewStyle().Foreground(lg.Color("9")).Padding(1)
-)
-
-func (c *Client) statusView() {
+	// mise à jour de la barre de statut
 	login := fmt.Sprintf("id=%s", c.Console.Login)
 	admin := "user"
 	if c.Console.Admin {
@@ -258,13 +235,28 @@ func (c *Client) statusView() {
 
 	hist := fmt.Sprintf("net=%s", b.String())
 
-	c.status.SetContent(
-		timer,
-		hist,
-		login,
-		admin,
+	c.status.SetContent(timer, hist, login, admin)
+
+	if c.modal != nil {
+		content := modalStyle.Render(c.modal.View())
+		modal := lg.Place(c.width, c.height-1, lg.Center, lg.Center, content, lg.WithWhitespaceChars(". "))
+		return lg.JoinVertical(lg.Left,
+			c.status.View(),
+			modal,
+		)
+	}
+
+	return lg.JoinVertical(lg.Left,
+		c.status.View(),
+		c.output.View(),
+		c.input.View(),
 	)
 }
+
+var (
+	modalStyle     = lg.NewStyle().Border(lg.DoubleBorder()).Padding(1)
+	errorTextStyle = lg.NewStyle().Foreground(lg.Color("9")).Padding(1)
+)
 
 // Run parse et exécute la commande saisie par l'utilisateur
 func (c *Client) Parse(input string) tea.Cmd {

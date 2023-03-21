@@ -75,7 +75,7 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 	co := c.Console
 	co.Server = server
 	co.Login = "illegal"
-	co.Privilege = 1
+	co.Admin = false
 	co.InitMem()
 	co.History.Push(target)
 	if c.Alert && c.Scan < c.Countdown {

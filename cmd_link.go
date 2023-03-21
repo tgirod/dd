@@ -43,11 +43,7 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 		tw := tw(&b)
 		fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
 		for i, t := range c.Server.Targets {
-			if c.Console.Privilege >= t.Restricted {
-				fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
-			} else {
-				fmt.Fprintf(tw, "%d\t%s\t\n", i, "Accès restreint")
-			}
+			fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
 		}
 		tw.Flush()
 
@@ -67,14 +63,6 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	}
 	target := c.Server.Targets[id]
 
-	// vérifier le niveau de privilège
-	if c.Console.Privilege < target.Restricted {
-		return ResultMsg{
-			Cmd:   "link " + strings.Join(args, " "),
-			Error: errLowPrivilege,
-		}
-	}
-
 	// récupérer le serveur correspondant
 	server, err := c.Game.FindServer(target.Address)
 	if err != nil {
@@ -93,7 +81,7 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	} else {
 		// succès de la connexion
 		c.Console.Connect(server, priv)
-		c.Console.History.Push(Target{server.Address, "", priv})
+		c.Console.History.Push(Target{server.Address, ""})
 
 		b := strings.Builder{}
 		fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)

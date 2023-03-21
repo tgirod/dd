@@ -19,8 +19,8 @@ type Console struct {
 	// identifiant dans le serveur actuel
 	Login string
 
-	// niveau de privilège dans le serveur actuel
-	Privilege int
+	// admin dans le serveur actuel ?
+	Admin bool
 
 	// l'alerte est-elle activée ?
 	Alert bool
@@ -43,7 +43,6 @@ type Console struct {
 
 var Hack = map[string]Command{
 	"yyqz": Jack{},
-	"hfed": Rise{},
 	"zfcq": Evade{},
 }
 
@@ -70,8 +69,8 @@ func NewConsole() *Console {
 	}
 }
 
-func (c *Console) Connect(s *Server, priv int) {
-	c.Privilege = priv
+func (c *Console) Connect(s *Server, admin bool) {
+	c.Admin = admin
 	c.Server = s
 	c.InitMem()
 }
@@ -91,7 +90,7 @@ func (c *Console) InitMem() {
 func (c *Console) Disconnect() {
 	c.Server = nil
 	c.Login = ""
-	c.Privilege = 0
+	c.Admin = false
 	c.Alert = false
 	c.History.Clear()
 	c.Node.Sub = baseCmds

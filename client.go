@@ -236,7 +236,10 @@ var (
 
 func (c *Client) statusView() {
 	login := fmt.Sprintf("id=%s", c.Console.Login)
-	priv := fmt.Sprintf("priv=%d", c.Console.Privilege)
+	admin := "user"
+	if c.Console.Admin {
+		admin = "admin"
+	}
 	timer := "--:--"
 	if c.Console.Alert {
 		min := int(c.Countdown.Minutes())
@@ -259,7 +262,7 @@ func (c *Client) statusView() {
 		timer,
 		hist,
 		login,
-		priv,
+		admin,
 	)
 }
 

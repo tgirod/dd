@@ -48,7 +48,7 @@ func (c Connect) Run(client *Client, args []string) tea.Msg {
 		}
 	}
 
-	if priv, err := server.CheckAccount(client.Login); err != nil {
+	if admin, err := server.CheckAccount(client.Login); err != nil {
 		// échec de la connexion
 		return ResultMsg{
 			Error: fmt.Errorf("connect : %w", err),
@@ -56,9 +56,9 @@ func (c Connect) Run(client *Client, args []string) tea.Msg {
 		}
 	} else {
 		// succès de la connexion
-		client.Console.Connect(server, priv)
+		client.Console.Connect(server, admin)
 		client.Console.History.Clear()
-		client.Console.History.Push(Target{server.Address, "", priv})
+		client.Console.History.Push(Target{server.Address, ""})
 
 		b := strings.Builder{}
 		fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)

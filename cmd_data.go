@@ -69,10 +69,6 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
 	for _, e := range entries {
 		title := e.Title
-		if c.Privilege < e.Restricted {
-			title = "accès restreint"
-		}
-
 		fmt.Fprintf(tw, "%s\t%s\t%s\t\n",
 			e.ID,
 			strings.Join(e.Keywords, " "),
@@ -126,13 +122,6 @@ func (d DataView) Run(c *Client, args []string) tea.Msg {
 		return ResultMsg{
 			Cmd:   "data view " + strings.Join(args, " "),
 			Error: err,
-		}
-	}
-
-	if c.Console.Privilege < entry.Restricted {
-		return ResultMsg{
-			Cmd:   "data view " + strings.Join(args, " "),
-			Error: fmt.Errorf("%s : %w", id, errLowPrivilege),
 		}
 	}
 

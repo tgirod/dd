@@ -56,11 +56,7 @@ func (r RegistrySearch) Run(c *Client, args []string) tea.Msg {
 	tw := tw(&b)
 	fmt.Fprintf(tw, "NAME\tSTATE\tDESCRIPTION\t\n")
 	for _, r := range regs {
-		if r.Restricted <= c.Privilege {
-			fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
-		} else {
-			fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, "Accès restreint")
-		}
+		fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
 	}
 	tw.Flush()
 	return ResultMsg{
@@ -112,16 +108,10 @@ func (r RegistryEdit) Run(c *Client, args []string) tea.Msg {
 		}
 	}
 
-	if reg.Restricted > c.Privilege {
-		return ResultMsg{
-			Cmd:   "registry edit " + strings.Join(args, " "),
-			Error: errLowPrivilege,
-		}
-	}
 	reg.State = !reg.State
 	// Persistent: save new game state
 	c.Game.Serialize()
-	
+
 	return ResultMsg{
 		Cmd:    "registry edit " + strings.Join(args, " "),
 		Output: fmt.Sprintf("registre %s est désormais sur l'état '%t'\n", reg.Name, reg.State),

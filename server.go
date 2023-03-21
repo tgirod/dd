@@ -43,22 +43,22 @@ type Server struct {
 
 // Account représente un compte utilisateur sur un serveur
 type Account struct {
-	Login     string
-	Privilege int
+	Login string
+	Admin bool
 }
 
-func (s *Server) CheckAccount(login string) (int, error) {
+func (s *Server) CheckAccount(login string) (bool, error) {
 	for _, a := range s.Accounts {
 		if a.Login == login {
-			return a.Privilege, nil
+			return a.Admin, nil
 		}
 	}
 
 	if s.Public {
-		return PUBLIC_PRIVILEGE, nil
+		return false, nil
 	}
 
-	return 0, errInvalidIdentity
+	return false, errInvalidIdentity
 }
 
 type Target struct {
@@ -67,9 +67,6 @@ type Target struct {
 
 	// description du lien
 	Description string
-
-	// niveau de privilège nécessaire pour utiliser ce target
-	Restricted int
 }
 
 func (s *Server) FindTarget(address string) (Target, error) {

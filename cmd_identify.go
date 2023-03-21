@@ -61,8 +61,8 @@ func (i Identify) Run(c *Client, args []string) tea.Msg {
 
 	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
 	if c.Console.Server != nil {
-		if priv, err := c.CheckAccount(login); err == nil {
-			c.Console.Privilege = priv
+		if admin, err := c.CheckAccount(login); err == nil {
+			c.Console.Admin = admin
 		}
 	}
 

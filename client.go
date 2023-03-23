@@ -25,7 +25,6 @@ type Client struct {
 	prevOutput string           // sortie de la commande précédente
 	modal      tea.Model        // fenêtre modale
 
-	*Game    // état interne du jeu
 	*Console // console enregistrée dans le jeu
 }
 
@@ -65,8 +64,7 @@ func NewClient(width, height int, game *Game) *Client {
 		input:   input,
 		output:  output,
 		status:  status,
-		Game:    game,
-		Console: NewConsole(),
+		Console: NewConsole(game),
 	}
 	return c
 }

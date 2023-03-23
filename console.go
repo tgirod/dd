@@ -34,11 +34,14 @@ type Console struct {
 	// interface neurale directe
 	DNI bool
 
+	// Pile de serveurs visités lors de cette connexion
+	History Stack
+
 	// serveur auquel la console est connectée
 	*Server
 
-	// Pile de serveurs visités lors de cette connexion
-	History Stack
+	// état interne du jeu
+	*Game
 }
 
 var Hack = map[string]Command{
@@ -61,11 +64,12 @@ var baseCmds = []Command{
 	Pop{},
 }
 
-func NewConsole() *Console {
+func NewConsole(game *Game) *Console {
 	return &Console{
 		Node: Node{
 			Sub: baseCmds,
 		},
+		Game: game,
 	}
 }
 

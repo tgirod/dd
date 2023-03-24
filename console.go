@@ -158,3 +158,13 @@ func (c *Console) Disconnect() error {
 	c.Node.Sub = baseCmds
 	return nil
 }
+
+func (c *Console) Load(code string) error {
+	command, ok := Hack[code]
+	if !ok {
+		return fmt.Errorf("%s : %w", code, errInvalidArgument)
+	}
+
+	c.Node.Sub = append(c.Node.Sub, command)
+	return nil
+}

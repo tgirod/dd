@@ -28,26 +28,28 @@ func (l Load) LongHelp() string {
 }
 
 func (l Load) Run(c *Client, args []string) tea.Msg {
+	cmd := fmt.Sprintf("load %s", strings.Join(args, " "))
 	if len(args) < 1 {
 		return ResultMsg{
-			Cmd:    "load " + strings.Join(args, " "),
+			Cmd:    cmd,
 			Error:  fmt.Errorf("CODE : %w", errMissingArgument),
 			Output: l.LongHelp(),
 		}
 	}
 
 	code := args[0]
-	cmd, ok := Hack[code]
-	if !ok {
+	if err := c.Load(code); err != nil {
 		return ResultMsg{
-			Cmd:   "load " + strings.Join(args, " "),
-			Error: fmt.Errorf("%s : %w", code, errInvalidArgument),
+			Cmd:    cmd,
+			Error:  err,
+			Output: l.LongHelp(),
 		}
 	}
-	c.Console.Node.Sub = append(c.Console.Node.Sub, cmd)
 
+	cmds := c.Console.Node.Sub
+	name := cmds[len(cmds)-1].ParseName()
 	return ResultMsg{
 		Cmd:    "load " + strings.Join(args, " "),
-		Output: fmt.Sprintf("%s : commande chargée", cmd.ParseName()),
+		Output: fmt.Sprintf("%s : commande chargée", name),
 	}
 }

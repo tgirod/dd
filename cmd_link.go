@@ -30,15 +30,9 @@ func (l Link) LongHelp() string {
 }
 
 func (l Link) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
-		return ResultMsg{
-			Cmd:   "link " + strings.Join(args, " "),
-			Error: errNotConnected,
-		}
-	}
+	cmd := fmt.Sprintf("link %s", strings.Join(args, " "))
 
 	if len(args) == 0 {
-		// lister les liens disponibles
 		b := strings.Builder{}
 		tw := tw(&b)
 		fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
@@ -48,7 +42,7 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 		tw.Flush()
 
 		return ResultMsg{
-			Cmd:    "link " + strings.Join(args, " "),
+			Cmd:    cmd,
 			Output: b.String(),
 		}
 	}
@@ -57,39 +51,24 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	id, err := strconv.Atoi(args[0])
 	if err != nil || id < 0 || id >= len(c.Server.Targets) {
 		return ResultMsg{
-			Cmd:   "link " + strings.Join(args, " "),
-			Error: fmt.Errorf("ID : %w", errInvalidArgument),
-		}
-	}
-	target := c.Server.Targets[id]
-
-	// récupérer le serveur correspondant
-	server, err := c.Game.FindServer(target.Address)
-	if err != nil {
-		return ResultMsg{
-			Cmd:   "link " + strings.Join(args, " "),
-			Error: fmt.Errorf("%s : %w", target.Address, err),
+			Cmd:   cmd,
+			Error: fmt.Errorf("ID : %w", err),
 		}
 	}
 
-	if priv, err := server.CheckAccount(c.Login); err != nil {
-		// échec de la connexion
+	if err := c.Link(id); err != nil {
 		return ResultMsg{
-			Error: fmt.Errorf("link : %w", err),
-			Cmd:   fmt.Sprintf("link %d", id),
+			Cmd:   cmd,
+			Error: err,
 		}
-	} else {
-		// succès de la connexion
-		c.Console.Connect(server, priv)
-		c.Console.History.Push(Target{server.Address, ""})
+	}
 
-		b := strings.Builder{}
-		fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
-		fmt.Fprintf(&b, "%s\n", server.Description)
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
+	fmt.Fprintf(&b, "%s\n", c.Server.Description)
 
-		return ResultMsg{
-			Cmd:    fmt.Sprintf("link %d", id),
-			Output: b.String(),
-		}
+	return ResultMsg{
+		Cmd:    cmd,
+		Output: b.String(),
 	}
 }

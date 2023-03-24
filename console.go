@@ -73,10 +73,64 @@ func NewConsole(game *Game) *Console {
 	}
 }
 
-func (c *Console) Connect(s *Server, admin bool) {
-	c.Admin = admin
-	c.Server = s
+func (c *Console) connect(address string) error {
+	var err error
+	var server *Server
+
+	// récupérer le serveur
+	if server, err = c.FindServer(address); err != nil {
+		return fmt.Errorf("%s : %w", address, err)
+	}
+
+	// vérifier que l'utilisateur a le droit de se connecter
+	if c.Admin, err = server.CheckAccount(c.Login); err != nil {
+		return fmt.Errorf("%s : %w", c.Login, err)
+	}
+
+	// enregistrer le nouveau serveur
+	c.Server = server
 	c.InitMem()
+	return nil
+}
+
+func (c *Console) Connect(address string) error {
+	if err := c.connect(address); err != nil {
+		return err
+	}
+
+	c.History.Clear()
+	c.History.Push(Target{address, ""})
+	fmt.Println(c.History)
+	return nil
+}
+
+func (c *Console) Link(id int) error {
+	target := c.Server.Targets[id]
+	if err := c.connect(target.Address); err != nil {
+		return err
+	}
+
+	c.History.Push(target)
+	fmt.Println(c.History)
+	return nil
+}
+
+func (c *Console) Back() error {
+	if !c.IsConnected() {
+		return errNotConnected
+	}
+
+	if len(c.History) == 1 {
+		return errInvalidCommand
+	}
+
+	// enlever le serveur actuel
+	c.History.Pop()
+
+	prevTarget, _ := c.History.Peek()
+
+	fmt.Println(c.History)
+	return c.connect(prevTarget.Address)
 }
 
 func (c *Console) IsConnected() bool {

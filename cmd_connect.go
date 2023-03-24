@@ -29,10 +29,12 @@ func (c Connect) LongHelp() string {
 }
 
 func (c Connect) Run(client *Client, args []string) tea.Msg {
+	cmd := fmt.Sprintf("connect %s", strings.Join(args, " "))
+
 	if len(args) < 1 {
 		return ResultMsg{
 			Error:  fmt.Errorf("ADDRESS : %w", errMissingArgument),
-			Cmd:    "connect " + strings.Join(args, " "),
+			Cmd:    cmd,
 			Output: c.LongHelp(),
 		}
 	}
@@ -40,33 +42,20 @@ func (c Connect) Run(client *Client, args []string) tea.Msg {
 	// récupérer les arguments
 	address := args[0]
 
-	// récupérer le serveur
-	server, err := client.Game.FindServer(address)
-	if err != nil {
+	if err := client.Connect(address); err != nil {
 		return ResultMsg{
 			Error: err,
+			Cmd:   cmd,
 		}
 	}
 
-	if admin, err := server.CheckAccount(client.Login); err != nil {
-		// échec de la connexion
-		return ResultMsg{
-			Error: fmt.Errorf("connect : %w", err),
-			Cmd:   fmt.Sprintf("connect %s", address),
-		}
-	} else {
-		// succès de la connexion
-		client.Console.Connect(server, admin)
-		client.Console.History.Clear()
-		client.Console.History.Push(Target{server.Address, ""})
+	server := client.Server
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
+	fmt.Fprintf(&b, "%s\n", server.Description)
 
-		b := strings.Builder{}
-		fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
-		fmt.Fprintf(&b, "%s\n", server.Description)
-
-		return ResultMsg{
-			Cmd:    fmt.Sprintf("connect %s", address),
-			Output: b.String(),
-		}
+	return ResultMsg{
+		Cmd:    cmd,
+		Output: b.String(),
 	}
 }

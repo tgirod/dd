@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -25,15 +26,13 @@ func (p Plug) LongHelp() string {
 }
 
 func (p Plug) Run(c *Client, args []string) tea.Msg {
-	if c.Console.IsConnected() {
+	if err := c.Plug(); err != nil {
 		return ResultMsg{
 			Cmd:    "plug",
-			Error:  errConnected,
+			Error:  fmt.Errorf("plug : %w", err),
 			Output: p.LongHelp(),
 		}
 	}
-
-	c.Console.DNI = true
 
 	return ResultMsg{
 		Cmd:    "plug",

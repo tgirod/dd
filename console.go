@@ -168,3 +168,12 @@ func (c *Console) Load(code string) error {
 	c.Node.Sub = append(c.Node.Sub, command)
 	return nil
 }
+
+func (c *Console) Plug() error {
+	if c.IsConnected() {
+		return errConnected
+	}
+
+	c.DNI = true
+	return nil
+}

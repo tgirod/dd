@@ -105,6 +105,10 @@ func (c *Console) Connect(address string) error {
 }
 
 func (c *Console) Link(id int) error {
+	if id < 0 || id >= len(c.Server.Targets) {
+		return errInvalidArgument
+	}
+
 	target := c.Server.Targets[id]
 	if err := c.connect(target.Address); err != nil {
 		return err

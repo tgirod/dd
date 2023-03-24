@@ -49,7 +49,7 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 
 	// récupérer le lien
 	id, err := strconv.Atoi(args[0])
-	if err != nil || id < 0 || id >= len(c.Server.Targets) {
+	if err != nil {
 		return ResultMsg{
 			Cmd:   cmd,
 			Error: fmt.Errorf("ID : %w", err),

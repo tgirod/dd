@@ -71,7 +71,6 @@ func NewClient(width, height int, game *Game) *Client {
 
 func (c *Client) Init() tea.Cmd {
 	return tea.Batch(
-		c.StartSecurity,
 		textinput.Blink,
 	)
 }

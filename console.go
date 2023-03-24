@@ -145,11 +145,16 @@ func (c *Console) InitMem() {
 	}
 }
 
-func (c *Console) Disconnect() {
+func (c *Console) Disconnect() error {
+	if !c.IsConnected() {
+		return errNotConnected
+	}
+
 	c.Server = nil
 	c.Login = ""
 	c.Admin = false
 	c.Alert = false
 	c.History.Clear()
 	c.Node.Sub = baseCmds
+	return nil
 }

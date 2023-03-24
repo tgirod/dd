@@ -25,14 +25,14 @@ func (q Quit) LongHelp() string {
 }
 
 func (q Quit) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
+	cmd := "quit"
+	if err := c.Disconnect(); err != nil {
 		return ResultMsg{
-			Cmd:   "quit" + strings.Join(args, " "),
-			Error: errNotConnected,
+			Cmd:   cmd,
+			Error: err,
 		}
 	}
 
-	c.Disconnect()
 	return ResultMsg{
 		Cmd:    "quit",
 		Output: "déconnexion effectuée",

@@ -264,3 +264,25 @@ func (c *Console) Evade(zone string) error {
 
 	return nil
 }
+
+func (c *Console) RegistrySearch(name string) ([]Register, error) {
+	var search []Register
+
+	if !c.IsConnected() {
+		return search, errNotConnected
+	}
+
+	search = c.Server.RegistrySearch(name)
+	return search, nil
+}
+
+func (c *Console) RegistryEdit(name string) error {
+	if !c.IsConnected() {
+		return errNotConnected
+	}
+
+	// sauver l'état du jeu
+	c.Game.Serialize()
+
+	return c.Server.RegistryEdit(name)
+}

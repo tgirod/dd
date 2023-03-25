@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 	"unicode"
 
@@ -140,7 +141,7 @@ func (r *Register) Match(name string) bool {
 	return fuzzy.MatchNormalizedFold(name, r.Name)
 }
 
-func (s *Server) RegisterSearch(name string) []Register {
+func (s *Server) RegistrySearch(name string) []Register {
 	result := make([]Register, 0, len(s.Registers))
 	for _, r := range s.Registers {
 		if r.Match(name) {
@@ -150,17 +151,18 @@ func (s *Server) RegisterSearch(name string) []Register {
 	return result
 }
 
-func (s *Server) FindRegister(name string) (*Register, error) {
-	for i, r := range s.Registers {
-		if r.Name == name {
-			return &s.Registers[i], nil
-		}
-	}
-	return nil, errInvalidArgument
-}
-
 func normalize(s string) string {
 	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
 	out, _, _ := transform.String(t, s)
 	return out
+}
+
+func (s *Server) RegistryEdit(name string) error {
+	for i, r := range s.Registers {
+		if r.Name == name {
+			s.Registers[i].State = !s.Registers[i].State
+			return nil
+		}
+	}
+	return fmt.Errorf("%s : %w", name, errRegisterNotFound)
 }

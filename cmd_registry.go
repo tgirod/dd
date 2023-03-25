@@ -38,29 +38,30 @@ func (r RegistrySearch) LongHelp() string {
 }
 
 func (r RegistrySearch) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
-		return ResultMsg{
-			Cmd:   "registry search " + strings.Join(args, " "),
-			Error: errNotConnected}
+	cmd := fmt.Sprintf("registry search %s", strings.Join(args, " "))
+
+	var name = ""
+	if len(args) > 0 {
+		name = args[0]
 	}
 
-	// par défaut afficher la liste de tous les registres
-	regs := c.Console.Server.Registers
-
-	if len(args) > 0 {
-		// filter la liste des registres sur le préfixe
-		regs = c.Console.Server.RegisterSearch(args[0])
+	search, err := c.Console.RegistrySearch(name)
+	if err != nil {
+		return ResultMsg{
+			Cmd:   cmd,
+			Error: err,
+		}
 	}
 
 	b := strings.Builder{}
 	tw := tw(&b)
 	fmt.Fprintf(tw, "NAME\tSTATE\tDESCRIPTION\t\n")
-	for _, r := range regs {
+	for _, r := range search {
 		fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
 	}
 	tw.Flush()
 	return ResultMsg{
-		Cmd:    "registry search " + strings.Join(args, " "),
+		Cmd:    cmd,
 		Output: b.String(),
 	}
 }
@@ -86,34 +87,25 @@ func (r RegistryEdit) LongHelp() string {
 }
 
 func (r RegistryEdit) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
-		return ResultMsg{
-			Cmd:   "registry edit " + strings.Join(args, " "),
-			Error: errNotConnected}
-	}
+	cmd := fmt.Sprintf("registry edit %s", strings.Join(args, " "))
 
 	if len(args) < 1 {
 		return ResultMsg{
-			Cmd:   "registry edit " + strings.Join(args, " "),
+			Cmd:   cmd,
 			Error: fmt.Errorf("NAME : %w", errMissingArgument),
 		}
 	}
 
 	name := args[0]
-	reg, err := c.FindRegister(name)
-	if err != nil {
+	if err := c.Console.RegistryEdit(name); err != nil {
 		return ResultMsg{
-			Cmd:   "registry edit " + strings.Join(args, " "),
-			Error: fmt.Errorf("%s : %w", name, err),
+			Cmd:   cmd,
+			Error: err,
 		}
 	}
 
-	reg.State = !reg.State
-	// Persistent: save new game state
-	c.Game.Serialize()
-
 	return ResultMsg{
-		Cmd:    "registry edit " + strings.Join(args, " "),
-		Output: fmt.Sprintf("registre %s est désormais sur l'état '%t'\n", reg.Name, reg.State),
+		Cmd:    cmd,
+		Output: fmt.Sprintf("l'état du registre %s est changé\n", name),
 	}
 }

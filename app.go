@@ -36,6 +36,7 @@ var (
 	errMemUnavailable     = errors.New("zone mémoire indisponible")
 	errEmptyHistory       = errors.New("historique de navigation vide")
 	errKeywordTooShort    = errors.New("mot clef trop court")
+	errRegisterNotFound   = errors.New("registre introuvable")
 )
 
 type App struct {

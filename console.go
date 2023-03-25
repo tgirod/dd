@@ -213,3 +213,34 @@ func (c *Console) StartSecurity() {
 		c.Countdown = c.Server.Scan
 	}
 }
+
+func (c *Console) DataSearch(keyword string) ([]Entry, error) {
+	var search []Entry
+
+	if !c.IsConnected() {
+		return search, errNotConnected
+	}
+
+	if len([]rune(keyword)) < 3 {
+		return search, fmt.Errorf("%s : %w", keyword, errKeywordTooShort)
+	}
+
+	search = c.Server.DataSearch(keyword, c.Login)
+	return search, nil
+}
+
+func (c *Console) DataView(id string) (Entry, error) {
+	var err error
+	var entry Entry
+
+	if !c.IsConnected() {
+		return entry, errNotConnected
+	}
+
+	entry, err = c.Server.FindEntry(id, c.Login)
+	if err != nil {
+		return entry, err
+	}
+
+	return entry, nil
+}

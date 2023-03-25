@@ -37,31 +37,33 @@ func (d DataSearch) LongHelp() string {
 }
 
 func (d DataSearch) Run(c *Client, args []string) tea.Msg {
+	var err error
+	cmd := fmt.Sprintf("data search %s", strings.Join(args, " "))
+
 	if !c.Console.IsConnected() {
 		return ResultMsg{
-			Cmd:   "data search " + strings.Join(args, " "),
-			Error: errNotConnected}
+			Cmd:   cmd,
+			Error: errNotConnected,
+		}
 	}
 
 	if len(args) < 1 {
 		return ResultMsg{
-			Cmd:    "data search " + strings.Join(args, " "),
-			Error:  errMissingArgument,
+			Cmd:    cmd,
+			Error:  fmt.Errorf("KEYWORD : %w", errMissingArgument),
 			Output: d.LongHelp(),
 		}
 	}
 
 	keyword := args[0]
 
-	if len([]rune(keyword)) < 2 {
+	entries, err := c.Console.DataSearch(keyword)
+	if err != nil {
 		return ResultMsg{
-			Cmd:    "data search " + strings.Join(args, " "),
-			Error:  fmt.Errorf("%s : %w", keyword, errKeywordTooShort),
-			Output: d.LongHelp(),
+			Cmd:   cmd,
+			Error: err,
 		}
 	}
-
-	entries := c.Server.DataSearch(keyword, c.Login)
 
 	// construire la réponse à afficher
 	b := strings.Builder{}
@@ -104,23 +106,22 @@ func (d DataView) LongHelp() string {
 }
 
 func (d DataView) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
-		return ResultMsg{Error: errNotConnected}
-	}
+	cmd := fmt.Sprintf("data view %s", strings.Join(args, " "))
 
 	if len(args) < 1 {
 		return ResultMsg{
-			Cmd:    "data view " + strings.Join(args, " "),
+			Cmd:    cmd,
 			Error:  errMissingArgument,
 			Output: d.LongHelp(),
 		}
 	}
 
 	id := args[0]
+
 	entry, err := c.Server.FindEntry(id, c.Login)
 	if err != nil {
 		return ResultMsg{
-			Cmd:   "data view " + strings.Join(args, " "),
+			Cmd:   cmd,
 			Error: err,
 		}
 	}

@@ -286,3 +286,21 @@ func (c *Console) RegistryEdit(name string) error {
 
 	return c.Server.RegistryEdit(name)
 }
+
+func (c *Console) Identify(login, password string) error {
+
+	if err := c.CheckIdentity(login, password); err != nil {
+		return err
+	}
+
+	c.Login = login
+
+	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
+	if c.Server != nil {
+		if admin, err := c.CheckAccount(login); err == nil {
+			c.Admin = admin
+		}
+	}
+
+	return nil
+}

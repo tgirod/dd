@@ -29,10 +29,11 @@ func (i Identify) LongHelp() string {
 }
 
 func (i Identify) Run(c *Client, args []string) tea.Msg {
+	cmd := fmt.Sprintf("identify %s", strings.Join(args, " "))
 	if len(args) < 1 {
 		return ResultMsg{
 			Error:  fmt.Errorf("LOGIN : %w", errMissingArgument),
-			Cmd:    "identify " + strings.Join(args, ""),
+			Cmd:    cmd,
 			Output: i.LongHelp(),
 		}
 	}
@@ -40,7 +41,7 @@ func (i Identify) Run(c *Client, args []string) tea.Msg {
 	if len(args) < 2 {
 		return ResultMsg{
 			Error:  fmt.Errorf("PASSWORD : %w", errMissingArgument),
-			Cmd:    "identify " + strings.Join(args, ""),
+			Cmd:    cmd,
 			Output: i.LongHelp(),
 		}
 	}
@@ -49,28 +50,16 @@ func (i Identify) Run(c *Client, args []string) tea.Msg {
 	login := args[0]
 	password := args[1]
 
-	if err := c.CheckIdentity(login, password); err != nil {
+	if err := c.Identify(login, password); err != nil {
 		// échec de l'identification
 		return ResultMsg{
-			Cmd:   fmt.Sprintf("identify %s %s", login, strings.Repeat("*", len(password))),
+			Cmd:   cmd,
 			Error: fmt.Errorf("identify : %w", err),
 		}
 	}
 
-	c.Console.Login = login
-
-	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
-	if c.Console.Server != nil {
-		if admin, err := c.CheckAccount(login); err == nil {
-			c.Console.Admin = admin
-		}
-	}
-
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "identité établie. Bienvenue, %s.\n\n", login)
-
 	return ResultMsg{
-		Cmd:    fmt.Sprintf("identify %s %s", login, strings.Repeat("*", len(password))),
-		Output: b.String(),
+		Cmd:    cmd,
+		Output: fmt.Sprintf("identité établie. Bienvenue, %s\n", login),
 	}
 }

@@ -110,11 +110,6 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.output.Width = msg.Width
 		c.output.Height = msg.Height - 2
 		c.input.Width = msg.Width
-		if c.modal != nil {
-			w, h := c.modalWindowSize()
-			c.modal, cmd = c.modal.Update(tea.WindowSizeMsg{Width: w, Height: h})
-			cmds = append(cmds, cmd)
-		}
 
 	case OpenModalMsg:
 		c.input.Blur()
@@ -163,39 +158,47 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		if c.modal != nil {
-			// la fenêtre modale prend le contrôle du clavier
-			c.modal, cmd = c.modal.Update(msg)
+			break
+		}
+
+		switch msg.Type {
+		case tea.KeyCtrlC:
+			// quitter l'application client
+			cmds = append(cmds, tea.Quit)
+		case tea.KeyEnter:
+			// valider la commande
+			input := c.input.Value()
+			c.input.Reset()
+			cmd = c.Parse(input)
 			cmds = append(cmds, cmd)
-		} else {
-			switch msg.Type {
-			case tea.KeyCtrlC:
-				// quitter l'application client
-				cmds = append(cmds, tea.Quit)
-			case tea.KeyEnter:
-				// valider la commande
-				input := c.input.Value()
-				c.input.Reset()
-				cmd = c.Parse(input)
-				cmds = append(cmds, cmd)
-			case tea.KeyPgUp, tea.KeyPgDown:
-				// scroll de la sortie
-				c.output, cmd = c.output.Update(msg)
-				cmds = append(cmds, cmd)
-			default:
-				// passer le KeyMsg au prompt
-				c.input, cmd = c.input.Update(msg)
-				cmds = append(cmds, cmd)
-			}
+		case tea.KeyPgUp, tea.KeyPgDown:
+			// scroll de la sortie
+			c.output, cmd = c.output.Update(msg)
+			cmds = append(cmds, cmd)
+		default:
+			// passer le KeyMsg au prompt
+			c.input, cmd = c.input.Update(msg)
+			cmds = append(cmds, cmd)
 		}
 
 	default:
 		if c.modal != nil {
-			// la fenêtre modale prend le contrôle du clavier
-			c.modal, cmd = c.modal.Update(msg)
+			break
+		}
+
+		// passer tous les messages au prompt
+		c.input, cmd = c.input.Update(msg)
+		cmds = append(cmds, cmd)
+	}
+
+	if c.modal != nil {
+		switch msg := msg.(type) {
+		case tea.WindowSizeMsg:
+			w, h := c.modalWindowSize()
+			c.modal, cmd = c.modal.Update(tea.WindowSizeMsg{Width: w, Height: h})
 			cmds = append(cmds, cmd)
-		} else {
-			// passer tous les messages au prompt
-			c.input, cmd = c.input.Update(msg)
+		default:
+			c.modal, cmd = c.modal.Update(msg)
 			cmds = append(cmds, cmd)
 		}
 	}

@@ -22,69 +22,40 @@ func (j Jack) LongHelp() string {
 	b := strings.Builder{}
 	b.WriteString(j.ShortHelp() + "\n")
 	b.WriteString("\nUSAGE\n")
-	b.WriteString("  jack [ID]\n")
+	b.WriteString("  jack <ID>\n")
 	b.WriteString("\nARGUMENTS\n")
-	b.WriteString("  aucun -- liste les liens disponibles\n")
 	b.WriteString("  ID    -- force l'accès au lien ID")
 	return b.String()
 }
 
 func (j Jack) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
-		return ResultMsg{
-			Cmd:   "jack " + strings.Join(args, " "),
-			Error: errNotConnected,
-		}
-	}
-
+	cmd := fmt.Sprintf("jack %s", strings.Join(args, " "))
 	if len(args) == 0 {
-		// lister les liens disponibles
-		b := strings.Builder{}
-		tw := tw(&b)
-		fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
-		for i, t := range c.Server.Targets {
-			fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
-		}
-		tw.Flush()
-
 		return ResultMsg{
-			Cmd:    "jack",
-			Output: b.String(),
+			Cmd:   cmd,
+			Error: fmt.Errorf("ID : %w", errMissingArgument),
 		}
 	}
 
 	// récupérer le lien
 	id, err := strconv.Atoi(args[0])
-	if err != nil || id < 0 || id >= len(c.Server.Targets) {
+	if err != nil {
 		return ResultMsg{
-			Cmd:   "jack " + strings.Join(args, " "),
+			Cmd:   cmd,
 			Error: fmt.Errorf("ID : %w", errInvalidArgument),
 		}
 	}
-	target := c.Server.Targets[id]
 
-	// récupérer le serveur correspondant
-	server, err := c.Game.FindServer(target.Address)
-	if err != nil {
+	if err := c.Jack(id); err != nil {
 		return ResultMsg{
-			Cmd:   "jack " + strings.Join(args, " "),
-			Error: fmt.Errorf("%s : %w", target.Address, err),
+			Cmd:   cmd,
+			Error: err,
 		}
 	}
 
-	co := c.Console
-	co.Server = server
-	co.Login = "illegal"
-	co.Admin = false
-	co.InitMem()
-	co.History.Push(target)
-	if c.Alert && c.Scan < c.Countdown {
-		c.Countdown = c.Scan
-	}
-
 	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
-	fmt.Fprintf(&b, "%s\n", server.Description)
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
+	fmt.Fprintf(&b, "%s\n", c.Server.Description)
 
 	return ResultMsg{
 		Cmd:     "jack " + strings.Join(args, " "),

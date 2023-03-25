@@ -181,3 +181,35 @@ func (c *Console) Plug() error {
 	c.DNI = true
 	return nil
 }
+
+func (c *Console) Jack(id int) error {
+	if !c.IsConnected() {
+		return errNotConnected
+	}
+
+	if id < 0 || id >= len(c.Server.Targets) {
+		return errInvalidArgument
+	}
+
+	target := c.Server.Targets[id]
+	server, err := c.Game.FindServer(target.Address)
+	if err != nil {
+		return err
+	}
+
+	c.Server = server
+	c.Login = "illegal"
+	c.Admin = false
+	c.InitMem()
+	c.History.Push(target)
+	return nil
+}
+
+func (c *Console) StartSecurity() {
+	if !c.Alert {
+		c.Alert = true
+		c.Countdown = c.Server.Scan
+	} else if c.Server.Scan < c.Countdown {
+		c.Countdown = c.Server.Scan
+	}
+}

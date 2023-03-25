@@ -29,12 +29,7 @@ func (e Evade) LongHelp() string {
 }
 
 func (e Evade) Run(c *Client, args []string) tea.Msg {
-	if !c.Console.IsConnected() {
-		return ResultMsg{
-			Cmd:   "evade" + strings.Join(args, " "),
-			Error: errNotConnected,
-		}
-	}
+	cmd := fmt.Sprintf("evade %s", strings.Join(args, " "))
 
 	// afficher la liste des zones mémoires disponibles
 	if len(args) == 0 {
@@ -51,33 +46,22 @@ func (e Evade) Run(c *Client, args []string) tea.Msg {
 		tw.Flush()
 
 		return ResultMsg{
-			Cmd:    "evade",
-			Output: b.String(),
+			Cmd:     cmd,
+			Output:  b.String(),
+			Illegal: true,
 		}
 	}
 
-	addr := args[0]
-	available, exist := c.Console.Mem[addr]
-	if !exist {
+	zone := args[0]
+	if err := c.Console.Evade(zone); err != nil {
 		return ResultMsg{
-			Cmd:   "evade" + strings.Join(args, " "),
-			Error: fmt.Errorf("%s : %w", addr, errMemNotFound),
+			Cmd:   cmd,
+			Error: err,
 		}
 	}
-
-	if !available {
-		return ResultMsg{
-			Cmd:   "evade" + strings.Join(args, " "),
-			Error: fmt.Errorf("%s : %w", addr, errMemUnavailable),
-		}
-	}
-
-	// évasion effectuée
-	c.Console.Mem[addr] = false
-	c.Console.Countdown = c.Console.Server.Scan
 
 	return ResultMsg{
-		Cmd:     "evade " + strings.Join(args, " "),
+		Cmd:     cmd,
 		Output:  "Evasion effectuée",
 		Illegal: true,
 	}

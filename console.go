@@ -244,3 +244,23 @@ func (c *Console) DataView(id string) (Entry, error) {
 
 	return entry, nil
 }
+
+func (c *Console) Evade(zone string) error {
+	if !c.IsConnected() {
+		return errNotConnected
+	}
+
+	available, exist := c.Mem[zone]
+	if !exist {
+		return fmt.Errorf("%s : %w", zone, errMemNotFound)
+	}
+
+	if !available {
+		return fmt.Errorf("%s : %w", zone, errMemUnavailable)
+	}
+
+	c.Mem[zone] = false
+	c.Countdown = c.Server.Scan
+
+	return nil
+}

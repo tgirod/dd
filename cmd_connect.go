@@ -10,6 +10,10 @@ import (
 // Connect établit la connexion à un serveur
 type Connect struct{}
 
+type ConnectMsg struct {
+	Address string
+}
+
 func (c Connect) ParseName() string {
 	return "connect"
 }
@@ -42,20 +46,7 @@ func (c Connect) Run(client *Client, args []string) tea.Msg {
 	// récupérer les arguments
 	address := args[0]
 
-	if err := client.Connect(address); err != nil {
-		return ResultMsg{
-			Error: err,
-			Cmd:   cmd,
-		}
-	}
-
-	server := client.Server
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", server.Address)
-	fmt.Fprintf(&b, "%s\n", server.Description)
-
-	return ResultMsg{
-		Cmd:    cmd,
-		Output: b.String(),
+	return ConnectMsg{
+		Address: address,
 	}
 }

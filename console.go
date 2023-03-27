@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -103,14 +104,25 @@ func (c *Console) connect(address string) error {
 	return nil
 }
 
-func (c *Console) Connect(address string) error {
+func (c *Console) Connect(address string) {
+	output := Output{
+		Cmd: fmt.Sprintf("connect %s", address),
+	}
+
 	if err := c.connect(address); err != nil {
-		return err
+		output.Error = err
+		c.AppendOutput(output)
+		return
 	}
 
 	c.History.Clear()
 	c.History.Push(Target{address, ""})
-	return nil
+
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
+	fmt.Fprintf(&b, "%s\n", c.Server.Description)
+	output.Content = b.String()
+	c.AppendOutput(output)
 }
 
 func (c *Console) Link(id int) error {

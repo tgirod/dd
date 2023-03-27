@@ -18,6 +18,10 @@ var Registry = Node{
 
 type RegistrySearch struct{}
 
+type RegistrySearchMsg struct {
+	Name string
+}
+
 func (r RegistrySearch) ParseName() string {
 	return "search"
 }
@@ -38,35 +42,19 @@ func (r RegistrySearch) LongHelp() string {
 }
 
 func (r RegistrySearch) Run(c *Client, args []string) tea.Msg {
-	cmd := fmt.Sprintf("registry search %s", strings.Join(args, " "))
-
 	var name = ""
 	if len(args) > 0 {
 		name = args[0]
 	}
 
-	search, err := c.Console.RegistrySearch(name)
-	if err != nil {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: err,
-		}
-	}
-
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "NAME\tSTATE\tDESCRIPTION\t\n")
-	for _, r := range search {
-		fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
-	}
-	tw.Flush()
-	return ResultMsg{
-		Cmd:    cmd,
-		Output: b.String(),
-	}
+	return RegistrySearchMsg{name}
 }
 
 type RegistryEdit struct{}
+
+type RegistryEditMsg struct {
+	Name string
+}
 
 func (r RegistryEdit) ParseName() string {
 	return "edit"
@@ -97,15 +85,5 @@ func (r RegistryEdit) Run(c *Client, args []string) tea.Msg {
 	}
 
 	name := args[0]
-	if err := c.Console.RegistryEdit(name); err != nil {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: err,
-		}
-	}
-
-	return ResultMsg{
-		Cmd:    cmd,
-		Output: fmt.Sprintf("l'état du registre %s est changé\n", name),
-	}
+	return RegistryEditMsg{name}
 }

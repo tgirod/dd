@@ -157,12 +157,12 @@ func normalize(s string) string {
 	return out
 }
 
-func (s *Server) RegistryEdit(name string) error {
+func (s *Server) RegistryEdit(name string) (bool, error) {
 	for i, r := range s.Registers {
 		if r.Name == name {
 			s.Registers[i].State = !s.Registers[i].State
-			return nil
+			return s.Registers[i].State, nil
 		}
 	}
-	return fmt.Errorf("%s : %w", name, errRegisterNotFound)
+	return false, fmt.Errorf("%s : %w", name, errRegisterNotFound)
 }

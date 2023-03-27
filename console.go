@@ -423,26 +423,52 @@ func (c *Console) Evade(zone string) error {
 	return nil
 }
 
-func (c *Console) RegistrySearch(name string) ([]Register, error) {
-	var search []Register
-
-	if !c.IsConnected() {
-		return search, errNotConnected
+func (c *Console) RegistrySearch(name string) {
+	output := Output{
+		Cmd: fmt.Sprintf("registry search %s", name),
 	}
 
-	search = c.Server.RegistrySearch(name)
-	return search, nil
+	if !c.IsConnected() {
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
+	}
+
+	search := c.Server.RegistrySearch(name)
+
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "NAME\tSTATE\tDESCRIPTION\t\n")
+	for _, r := range search {
+		fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
+	}
+	tw.Flush()
+
+	output.Content = b.String()
+	c.AppendOutput(output)
 }
 
-func (c *Console) RegistryEdit(name string) error {
-	if !c.IsConnected() {
-		return errNotConnected
+func (c *Console) RegistryEdit(name string) {
+	output := Output{
+		Cmd: fmt.Sprintf("registry edit %s", name),
 	}
 
-	// sauver l'état du jeu
-	c.Game.Serialize()
+	if !c.IsConnected() {
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
+	}
 
-	return c.Server.RegistryEdit(name)
+	state, err := c.Server.RegistryEdit(name)
+
+	if err != nil {
+		output.Error = err
+		c.AppendOutput(output)
+		return
+	}
+
+	output.Content = fmt.Sprintf("nouvel état du registre %s : %v\n", name, state)
+	c.AppendOutput(output)
 }
 
 func (c *Console) Identify(login, password string) {

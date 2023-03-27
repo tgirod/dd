@@ -128,22 +128,14 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, textinput.Blink)
 
 	case ResultMsg:
-		// mettre à jour la sortie
-		b := strings.Builder{}
-		if msg.Error != nil {
-			fmt.Fprintf(&b, "%s\n\n", errorTextStyle.Render(msg.Error.Error()))
-		}
-		fmt.Fprintf(&b, "> %s\n\n", msg.Cmd)
-		fmt.Fprintf(&b, "%s\n", msg.Output)
-		// curOutput := c.Wrap(b.String())
-		curOutput := b.String()
-		if c.prevOutput == "" {
-			c.output.SetContent(curOutput)
-		} else {
-			c.output.SetContent(c.prevOutput + "\n" + curOutput)
-		}
+		// FIXME en attendant mieux ...
+		c.Console.Output = append(c.Console.Output, Output{
+			Cmd:     msg.Cmd,
+			Err:     msg.Error,
+			Content: msg.Output,
+		})
+		c.output.SetContent(c.RenderOutput())
 		c.output.GotoBottom()
-		c.prevOutput = curOutput
 
 		// déclencher le scan si la commande est illégale
 		if msg.Illegal {
@@ -206,6 +198,13 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return c, tea.Batch(cmds...)
 }
 
+var (
+	modalStyle  = lg.NewStyle().Border(lg.DoubleBorder()).Padding(1)
+	errorStyle  = lg.NewStyle().Foreground(lg.Color("9"))
+	promptStyle = lg.NewStyle().Foreground(lg.Color("8"))
+	outputStyle = lg.NewStyle()
+)
+
 func (c *Client) View() string {
 	// mise à jour de la barre de statut
 	login := fmt.Sprintf("id=%s", c.Console.Login)
@@ -249,10 +248,25 @@ func (c *Client) View() string {
 	)
 }
 
-var (
-	modalStyle     = lg.NewStyle().Border(lg.DoubleBorder()).Padding(1)
-	errorTextStyle = lg.NewStyle().Foreground(lg.Color("9")).Padding(1)
-)
+func (c *Client) RenderOutput() string {
+	b := strings.Builder{}
+	for _, o := range c.Console.Output {
+		fmt.Fprintf(&b, "> %s\n",
+			promptStyle.MaxWidth(c.width).Render(o.Cmd))
+
+		if o.Err != nil {
+			fmt.Fprintf(&b, "%s\n\n",
+				errorStyle.MaxWidth(c.width).Render(o.Err.Error()))
+		}
+
+		if o.Content != "" {
+			fmt.Fprintf(&b, "%s\n\n",
+				outputStyle.MaxWidth(c.width).Render(o.Content))
+		}
+	}
+
+	return b.String()
+}
 
 // Run parse et exécute la commande saisie par l'utilisateur
 func (c *Client) Parse(input string) tea.Cmd {

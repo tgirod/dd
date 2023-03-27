@@ -37,11 +37,19 @@ type Console struct {
 	// Pile de serveurs visités lors de cette connexion
 	History Stack
 
+	Output []Output
+
 	// serveur auquel la console est connectée
 	*Server
 
 	// état interne du jeu
 	*Game
+}
+
+type Output struct {
+	Cmd     string
+	Err     error
+	Content string
 }
 
 var Hack = map[string]Command{
@@ -100,7 +108,6 @@ func (c *Console) Connect(address string) error {
 
 	c.History.Clear()
 	c.History.Push(Target{address, ""})
-	fmt.Println(c.History)
 	return nil
 }
 
@@ -115,7 +122,6 @@ func (c *Console) Link(id int) error {
 	}
 
 	c.History.Push(target)
-	fmt.Println(c.History)
 	return nil
 }
 

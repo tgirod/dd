@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const MAX_LEN_OUTPUT int = 10
+
 // Console représente le terminal depuis lequel le joueur accède au net
 type Console struct {
 	ID int
@@ -309,4 +311,11 @@ func (c *Console) Identify(login, password string) error {
 	}
 
 	return nil
+}
+
+func (c *Console) AppendOutput(o Output) {
+	c.Output = append(c.Output, o)
+	if len(c.Output) > MAX_LEN_OUTPUT {
+		c.Output = c.Output[len(c.Output)-MAX_LEN_OUTPUT : len(c.Output)]
+	}
 }

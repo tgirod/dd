@@ -129,7 +129,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case ResultMsg:
 		// FIXME en attendant mieux ...
-		c.Console.Output = append(c.Console.Output, Output{
+		c.Console.AppendOutput(Output{
 			Cmd:     msg.Cmd,
 			Err:     msg.Error,
 			Content: msg.Output,

@@ -1,13 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Evade struct{}
+
+type EvadeListMsg struct{}
+
+type EvadeMsg struct {
+	Zone string
+}
 
 func (e Evade) ParseName() string {
 	return "evade"
@@ -29,40 +34,10 @@ func (e Evade) LongHelp() string {
 }
 
 func (e Evade) Run(c *Client, args []string) tea.Msg {
-	cmd := fmt.Sprintf("evade %s", strings.Join(args, " "))
-
-	// afficher la liste des zones mémoires disponibles
 	if len(args) == 0 {
-		b := strings.Builder{}
-		tw := tw(&b)
-		fmt.Fprintf(tw, "ZONE\tDISPONIBILITE\t\n")
-		for addr, available := range c.Console.Mem {
-			if !available {
-				fmt.Fprintf(tw, "%s\t%s\t\n", addr, "INDISPONIBLE")
-			} else {
-				fmt.Fprintf(tw, "%s\t%s\t\n", addr, "OK")
-			}
-		}
-		tw.Flush()
-
-		return ResultMsg{
-			Cmd:     cmd,
-			Output:  b.String(),
-			Illegal: true,
-		}
+		return EvadeListMsg{}
 	}
 
 	zone := args[0]
-	if err := c.Console.Evade(zone); err != nil {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: err,
-		}
-	}
-
-	return ResultMsg{
-		Cmd:     cmd,
-		Output:  "Evasion effectuée",
-		Illegal: true,
-	}
+	return EvadeMsg{zone}
 }

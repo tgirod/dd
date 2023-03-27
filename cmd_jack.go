@@ -10,6 +10,10 @@ import (
 
 type Jack struct{}
 
+type JackMsg struct {
+	Id int
+}
+
 func (j Jack) ParseName() string {
 	return "jack"
 }
@@ -46,20 +50,5 @@ func (j Jack) Run(c *Client, args []string) tea.Msg {
 		}
 	}
 
-	if err := c.Jack(id); err != nil {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: err,
-		}
-	}
-
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
-	fmt.Fprintf(&b, "%s\n", c.Server.Description)
-
-	return ResultMsg{
-		Cmd:     "jack " + strings.Join(args, " "),
-		Output:  b.String(),
-		Illegal: true,
-	}
+	return JackMsg{id}
 }

@@ -272,19 +272,29 @@ func (c *Console) Plug() {
 	c.AppendOutput(output)
 }
 
-func (c *Console) Jack(id int) error {
-	if !c.IsConnected() {
-		return errNotConnected
+func (c *Console) Jack(id int) {
+	output := Output{
+		Cmd: fmt.Sprintf("jack %d", id),
+	}
+
+	if c.IsConnected() {
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
 	}
 
 	if id < 0 || id >= len(c.Server.Targets) {
-		return errInvalidArgument
+		output.Error = errInvalidArgument
+		c.AppendOutput(output)
+		return
 	}
 
 	target := c.Server.Targets[id]
 	server, err := c.Game.FindServer(target.Address)
 	if err != nil {
-		return err
+		output.Error = err
+		c.AppendOutput(output)
+		return
 	}
 
 	c.Server = server
@@ -292,7 +302,12 @@ func (c *Console) Jack(id int) error {
 	c.Admin = false
 	c.InitMem()
 	c.History.Push(target)
-	return nil
+
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
+	fmt.Fprintf(&b, "%s\n", c.Server.Description)
+	output.Content = b.String()
+	c.AppendOutput(output)
 }
 
 func (c *Console) StartSecurity() {
@@ -403,24 +418,61 @@ func (c *Console) Help(args []string) {
 	c.AppendOutput(output)
 }
 
-func (c *Console) Evade(zone string) error {
-	if !c.IsConnected() {
-		return errNotConnected
+func (c *Console) EvadeList() {
+	output := Output{
+		Cmd: "evade",
 	}
 
-	available, exist := c.Mem[zone]
-	if !exist {
-		return fmt.Errorf("%s : %w", zone, errMemNotFound)
+	if !c.IsConnected() {
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
+	}
+
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "ZONE\tDISPONIBILITE\t\n")
+	for addr, available := range c.Mem {
+		if !available {
+			fmt.Fprintf(tw, "%s\t%s\t\n", addr, "INDISPONIBLE")
+		} else {
+			fmt.Fprintf(tw, "%s\t%s\t\n", addr, "OK")
+		}
+	}
+	tw.Flush()
+
+	output.Content = b.String()
+	c.AppendOutput(output)
+}
+
+func (c *Console) Evade(zone string) {
+	output := Output{
+		Cmd: fmt.Sprintf("evade %s", zone),
+	}
+
+	if !c.IsConnected() {
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
+	}
+
+	available, ok := c.Mem[zone]
+	if !ok {
+		output.Error = fmt.Errorf("%s : %w", zone, errMemNotFound)
+		c.AppendOutput(output)
+		return
 	}
 
 	if !available {
-		return fmt.Errorf("%s : %w", zone, errMemUnavailable)
+		output.Error = fmt.Errorf("%s : %w", zone, errMemUnavailable)
+		c.AppendOutput(output)
+		return
 	}
 
 	c.Mem[zone] = false
 	c.Countdown = c.Server.Scan
-
-	return nil
+	output.Content = fmt.Sprintf("session relocalisée dans la zone mémoire %s", zone)
+	c.AppendOutput(output)
 }
 
 func (c *Console) RegistrySearch(name string) {

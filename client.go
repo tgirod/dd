@@ -157,6 +157,22 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Console.RegistryEdit(msg.Name)
 		c.RenderOutput()
 
+	case JackMsg:
+		c.Console.Jack(msg.Id)
+		c.Console.StartSecurity()
+		// FIXME start security ne fonctionne peut être pas comme prévu
+		c.RenderOutput()
+
+	case EvadeListMsg:
+		c.Console.EvadeList()
+		// FIXME security
+		c.RenderOutput()
+
+	case EvadeMsg:
+		c.Console.Evade(msg.Zone)
+		// FIXME security
+		c.RenderOutput()
+
 	case tea.WindowSizeMsg:
 		// redimensionner les différentes parties de l'interface
 		c.width = msg.Width

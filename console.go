@@ -125,18 +125,53 @@ func (c *Console) Connect(address string) {
 	c.AppendOutput(output)
 }
 
-func (c *Console) Link(id int) error {
+func (c *Console) LinkList() {
+	output := Output{
+		Cmd: "link",
+	}
+
+	if !c.IsConnected() {
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
+	}
+
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
+	for i, t := range c.Server.Targets {
+		fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
+	}
+	tw.Flush()
+
+	output.Content = b.String()
+	c.AppendOutput(output)
+}
+
+func (c *Console) Link(id int) {
+	output := Output{
+		Cmd: fmt.Sprintf("link %d", id),
+	}
+
 	if id < 0 || id >= len(c.Server.Targets) {
-		return errInvalidArgument
+		output.Error = errInvalidArgument
+		c.AppendOutput(output)
+		return
 	}
 
 	target := c.Server.Targets[id]
 	if err := c.connect(target.Address); err != nil {
-		return err
+		output.Error = err
+		c.AppendOutput(output)
+		return
 	}
 
 	c.History.Push(target)
-	return nil
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
+	fmt.Fprintf(&b, "%s\n", c.Server.Description)
+	output.Content = b.String()
+	c.AppendOutput(output)
 }
 
 func (c *Console) Back() {

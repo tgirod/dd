@@ -10,6 +10,12 @@ import (
 
 type Link struct{}
 
+type LinkListMsg struct{}
+
+type LinkMsg struct {
+	Id int
+}
+
 func (l Link) ParseName() string {
 	return "link"
 }
@@ -33,21 +39,10 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 	cmd := fmt.Sprintf("link %s", strings.Join(args, " "))
 
 	if len(args) == 0 {
-		b := strings.Builder{}
-		tw := tw(&b)
-		fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
-		for i, t := range c.Server.Targets {
-			fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
-		}
-		tw.Flush()
-
-		return ResultMsg{
-			Cmd:    cmd,
-			Output: b.String(),
-		}
+		// demander la liste
+		return LinkListMsg{}
 	}
 
-	// récupérer le lien
 	id, err := strconv.Atoi(args[0])
 	if err != nil {
 		return ResultMsg{
@@ -56,19 +51,5 @@ func (l Link) Run(c *Client, args []string) tea.Msg {
 		}
 	}
 
-	if err := c.Link(id); err != nil {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: err,
-		}
-	}
-
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
-	fmt.Fprintf(&b, "%s\n", c.Server.Description)
-
-	return ResultMsg{
-		Cmd:    cmd,
-		Output: b.String(),
-	}
+	return LinkMsg{id}
 }

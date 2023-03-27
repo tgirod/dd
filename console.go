@@ -314,6 +314,39 @@ func (c *Console) DataView(id string) {
 
 }
 
+func (c *Console) Help(args []string) {
+	output := Output{
+		Cmd: fmt.Sprintf("help %s", strings.Join(args, " ")),
+	}
+
+	if len(args) == 0 {
+		b := strings.Builder{}
+		b.WriteString("COMMANDES DISPONIBLES\n\n")
+		tw := tw(&b)
+		fmt.Fprintf(tw, "NOM\tDESCRIPTION\t\n")
+		for _, s := range c.Node.Sub {
+			fmt.Fprintf(tw, "%s\t%s\t\n", s.ParseName(), s.ShortHelp())
+		}
+		tw.Flush()
+		b.WriteString("\nPour plus d'aide, tapez 'help <COMMAND>'\n")
+
+		output.Content = b.String()
+		c.AppendOutput(output)
+		return
+	}
+
+	// FIXME match récursif pour afficher l'aide d'une sous-commande
+	match := c.Node.Match(args[0])
+	if len(match) == 0 {
+		output.Error = fmt.Errorf("%s : %w", args[0], errInvalidCommand)
+		c.AppendOutput(output)
+		return
+	}
+
+	output.Content = match[0].LongHelp()
+	c.AppendOutput(output)
+}
+
 func (c *Console) Evade(zone string) error {
 	if !c.IsConnected() {
 		return errNotConnected

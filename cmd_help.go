@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -9,6 +8,10 @@ import (
 
 // Help affiche l'aide
 type Help struct{}
+
+type HelpMsg struct {
+	Args []string
+}
 
 func (c Help) ParseName() string {
 	return "help"
@@ -29,34 +32,5 @@ func (c Help) LongHelp() string {
 }
 
 func (c Help) Run(client *Client, args []string) tea.Msg {
-	if len(args) == 0 {
-		b := strings.Builder{}
-		b.WriteString("COMMANDES DISPONIBLES\n\n")
-		tw := tw(&b)
-		fmt.Fprintf(tw, "NOM\tDESCRIPTION\t\n")
-		for _, s := range client.Console.Node.Sub {
-			fmt.Fprintf(tw, "%s\t%s\t\n", s.ParseName(), s.ShortHelp())
-		}
-		tw.Flush()
-		b.WriteString("\nPour plus d'aide, tapez 'help <COMMAND>'\n")
-
-		return ResultMsg{
-			Cmd:    "help " + strings.Join(args, " "),
-			Output: b.String(),
-		}
-	}
-
-	cmd := args[0]
-	match := client.Console.Node.Match(cmd)
-	if len(match) == 0 {
-		return ResultMsg{
-			Cmd:   "help " + strings.Join(args, " "),
-			Error: fmt.Errorf("%s : %w", cmd, errInvalidCommand),
-		}
-	}
-
-	return ResultMsg{
-		Cmd:    "help " + strings.Join(args, " "),
-		Output: match[0].LongHelp(),
-	}
+	return HelpMsg{args}
 }

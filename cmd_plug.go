@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Plug struct{}
+
+type PlugMsg struct{}
 
 func (p Plug) ParseName() string {
 	return "plug"
@@ -26,16 +27,5 @@ func (p Plug) LongHelp() string {
 }
 
 func (p Plug) Run(c *Client, args []string) tea.Msg {
-	if err := c.Plug(); err != nil {
-		return ResultMsg{
-			Cmd:    "plug",
-			Error:  fmt.Errorf("plug : %w", err),
-			Output: p.LongHelp(),
-		}
-	}
-
-	return ResultMsg{
-		Cmd:    "plug",
-		Output: "interface neuronale directe activée",
-	}
+	return PlugMsg{}
 }

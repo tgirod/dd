@@ -249,13 +249,20 @@ func (c *Console) Load(code string) {
 	c.AppendOutput(output)
 }
 
-func (c *Console) Plug() error {
+func (c *Console) Plug() {
+	output := Output{
+		Cmd: "plug",
+	}
+
 	if c.IsConnected() {
-		return errConnected
+		output.Error = errConnected
+		c.AppendOutput(output)
+		return
 	}
 
 	c.DNI = true
-	return nil
+	output.Content = "interface neuronale directe activée"
+	c.AppendOutput(output)
 }
 
 func (c *Console) Jack(id int) error {

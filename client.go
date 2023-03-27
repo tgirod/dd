@@ -109,6 +109,14 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Console.Connect(msg.Address)
 		c.RenderOutput()
 
+	case DataSearchMsg:
+		c.Console.DataSearch(msg.Keyword)
+		c.RenderOutput()
+
+	case DataViewMsg:
+		c.Console.DataView(msg.Id)
+		c.RenderOutput()
+
 	case tea.WindowSizeMsg:
 		// redimensionner les différentes parties de l'interface
 		c.width = msg.Width

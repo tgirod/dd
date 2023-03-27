@@ -16,6 +16,10 @@ var Data = Node{
 	},
 }
 
+type DataSearchMsg struct {
+	Keyword string
+}
+
 type DataSearch struct{}
 
 func (d DataSearch) ParseName() string {
@@ -37,16 +41,7 @@ func (d DataSearch) LongHelp() string {
 }
 
 func (d DataSearch) Run(c *Client, args []string) tea.Msg {
-	var err error
 	cmd := fmt.Sprintf("data search %s", strings.Join(args, " "))
-
-	if !c.Console.IsConnected() {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: errNotConnected,
-		}
-	}
-
 	if len(args) < 1 {
 		return ResultMsg{
 			Cmd:    cmd,
@@ -56,33 +51,11 @@ func (d DataSearch) Run(c *Client, args []string) tea.Msg {
 	}
 
 	keyword := args[0]
+	return DataSearchMsg{keyword}
+}
 
-	entries, err := c.Console.DataSearch(keyword)
-	if err != nil {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: err,
-		}
-	}
-
-	// construire la réponse à afficher
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
-	for _, e := range entries {
-		title := e.Title
-		fmt.Fprintf(tw, "%s\t%s\t%s\t\n",
-			e.ID,
-			strings.Join(e.Keywords, " "),
-			title,
-		)
-	}
-	tw.Flush()
-
-	return ResultMsg{
-		Cmd:    "data search " + strings.Join(args, ""),
-		Output: b.String(),
-	}
+type DataViewMsg struct {
+	Id string
 }
 
 type DataView struct{}
@@ -117,24 +90,5 @@ func (d DataView) Run(c *Client, args []string) tea.Msg {
 	}
 
 	id := args[0]
-
-	entry, err := c.Server.FindEntry(id, c.Login)
-	if err != nil {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: err,
-		}
-	}
-
-	// construire la réponse à afficher
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "TITLE: %s\n", entry.Title)
-	fmt.Fprintf(&b, "KEYWORDS: %s\n", strings.Join(entry.Keywords, " "))
-	fmt.Fprintf(&b, "-------------------------------------\n")
-	fmt.Fprintf(&b, entry.Content)
-
-	return ResultMsg{
-		Cmd:    "data view " + strings.Join(args, " "),
-		Output: b.String(),
-	}
+	return DataViewMsg{id}
 }

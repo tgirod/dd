@@ -248,35 +248,70 @@ func (c *Console) StartSecurity() {
 	}
 }
 
-func (c *Console) DataSearch(keyword string) ([]Entry, error) {
-	var search []Entry
+func (c *Console) DataSearch(keyword string) {
+	var output = Output{
+		Cmd: fmt.Sprintf("data search %s", keyword),
+	}
 
 	if !c.IsConnected() {
-		return search, errNotConnected
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
 	}
 
 	if len([]rune(keyword)) < 3 {
-		return search, fmt.Errorf("%s : %w", keyword, errKeywordTooShort)
+		output.Error = fmt.Errorf("%s : %w", keyword, errKeywordTooShort)
+		c.AppendOutput(output)
+		return
 	}
 
-	search = c.Server.DataSearch(keyword, c.Login)
-	return search, nil
+	// construire la réponse à afficher
+	entries := c.Server.DataSearch(keyword, c.Login)
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
+	for _, e := range entries {
+		title := e.Title
+		fmt.Fprintf(tw, "%s\t%s\t%s\t\n",
+			e.ID,
+			strings.Join(e.Keywords, " "),
+			title,
+		)
+	}
+	tw.Flush()
+
+	output.Content = b.String()
+	c.AppendOutput(output)
 }
 
-func (c *Console) DataView(id string) (Entry, error) {
-	var err error
-	var entry Entry
+func (c *Console) DataView(id string) {
+	output := Output{
+		Cmd: fmt.Sprintf("data view %s", id),
+	}
 
 	if !c.IsConnected() {
-		return entry, errNotConnected
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
 	}
 
-	entry, err = c.Server.FindEntry(id, c.Login)
+	entry, err := c.Server.FindEntry(id, c.Login)
 	if err != nil {
-		return entry, err
+		output.Error = err
+		c.AppendOutput(output)
+		return
 	}
 
-	return entry, nil
+	// construire la réponse à afficher
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "TITLE: %s\n", entry.Title)
+	fmt.Fprintf(&b, "KEYWORDS: %s\n", strings.Join(entry.Keywords, " "))
+	fmt.Fprintf(&b, "-------------------------------------\n")
+	fmt.Fprintf(&b, entry.Content)
+
+	output.Content = b.String()
+	c.AppendOutput(output)
+
 }
 
 func (c *Console) Evade(zone string) error {

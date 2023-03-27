@@ -101,6 +101,9 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	switch msg := msg.(type) {
+	case BackMsg:
+		c.Console.Back()
+		c.RenderOutput()
 
 	case tea.WindowSizeMsg:
 		// redimensionner les différentes parties de l'interface
@@ -131,11 +134,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// FIXME en attendant mieux ...
 		c.Console.AppendOutput(Output{
 			Cmd:     msg.Cmd,
-			Err:     msg.Error,
+			Error:   msg.Error,
 			Content: msg.Output,
 		})
-		c.output.SetContent(c.RenderOutput())
-		c.output.GotoBottom()
+		c.RenderOutput()
 
 		// déclencher le scan si la commande est illégale
 		if msg.Illegal {
@@ -248,24 +250,25 @@ func (c *Client) View() string {
 	)
 }
 
-func (c *Client) RenderOutput() string {
+func (c *Client) RenderOutput() {
 	b := strings.Builder{}
 	for _, o := range c.Console.Output {
 		fmt.Fprintf(&b, "> %s\n",
 			promptStyle.MaxWidth(c.width).Render(o.Cmd))
 
-		if o.Err != nil {
-			fmt.Fprintf(&b, "%s\n\n",
-				errorStyle.MaxWidth(c.width).Render(o.Err.Error()))
+		if o.Error != nil {
+			fmt.Fprintf(&b, "%s\n",
+				errorStyle.MaxWidth(c.width).Render(o.Error.Error()))
 		}
 
 		if o.Content != "" {
-			fmt.Fprintf(&b, "%s\n\n",
+			fmt.Fprintf(&b, "%s\n",
 				outputStyle.MaxWidth(c.width).Render(o.Content))
 		}
 	}
 
-	return b.String()
+	c.output.SetContent(b.String())
+	c.output.GotoBottom()
 }
 
 // Run parse et exécute la commande saisie par l'utilisateur

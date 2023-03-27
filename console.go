@@ -50,7 +50,7 @@ type Console struct {
 
 type Output struct {
 	Cmd     string
-	Err     error
+	Error   error
 	Content string
 }
 
@@ -127,13 +127,21 @@ func (c *Console) Link(id int) error {
 	return nil
 }
 
-func (c *Console) Back() error {
+func (c *Console) Back() {
+	output := Output{
+		Cmd: "back",
+	}
+
 	if !c.IsConnected() {
-		return errNotConnected
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
 	}
 
 	if len(c.History) == 1 {
-		return errInvalidCommand
+		output.Error = errInvalidCommand
+		c.AppendOutput(output)
+		return
 	}
 
 	// enlever le serveur actuel
@@ -141,8 +149,14 @@ func (c *Console) Back() error {
 
 	prevTarget, _ := c.History.Peek()
 
-	fmt.Println(c.History)
-	return c.connect(prevTarget.Address)
+	if err := c.connect(prevTarget.Address); err != nil {
+		output.Error = err
+		c.AppendOutput(output)
+		return
+	}
+
+	output.Content = fmt.Sprintf("connexion établie à l'adresse %s\n\n", c.Server.Address)
+	c.AppendOutput(output)
 }
 
 func (c *Console) IsConnected() bool {

@@ -1,11 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
+
+type BackMsg struct{}
 
 // Connect établit la connexion à un serveur
 type Back struct{}
@@ -27,15 +28,5 @@ func (cmd Back) LongHelp() string {
 }
 
 func (cmd Back) Run(client *Client, args []string) tea.Msg {
-	if err := client.Back(); err != nil {
-		return ResultMsg{
-			Cmd:   "back",
-			Error: err,
-		}
-	}
-
-	return ResultMsg{
-		Cmd:    "back",
-		Output: fmt.Sprintf("connexion établie à l'adresse %s\n\n", client.Server.Address),
-	}
+	return BackMsg{}
 }

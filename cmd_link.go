@@ -35,7 +35,7 @@ func (l Link) LongHelp() string {
 	return b.String()
 }
 
-func (l Link) Run(c *Client, args []string) tea.Msg {
+func (l Link) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("link %s", strings.Join(args, " "))
 
 	if len(args) == 0 {

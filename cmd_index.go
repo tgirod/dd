@@ -26,6 +26,6 @@ func (i Index) LongHelp() string {
 	return b.String()
 }
 
-func (i Index) Run(c *Client, args []string) tea.Msg {
+func (i Index) Run(args []string) tea.Msg {
 	return IndexMsg{}
 }

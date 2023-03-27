@@ -33,7 +33,7 @@ func (e Evade) LongHelp() string {
 	return b.String()
 }
 
-func (e Evade) Run(c *Client, args []string) tea.Msg {
+func (e Evade) Run(args []string) tea.Msg {
 	if len(args) == 0 {
 		return EvadeListMsg{}
 	}

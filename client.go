@@ -346,7 +346,7 @@ func (c *Client) Parse(input string) tea.Cmd {
 	// construire la tea.Cmd qui parse et exécute la commande
 	return func() tea.Msg {
 		// exécuter la commande
-		return c.Console.Run(c, args)
+		return c.Console.Run(args)
 	}
 }
 

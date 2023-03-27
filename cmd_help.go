@@ -31,6 +31,6 @@ func (c Help) LongHelp() string {
 	return b.String()
 }
 
-func (c Help) Run(client *Client, args []string) tea.Msg {
+func (c Help) Run(args []string) tea.Msg {
 	return HelpMsg{args}
 }

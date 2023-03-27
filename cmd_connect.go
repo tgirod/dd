@@ -32,7 +32,7 @@ func (c Connect) LongHelp() string {
 	return b.String()
 }
 
-func (c Connect) Run(client *Client, args []string) tea.Msg {
+func (c Connect) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("connect %s", strings.Join(args, " "))
 
 	if len(args) < 1 {

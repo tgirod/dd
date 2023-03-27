@@ -26,6 +26,6 @@ func (q Quit) LongHelp() string {
 	return b.String()
 }
 
-func (q Quit) Run(c *Client, args []string) tea.Msg {
+func (q Quit) Run(args []string) tea.Msg {
 	return QuitMsg{}
 }

@@ -41,7 +41,7 @@ func (r RegistrySearch) LongHelp() string {
 	return b.String()
 }
 
-func (r RegistrySearch) Run(c *Client, args []string) tea.Msg {
+func (r RegistrySearch) Run(args []string) tea.Msg {
 	var name = ""
 	if len(args) > 0 {
 		name = args[0]
@@ -74,7 +74,7 @@ func (r RegistryEdit) LongHelp() string {
 	return b.String()
 }
 
-func (r RegistryEdit) Run(c *Client, args []string) tea.Msg {
+func (r RegistryEdit) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("registry edit %s", strings.Join(args, " "))
 
 	if len(args) < 1 {

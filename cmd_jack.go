@@ -32,7 +32,7 @@ func (j Jack) LongHelp() string {
 	return b.String()
 }
 
-func (j Jack) Run(c *Client, args []string) tea.Msg {
+func (j Jack) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("jack %s", strings.Join(args, " "))
 	if len(args) == 0 {
 		return ResultMsg{

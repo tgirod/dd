@@ -31,7 +31,7 @@ func (l Load) LongHelp() string {
 	return b.String()
 }
 
-func (l Load) Run(c *Client, args []string) tea.Msg {
+func (l Load) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("load %s", strings.Join(args, " "))
 	if len(args) < 1 {
 		return ResultMsg{

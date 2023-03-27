@@ -40,7 +40,7 @@ func (d DataSearch) LongHelp() string {
 	return b.String()
 }
 
-func (d DataSearch) Run(c *Client, args []string) tea.Msg {
+func (d DataSearch) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("data search %s", strings.Join(args, " "))
 	if len(args) < 1 {
 		return ResultMsg{
@@ -78,7 +78,7 @@ func (d DataView) LongHelp() string {
 	return b.String()
 }
 
-func (d DataView) Run(c *Client, args []string) tea.Msg {
+func (d DataView) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("data view %s", strings.Join(args, " "))
 
 	if len(args) < 1 {

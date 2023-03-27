@@ -33,7 +33,7 @@ func (i Identify) LongHelp() string {
 	return b.String()
 }
 
-func (i Identify) Run(c *Client, args []string) tea.Msg {
+func (i Identify) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("identify %s", strings.Join(args, " "))
 	if len(args) < 1 {
 		return ResultMsg{

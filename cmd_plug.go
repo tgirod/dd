@@ -26,6 +26,6 @@ func (p Plug) LongHelp() string {
 	return b.String()
 }
 
-func (p Plug) Run(c *Client, args []string) tea.Msg {
+func (p Plug) Run(args []string) tea.Msg {
 	return PlugMsg{}
 }

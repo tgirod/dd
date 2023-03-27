@@ -31,13 +31,12 @@ func (p Pop) LongHelp() string {
 	return b.String()
 }
 
-func (p Pop) Run(c *Client, args []string) tea.Msg {
+func (p Pop) Run(args []string) tea.Msg {
 	msg := strings.Join(args, " ")
 	if len(args) == 0 {
 		msg = "ceci est une fenêtre modale"
 	}
-	w, h := c.modalWindowSize()
-	return OpenModalMsg(&Pop{msg, w, h})
+	return OpenModalMsg(&Pop{msg, 0, 0})
 }
 
 func (p *Pop) Init() tea.Cmd {

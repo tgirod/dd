@@ -27,6 +27,6 @@ func (cmd Back) LongHelp() string {
 	return b.String()
 }
 
-func (cmd Back) Run(client *Client, args []string) tea.Msg {
+func (cmd Back) Run(args []string) tea.Msg {
 	return BackMsg{}
 }

@@ -413,6 +413,30 @@ func (c *Console) Identify(login, password string) {
 	c.AppendOutput(output)
 }
 
+func (c *Console) Index() {
+	output := Output{
+		Cmd: "index",
+	}
+
+	if !c.IsConnected() {
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
+	}
+
+	b := strings.Builder{}
+
+	s := c.Server
+	b.WriteString(s.Description)
+	b.WriteString("\n")
+	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Targets))
+	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries))
+	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
+
+	output.Content = b.String()
+	c.AppendOutput(output)
+}
+
 func (c *Console) AppendOutput(o Output) {
 	c.Output = append(c.Output, o)
 	if len(c.Output) > MAX_LEN_OUTPUT {

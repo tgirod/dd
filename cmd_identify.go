@@ -9,6 +9,11 @@ import (
 
 type Identify struct{}
 
+type IdentifyMsg struct {
+	Login    string
+	Password string
+}
+
 func (i Identify) ParseName() string {
 	return "identify"
 }
@@ -49,17 +54,5 @@ func (i Identify) Run(c *Client, args []string) tea.Msg {
 	// récupérer les arguments
 	login := args[0]
 	password := args[1]
-
-	if err := c.Identify(login, password); err != nil {
-		// échec de l'identification
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: fmt.Errorf("identify : %w", err),
-		}
-	}
-
-	return ResultMsg{
-		Cmd:    cmd,
-		Output: fmt.Sprintf("identité établie. Bienvenue, %s\n", login),
-	}
+	return IdentifyMsg{login, password}
 }

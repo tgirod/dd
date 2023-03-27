@@ -121,6 +121,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Console.Help(msg.Args)
 		c.RenderOutput()
 
+	case IdentifyMsg:
+		c.Console.Identify(msg.Login, msg.Password)
+		c.RenderOutput()
+
 	case tea.WindowSizeMsg:
 		// redimensionner les différentes parties de l'interface
 		c.width = msg.Width

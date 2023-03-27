@@ -389,10 +389,15 @@ func (c *Console) RegistryEdit(name string) error {
 	return c.Server.RegistryEdit(name)
 }
 
-func (c *Console) Identify(login, password string) error {
+func (c *Console) Identify(login, password string) {
+	output := Output{
+		Cmd: fmt.Sprintf("identify %s %s", login, password),
+	}
 
 	if err := c.CheckIdentity(login, password); err != nil {
-		return err
+		output.Error = err
+		c.AppendOutput(output)
+		return
 	}
 
 	c.Login = login
@@ -404,7 +409,8 @@ func (c *Console) Identify(login, password string) error {
 		}
 	}
 
-	return nil
+	output.Content = fmt.Sprintf("Identité établie. Bienvenue, %s\n", login)
+	c.AppendOutput(output)
 }
 
 func (c *Console) AppendOutput(o Output) {

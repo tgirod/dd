@@ -8,6 +8,8 @@ import (
 
 type Quit struct{}
 
+type QuitMsg struct{}
+
 func (q Quit) ParseName() string {
 	return "quit"
 }
@@ -25,16 +27,5 @@ func (q Quit) LongHelp() string {
 }
 
 func (q Quit) Run(c *Client, args []string) tea.Msg {
-	cmd := "quit"
-	if err := c.Disconnect(); err != nil {
-		return ResultMsg{
-			Cmd:   cmd,
-			Error: err,
-		}
-	}
-
-	return ResultMsg{
-		Cmd:    "quit",
-		Output: "déconnexion effectuée",
-	}
+	return QuitMsg{}
 }

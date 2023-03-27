@@ -218,9 +218,14 @@ func (c *Console) InitMem() {
 	}
 }
 
-func (c *Console) Disconnect() error {
+func (c *Console) Quit() {
+	output := Output{
+		Cmd: "quit",
+	}
 	if !c.IsConnected() {
-		return errNotConnected
+		output.Error = errNotConnected
+		c.AppendOutput(output)
+		return
 	}
 
 	c.Server = nil
@@ -229,7 +234,9 @@ func (c *Console) Disconnect() error {
 	c.Alert = false
 	c.History.Clear()
 	c.Node.Sub = baseCmds
-	return nil
+
+	output.Content = "déconnexion effectuée"
+	c.AppendOutput(output)
 }
 
 func (c *Console) Load(code string) {

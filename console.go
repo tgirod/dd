@@ -232,14 +232,21 @@ func (c *Console) Disconnect() error {
 	return nil
 }
 
-func (c *Console) Load(code string) error {
+func (c *Console) Load(code string) {
+	output := Output{
+		Cmd: fmt.Sprintf("load %s", code),
+	}
+
 	command, ok := Hack[code]
 	if !ok {
-		return fmt.Errorf("%s : %w", code, errInvalidArgument)
+		output.Error = fmt.Errorf("%s : %w", code, errInvalidArgument)
+		c.AppendOutput(output)
+		return
 	}
 
 	c.Node.Sub = append(c.Node.Sub, command)
-	return nil
+	output.Content = fmt.Sprintf("%s : commande chargée", command.ParseName())
+	c.AppendOutput(output)
 }
 
 func (c *Console) Plug() error {

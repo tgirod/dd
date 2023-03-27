@@ -137,6 +137,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Console.Link(msg.Id)
 		c.RenderOutput()
 
+	case LoadMsg:
+		c.Console.Load(msg.Code)
+		c.RenderOutput()
+
 	case tea.WindowSizeMsg:
 		// redimensionner les différentes parties de l'interface
 		c.width = msg.Width

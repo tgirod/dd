@@ -9,6 +9,10 @@ import (
 
 type Load struct{}
 
+type LoadMsg struct {
+	Code string
+}
+
 func (l Load) ParseName() string {
 	return "load"
 }
@@ -38,18 +42,5 @@ func (l Load) Run(c *Client, args []string) tea.Msg {
 	}
 
 	code := args[0]
-	if err := c.Load(code); err != nil {
-		return ResultMsg{
-			Cmd:    cmd,
-			Error:  err,
-			Output: l.LongHelp(),
-		}
-	}
-
-	cmds := c.Console.Node.Sub
-	name := cmds[len(cmds)-1].ParseName()
-	return ResultMsg{
-		Cmd:    "load " + strings.Join(args, " "),
-		Output: fmt.Sprintf("%s : commande chargée", name),
-	}
+	return LoadMsg{code}
 }

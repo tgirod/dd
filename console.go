@@ -277,7 +277,7 @@ func (c *Console) Jack(id int) {
 		Cmd: fmt.Sprintf("jack %d", id),
 	}
 
-	if c.IsConnected() {
+	if !c.IsConnected() {
 		output.Error = errNotConnected
 		c.AppendOutput(output)
 		return

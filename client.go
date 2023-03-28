@@ -159,18 +159,17 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case JackMsg:
 		c.Console.Jack(msg.Id)
-		c.Console.StartSecurity()
-		// FIXME start security ne fonctionne peut être pas comme prévu
+		cmds = append(cmds, c.StartSecurity)
 		c.RenderOutput()
 
 	case EvadeListMsg:
 		c.Console.EvadeList()
-		// FIXME security
+		cmds = append(cmds, c.StartSecurity)
 		c.RenderOutput()
 
 	case EvadeMsg:
 		c.Console.Evade(msg.Zone)
-		// FIXME security
+		cmds = append(cmds, c.StartSecurity)
 		c.RenderOutput()
 
 	case tea.WindowSizeMsg:

@@ -206,14 +206,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		})
 		c.RenderOutput()
 
-		// déclencher le scan si la commande est illégale
-		if msg.Illegal {
-			cmds = append(cmds, c.StartSecurity)
-		}
-
 	case SecurityMsg:
 		if c.Console.Alert {
-			// l'alerte est toujours là, on relance la routine de sécurité pour un tour
+			// l'alerte est toujours là
+			// la routine de sécurité continue
 			cmds = append(cmds, tea.Every(msg.Wait, c.Security))
 		}
 
@@ -349,7 +345,7 @@ func (c *Client) Parse(input string) tea.Cmd {
 	}
 }
 
-func (c Client) Delay() time.Duration {
+func (c *Client) Delay() time.Duration {
 	if c.Console.DNI {
 		return time.Second * DNISpeed
 	} else {
@@ -357,44 +353,23 @@ func (c Client) Delay() time.Duration {
 	}
 }
 
-func (c Client) StartSecurity() tea.Msg {
-	c.Console.StartSecurity()
+func (c *Client) StartSecurity() tea.Msg {
+	c.StartAlert()
 	return SecurityMsg{c.Delay()}
 }
 
-func (c Client) Security(t time.Time) tea.Msg {
+func (c *Client) Security(t time.Time) tea.Msg {
 	// décrémenter d'une seconde
 	c.Countdown -= time.Second
 
 	if c.Countdown > 0 {
-		// on continue de faire tourner la routine de sécurité
+		// tant que l'horloge n'est pas à arrivée à 0, on ne fait rien
 		return SecurityMsg{c.Delay()}
 	}
 
-	c.Quit()
-	if c.DNI {
-		return ResultMsg{
-			Output: `
-			     DUMPSHOCK !!!!
-                     _____
-                    /     \
-                   | () () |
-                    \  ^  /
-                     |||||
-                     |||||
-
-			PERDS UN POINT DE VIE
-
-coupure de la connexion au réseau.
-`,
-		}
-	}
-
-	return ResultMsg{
-		Output: `
-coupure de la connexion au réseau.
-`,
-	}
+	c.Console.Disconnect()
+	c.RenderOutput()
+	return nil
 }
 
 func tw(output io.Writer) *tabwriter.Writer {

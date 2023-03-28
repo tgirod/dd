@@ -239,6 +239,37 @@ func (c *Console) Quit() {
 	c.AppendOutput(output)
 }
 
+func (c *Console) Disconnect() {
+	c.Server = nil
+	c.Login = ""
+	c.Admin = false
+	c.Alert = false
+	c.History.Clear()
+	c.Node.Sub = baseCmds
+
+	// affichage par défaut
+	output := Output{
+		Content: "coupure de la connexion au réseau.",
+	}
+
+	if c.DNI {
+		output.Content = `
+			     DUMPSHOCK !!!!
+                     _____
+                    /     \
+                   | () () |
+                    \  ^  /
+                     |||||
+                     |||||
+
+			PERDS UN POINT DE VIE
+
+coupure de la connexion au réseau.`
+	}
+
+	c.AppendOutput(output)
+}
+
 func (c *Console) Load(code string) {
 	output := Output{
 		Cmd: fmt.Sprintf("load %s", code),
@@ -310,7 +341,7 @@ func (c *Console) Jack(id int) {
 	c.AppendOutput(output)
 }
 
-func (c *Console) StartSecurity() {
+func (c *Console) StartAlert() {
 	if !c.Alert {
 		c.Alert = true
 		c.Countdown = c.Server.Scan

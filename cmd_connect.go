@@ -36,9 +36,9 @@ func (c Connect) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("connect %s", strings.Join(args, " "))
 
 	if len(args) < 1 {
-		return ResultMsg{
-			Error:  fmt.Errorf("ADDRESS : %w", errMissingArgument),
+		return Eval{
 			Cmd:    cmd,
+			Error:  fmt.Errorf("ADDRESS : %w", errMissingArgument),
 			Output: c.LongHelp(),
 		}
 	}

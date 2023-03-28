@@ -34,7 +34,7 @@ func (l Load) LongHelp() string {
 func (l Load) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("load %s", strings.Join(args, " "))
 	if len(args) < 1 {
-		return ResultMsg{
+		return Eval{
 			Cmd:    cmd,
 			Error:  fmt.Errorf("CODE : %w", errMissingArgument),
 			Output: l.LongHelp(),

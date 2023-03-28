@@ -45,7 +45,7 @@ func (l Link) Run(args []string) tea.Msg {
 
 	id, err := strconv.Atoi(args[0])
 	if err != nil {
-		return ResultMsg{
+		return Eval{
 			Cmd:   cmd,
 			Error: fmt.Errorf("ID : %w", err),
 		}

@@ -54,7 +54,7 @@ func (n Node) LongHelp() string {
 // Parse exécute le parsing des arguments pour le noeud courant
 func (n Node) Run(args []string) tea.Msg {
 	if len(args) == 0 {
-		return ResultMsg{
+		return Eval{
 			Error:  errMissingCommand,
 			Output: n.LongHelp(),
 		}
@@ -62,7 +62,7 @@ func (n Node) Run(args []string) tea.Msg {
 
 	match := n.Match(args[0])
 	if len(match) == 0 {
-		return ResultMsg{
+		return Eval{
 			Cmd:    strings.Join(args, " "),
 			Error:  fmt.Errorf("%s : %w", args[0], errInvalidCommand),
 			Output: n.LongHelp(),

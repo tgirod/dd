@@ -78,7 +78,7 @@ func (r RegistryEdit) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("registry edit %s", strings.Join(args, " "))
 
 	if len(args) < 1 {
-		return ResultMsg{
+		return Eval{
 			Cmd:   cmd,
 			Error: fmt.Errorf("NAME : %w", errMissingArgument),
 		}

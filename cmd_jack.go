@@ -35,7 +35,7 @@ func (j Jack) LongHelp() string {
 func (j Jack) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("jack %s", strings.Join(args, " "))
 	if len(args) == 0 {
-		return ResultMsg{
+		return Eval{
 			Cmd:   cmd,
 			Error: fmt.Errorf("ID : %w", errMissingArgument),
 		}
@@ -44,7 +44,7 @@ func (j Jack) Run(args []string) tea.Msg {
 	// récupérer le lien
 	id, err := strconv.Atoi(args[0])
 	if err != nil {
-		return ResultMsg{
+		return Eval{
 			Cmd:   cmd,
 			Error: fmt.Errorf("ID : %w", errInvalidArgument),
 		}

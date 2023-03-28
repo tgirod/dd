@@ -36,17 +36,17 @@ func (i Identify) LongHelp() string {
 func (i Identify) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("identify %s", strings.Join(args, " "))
 	if len(args) < 1 {
-		return ResultMsg{
-			Error:  fmt.Errorf("LOGIN : %w", errMissingArgument),
+		return Eval{
 			Cmd:    cmd,
+			Error:  fmt.Errorf("LOGIN : %w", errMissingArgument),
 			Output: i.LongHelp(),
 		}
 	}
 
 	if len(args) < 2 {
-		return ResultMsg{
-			Error:  fmt.Errorf("PASSWORD : %w", errMissingArgument),
+		return Eval{
 			Cmd:    cmd,
+			Error:  fmt.Errorf("PASSWORD : %w", errMissingArgument),
 			Output: i.LongHelp(),
 		}
 	}

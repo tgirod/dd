@@ -43,7 +43,7 @@ func (d DataSearch) LongHelp() string {
 func (d DataSearch) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("data search %s", strings.Join(args, " "))
 	if len(args) < 1 {
-		return ResultMsg{
+		return Eval{
 			Cmd:    cmd,
 			Error:  fmt.Errorf("KEYWORD : %w", errMissingArgument),
 			Output: d.LongHelp(),
@@ -82,7 +82,7 @@ func (d DataView) Run(args []string) tea.Msg {
 	cmd := fmt.Sprintf("data view %s", strings.Join(args, " "))
 
 	if len(args) < 1 {
-		return ResultMsg{
+		return Eval{
 			Cmd:    cmd,
 			Error:  errMissingArgument,
 			Output: d.LongHelp(),

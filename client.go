@@ -75,14 +75,6 @@ func (c *Client) Init() tea.Cmd {
 	)
 }
 
-// affiche le résultat d'une commande
-type ResultMsg struct {
-	Error   error
-	Cmd     string
-	Output  string
-	Illegal bool
-}
-
 type SecurityMsg struct {
 	Wait time.Duration // temps avant de relancer la routine de sécurité
 }
@@ -197,13 +189,8 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.input.Focus()
 		cmds = append(cmds, textinput.Blink)
 
-	case ResultMsg:
-		// FIXME en attendant mieux ...
-		c.Console.AppendOutput(Output{
-			Cmd:     msg.Cmd,
-			Error:   msg.Error,
-			Content: msg.Output,
-		})
+	case Eval:
+		c.Console.AppendOutput(msg)
 		c.RenderOutput()
 
 	case SecurityMsg:
@@ -315,18 +302,20 @@ func (c *Client) View() string {
 
 func (c *Client) RenderOutput() {
 	b := strings.Builder{}
-	for _, o := range c.Console.Output {
-		fmt.Fprintf(&b, "> %s\n",
-			promptStyle.MaxWidth(c.width).Render(o.Cmd))
-
-		if o.Error != nil {
-			fmt.Fprintf(&b, "%s\n",
-				errorStyle.MaxWidth(c.width).Render(o.Error.Error()))
+	for _, e := range c.Console.Evals {
+		if e.Cmd != "" {
+			fmt.Fprintf(&b, "> %s\n",
+				promptStyle.MaxWidth(c.width).Render(e.Cmd))
 		}
 
-		if o.Content != "" {
+		if e.Error != nil {
 			fmt.Fprintf(&b, "%s\n",
-				outputStyle.MaxWidth(c.width).Render(o.Content))
+				errorStyle.MaxWidth(c.width).Render(e.Error.Error()))
+		}
+
+		if e.Output != "" {
+			fmt.Fprintf(&b, "%s\n",
+				outputStyle.MaxWidth(c.width).Render(e.Output))
 		}
 	}
 

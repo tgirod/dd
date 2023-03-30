@@ -14,7 +14,7 @@ type Console struct {
 	ID int
 
 	// racine de l'arbre des commandes
-	Node
+	Cmd
 
 	// identité active sur la console
 	Identity string
@@ -56,31 +56,29 @@ type Eval struct {
 	Output string
 }
 
-var Hack = map[string]Command{
-	"yyqz": Jack{},
-	"zfcq": Evade{},
+var Hack = map[string]Cmd{
+	"yyqz": jack,
+	"zfcq": evade,
 }
 
-var baseCmds = []Command{
-	Back{},
-	Connect{},
-	Data,
-	Help{},
-	Identify{},
-	Index{},
-	Link{},
-	Load{},
-	Plug{},
-	Quit{},
-	Registry,
-	Pop{},
+var baseCmds = []Cmd{
+	back,
+	connect,
+	data,
+	help,
+	identify,
+	index,
+	link,
+	load,
+	plug,
+	quit,
+	registry,
+	pop,
 }
 
 func NewConsole(game *Game) *Console {
 	return &Console{
-		Node: Node{
-			Sub: baseCmds,
-		},
+		Cmd:  Cmd{SubCmds: baseCmds},
 		Game: game,
 	}
 }
@@ -234,7 +232,7 @@ func (c *Console) Quit() {
 	c.Admin = false
 	c.Alert = false
 	c.History.Clear()
-	c.Node.Sub = baseCmds
+	c.Cmd.SubCmds = baseCmds
 
 	eval.Output = "déconnexion effectuée"
 	c.AppendOutput(eval)
@@ -246,7 +244,7 @@ func (c *Console) Disconnect() {
 	c.Admin = false
 	c.Alert = false
 	c.History.Clear()
-	c.Node.Sub = baseCmds
+	c.Cmd.SubCmds = baseCmds
 
 	// affichage par défaut
 	eval := Eval{
@@ -283,8 +281,8 @@ func (c *Console) Load(code string) {
 		return
 	}
 
-	c.Node.Sub = append(c.Node.Sub, command)
-	eval.Output = fmt.Sprintf("%s : commande chargée", command.ParseName())
+	c.Cmd.SubCmds = append(c.Cmd.SubCmds, command)
+	eval.Output = fmt.Sprintf("%s : commande chargée", command.Name)
 	c.AppendOutput(eval)
 }
 
@@ -421,32 +419,7 @@ func (c *Console) Help(args []string) {
 	eval := Eval{
 		Cmd: fmt.Sprintf("help %s", strings.Join(args, " ")),
 	}
-
-	if len(args) == 0 {
-		b := strings.Builder{}
-		b.WriteString("COMMANDES DISPONIBLES\n\n")
-		tw := tw(&b)
-		fmt.Fprintf(tw, "NOM\tDESCRIPTION\t\n")
-		for _, s := range c.Node.Sub {
-			fmt.Fprintf(tw, "%s\t%s\t\n", s.ParseName(), s.ShortHelp())
-		}
-		tw.Flush()
-		b.WriteString("\nPour plus d'aide, tapez 'help <COMMAND>'\n")
-
-		eval.Output = b.String()
-		c.AppendOutput(eval)
-		return
-	}
-
-	// FIXME match récursif pour afficher l'aide d'une sous-commande
-	match := c.Node.Match(args[0])
-	if len(match) == 0 {
-		eval.Error = fmt.Errorf("%s : %w", args[0], errInvalidCommand)
-		c.AppendOutput(eval)
-		return
-	}
-
-	eval.Output = match[0].LongHelp()
+	eval.Output = c.Cmd.Help(args)
 	c.AppendOutput(eval)
 }
 

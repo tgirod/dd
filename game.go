@@ -62,9 +62,9 @@ func (g Game) FindIdentity(login string) (*Identity, error) {
 }
 
 func (g Game) FindServer(address string) (*Server, error) {
-	for _, server := range g.Network {
+	for i, server := range g.Network {
 		if server.Address == address {
-			return &server, nil
+			return &g.Network[i], nil
 		}
 	}
 	return nil, fmt.Errorf("%s : %w", address, errServerNotFound)

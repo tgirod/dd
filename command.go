@@ -14,6 +14,7 @@ import (
 // SubCmds == commande intermédiaire
 // Parse == commande terminale
 type Cmd struct {
+	Path      []string
 	Name      string
 	ShortHelp string
 	SubCmds   []Cmd
@@ -30,7 +31,7 @@ type Arg struct {
 // Usage décrit l'utilisation d'une commande
 func (c Cmd) Usage() string {
 	b := strings.Builder{}
-	fmt.Fprintf(&b, "%s", c.Name)
+	fmt.Fprintf(&b, "%s %s", strings.Join(c.Path, " "), c.Name)
 	if len(c.SubCmds) > 0 {
 		fmt.Fprintf(&b, " <SUBCOMMAND>")
 		return b.String()
@@ -52,8 +53,12 @@ func (c Cmd) Match(prefix string) []Cmd {
 	return cmds
 }
 
-func (c Cmd) String(args []string) string {
-	return fmt.Sprintf("%s %s", c.Name, strings.Join(args, " "))
+func (c Cmd) FullCmd(args []string) string {
+	return fmt.Sprintf("%s %s %s",
+		strings.Join(c.Path, " "),
+		c.Name,
+		strings.Join(args, " "),
+	)
 }
 
 // CheckArgs vérifie que la commande reçoit le bon nombre d'arguments
@@ -72,14 +77,14 @@ func (c Cmd) Run(args []string) any {
 		if c.Parse == nil {
 			// ne devrait pas arriver
 			return Eval{
-				Cmd:   c.String(args),
+				Cmd:   c.FullCmd(args),
 				Error: errInternalError,
 			}
 		}
 		// vérifier qu'il y a assez d'arguments
 		if err := c.CheckArgs(args); err != nil {
 			return Eval{
-				Cmd:    c.String(args),
+				Cmd:    c.FullCmd(args),
 				Error:  err,
 				Output: c.Help(args),
 			}
@@ -90,7 +95,7 @@ func (c Cmd) Run(args []string) any {
 
 	if len(args) == 0 {
 		return Eval{
-			Cmd:    c.String(args),
+			Cmd:    c.FullCmd(args),
 			Error:  errMissingCommand,
 			Output: c.Help(args),
 		}
@@ -101,7 +106,7 @@ func (c Cmd) Run(args []string) any {
 	if len(cmds) == 0 {
 		// aucune commande ne correspond a ce préfixe
 		return Eval{
-			Cmd:   c.String(args),
+			Cmd:   c.FullCmd(args),
 			Error: fmt.Errorf("%s : %w", args[0], errInvalidCommand),
 		}
 	}
@@ -263,8 +268,6 @@ type HelpMsg struct {
 var help = Cmd{
 	Name:      "help",
 	ShortHelp: "affiche l'aide",
-	SubCmds:   []Cmd{},
-	Args:      []Arg{},
 	Parse: func(args []string) any {
 		return HelpMsg{args}
 	},
@@ -284,6 +287,7 @@ var data = Cmd{
 	SubCmds: []Cmd{
 		{
 			Name:      "search",
+			Path:      []string{"data"},
 			ShortHelp: "effectue une recherche par mot clef",
 			Args: []Arg{
 				{
@@ -297,6 +301,7 @@ var data = Cmd{
 		},
 		{
 			Name:      "view",
+			Path:      []string{"data"},
 			ShortHelp: "affiche le contenu d'une entrée",
 			Args: []Arg{
 				{
@@ -323,6 +328,7 @@ var link = Cmd{
 	SubCmds: []Cmd{
 		{
 			Name:      "list",
+			Path:      []string{"link"},
 			ShortHelp: "affiche la liste des liens disponibles",
 			Parse: func(args []string) any {
 				return LinkListMsg{}
@@ -330,6 +336,7 @@ var link = Cmd{
 		},
 		{
 			Name:      "connect",
+			Path:      []string{"link"},
 			ShortHelp: "suit un lien vers un autre serveur",
 			Args: []Arg{
 				{
@@ -373,6 +380,7 @@ var evade = Cmd{
 	SubCmds: []Cmd{
 		{
 			Name:      "list",
+			Path:      []string{"evade"},
 			ShortHelp: "liste les zones mémoires disponibles pour une évasion",
 			Parse: func(args []string) any {
 				return EvadeListMsg{}
@@ -380,6 +388,7 @@ var evade = Cmd{
 		},
 		{
 			Name:      "move",
+			Path:      []string{"evade"},
 			ShortHelp: "effectue la manoeuvre d'evasion vers une zone mémoire",
 			Args: []Arg{
 				{
@@ -436,6 +445,7 @@ var registry = Cmd{
 	SubCmds: []Cmd{
 		{
 			Name:      "search",
+			Path:      []string{"registry"},
 			ShortHelp: "recherche dans les registres",
 			Args: []Arg{
 				{
@@ -449,6 +459,7 @@ var registry = Cmd{
 		},
 		{
 			Name:      "edit",
+			Path:      []string{"registry"},
 			ShortHelp: "modifie un registre",
 			Args: []Arg{
 				{

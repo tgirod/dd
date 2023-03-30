@@ -93,6 +93,14 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	switch msg := msg.(type) {
+	case BalanceMsg:
+		c.Console.Balance()
+		c.RenderOutput()
+
+	case PayMsg:
+		c.Console.Pay(msg.To, msg.Amount)
+		c.RenderOutput()
+
 	case BackMsg:
 		c.Console.Back()
 		c.RenderOutput()

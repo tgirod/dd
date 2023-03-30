@@ -22,6 +22,7 @@ var (
 	errInternalError      = errors.New("erreur interne")
 	errServerNotFound     = errors.New("serveur introuvable")
 	errServiceNotFound    = errors.New("serveur introuvable")
+	errIdentityNotFound   = errors.New("identité introuvable")
 	errInvalidCommand     = errors.New("commande invalide")
 	errMissingCommand     = errors.New("commande manquante")
 	errMissingArgument    = errors.New("argument manquant")
@@ -37,6 +38,8 @@ var (
 	errEmptyHistory       = errors.New("historique de navigation vide")
 	errKeywordTooShort    = errors.New("mot clef trop court")
 	errRegisterNotFound   = errors.New("registre introuvable")
+	errNotIdentified      = errors.New("aucune identité active")
+	errLowCredit          = errors.New("crédit insuffisant")
 )
 
 type App struct {

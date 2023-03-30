@@ -3340,17 +3340,17 @@ var hopDesc = `
 
 // TODO remplir la liste des identités
 var identities = []Identity{
-	{"jesus", "roxor", ""},
-	{"crunch", "hacktheplanet", ""},
-	{"celine", "waytoocool", ""},
-	{"nikki", "bohw4k", ""},
-	{"greenglass", "brianglass", ""},
-	{"hope", "tearsintherain", ""},
-	{"mel", "xxx", ""},
-	{"akremmer", "sexgod22", "Alexandre Kremmer"}, // backdoor, vol de compte utilisateur
-	{papaproxy.Login, "paparezo", papaproxy.Name},
-	{"legbadmin", "foh5wuoh", "FIXME"},
-	{"afrieman", "theblackwaverocks", "FIXME"},
+	{"jesus", "roxor", "", 100},
+	{"crunch", "hacktheplanet", "", 0},
+	{"celine", "waytoocool", "", 0},
+	{"nikki", "bohw4k", "", 0},
+	{"greenglass", "brianglass", "", 0},
+	{"hope", "tearsintherain", "", 0},
+	{"mel", "xxx", "", 0},
+	{"akremmer", "sexgod22", "Alexandre Kremmer", 0}, // backdoor, vol de compte utilisateur
+	{papaproxy.Login, "paparezo", papaproxy.Name, 0},
+	{"legbadmin", "foh5wuoh", "FIXME", 0},
+	{"afrieman", "theblackwaverocks", "FIXME", 0},
 }
 
 var game = &Game{

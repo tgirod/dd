@@ -64,6 +64,7 @@ var Hack = map[string]Cmd{
 var baseCmds = Cmd{
 	SubCmds: []Cmd{
 		back,
+		bank,
 		connect,
 		data,
 		help,
@@ -574,6 +575,63 @@ func (c *Console) Index() {
 	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries))
 	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
 
+	eval.Output = b.String()
+	c.AppendOutput(eval)
+}
+
+func (c *Console) Pay(to string, amount int) {
+	eval := Eval{
+		Cmd: fmt.Sprintf("bank pay %s %d", to, amount),
+	}
+
+	if !c.IsConnected() {
+		eval.Error = errNotConnected
+		c.AppendOutput(eval)
+		return
+	}
+
+	if c.Login == "" {
+		eval.Error = errNotIdentified
+		c.AppendOutput(eval)
+		return
+	}
+
+	from := c.Login
+	if err := c.Game.Pay(from, to, amount); err != nil {
+		eval.Error = err
+		c.AppendOutput(eval)
+		return
+	}
+
+	eval.Output = fmt.Sprintf("transfert effectué")
+	c.AppendOutput(eval)
+}
+
+func (c *Console) Balance() {
+	eval := Eval{
+		Cmd: fmt.Sprintf("bank balance"),
+	}
+
+	if !c.IsConnected() {
+		eval.Error = errNotConnected
+		c.AppendOutput(eval)
+		return
+	}
+
+	if c.Login == "" {
+		eval.Error = errNotIdentified
+		c.AppendOutput(eval)
+		return
+	}
+
+	// FIXME on devrait avoir une copie de l'identité courante dans la console
+	id, _ := c.FindIdentity(c.Login)
+
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "Compte bancaire associé à l'identité %s\n", id.Login)
+	fmt.Fprintf(tw, "Solde du compte :\t%d Y€S\t\n", id.Yes)
+	tw.Flush()
 	eval.Output = b.String()
 	c.AppendOutput(eval)
 }

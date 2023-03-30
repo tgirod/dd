@@ -61,24 +61,26 @@ var Hack = map[string]Cmd{
 	"zfcq": evade,
 }
 
-var baseCmds = []Cmd{
-	back,
-	connect,
-	data,
-	help,
-	identify,
-	index,
-	link,
-	load,
-	plug,
-	quit,
-	registry,
-	pop,
+var baseCmds = Cmd{
+	SubCmds: []Cmd{
+		back,
+		connect,
+		data,
+		help,
+		identify,
+		index,
+		link,
+		load,
+		plug,
+		quit,
+		registry,
+		pop,
+	},
 }
 
 func NewConsole(game *Game) *Console {
 	return &Console{
-		Cmd:  Cmd{SubCmds: baseCmds},
+		Cmd:  baseCmds,
 		Game: game,
 	}
 }
@@ -232,7 +234,7 @@ func (c *Console) Quit() {
 	c.Admin = false
 	c.Alert = false
 	c.History.Clear()
-	c.Cmd.SubCmds = baseCmds
+	c.Cmd = baseCmds
 
 	eval.Output = "déconnexion effectuée"
 	c.AppendOutput(eval)
@@ -244,7 +246,7 @@ func (c *Console) Disconnect() {
 	c.Admin = false
 	c.Alert = false
 	c.History.Clear()
-	c.Cmd.SubCmds = baseCmds
+	c.Cmd = baseCmds
 
 	// affichage par défaut
 	eval := Eval{

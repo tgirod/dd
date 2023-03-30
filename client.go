@@ -304,17 +304,17 @@ func (c *Client) RenderOutput() {
 	b := strings.Builder{}
 	for _, e := range c.Console.Evals {
 		if e.Cmd != "" {
-			fmt.Fprintf(&b, "> %s\n",
+			fmt.Fprintf(&b, "> %s\n\n",
 				promptStyle.MaxWidth(c.width).Render(e.Cmd))
 		}
 
 		if e.Error != nil {
-			fmt.Fprintf(&b, "%s\n",
+			fmt.Fprintf(&b, "%s\n\n",
 				errorStyle.MaxWidth(c.width).Render(e.Error.Error()))
 		}
 
 		if e.Output != "" {
-			fmt.Fprintf(&b, "%s\n",
+			fmt.Fprintf(&b, "%s\n\n",
 				outputStyle.MaxWidth(c.width).Render(e.Output))
 		}
 	}

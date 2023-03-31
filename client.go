@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dd/ui/filler"
 	"fmt"
 	"io"
 	"strings"
@@ -176,10 +177,8 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.modal, cmd = c.modal.Update(tea.WindowSizeMsg{Width: w, Height: h})
 		cmds = append(cmds, cmd)
 
-	case CloseModalMsg:
-		render = false
-		c.modal = nil
-		cmds = append(cmds, c.input.Focus())
+	case CloseModalMsg, filler.FilledMsg:
+		cmds = append(cmds, c.CloseModal())
 
 	case Eval:
 		c.Console.AppendOutput(msg)
@@ -359,6 +358,11 @@ func (c *Client) Security(t time.Time) tea.Msg {
 	c.Console.Disconnect()
 	c.RenderOutput()
 	return nil
+}
+
+func (c *Client) CloseModal() tea.Cmd {
+	c.modal = nil
+	return c.input.Focus()
 }
 
 func tw(output io.Writer) *tabwriter.Writer {

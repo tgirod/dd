@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dd/ui/filler"
 	"fmt"
 	"strconv"
 	"strings"
@@ -437,6 +438,11 @@ type IdentifyMsg struct {
 	Password string
 }
 
+func (i IdentifyMsg) SetPassword(password string) filler.PasswordFiller {
+	i.Password = password
+	return i
+}
+
 var identify = Cmd{
 	Name:      "identify",
 	ShortHelp: "validation d'identité avec le login/password",
@@ -445,12 +451,10 @@ var identify = Cmd{
 			Name:      "login",
 			ShortHelp: "identifiant utilsateur",
 		},
-		{
-			Name:      "password",
-			ShortHelp: "mot de passe utilisateur",
-		},
 	},
 	Parse: func(args []string) any {
-		return IdentifyMsg{args[0], args[1]}
+		msg := IdentifyMsg{Login: args[0]}
+		model := filler.New("entrez votre mot de passe", msg)
+		return OpenModalMsg(model)
 	},
 }

@@ -98,7 +98,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Console.Balance()
 
 	case PayMsg:
-		c.Console.Pay(msg.To, msg.Amount)
+		c.Console.Pay(msg.To, msg.Amount, msg.Password)
 
 	case BackMsg:
 		c.Console.Back()

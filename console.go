@@ -579,7 +579,7 @@ func (c *Console) Index() {
 	c.AppendOutput(eval)
 }
 
-func (c *Console) Pay(to string, amount int) {
+func (c *Console) Pay(to string, amount int, password string) {
 	eval := Eval{
 		Cmd: fmt.Sprintf("bank pay %s %d", to, amount),
 	}
@@ -592,6 +592,12 @@ func (c *Console) Pay(to string, amount int) {
 
 	if c.Login == "" {
 		eval.Error = errNotIdentified
+		c.AppendOutput(eval)
+		return
+	}
+
+	if err := c.Game.CheckIdentity(c.Login, password); err != nil {
+		eval.Error = err
 		c.AppendOutput(eval)
 		return
 	}

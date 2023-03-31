@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
-	lg "github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
 )
 
@@ -27,8 +26,6 @@ func (p *Pop) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 	return p, nil
 }
-
-var border = lg.NewStyle().Border(lg.DoubleBorder()).Padding(1)
 
 func (p *Pop) View() string {
 	return wordwrap.String(p.msg, p.width)

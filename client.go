@@ -179,8 +179,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case CloseModalMsg:
 		render = false
 		c.modal = nil
-		c.input.Focus()
-		cmds = append(cmds, textinput.Blink)
+		cmds = append(cmds, c.input.Focus())
 
 	case Eval:
 		c.Console.AppendOutput(msg)

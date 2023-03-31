@@ -91,88 +91,71 @@ func (c *Client) modalWindowSize() (int, int) {
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	var cmd tea.Cmd
+	var render bool = true // doit-on rafraichir le viewport ?
 
 	switch msg := msg.(type) {
 	case BalanceMsg:
 		c.Console.Balance()
-		c.RenderOutput()
 
 	case PayMsg:
 		c.Console.Pay(msg.To, msg.Amount)
-		c.RenderOutput()
 
 	case BackMsg:
 		c.Console.Back()
-		c.RenderOutput()
 
 	case ConnectMsg:
 		c.Console.Connect(msg.Address)
-		c.RenderOutput()
 
 	case DataSearchMsg:
 		c.Console.DataSearch(msg.Keyword)
-		c.RenderOutput()
 
 	case DataViewMsg:
 		c.Console.DataView(msg.Id)
-		c.RenderOutput()
 
 	case HelpMsg:
 		c.Console.Help(msg.Args)
-		c.RenderOutput()
 
 	case IdentifyMsg:
 		c.Console.Identify(msg.Login, msg.Password)
-		c.RenderOutput()
 
 	case IndexMsg:
 		c.Console.Index()
-		c.RenderOutput()
 
 	case LinkListMsg:
 		c.Console.LinkList()
-		c.RenderOutput()
 
 	case LinkMsg:
 		c.Console.Link(msg.Id)
-		c.RenderOutput()
 
 	case LoadMsg:
 		c.Console.Load(msg.Code)
-		c.RenderOutput()
 
 	case PlugMsg:
 		c.Console.Plug()
-		c.RenderOutput()
 
 	case QuitMsg:
 		c.Console.Quit()
-		c.RenderOutput()
 
 	case RegistrySearchMsg:
 		c.Console.RegistrySearch(msg.Name)
-		c.RenderOutput()
 
 	case RegistryEditMsg:
 		c.Console.RegistryEdit(msg.Name)
-		c.RenderOutput()
 
 	case JackMsg:
 		c.Console.Jack(msg.Id)
 		cmds = append(cmds, c.StartSecurity)
-		c.RenderOutput()
 
 	case EvadeListMsg:
 		c.Console.EvadeList()
 		cmds = append(cmds, c.StartSecurity)
-		c.RenderOutput()
 
 	case EvadeMsg:
 		c.Console.Evade(msg.Zone)
 		cmds = append(cmds, c.StartSecurity)
-		c.RenderOutput()
 
 	case tea.WindowSizeMsg:
+		render = false
 		// redimensionner les différentes parties de l'interface
 		c.width = msg.Width
 		c.height = msg.Height
@@ -182,6 +165,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.input.Width = msg.Width
 
 	case OpenModalMsg:
+		render = false
 		c.input.Blur()
 		// ouvrir une fenêtre modale
 		c.modal = msg.(tea.Model)
@@ -193,6 +177,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, cmd)
 
 	case CloseModalMsg:
+		render = false
 		c.modal = nil
 		c.input.Focus()
 		cmds = append(cmds, textinput.Blink)
@@ -202,6 +187,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.RenderOutput()
 
 	case SecurityMsg:
+		render = false
 		if c.Console.Alert {
 			// l'alerte est toujours là
 			// la routine de sécurité continue
@@ -209,6 +195,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case tea.KeyMsg:
+		render = false
 		if c.modal != nil {
 			break
 		}
@@ -234,6 +221,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	default:
+		render = false
 		if c.modal != nil {
 			break
 		}
@@ -244,6 +232,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	if c.modal != nil {
+		render = false
 		switch msg := msg.(type) {
 		case tea.WindowSizeMsg:
 			w, h := c.modalWindowSize()
@@ -253,6 +242,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			c.modal, cmd = c.modal.Update(msg)
 			cmds = append(cmds, cmd)
 		}
+	}
+
+	if render {
+		c.RenderOutput()
 	}
 
 	return c, tea.Batch(cmds...)

@@ -130,10 +130,10 @@ func (p *PayModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			password := p.Fields[PayFieldPassword].Value()
 
 			// effectuer le transfert et fermer la fenêtre
-			cmds = append(cmds, tea.Sequence(
+			cmds = append(cmds,
 				MsgToCmd(CloseModalMsg{}),
 				MsgToCmd(PayMsg{to, amount, password}),
-			))
+			)
 
 		case key.Matches(msg, p.Keymap.Cancel):
 			// annuler le transfert et fermer la fenêtre

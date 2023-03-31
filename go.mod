@@ -10,7 +10,6 @@ require (
 	github.com/charmbracelet/wish v1.0.0
 	github.com/knipferrc/teacup v0.3.0
 	github.com/lithammer/fuzzysearch v1.1.5
-	github.com/muesli/reflow v0.3.0
 	golang.org/x/text v0.5.0
 )
 
@@ -28,6 +27,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/muesli/ansi v0.0.0-20221106050444-61f0cd9a192a // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
+	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.13.0 // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
 	golang.org/x/crypto v0.4.0 // indirect

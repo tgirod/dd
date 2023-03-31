@@ -75,7 +75,6 @@ var baseCmds = Cmd{
 		plug,
 		quit,
 		registry,
-		pop,
 	},
 }
 

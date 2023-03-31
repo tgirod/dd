@@ -365,3 +365,9 @@ func (c *Client) Security(t time.Time) tea.Msg {
 func tw(output io.Writer) *tabwriter.Writer {
 	return tabwriter.NewWriter(output, 8, 1, 2, ' ', 0)
 }
+
+func MsgToCmd(msg tea.Msg) tea.Cmd {
+	return func() tea.Msg {
+		return msg
+	}
+}

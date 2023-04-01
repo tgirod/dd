@@ -36,6 +36,10 @@ func (g *Game) Pay(from, to string, amount int) error {
 		return errLowCredit
 	}
 
+	if amount < 0 {
+		return errNegativeAmount
+	}
+
 	src.Yes = src.Yes - amount
 	dst.Yes = dst.Yes + amount
 

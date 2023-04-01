@@ -40,6 +40,7 @@ var (
 	errRegisterNotFound   = errors.New("registre introuvable")
 	errNotIdentified      = errors.New("aucune identité active")
 	errLowCredit          = errors.New("crédit insuffisant")
+	errNegativeAmount     = errors.New("montant négatif")
 )
 
 type App struct {

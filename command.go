@@ -28,13 +28,13 @@ type Arg struct {
 // Usage décrit l'utilisation d'une commande
 func (c Cmd) Usage() string {
 	b := strings.Builder{}
-	fmt.Fprintf(&b, "%s %s", strings.Join(c.Path, " "), c.Name)
+	fmt.Fprintf(&b, "%s %s", strings.ToUpper(strings.Join(c.Path, " ")), c.Name)
 	if len(c.SubCmds) > 0 {
 		fmt.Fprintf(&b, " <SUBCOMMAND>")
 		return b.String()
 	}
 	for _, arg := range c.Args {
-		fmt.Fprintf(&b, " <%s>", arg.Name)
+		fmt.Fprintf(&b, " <%s>", strings.ToUpper(arg.Name))
 	}
 	return b.String()
 }
@@ -128,7 +128,7 @@ func (c Cmd) Help(args []string) string {
 		// cas particulier de la commande racine
 		fmt.Fprintf(&b, "COMMANDES\n")
 		for _, sub := range c.SubCmds {
-			fmt.Fprintf(tw, "\t%s\t%s\t\n", sub.Name, sub.ShortHelp)
+			fmt.Fprintf(tw, "\t%s\t%s\t\n", strings.ToUpper(sub.Name), sub.ShortHelp)
 		}
 		tw.Flush()
 		return b.String()
@@ -140,14 +140,14 @@ func (c Cmd) Help(args []string) string {
 	if len(c.SubCmds) > 0 {
 		fmt.Fprintf(&b, "SOUS-COMMANDES\n")
 		for _, sub := range c.SubCmds {
-			fmt.Fprintf(tw, "\t%s\t%s\t\n", sub.Name, sub.ShortHelp)
+			fmt.Fprintf(tw, "\t%s\t%s\t\n", strings.ToUpper(sub.Name), sub.ShortHelp)
 		}
 	}
 
 	if len(c.Args) > 0 {
 		fmt.Fprintf(&b, "ARGUMENTS\n")
 		for _, arg := range c.Args {
-			fmt.Fprintf(tw, "\t<%s>\t%s\t\n", arg.Name, arg.ShortHelp)
+			fmt.Fprintf(tw, "\t<%s>\t%s\t\n", strings.ToUpper(arg.Name), arg.ShortHelp)
 		}
 	}
 

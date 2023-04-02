@@ -167,14 +167,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case OpenModalMsg:
 		render = false
-		c.input.Blur()
-		// ouvrir une fenêtre modale
-		c.modal = msg.(tea.Model)
-		cmd = c.modal.Init()
-		cmds = append(cmds, cmd)
-		// envoyer un WindowSizeMsg
-		w, h := c.modalWindowSize()
-		c.modal, cmd = c.modal.Update(tea.WindowSizeMsg{Width: w, Height: h})
+		cmd = c.OpenModal(msg.(tea.Model))
 		cmds = append(cmds, cmd)
 
 	case CloseModalMsg, filler.FilledMsg:
@@ -358,6 +351,20 @@ func (c *Client) Security(t time.Time) tea.Msg {
 	c.Console.Disconnect()
 	c.RenderOutput()
 	return nil
+}
+
+func (c *Client) OpenModal(model tea.Model) tea.Cmd {
+	c.input.Blur()
+	initCmd := model.Init()
+	// initialiser la taille si nécessaire
+	w, h := c.modalWindowSize()
+	var sizeCmd tea.Cmd
+	model, sizeCmd = model.Update(tea.WindowSizeMsg{Width: w, Height: h})
+	c.modal = model
+	return tea.Batch(
+		initCmd,
+		sizeCmd,
+	)
 }
 
 func (c *Client) CloseModal() tea.Cmd {

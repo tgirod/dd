@@ -11,12 +11,12 @@ import (
 // SubCmds == commande intermédiaire
 // Parse == commande terminale
 type Cmd struct {
-	Path      []string
-	Name      string
-	ShortHelp string
-	SubCmds   []Cmd
-	Args      []Arg
-	Parse     func(args []string) any
+	Path      []string                // chemin qui mène à la commande
+	Name      string                  // nom de la commande
+	ShortHelp string                  // phrase d'aide
+	SubCmds   []Cmd                   // sous-commandes (optionnel)
+	Args      []Arg                   // arguments (optionnel)
+	Parse     func(args []string) any // fonction exécutée (optionnel)
 }
 
 // Arg décrit un argument. Il n'y a pas d'arguments optionnels

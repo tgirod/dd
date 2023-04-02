@@ -117,7 +117,7 @@ func (c *Console) Connect(address string) {
 	}
 
 	c.History.Clear()
-	c.History.Push(Target{address, ""})
+	c.History.Push(Link{address, ""})
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
@@ -140,7 +140,7 @@ func (c *Console) LinkList() {
 	b := strings.Builder{}
 	tw := tw(&b)
 	fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
-	for i, t := range c.Server.Targets {
+	for i, t := range c.Server.Links {
 		fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
 	}
 	tw.Flush()
@@ -154,13 +154,13 @@ func (c *Console) Link(id int) {
 		Cmd: fmt.Sprintf("link %d", id),
 	}
 
-	if id < 0 || id >= len(c.Server.Targets) {
+	if id < 0 || id >= len(c.Server.Links) {
 		eval.Error = errInvalidArgument
 		c.AppendOutput(eval)
 		return
 	}
 
-	target := c.Server.Targets[id]
+	target := c.Server.Links[id]
 	if err := c.connect(target.Address); err != nil {
 		eval.Error = err
 		c.AppendOutput(eval)
@@ -315,13 +315,13 @@ func (c *Console) Jack(id int) {
 		return
 	}
 
-	if id < 0 || id >= len(c.Server.Targets) {
+	if id < 0 || id >= len(c.Server.Links) {
 		eval.Error = errInvalidArgument
 		c.AppendOutput(eval)
 		return
 	}
 
-	target := c.Server.Targets[id]
+	target := c.Server.Links[id]
 	server, err := c.Game.FindServer(target.Address)
 	if err != nil {
 		eval.Error = err
@@ -570,7 +570,7 @@ func (c *Console) Index() {
 	s := c.Server
 	b.WriteString(s.Description)
 	b.WriteString("\n")
-	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Targets))
+	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Links))
 	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries))
 	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
 

@@ -78,7 +78,7 @@ var dd = Server{
 		{"jesus", true},
 	},
 	Description: ddDesc,
-	Targets: []Target{
+	Links: []Link{
 		{d22.Address, "serveur public du District 22"},
 	},
 	Registers: []Register{
@@ -114,7 +114,7 @@ var d22 = Server{
 	Public:      true,
 	Accounts:    []Account{},
 	Description: dd22Desc,
-	Targets: []Target{
+	Links: []Link{
 		{legba.Address, "Legba Voodoocom"},
 		{kramps.Address, "Kramps Security"},
 		{corp.Address, "Central Services"},
@@ -149,7 +149,7 @@ var kramps = Server{
 	Address:  "kramps.d22.eu",
 	Public:   true,
 	Accounts: []Account{},
-	Targets: []Target{
+	Links: []Link{
 		{kramps_pers.Address, "Serveur réservé au personnel"},
 	},
 	Description: kpubDesc,
@@ -187,7 +187,7 @@ var kramps_pers = Server{
 	Accounts: []Account{
 		{"akremmer", false},
 	},
-	Targets: []Target{
+	Links: []Link{
 		{kramps_inmates.Address, "Gestion des prisonniers"},
 		{kramps_sec.Address, "Sécurité des installations"},
 	},
@@ -1936,7 +1936,7 @@ var corp = Server{
 	Public:      true,
 	Accounts:    []Account{},
 	Description: cd22Desc,
-	Targets: []Target{
+	Links: []Link{
 		{justice.Address, "services judiciaires"},
 	},
 	Scan: SEC3,
@@ -2166,7 +2166,7 @@ var legba = Server{
 	},
 	Scan:        SEC4,
 	Description: lbDesc,
-	Targets: []Target{
+	Links: []Link{
 		{legba_satcom.Address, "division sat-com"},
 		{legba_archive.Address, "archives"},
 	},

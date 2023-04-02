@@ -33,7 +33,7 @@ type Server struct {
 	Scan time.Duration
 
 	// liste des liens fournis par le serveur
-	Targets []Target
+	Links []Link
 
 	// liste des données fournies par le serveur
 	Entries []Entry
@@ -62,7 +62,7 @@ func (s *Server) CheckAccount(login string) (bool, error) {
 	return false, errInvalidIdentity
 }
 
-type Target struct {
+type Link struct {
 	// adresse du serveur de destination
 	Address string
 
@@ -70,13 +70,13 @@ type Target struct {
 	Description string
 }
 
-func (s *Server) FindTarget(address string) (Target, error) {
-	for _, t := range s.Targets {
+func (s *Server) FindTarget(address string) (Link, error) {
+	for _, t := range s.Links {
 		if t.Address == address {
 			return t, nil
 		}
 	}
-	return Target{}, errInvalidArgument
+	return Link{}, errInvalidArgument
 }
 
 // Entry est une entrée dans une base de données

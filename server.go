@@ -26,9 +26,6 @@ type Server struct {
 	// liste des comptes utilisateurs enregistrés
 	Accounts []Account
 
-	// accès illégaux créés avec la commande HOLE
-	Backdoors []Backdoor
-
 	// informations affichées lors de la connexion
 	Description string
 
@@ -47,18 +44,21 @@ type Server struct {
 
 // Account représente un compte utilisateur sur un serveur
 type Account struct {
-	Login string
-	Admin bool
-}
-
-type Backdoor struct {
-	Login string
+	Login    string
+	Admin    bool
+	Backdoor bool
 }
 
 func (s *Server) CheckAccount(login string) (bool, error) {
 	// cherche un compte utilisateur valide
-	for _, a := range s.Accounts {
+	for i, a := range s.Accounts {
 		if a.Login == login {
+			if a.Backdoor {
+				// retirer la backdoor après usage
+				last := len(s.Accounts) - 1
+				s.Accounts[i] = s.Accounts[last]
+				s.Accounts = s.Accounts[:last]
+			}
 			return a.Admin, nil
 		}
 	}
@@ -66,18 +66,6 @@ func (s *Server) CheckAccount(login string) (bool, error) {
 	// si le serveur est public, autoriser l'accès quoi qu'il arrive
 	if s.Public {
 		return false, nil
-	}
-
-	// cherche une backdoor utilisable
-	for i, b := range s.Backdoors {
-		if b.Login == login {
-			// retirer la backdoor de la liste (usage unique)
-			bd := s.Backdoors
-			last := len(bd) - 1
-			bd[i] = bd[last]
-			s.Backdoors = bd[:last]
-			return false, nil
-		}
 	}
 
 	return false, errInvalidIdentity

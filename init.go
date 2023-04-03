@@ -75,7 +75,7 @@ var dd = Server{
 	Address: "dd.local",
 	Public:  true,
 	Accounts: []Account{
-		{"jesus", true},
+		{"jesus", true, false},
 	},
 	Description: ddDesc,
 	Links: []Link{
@@ -185,10 +185,8 @@ var kramps_pers = Server{
 	Address: "priv.kramps.d22.eu",
 	Public:  false,
 	Accounts: []Account{
-		{"akremmer", false},
-	},
-	Backdoors: []Backdoor{
-		{"haxxor"}, // FIXME
+		{Login: "akremmer"},
+		{Login: "haxxor", Backdoor: true},
 	},
 	Links: []Link{
 		{kramps_inmates.Address, "Gestion des prisonniers"},
@@ -531,7 +529,7 @@ var kperDesc = `
 var kramps_inmates = Server{
 	Address: "inmates.kramps.d22.eu",
 	Accounts: []Account{
-		{"akremmer", true},
+		{Login: "akremmer", Admin: true},
 	},
 	Scan:        SEC3,
 	Description: kinmatesDesc,
@@ -2092,8 +2090,8 @@ var cd22bankDesc = `
 `
 
 var (
-	legbaPersonnel = Account{"hproskychev", false}
-	legbaAdmin     = Account{"lgebadmin", true}
+	legbaPersonnel = Account{Login: "hproskychev"}
+	legbaAdmin     = Account{Login: "lgebadmin", Admin: true}
 	lbDesc         = `
                  ......                 
            .',,,,,,,,,,,,,,,.           
@@ -3062,7 +3060,7 @@ var lbd = Server{
 var greendata = Server{
 	Address: "greendata.d22.eu",
 	Accounts: []Account{
-		{"afrieman", false},
+		{Login: "afrieman"},
 	},
 	Description: greenDesc,
 	Scan:        SEC3,
@@ -3110,10 +3108,10 @@ var invertedLeaf = `
 var leet = Server{
 	Address: "leet.darknet",
 	Accounts: []Account{
-		{"crunch", true},
-		{"celine", false},
-		{"nikki", false},
-		{"greenglass", false},
+		{Login: "crunch", Admin: true},
+		{Login: "celine"},
+		{Login: "nikki"},
+		{Login: "greenglass"},
 	},
 	Description: cruDesc,
 	Scan:        SEC3,
@@ -3198,7 +3196,7 @@ var cruDesc = `
 var lair = Server{
 	Address: "celine.darknet",
 	Accounts: []Account{
-		{"celine", true},
+		{Login: "celine", Admin: true},
 	},
 	Description: celDesc,
 	Scan:        SEC3,
@@ -3257,8 +3255,8 @@ var celDesc = `
 var hope = Server{
 	Address: "hope.local",
 	Accounts: []Account{
-		{"hope", true},
-		{"mel", false},
+		{Login: "hope", Admin: true},
+		{Login: "mel"},
 	},
 	Description: hopDesc,
 	Scan:        SEC5,

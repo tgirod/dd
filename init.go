@@ -187,6 +187,9 @@ var kramps_pers = Server{
 	Accounts: []Account{
 		{"akremmer", false},
 	},
+	Backdoors: []Backdoor{
+		{"haxxor"}, // FIXME
+	},
 	Links: []Link{
 		{kramps_inmates.Address, "Gestion des prisonniers"},
 		{kramps_sec.Address, "Sécurité des installations"},
@@ -3351,6 +3354,7 @@ var identities = []Identity{
 	{papaproxy.Login, "paparezo", papaproxy.Name, 0},
 	{"legbadmin", "foh5wuoh", "FIXME", 0},
 	{"afrieman", "theblackwaverocks", "FIXME", 0},
+	{"haxxor", "crunchwashere", "", 0}, // FIXME
 }
 
 var game = &Game{

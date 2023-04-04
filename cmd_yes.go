@@ -19,12 +19,12 @@ func (p PayMsg) SetPassword(password string) filler.PasswordFiller {
 	return p
 }
 
-var bank = Cmd{
-	Name:      "bank",
+var yes = Cmd{
+	Name:      "yes",
 	ShortHelp: "effectuer des opérations bancaires",
 	SubCmds: []Cmd{
 		{
-			Path:      []string{"bank"},
+			Path:      []string{"yes"},
 			Name:      "balance",
 			ShortHelp: "affiche le solde du compte",
 			Parse: func(args []string) any {
@@ -32,7 +32,7 @@ var bank = Cmd{
 			},
 		},
 		{
-			Path:      []string{"bank"},
+			Path:      []string{"yes"},
 			Name:      "pay",
 			ShortHelp: "effectue un transfert de monnaie",
 			Args: []Arg{

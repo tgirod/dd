@@ -64,7 +64,7 @@ var Hack = map[string]Cmd{
 var baseCmds = Cmd{
 	SubCmds: []Cmd{
 		back,
-		bank,
+		yes,
 		connect,
 		data,
 		help,

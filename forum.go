@@ -14,10 +14,13 @@ type Forum struct {
 	// adresse du Forum
 	Address string
 
-	// Topic en train d'être visité
+	// user
+	User string
+
+	// Topic en train d'être visité path/path/dirname
 	Topic string
 
-	// Post en train d'être lu
+	// Post en train d'être lu filaname (without path)
 	Post      string
 	IndexPost int
 
@@ -45,7 +48,7 @@ func GetForum(serverAdress string) (Forum, error) {
 		forum := Forum{}
 		return forum, err
 	}
-	forum := Forum{serverAdress + "/forum", "", "", 0, nil, "", 0}
+	forum := Forum{serverAdress + "/forum", "", "", "", 0, nil, "", 0}
 	err = forum.GetFiles("")
 	return forum, err
 }
@@ -55,6 +58,7 @@ func (f Forum) Show() {
 }
 
 func (f *Forum) GetFiles(topicStr string) error {
+	fmt.Printf("__GetFiles in %s\n", f.Address+"/"+topicStr)
 	ff, err := os.Open(f.Address + "/" + topicStr)
 	if err != nil {
 		return err
@@ -181,13 +185,25 @@ func (f *Forum) EnterPost(name string, index int) error {
 	fmt.Print(string(dat))
 	return nil
 }
-
+func (f *Forum) GetPost(index int) (string, error) {
+	finfo := f.TopicList[index]
+	filename := finfo.Name()
+	dat, err := os.ReadFile(f.Address + "/" + f.Topic + "/" + filename)
+	if err != nil {
+		return "", err
+	}
+	f.Post = filename
+	f.IndexPost = index
+	return string(dat), nil
+}
 func (f *Forum) AddPost(date string,
 	time string,
 	title string,
 	author string,
 	body string) error {
 	filename := date + "_" + time + "_" + title + "_" + author
+
+	fmt.Printf("__Forum::AddPost %s\n", f.Address+"/"+f.Topic+"/"+filename)
 
 	err := os.WriteFile(f.Address+"/"+f.Topic+"/"+filename, []byte(body), 0644)
 	if err != nil {

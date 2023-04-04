@@ -220,7 +220,7 @@ func (c *Client) View() string {
 
 	if c.modal != nil {
 		// DEBUG
-		if fo, ok := c.modal.(ForumCmd); ok {
+		if fo, ok := c.modal.(ForumCmdModel); ok {
 			fmt.Printf("__clientView size=%d, %d\n", fo.list.Width(), fo.list.Height())
 		}
 		content := modalStyle.Render(c.modal.View())

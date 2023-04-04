@@ -49,26 +49,38 @@ type Account struct {
 	Backdoor bool
 }
 
-func (s *Server) CheckAccount(login string) (bool, error) {
+var PublicAccount = Account{
+	Login:    "public",
+	Admin:    false,
+	Backdoor: false,
+}
+
+func (s *Server) CheckAccount(login string) (Account, error) {
 	// cherche un compte utilisateur valide
-	for i, a := range s.Accounts {
+	for _, a := range s.Accounts {
 		if a.Login == login {
-			if a.Backdoor {
-				// retirer la backdoor après usage
-				last := len(s.Accounts) - 1
-				s.Accounts[i] = s.Accounts[last]
-				s.Accounts = s.Accounts[:last]
-			}
-			return a.Admin, nil
+			return a, nil
 		}
 	}
 
 	// si le serveur est public, autoriser l'accès quoi qu'il arrive
 	if s.Public {
-		return false, nil
+		return Account{}, nil
 	}
 
-	return false, errInvalidIdentity
+	return PublicAccount, errInvalidIdentity
+}
+
+func (s *Server) RemoveAccount(login string) {
+	for i, a := range s.Accounts {
+		if a.Login == login {
+			// retirer la backdoor après usage
+			last := len(s.Accounts) - 1
+			s.Accounts[i] = s.Accounts[last]
+			s.Accounts = s.Accounts[:last]
+			return
+		}
+	}
 }
 
 type Link struct {
@@ -174,4 +186,14 @@ func (s *Server) RegistryEdit(name string) (bool, error) {
 		}
 	}
 	return false, fmt.Errorf("%s : %w", name, errRegisterNotFound)
+}
+
+// Backdoor créé une backdoor dans le serveur
+func (s *Server) Backdoor(login string) {
+	acc := Account{
+		Login:    login,
+		Admin:    false,
+		Backdoor: true,
+	}
+	s.Accounts = append(s.Accounts, acc)
 }

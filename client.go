@@ -71,9 +71,7 @@ func NewClient(width, height int, game *Game) *Client {
 }
 
 func (c *Client) Init() tea.Cmd {
-	return tea.Batch(
-		textinput.Blink,
-	)
+	return textinput.Blink
 }
 
 type SecurityMsg struct {
@@ -95,6 +93,9 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var render bool = true // doit-on rafraichir le viewport ?
 
 	switch msg := msg.(type) {
+	case DoorMsg:
+		c.Console.Door()
+
 	case BalanceMsg:
 		c.Console.Balance()
 

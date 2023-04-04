@@ -19,11 +19,8 @@ type Console struct {
 	// identité active sur la console
 	Identity string
 
-	// identifiant dans le serveur actuel
-	Login string
-
-	// admin dans le serveur actuel ?
-	Admin bool
+	// compte utilisateur sur le serveur courant
+	Account
 
 	// l'alerte est-elle activée ?
 	Alert bool
@@ -57,8 +54,9 @@ type Eval struct {
 }
 
 var Hack = map[string]Cmd{
-	"yyqz": jack,
-	"zfcq": evade,
+	"jack":  jack,
+	"evade": evade,
+	"door":  door,
 }
 
 var baseCmds = Cmd{
@@ -95,12 +93,18 @@ func (c *Console) connect(address string) error {
 	}
 
 	// vérifier que l'utilisateur a le droit de se connecter
-	if c.Admin, err = server.CheckAccount(c.Login); err != nil {
+	var account Account
+	if account, err = server.CheckAccount(c.Login); err != nil {
 		return fmt.Errorf("%s : %w", c.Login, err)
 	}
+	c.Account = account
 
 	// enregistrer le nouveau serveur
 	c.Server = server
+	if account.Backdoor {
+		c.Server.RemoveAccount(c.Account.Login)
+		c.Game.RemoveIdentity(c.Account.Login)
+	}
 	c.InitMem()
 	return nil
 }
@@ -230,8 +234,7 @@ func (c *Console) Quit() {
 	}
 
 	c.Server = nil
-	c.Login = ""
-	c.Admin = false
+	c.Account = Account{}
 	c.Alert = false
 	c.History.Clear()
 	c.Cmd = baseCmds
@@ -545,8 +548,8 @@ func (c *Console) Identify(login, password string) {
 
 	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
 	if c.Server != nil {
-		if admin, err := c.CheckAccount(login); err == nil {
-			c.Admin = admin
+		if account, err := c.CheckAccount(login); err == nil {
+			c.Account = account
 		}
 	}
 
@@ -646,4 +649,31 @@ func (c *Console) AppendOutput(o Eval) {
 	if len(c.Evals) > MAX_LEN_OUTPUT {
 		c.Evals = c.Evals[len(c.Evals)-MAX_LEN_OUTPUT : len(c.Evals)]
 	}
+}
+
+func (c *Console) Door() {
+	eval := Eval{
+		Cmd: fmt.Sprintf("hole"),
+	}
+
+	if !c.IsConnected() {
+		eval.Error = errNotConnected
+		c.AppendOutput(eval)
+		return
+	}
+
+	// créer une nouvelle identité aléatoire
+	id := c.CreateRandomIdentity()
+
+	// créer une backdoor associée
+	c.Server.Backdoor(id.Login)
+
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "backdoor créée sur le serveur %s\n", c.Server.Address)
+	fmt.Fprintf(&b, "login: %s\n", id.Login)
+	fmt.Fprintf(&b, "password: %s\n", id.Password)
+	fmt.Fprintf(&b, "cette backdoor sera détruite automatiquement après usage.\n")
+
+	eval.Output = b.String()
+	c.AppendOutput(eval)
 }

@@ -458,3 +458,13 @@ var identify = Cmd{
 		return OpenModalMsg(model)
 	},
 }
+
+type DoorMsg struct{}
+
+var door = Cmd{
+	Name:      "door",
+	ShortHelp: "créé une backdoor dans le serveur",
+	Parse: func(args []string) any {
+		return DoorMsg{}
+	},
+}

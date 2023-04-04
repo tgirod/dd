@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	//"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
@@ -44,6 +46,29 @@ func (g *Game) Pay(from, to string, amount int) error {
 	dst.Yes = dst.Yes + amount
 
 	return nil
+}
+
+func randomString() string {
+	data := make([]byte, 3)
+	rand.Read(data)
+	return base64.RawStdEncoding.EncodeToString(data)
+}
+
+func (g *Game) CreateRandomIdentity() Identity {
+	login := randomString()
+	password := randomString()
+	id := Identity{
+		Login:    login,
+		Password: password,
+		Name:     "",
+		Yes:      0,
+	}
+	g.Identities = append(g.Identities, id)
+	return id
+}
+
+func (g *Game) RemoveIdentity(login string) {
+
 }
 
 func (g *Game) CheckIdentity(login, password string) error {

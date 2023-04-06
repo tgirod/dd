@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	//"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
@@ -17,6 +19,56 @@ type Identity struct {
 	Login    string
 	Password string
 	Name     string
+	Yes      int
+}
+
+func (g *Game) Pay(from, to string, amount int) error {
+	var src, dst *Identity
+	var err error
+
+	if src, err = g.FindIdentity(from); err != nil {
+		return errIdentityNotFound
+	}
+
+	if dst, err = g.FindIdentity(to); err != nil {
+		return errIdentityNotFound
+	}
+
+	if src.Yes < amount {
+		return errLowCredit
+	}
+
+	if amount < 0 {
+		return errNegativeAmount
+	}
+
+	src.Yes = src.Yes - amount
+	dst.Yes = dst.Yes + amount
+
+	return nil
+}
+
+func randomString() string {
+	data := make([]byte, 3)
+	rand.Read(data)
+	return base64.RawStdEncoding.EncodeToString(data)
+}
+
+func (g *Game) CreateRandomIdentity() Identity {
+	login := randomString()
+	password := randomString()
+	id := Identity{
+		Login:    login,
+		Password: password,
+		Name:     "",
+		Yes:      0,
+	}
+	g.Identities = append(g.Identities, id)
+	return id
+}
+
+func (g *Game) RemoveIdentity(login string) {
+
 }
 
 func (g *Game) CheckIdentity(login, password string) error {
@@ -28,10 +80,20 @@ func (g *Game) CheckIdentity(login, password string) error {
 	return errInvalidIdentity
 }
 
+func (g Game) FindIdentity(login string) (*Identity, error) {
+	for i, identity := range g.Identities {
+		if identity.Login == login {
+			return &g.Identities[i], nil
+		}
+	}
+
+	return nil, errIdentityNotFound
+}
+
 func (g Game) FindServer(address string) (*Server, error) {
-	for _, server := range g.Network {
+	for i, server := range g.Network {
 		if server.Address == address {
-			return &server, nil
+			return &g.Network[i], nil
 		}
 	}
 	return nil, fmt.Errorf("%s : %w", address, errServerNotFound)

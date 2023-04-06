@@ -75,11 +75,11 @@ var dd = Server{
 	Address: "dd.local",
 	Public:  true,
 	Accounts: []Account{
-		{"jesus", 5},
+		{"jesus", true, false},
 	},
 	Description: ddDesc,
-	Targets: []Target{
-		{d22.Address, "serveur public du District 22", 1},
+	Links: []Link{
+		{d22.Address, "serveur public du District 22"},
 	},
 	Registers: []Register{
 		{"cafe", false, "machine à café", 1},
@@ -114,12 +114,12 @@ var d22 = Server{
 	Public:      true,
 	Accounts:    []Account{},
 	Description: dd22Desc,
-	Targets: []Target{
-		{legba.Address, "Legba Voodoocom", 1},
-		{kramps.Address, "Kramps Security", 1},
-		{corp.Address, "Central Services", 1},
-		{abus.Address, "Association des Banques Unifiées Suisses", 1},
-		{greendata.Address, "Green Data, solution environnementale", 1},
+	Links: []Link{
+		{legba.Address, "Legba Voodoocom"},
+		{kramps.Address, "Kramps Security"},
+		{corp.Address, "Central Services"},
+		{abus.Address, "Association des Banques Unifiées Suisses"},
+		{greendata.Address, "Green Data, solution environnementale"},
 	},
 	Scan: SEC2,
 }
@@ -149,8 +149,8 @@ var kramps = Server{
 	Address:  "kramps.d22.eu",
 	Public:   true,
 	Accounts: []Account{},
-	Targets: []Target{
-		{kramps_pers.Address, "Serveur réservé au personnel", 3},
+	Links: []Link{
+		{kramps_pers.Address, "Serveur réservé au personnel"},
 	},
 	Description: kpubDesc,
 	Scan:        SEC2,
@@ -185,11 +185,12 @@ var kramps_pers = Server{
 	Address: "priv.kramps.d22.eu",
 	Public:  false,
 	Accounts: []Account{
-		{"akremmer", 3},
+		{Login: "akremmer"},
+		{Login: "haxxor", Backdoor: true},
 	},
-	Targets: []Target{
-		{kramps_inmates.Address, "Gestion des prisonniers", 3},
-		{kramps_sec.Address, "Sécurité des installations", 5},
+	Links: []Link{
+		{kramps_inmates.Address, "Gestion des prisonniers"},
+		{kramps_sec.Address, "Sécurité des installations"},
 	},
 	Scan:        SEC3,
 	Description: kperDesc,
@@ -528,7 +529,7 @@ var kperDesc = `
 var kramps_inmates = Server{
 	Address: "inmates.kramps.d22.eu",
 	Accounts: []Account{
-		{"akremmer", 3},
+		{Login: "akremmer", Admin: true},
 	},
 	Scan:        SEC3,
 	Description: kinmatesDesc,
@@ -1936,8 +1937,8 @@ var corp = Server{
 	Public:      true,
 	Accounts:    []Account{},
 	Description: cd22Desc,
-	Targets: []Target{
-		{justice.Address, "services judiciaires", 0},
+	Links: []Link{
+		{justice.Address, "services judiciaires"},
 	},
 	Scan: SEC3,
 }
@@ -2089,8 +2090,8 @@ var cd22bankDesc = `
 `
 
 var (
-	legbaPersonnel = Account{"hproskychev", 3}
-	legbaAdmin     = Account{"lgebadmin", 5}
+	legbaPersonnel = Account{Login: "hproskychev"}
+	legbaAdmin     = Account{Login: "lgebadmin", Admin: true}
 	lbDesc         = `
                  ......                 
            .',,,,,,,,,,,,,,,.           
@@ -2166,9 +2167,9 @@ var legba = Server{
 	},
 	Scan:        SEC4,
 	Description: lbDesc,
-	Targets: []Target{
-		{legba_satcom.Address, "division sat-com", 3},
-		{legba_archive.Address, "archives", 3},
+	Links: []Link{
+		{legba_satcom.Address, "division sat-com"},
+		{legba_archive.Address, "archives"},
 	},
 }
 
@@ -3059,7 +3060,7 @@ var lbd = Server{
 var greendata = Server{
 	Address: "greendata.d22.eu",
 	Accounts: []Account{
-		{"afrieman", 2},
+		{Login: "afrieman"},
 	},
 	Description: greenDesc,
 	Scan:        SEC3,
@@ -3107,10 +3108,10 @@ var invertedLeaf = `
 var leet = Server{
 	Address: "leet.darknet",
 	Accounts: []Account{
-		{"crunch", 5},
-		{"celine", 4},
-		{"nikki", 4},
-		{"greenglass", 3},
+		{Login: "crunch", Admin: true},
+		{Login: "celine"},
+		{Login: "nikki"},
+		{Login: "greenglass"},
 	},
 	Description: cruDesc,
 	Scan:        SEC3,
@@ -3195,7 +3196,7 @@ var cruDesc = `
 var lair = Server{
 	Address: "celine.darknet",
 	Accounts: []Account{
-		{"celine", 5},
+		{Login: "celine", Admin: true},
 	},
 	Description: celDesc,
 	Scan:        SEC3,
@@ -3254,8 +3255,8 @@ var celDesc = `
 var hope = Server{
 	Address: "hope.local",
 	Accounts: []Account{
-		{"hope", 5},
-		{"mel", 3},
+		{Login: "hope", Admin: true},
+		{Login: "mel"},
 	},
 	Description: hopDesc,
 	Scan:        SEC5,
@@ -3340,17 +3341,18 @@ var hopDesc = `
 
 // TODO remplir la liste des identités
 var identities = []Identity{
-	{"jesus", "roxor", ""},
-	{"crunch", "hacktheplanet", ""},
-	{"celine", "waytoocool", ""},
-	{"nikki", "bohw4k", ""},
-	{"greenglass", "brianglass", ""},
-	{"hope", "tearsintherain", ""},
-	{"mel", "xxx", ""},
-	{"akremmer", "sexgod22", "Alexandre Kremmer"}, // backdoor, vol de compte utilisateur
-	{papaproxy.Login, "paparezo", papaproxy.Name},
-	{"legbadmin", "foh5wuoh", "FIXME"},
-	{"afrieman", "theblackwaverocks", "FIXME"},
+	{"jesus", "roxor", "", 100},
+	{"crunch", "hacktheplanet", "", 0},
+	{"celine", "waytoocool", "", 0},
+	{"nikki", "bohw4k", "", 0},
+	{"greenglass", "brianglass", "", 0},
+	{"hope", "tearsintherain", "", 0},
+	{"mel", "xxx", "", 0},
+	{"akremmer", "sexgod22", "Alexandre Kremmer", 0}, // backdoor, vol de compte utilisateur
+	{papaproxy.Login, "paparezo", papaproxy.Name, 0},
+	{"legbadmin", "foh5wuoh", "FIXME", 0},
+	{"afrieman", "theblackwaverocks", "FIXME", 0},
+	{"haxxor", "crunchwashere", "", 0}, // FIXME
 }
 
 var game = &Game{

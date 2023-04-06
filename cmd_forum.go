@@ -62,11 +62,12 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+
 	//"strconv"
 	"strings"
 	"time"
 
-	"github.com/charmbracelet/bubbles/help"
+	hhelp "github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textarea"
@@ -100,7 +101,7 @@ type QuitWritingMsg struct{}
 type ForumCmd struct{}
 type ForumCmdModel struct {
 	list   list.Model  // list Topics and Posts
-	help   help.Model  // help while in List
+	help   hhelp.Model // help while in List
 	keys   *listKeyMap // additionnal Keys for list
 	width  int
 	height int
@@ -131,17 +132,19 @@ func (f ForumCmd) LongHelp() string {
 
 func (f ForumCmd) Run(c *Client, args []string) tea.Msg {
 	if !c.Console.IsConnected() {
-		return ResultMsg{
+		return Eval{
 			Cmd:   "forum",
-			Error: errNotConnected}
+			Error: errNotConnected,
+		}
 	}
 
 	fo, err := c.Server.GetForum()
 	//c.Console.Forum = forum
 	if err != nil {
-		return ResultMsg{
+		return Eval{
 			Cmd:   "forum " + strings.Join(args, " "),
-			Error: errForumUnreachable}
+			Error: errForumUnreachable,
+		}
 	}
 	fo.User = c.Login
 	// finfo in TopicList are already ordered T > Post, dates
@@ -169,7 +172,7 @@ func (f ForumCmd) Run(c *Client, args []string) tea.Msg {
 	l.Help.Styles.FullKey = helpTextStyle
 	l.Help.Styles.ShortKey = helpTextStyle
 
-	h := help.New()
+	h := hhelp.New()
 	h.Styles.FullDesc = helpTextStyle
 	h.Styles.ShortDesc = helpTextStyle
 	h.Styles.FullKey = helpTextStyle
@@ -519,7 +522,6 @@ type readerKeyMap struct {
 	quitReading      key.Binding
 }
 
-//
 func newReaderKeyMap(v viewport.Model) *readerKeyMap {
 	return &readerKeyMap{
 		up:   v.KeyMap.Up,
@@ -546,7 +548,7 @@ func newReaderKeyMap(v viewport.Model) *readerKeyMap {
 // ReaderModel is made of a viewport, a KeyMap, help
 type ReaderModel struct {
 	viewport viewport.Model
-	help     help.Model // help while reading Posts
+	help     hhelp.Model // help while reading Posts
 	keys     *readerKeyMap
 	forum    *Forum
 	answers  []int // index of all Post in Thread to read
@@ -564,7 +566,7 @@ type ReaderModel struct {
 func NewReader() ReaderModel {
 	view := viewport.New(1, 1) // temporary width and height
 	k := newReaderKeyMap(view)
-	h := help.New()
+	h := hhelp.New()
 	h.Styles.FullDesc = helpTextStyle
 	h.Styles.ShortDesc = helpTextStyle
 	h.Styles.FullKey = helpTextStyle
@@ -740,7 +742,7 @@ func newWriterKeyMap() *writerKeyMap {
 type WriterModel struct {
 	textarea  textarea.Model
 	textinput textinput.Model
-	help      help.Model
+	help      hhelp.Model
 	keys      *writerKeyMap
 	forum     *Forum
 
@@ -760,7 +762,7 @@ func NewWriter() WriterModel {
 	ti.Placeholder = "Votre titre..."
 
 	k := newWriterKeyMap()
-	h := help.New()
+	h := hhelp.New()
 	h.Styles.FullDesc = helpTextStyle
 	h.Styles.ShortDesc = helpTextStyle
 	h.Styles.FullKey = helpTextStyle

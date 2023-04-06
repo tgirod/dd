@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 	"unicode"
 
@@ -32,7 +33,7 @@ type Server struct {
 	Scan time.Duration
 
 	// liste des liens fournis par le serveur
-	Targets []Target
+	Links []Link
 
 	// liste des données fournies par le serveur
 	Entries []Entry
@@ -43,42 +44,60 @@ type Server struct {
 
 // Account représente un compte utilisateur sur un serveur
 type Account struct {
-	Login     string
-	Privilege int
+	Login    string
+	Admin    bool
+	Backdoor bool
 }
 
-func (s *Server) CheckAccount(login string) (int, error) {
+var PublicAccount = Account{
+	Login:    "public",
+	Admin:    false,
+	Backdoor: false,
+}
+
+func (s *Server) CheckAccount(login string) (Account, error) {
+	// cherche un compte utilisateur valide
 	for _, a := range s.Accounts {
 		if a.Login == login {
-			return a.Privilege, nil
+			return a, nil
 		}
 	}
 
+	// si le serveur est public, autoriser l'accès quoi qu'il arrive
 	if s.Public {
-		return PUBLIC_PRIVILEGE, nil
+		return Account{}, nil
 	}
 
-	return 0, errInvalidIdentity
+	return PublicAccount, errInvalidIdentity
 }
 
-type Target struct {
+func (s *Server) RemoveAccount(login string) {
+	for i, a := range s.Accounts {
+		if a.Login == login {
+			// retirer la backdoor après usage
+			last := len(s.Accounts) - 1
+			s.Accounts[i] = s.Accounts[last]
+			s.Accounts = s.Accounts[:last]
+			return
+		}
+	}
+}
+
+type Link struct {
 	// adresse du serveur de destination
 	Address string
 
 	// description du lien
 	Description string
-
-	// niveau de privilège nécessaire pour utiliser ce target
-	Restricted int
 }
 
-func (s *Server) FindTarget(address string) (Target, error) {
-	for _, t := range s.Targets {
+func (s *Server) FindTarget(address string) (Link, error) {
+	for _, t := range s.Links {
 		if t.Address == address {
 			return t, nil
 		}
 	}
-	return Target{}, errInvalidArgument
+	return Link{}, errInvalidArgument
 }
 
 // Entry est une entrée dans une base de données
@@ -143,7 +162,7 @@ func (r *Register) Match(name string) bool {
 	return fuzzy.MatchNormalizedFold(name, r.Name)
 }
 
-func (s *Server) RegisterSearch(name string) []Register {
+func (s *Server) RegistrySearch(name string) []Register {
 	result := make([]Register, 0, len(s.Registers))
 	for _, r := range s.Registers {
 		if r.Match(name) {
@@ -151,15 +170,6 @@ func (s *Server) RegisterSearch(name string) []Register {
 		}
 	}
 	return result
-}
-
-func (s *Server) FindRegister(name string) (*Register, error) {
-	for i, r := range s.Registers {
-		if r.Name == name {
-			return &s.Registers[i], nil
-		}
-	}
-	return nil, errInvalidArgument
 }
 
 func normalize(s string) string {
@@ -171,4 +181,24 @@ func normalize(s string) string {
 // Deal with Forum
 func (s *Server) GetForum() (Forum, error) {
 	return GetForum("toile/" + s.Address)
+}
+
+func (s *Server) RegistryEdit(name string) (bool, error) {
+	for i, r := range s.Registers {
+		if r.Name == name {
+			s.Registers[i].State = !s.Registers[i].State
+			return s.Registers[i].State, nil
+		}
+	}
+	return false, fmt.Errorf("%s : %w", name, errRegisterNotFound)
+}
+
+// Backdoor créé une backdoor dans le serveur
+func (s *Server) Backdoor(login string) {
+	acc := Account{
+		Login:    login,
+		Admin:    false,
+		Backdoor: true,
+	}
+	s.Accounts = append(s.Accounts, acc)
 }

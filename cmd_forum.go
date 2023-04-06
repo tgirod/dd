@@ -77,6 +77,16 @@ import (
 	lg "github.com/charmbracelet/lipgloss"
 )
 
+type ForumMsg struct{}
+
+var forum = Cmd{
+	Name:      "forum",
+	ShortHelp: "consulter le forum d'un serveur",
+	Parse: func(args []string) any {
+		return ForumMsg{}
+	},
+}
+
 // *****************************************************************************
 // ********************************************************* ForumCmd as Command
 // *****************************************************************************

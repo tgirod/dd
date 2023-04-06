@@ -96,6 +96,12 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var render bool = true // doit-on rafraichir le viewport ?
 
 	switch msg := msg.(type) {
+	case ForumMsg:
+		// FIXME intégration bourrine
+		f := ForumCmd{}
+		m := f.Run(c, []string{})
+		cmds = append(cmds, MsgToCmd((m)))
+
 	case DoorMsg:
 		c.Console.Door()
 

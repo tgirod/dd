@@ -84,6 +84,14 @@ func NewConsole(game *Game) *Console {
 	}
 }
 
+func (c *Console) Run(args []string) any {
+	ctx := Context{
+		Connected:  c.Server != nil,
+		Identified: c.Identity != "",
+	}
+	return c.Cmd.Run(ctx, args)
+}
+
 func (c *Console) connect(address string) error {
 	var err error
 	var server *Server
@@ -136,12 +144,6 @@ func (c *Console) LinkList() {
 		Cmd: "link",
 	}
 
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
-	}
-
 	b := strings.Builder{}
 	tw := tw(&b)
 	fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
@@ -185,12 +187,6 @@ func (c *Console) Back() {
 		Cmd: "back",
 	}
 
-	if !c.IsConnected() {
-		e.Error = errNotConnected
-		c.AppendOutput(e)
-		return
-	}
-
 	if len(c.History) == 1 {
 		e.Error = errInvalidCommand
 		c.AppendOutput(e)
@@ -227,11 +223,6 @@ func (c *Console) InitMem() {
 func (c *Console) Quit() {
 	eval := Eval{
 		Cmd: "quit",
-	}
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
 	}
 
 	c.Server = nil
@@ -297,12 +288,6 @@ func (c *Console) Plug() {
 		Cmd: "plug",
 	}
 
-	if c.IsConnected() {
-		eval.Error = errConnected
-		c.AppendOutput(eval)
-		return
-	}
-
 	c.DNI = true
 	eval.Output = "interface neuronale directe activée"
 	c.AppendOutput(eval)
@@ -311,12 +296,6 @@ func (c *Console) Plug() {
 func (c *Console) Jack(id int) {
 	eval := Eval{
 		Cmd: fmt.Sprintf("jack %d", id),
-	}
-
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
 	}
 
 	if id < 0 || id >= len(c.Server.Links) {
@@ -360,12 +339,6 @@ func (c *Console) DataSearch(keyword string) {
 		Cmd: fmt.Sprintf("data search %s", keyword),
 	}
 
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
-	}
-
 	if len([]rune(keyword)) < 3 {
 		eval.Error = fmt.Errorf("%s : %w", keyword, errKeywordTooShort)
 		c.AppendOutput(eval)
@@ -394,12 +367,6 @@ func (c *Console) DataSearch(keyword string) {
 func (c *Console) DataView(id string) {
 	eval := Eval{
 		Cmd: fmt.Sprintf("data view %s", id),
-	}
-
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
 	}
 
 	entry, err := c.Server.FindEntry(id, c.Login)
@@ -434,12 +401,6 @@ func (c *Console) EvadeList() {
 		Cmd: "evade",
 	}
 
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
-	}
-
 	b := strings.Builder{}
 	tw := tw(&b)
 	fmt.Fprintf(tw, "ZONE\tDISPONIBILITE\t\n")
@@ -459,12 +420,6 @@ func (c *Console) EvadeList() {
 func (c *Console) Evade(zone string) {
 	eval := Eval{
 		Cmd: fmt.Sprintf("evade %s", zone),
-	}
-
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
 	}
 
 	available, ok := c.Mem[zone]
@@ -491,12 +446,6 @@ func (c *Console) RegistrySearch(name string) {
 		Cmd: fmt.Sprintf("registry search %s", name),
 	}
 
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
-	}
-
 	search := c.Server.RegistrySearch(name)
 
 	b := strings.Builder{}
@@ -514,12 +463,6 @@ func (c *Console) RegistrySearch(name string) {
 func (c *Console) RegistryEdit(name string) {
 	eval := Eval{
 		Cmd: fmt.Sprintf("registry edit %s", name),
-	}
-
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
 	}
 
 	state, err := c.Server.RegistryEdit(name)
@@ -563,12 +506,6 @@ func (c *Console) Index() {
 		Cmd: "index",
 	}
 
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
-	}
-
 	b := strings.Builder{}
 
 	s := c.Server
@@ -584,19 +521,7 @@ func (c *Console) Index() {
 
 func (c *Console) Pay(to string, amount int, password string) {
 	eval := Eval{
-		Cmd: fmt.Sprintf("bank pay %s %d", to, amount),
-	}
-
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
-	}
-
-	if c.Login == "" {
-		eval.Error = errNotIdentified
-		c.AppendOutput(eval)
-		return
+		Cmd: fmt.Sprintf("yes pay %s %d", to, amount),
 	}
 
 	if err := c.Game.CheckIdentity(c.Login, password); err != nil {
@@ -618,19 +543,7 @@ func (c *Console) Pay(to string, amount int, password string) {
 
 func (c *Console) Balance() {
 	eval := Eval{
-		Cmd: fmt.Sprintf("bank balance"),
-	}
-
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
-	}
-
-	if c.Login == "" {
-		eval.Error = errNotIdentified
-		c.AppendOutput(eval)
-		return
+		Cmd: fmt.Sprintf("yes balance"),
 	}
 
 	// FIXME on devrait avoir une copie de l'identité courante dans la console
@@ -654,13 +567,7 @@ func (c *Console) AppendOutput(o Eval) {
 
 func (c *Console) Door() {
 	eval := Eval{
-		Cmd: fmt.Sprintf("hole"),
-	}
-
-	if !c.IsConnected() {
-		eval.Error = errNotConnected
-		c.AppendOutput(eval)
-		return
+		Cmd: fmt.Sprintf("door"),
 	}
 
 	// créer une nouvelle identité aléatoire

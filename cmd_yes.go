@@ -20,8 +20,10 @@ func (p PayMsg) SetPassword(password string) filler.PasswordFiller {
 }
 
 var yes = Cmd{
-	Name:      "yes",
-	ShortHelp: "effectuer des opérations bancaires",
+	Name:       "yes",
+	ShortHelp:  "effectuer des opérations bancaires",
+	Connected:  true,
+	Identified: true,
 	SubCmds: []Cmd{
 		{
 			Path:      []string{"yes"},

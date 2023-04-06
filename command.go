@@ -11,12 +11,14 @@ import (
 // SubCmds == commande intermédiaire
 // Parse == commande terminale
 type Cmd struct {
-	Path      []string                // chemin qui mène à la commande
-	Name      string                  // nom de la commande
-	ShortHelp string                  // phrase d'aide
-	SubCmds   []Cmd                   // sous-commandes (optionnel)
-	Args      []Arg                   // arguments (optionnel)
-	Parse     func(args []string) any // fonction exécutée (optionnel)
+	Path       []string                // chemin qui mène à la commande
+	Name       string                  // nom de la commande
+	ShortHelp  string                  // phrase d'aide
+	SubCmds    []Cmd                   // sous-commandes (optionnel)
+	Args       []Arg                   // arguments (optionnel)
+	Connected  bool                    // la commande nécessite d'être connecté
+	Identified bool                    // la commande nécessite d'avoir une identité active
+	Parse      func(args []string) any // fonction exécutée (optionnel)
 }
 
 // Arg décrit un argument. Il n'y a pas d'arguments optionnels
@@ -69,7 +71,28 @@ func (c Cmd) CheckArgs(args []string) error {
 	return nil
 }
 
-func (c Cmd) Run(args []string) any {
+type Context struct {
+	Connected  bool
+	Identified bool
+}
+
+func (c Cmd) Run(ctx Context, args []string) any {
+	if c.Connected && !ctx.Connected {
+		return Eval{
+			Cmd:    c.FullCmd(args),
+			Error:  errNotConnected,
+			Output: c.Help(args),
+		}
+	}
+
+	if c.Identified && !ctx.Identified {
+		return Eval{
+			Cmd:    c.FullCmd(args),
+			Error:  errNotIdentified,
+			Output: c.Help(args),
+		}
+	}
+
 	if len(c.SubCmds) == 0 {
 		if c.Parse == nil {
 			// ne devrait pas arriver
@@ -109,7 +132,7 @@ func (c Cmd) Run(args []string) any {
 	}
 
 	// continuer l'exécution sur la première commande qui match
-	return cmds[0].Run(args[1:])
+	return cmds[0].Run(ctx, args[1:])
 }
 
 func (c Cmd) Help(args []string) string {
@@ -161,6 +184,7 @@ type QuitMsg struct{}
 var quit = Cmd{
 	Name:      "quit",
 	ShortHelp: "ferme la connexion au serveur courant",
+	Connected: true,
 	Parse: func(args []string) any {
 		return QuitMsg{}
 	},
@@ -192,6 +216,7 @@ type JackMsg struct {
 var jack = Cmd{
 	Name:      "jack",
 	ShortHelp: "force l'accès à un lien",
+	Connected: true,
 	Args: []Arg{
 		{
 			Name:      "id",
@@ -214,7 +239,7 @@ type PlugMsg struct{}
 
 var plug = Cmd{
 	Name:      "plug",
-	ShortHelp: "active l'interface neuronale hors connexion",
+	ShortHelp: "active l'interface neuronale",
 	Parse: func(args []string) any {
 		return PlugMsg{}
 	},
@@ -243,6 +268,7 @@ type DataViewMsg struct {
 var data = Cmd{
 	Name:      "data",
 	ShortHelp: "recherche des données sur le serveur",
+	Connected: true,
 	SubCmds: []Cmd{
 		{
 			Name:      "search",
@@ -284,6 +310,7 @@ type LinkMsg struct {
 var link = Cmd{
 	Name:      "link",
 	ShortHelp: "utilise les liens pour se connecter à un autre serveur",
+	Connected: true,
 	SubCmds: []Cmd{
 		{
 			Name:      "list",
@@ -322,6 +349,7 @@ type BackMsg struct{}
 var back = Cmd{
 	Name:      "back",
 	ShortHelp: "quitte le serveur actuel et se reconnecte au serveur précédent",
+	Connected: true,
 	Parse: func(args []string) any {
 		return BackMsg{}
 	},
@@ -336,6 +364,7 @@ type EvadeMsg struct {
 var evade = Cmd{
 	Name:      "evade",
 	ShortHelp: "effectue une manoeuvre d'évasion pour gagner un peu de temps",
+	Connected: true,
 	SubCmds: []Cmd{
 		{
 			Name:      "list",
@@ -367,6 +396,7 @@ type IndexMsg struct{}
 var index = Cmd{
 	Name:      "index",
 	ShortHelp: "liste les services disponibles dans le serveur courant",
+	Connected: true,
 	Parse: func(args []string) any {
 		return IndexMsg{}
 	},
@@ -401,6 +431,7 @@ type RegistryEditMsg struct {
 var registry = Cmd{
 	Name:      "registry",
 	ShortHelp: "liste et manipule les registres du serveur",
+	Connected: true,
 	SubCmds: []Cmd{
 		{
 			Name:      "search",
@@ -464,6 +495,7 @@ type DoorMsg struct{}
 var door = Cmd{
 	Name:      "door",
 	ShortHelp: "créé une backdoor dans le serveur",
+	Connected: true,
 	Parse: func(args []string) any {
 		return DoorMsg{}
 	},

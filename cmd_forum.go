@@ -82,6 +82,7 @@ type ForumMsg struct{}
 var forum = Cmd{
 	Name:      "forum",
 	ShortHelp: "consulter le forum d'un serveur",
+	Connected: true,
 	Parse: func(args []string) any {
 		return ForumMsg{}
 	},
@@ -1034,7 +1035,7 @@ func GenFromTopic(fo Forum) []list.Item {
 				item := NewPostForumItem(DecodePostTitle(v.Name()), id)
 				Items = append(Items, item)
 			} else {
-				orig_name := title[4:len(title)]
+				orig_name := title[4:]
 				//fmt.Printf("Answer to -%s-\n", orig_name)
 				// find item with this title
 				IncForumItemWithPost(Items,
@@ -1066,9 +1067,9 @@ func UpdatePostThread(fo *Forum, idPost int) ([]list.Item, int) {
 	fullname := fo.Post
 	_, fullTitle, _, _ := GetElements(fullname)
 	// oriTitle is the title of the "root" Post which is answered
-	oriTitle := fullTitle[0:len(fullTitle)]
+	oriTitle := fullTitle[0:]
 	if strings.HasPrefix(oriTitle, "Re: ") {
-		oriTitle = oriTitle[4:len(oriTitle)]
+		oriTitle = oriTitle[4:]
 	}
 	fmt.Printf("__UpdatePostThread reading=%s, title=%s\n", fullname, oriTitle)
 	// Reread Forum current directory
@@ -1194,8 +1195,8 @@ func (d ForumDelegate) Render(w io.Writer, m list.Model, index int, item list.It
 
 	fn := itemStyle.Render
 	if index == m.Index() {
-		fn = func(s string) string {
-			return selectedItemStyle.Render("> " + s)
+		fn = func(s ...string) string {
+			return selectedItemStyle.Render("> " + s[0])
 		}
 	}
 

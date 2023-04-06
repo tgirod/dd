@@ -54,7 +54,7 @@ func GetForum(serverAdress string) (Forum, error) {
 }
 
 func (f Forum) Show() {
-	fmt.Printf("Forum @%s:%s (%t) %d topics\n", f.Address, f.Topic, f.InPost, len(f.TopicList))
+	fmt.Printf("Forum @%s:%s (%t) %d topics\n", f.Address, f.Topic, f.InPost(), len(f.TopicList))
 }
 
 func (f *Forum) GetFiles(topicStr string) error {

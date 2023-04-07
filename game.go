@@ -20,6 +20,26 @@ type Identity struct {
 	Password string
 	Name     string
 	Yes      int
+	Messages []Message
+}
+
+type Message struct {
+	From    string // expéditeur
+	To      string // destinataire
+	Subject string // titre du message
+	Unread  bool   // pas encore lu
+	Content string // contenu du message
+}
+
+func (g *Game) Send(m Message) error {
+	// trouver le destinataire
+	to, err := g.FindIdentity(m.To)
+	if err != nil {
+		return err
+	}
+
+	to.Messages = append(to.Messages, m)
+	return nil
 }
 
 func (g *Game) Pay(from, to string, amount int) error {

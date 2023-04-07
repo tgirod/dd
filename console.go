@@ -73,6 +73,7 @@ var baseCmds = Cmd{
 		plug,
 		quit,
 		registry,
+		message,
 	},
 }
 
@@ -584,6 +585,65 @@ func (c *Console) Door() {
 	fmt.Fprintf(&b, "login: %s\n", id.Login)
 	fmt.Fprintf(&b, "password: %s\n", id.Password)
 	fmt.Fprintf(&b, "cette backdoor sera détruite automatiquement après usage.\n")
+
+	eval.Output = b.String()
+	c.AppendOutput(eval)
+}
+
+// MessageNew affiche les messages non lus
+func (c *Console) MessageNew() {
+	b := strings.Builder{}
+	tw := tw(&b)
+
+	fmt.Fprintf(tw, "liste des messages non lus :\n")
+	for i, m := range c.Messages {
+		if m.Unread {
+			fmt.Fprintf(tw, "%d\t%s\t\n", i, m.Subject)
+		}
+	}
+	tw.Flush()
+
+	c.AppendOutput(Eval{
+		Cmd:    "message new",
+		Output: b.String(),
+	})
+}
+
+func (c *Console) MessageList() {
+	b := strings.Builder{}
+	tw := tw(&b)
+
+	fmt.Fprintf(tw, "liste de tous les messages :\n")
+	for i, m := range c.Messages {
+		fmt.Fprintf(tw, "%d\t%s\t\n", i, m.Subject)
+	}
+	tw.Flush()
+
+	c.AppendOutput(Eval{
+		Cmd:    "message new",
+		Output: b.String(),
+	})
+}
+
+func (c *Console) MessageView(index int) {
+	eval := Eval{
+		Cmd: fmt.Sprintf("message view %d", index),
+	}
+
+	b := strings.Builder{}
+
+	if index < 0 || index >= len(c.Messages) {
+		eval.Error = errInvalidArgument
+		c.AppendOutput(eval)
+		return
+	}
+
+	msg := c.Messages[index]
+	c.Messages[index].Unread = false
+
+	fmt.Fprintf(&b, "De : %s\n", msg.From)
+	fmt.Fprintf(&b, "Sujet : %s\n", msg.Subject)
+	fmt.Fprintln(&b, msg.Content)
 
 	eval.Output = b.String()
 	c.AppendOutput(eval)

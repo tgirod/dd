@@ -93,6 +93,19 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var render bool = true // doit-on rafraichir le viewport ?
 
 	switch msg := msg.(type) {
+	case MessageNewMsg:
+		c.Console.MessageNew()
+
+	case MessageListMsg:
+		c.Console.MessageList()
+
+	case MessageViewMsg:
+		c.Console.MessageView(msg.Index)
+
+	case MessageSendMsg:
+
+	case MessageReplyMsg:
+
 	case DoorMsg:
 		c.Console.Door()
 

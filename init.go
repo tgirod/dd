@@ -3341,18 +3341,61 @@ var hopDesc = `
 
 // TODO remplir la liste des identités
 var identities = []Identity{
-	{"jesus", "roxor", "", 100},
-	{"crunch", "hacktheplanet", "", 0},
-	{"celine", "waytoocool", "", 0},
-	{"nikki", "bohw4k", "", 0},
-	{"greenglass", "brianglass", "", 0},
-	{"hope", "tearsintherain", "", 0},
-	{"mel", "xxx", "", 0},
-	{"akremmer", "sexgod22", "Alexandre Kremmer", 0}, // backdoor, vol de compte utilisateur
-	{papaproxy.Login, "paparezo", papaproxy.Name, 0},
-	{"legbadmin", "foh5wuoh", "FIXME", 0},
-	{"afrieman", "theblackwaverocks", "FIXME", 0},
-	{"haxxor", "crunchwashere", "", 0}, // FIXME
+	{
+		Login:    "jesus",
+		Password: "roxor",
+		Messages: []Message{
+			{
+				From:    "crunch",
+				To:      "jesus",
+				Subject: "ca roule ?",
+				Unread:  true,
+				Content: "ca va mon pote ?",
+			},
+		},
+	},
+	{
+		Login:    "crunch",
+		Password: "hacktheplanet",
+	},
+	{
+		Login:    "celine",
+		Password: "waytoocool",
+	},
+	{
+		Login:    "nikki",
+		Password: "bohw4k",
+	},
+	{
+		Login:    "greenglass",
+		Password: "brianglass",
+	},
+	{
+		Login:    "hope",
+		Password: "tearsintherain",
+	},
+	{
+		Login:    "mel",
+		Password: "xxx",
+	},
+	{
+		Login:    "akremmer",
+		Password: "sexgod22",
+		Name:     "Alexandre Kremmer",
+	},
+	{
+		Login:    papaproxy.Login,
+		Password: "paparezo",
+		Name:     papaproxy.Name,
+	},
+	{
+		Login:    "legbadmin",
+		Password: "foh5wuoh",
+	},
+	{
+		Login:    "afrieman",
+		Password: "theblackwaverocks",
+	},
 }
 
 var game = &Game{

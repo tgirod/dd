@@ -1,0 +1,109 @@
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+type MessageNewMsg struct {
+	Recipient string
+	Subject   string
+	Content   string
+}
+
+type MessageListMsg struct{}
+
+type MessageViewMsg struct {
+	Index int
+}
+
+type MessageSendMsg struct {
+	Recipient string // destinataire du message
+	Subject   string
+	Content   string
+}
+
+type MessageReplyMsg struct {
+	Index   int // identifiant du message auquel on répond
+	Subject string
+	Content string
+}
+
+var message = Cmd{
+	Name:       "message",
+	ShortHelp:  "consulter et envoyer des messages privés",
+	Connected:  true,
+	Identified: true,
+	SubCmds: []Cmd{
+		{
+			Path:      []string{"message"},
+			Name:      "new",
+			ShortHelp: "lister les messages non lus",
+			Parse: func(args []string) any {
+				return MessageNewMsg{}
+			},
+		},
+		{
+			Path:      []string{"message"},
+			Name:      "list",
+			ShortHelp: "lister tous les messages",
+			Parse: func(args []string) any {
+				return MessageListMsg{}
+			},
+		},
+		{
+			Path:      []string{"message"},
+			Name:      "view",
+			ShortHelp: "voir un message",
+			Args: []Arg{
+				{
+					Name:      "id",
+					ShortHelp: "index du message à consulter",
+				},
+			},
+			Parse: func(args []string) any {
+				id, err := strconv.Atoi(args[0])
+				if err != nil {
+					return Eval{
+						Error: fmt.Errorf("ID : %w", errInvalidArgument),
+					}
+				}
+				return MessageViewMsg{
+					Index: id,
+				}
+			},
+		},
+		{
+			Path:      []string{"message"},
+			Name:      "send",
+			ShortHelp: "écrire un message",
+			Args: []Arg{
+				{
+					Name:      "recipient",
+					ShortHelp: "destinataire du message",
+				},
+			},
+			Parse: func(args []string) any {
+				return MessageSendMsg{
+					Recipient: args[0],
+				}
+			},
+		},
+		{
+			Path:      []string{"message"},
+			Name:      "reply",
+			ShortHelp: "écrire un message",
+			Args: []Arg{
+				{
+					Name:      "id",
+					ShortHelp: "identifiant du message auquel répondre",
+				},
+			},
+			Parse: func(args []string) any {
+				return MessageSendMsg{
+					Recipient: args[0],
+				}
+			},
+		},
+	},
+}

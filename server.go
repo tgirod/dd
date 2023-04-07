@@ -49,26 +49,20 @@ type Account struct {
 	Backdoor bool
 }
 
-var PublicAccount = Account{
-	Login:    "public",
-	Admin:    false,
-	Backdoor: false,
-}
-
-func (s *Server) CheckAccount(login string) (Account, error) {
+func (s *Server) CheckAccount(login string) (*Account, error) {
 	// cherche un compte utilisateur valide
-	for _, a := range s.Accounts {
+	for i, a := range s.Accounts {
 		if a.Login == login {
-			return a, nil
+			return &s.Accounts[i], nil
 		}
 	}
 
 	// si le serveur est public, autoriser l'accès quoi qu'il arrive
 	if s.Public {
-		return Account{}, nil
+		return nil, nil
 	}
 
-	return PublicAccount, errInvalidIdentity
+	return nil, fmt.Errorf("%s : %w", login, errInvalidIdentity)
 }
 
 func (s *Server) RemoveAccount(login string) {

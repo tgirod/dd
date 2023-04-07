@@ -252,11 +252,16 @@ var (
 
 func (c *Client) View() string {
 	// mise à jour de la barre de statut
-	login := fmt.Sprintf("id=%s", c.Console.Login)
+	login := "anon"
+	if c.Console.Identity != nil {
+		login = fmt.Sprintf("id=%s", c.Console.Identity.Login)
+	}
+
 	admin := "user"
-	if c.Console.Admin {
+	if c.Console.Account != nil && c.Console.Account.Admin {
 		admin = "admin"
 	}
+
 	timer := "--:--"
 	if c.Console.Alert {
 		min := int(c.Countdown.Minutes())

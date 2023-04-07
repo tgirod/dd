@@ -17,10 +17,10 @@ type Console struct {
 	Cmd
 
 	// identité active sur la console
-	Identity string
+	*Identity
 
 	// compte utilisateur sur le serveur courant
-	Account
+	*Account
 
 	// l'alerte est-elle activée ?
 	Alert bool
@@ -86,7 +86,7 @@ func NewConsole(game *Game) *Console {
 func (c *Console) Run(args []string) any {
 	ctx := Context{
 		Connected:  c.Server != nil,
-		Identified: c.Identity != "",
+		Identified: c.Identity != nil,
 	}
 	return c.Cmd.Run(ctx, args)
 }
@@ -94,6 +94,7 @@ func (c *Console) Run(args []string) any {
 func (c *Console) connect(address string) error {
 	var err error
 	var server *Server
+	var account *Account
 
 	// récupérer le serveur
 	if server, err = c.FindServer(address); err != nil {
@@ -101,15 +102,19 @@ func (c *Console) connect(address string) error {
 	}
 
 	// vérifier que l'utilisateur a le droit de se connecter
-	var account Account
-	if account, err = server.CheckAccount(c.Login); err != nil {
-		return fmt.Errorf("%s : %w", c.Login, err)
+	login := ""
+	if c.Identity != nil {
+		login = c.Identity.Login
+	}
+	if account, err = server.CheckAccount(login); err != nil {
+		return err
 	}
 	c.Account = account
 
 	// enregistrer le nouveau serveur
 	c.Server = server
-	if account.Backdoor {
+
+	if c.Account != nil && c.Account.Backdoor {
 		c.Server.RemoveAccount(c.Account.Login)
 		c.Game.RemoveIdentity(c.Account.Login)
 	}
@@ -225,7 +230,8 @@ func (c *Console) Quit() {
 	}
 
 	c.Server = nil
-	c.Account = Account{}
+	c.Identity = nil
+	c.Account = nil
 	c.Alert = false
 	c.History.Clear()
 	c.Cmd = baseCmds
@@ -236,7 +242,6 @@ func (c *Console) Quit() {
 
 func (c *Console) Disconnect() {
 	c.Server = nil
-	c.Login = ""
 	c.Admin = false
 	c.Alert = false
 	c.History.Clear()
@@ -312,7 +317,6 @@ func (c *Console) Jack(id int) {
 	}
 
 	c.Server = server
-	c.Login = "illegal"
 	c.Admin = false
 	c.InitMem()
 	c.History.Push(target)
@@ -345,7 +349,7 @@ func (c *Console) DataSearch(keyword string) {
 	}
 
 	// construire la réponse à afficher
-	entries := c.Server.DataSearch(keyword, c.Login)
+	entries := c.Server.DataSearch(keyword, c.Identity.Login)
 	b := strings.Builder{}
 	tw := tw(&b)
 	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
@@ -368,7 +372,7 @@ func (c *Console) DataView(id string) {
 		Cmd: fmt.Sprintf("data view %s", id),
 	}
 
-	entry, err := c.Server.FindEntry(id, c.Login)
+	entry, err := c.Server.FindEntry(id, c.Identity.Login)
 	if err != nil {
 		eval.Error = err
 		c.AppendOutput(eval)
@@ -481,13 +485,13 @@ func (c *Console) Identify(login, password string) {
 		Cmd: fmt.Sprintf("identify %s %s", login, password),
 	}
 
-	if err := c.CheckIdentity(login, password); err != nil {
+	identity, err := c.CheckIdentity(login, password)
+	if err != nil {
 		eval.Error = err
 		c.AppendOutput(eval)
 		return
 	}
-
-	c.Login = login
+	c.Identity = identity
 
 	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
 	if c.Server != nil {
@@ -523,13 +527,13 @@ func (c *Console) Pay(to string, amount int, password string) {
 		Cmd: fmt.Sprintf("yes pay %s %d", to, amount),
 	}
 
-	if err := c.Game.CheckIdentity(c.Login, password); err != nil {
+	if _, err := c.Game.CheckIdentity(c.Identity.Login, password); err != nil {
 		eval.Error = err
 		c.AppendOutput(eval)
 		return
 	}
 
-	from := c.Login
+	from := c.Identity.Login
 	if err := c.Game.Pay(from, to, amount); err != nil {
 		eval.Error = err
 		c.AppendOutput(eval)
@@ -546,7 +550,7 @@ func (c *Console) Balance() {
 	}
 
 	// FIXME on devrait avoir une copie de l'identité courante dans la console
-	id, _ := c.FindIdentity(c.Login)
+	id, _ := c.FindIdentity(c.Identity.Login)
 
 	b := strings.Builder{}
 	tw := tw(&b)

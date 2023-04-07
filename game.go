@@ -71,13 +71,13 @@ func (g *Game) RemoveIdentity(login string) {
 
 }
 
-func (g *Game) CheckIdentity(login, password string) error {
-	for _, i := range g.Identities {
-		if i.Login == login && i.Password == password {
-			return nil
+func (g *Game) CheckIdentity(login, password string) (*Identity, error) {
+	for i, id := range g.Identities {
+		if id.Login == login && id.Password == password {
+			return &g.Identities[i], nil
 		}
 	}
-	return errInvalidIdentity
+	return nil, errInvalidIdentity
 }
 
 func (g Game) FindIdentity(login string) (*Identity, error) {
@@ -87,7 +87,7 @@ func (g Game) FindIdentity(login string) (*Identity, error) {
 		}
 	}
 
-	return nil, errIdentityNotFound
+	return nil, fmt.Errorf("%s : %w", login, errIdentityNotFound)
 }
 
 func (g Game) FindServer(address string) (*Server, error) {

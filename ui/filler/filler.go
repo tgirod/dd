@@ -2,6 +2,7 @@ package filler
 
 import (
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
@@ -15,12 +16,21 @@ type PasswordFiller interface {
 	SetPassword(string) PasswordFiller
 }
 
+type SubjectFiller interface {
+	SetSubject(string) SubjectFiller
+}
+
+type ContentFiller interface {
+	SetContent(string) ContentFiller
+}
+
 type FilledMsg struct{}
 
 type Model struct {
-	Title  string            // titre de la fenêtre modale
-	Msg    tea.Msg           // message à remplir
-	Fields []textinput.Model // champs de saisie
+	Title  string  // titre de la fenêtre modale
+	Msg    tea.Msg // message à remplir
+	Fields []field // champs de saisie
+	Focus  int     // champ sélectionné
 }
 
 type keymap struct {
@@ -44,44 +54,113 @@ var keys = keymap{
 	),
 }
 
+type field interface {
+	Focus() tea.Cmd
+	Blur()
+	Value() string
+	Update(tea.Msg) (field, tea.Cmd)
+	View() string
+}
+
+// LoginField permet de saisir un login
+type LoginField struct {
+	*textinput.Model
+}
+
+func (f LoginField) Update(msg tea.Msg) (field, tea.Cmd) {
+	model, cmd := f.Model.Update(msg)
+	f.Model = &model
+	return f, cmd
+}
+
+func newLoginField() LoginField {
+	ti := textinput.New()
+	ti.Placeholder = "login"
+	return LoginField{&ti}
+}
+
+// PasswordField permet de saisir un mot de passe
+type PasswordField struct {
+	*textinput.Model
+}
+
+func (f PasswordField) Update(msg tea.Msg) (field, tea.Cmd) {
+	model, cmd := f.Model.Update(msg)
+	f.Model = &model
+	return f, cmd
+}
+
+func newPasswordField() PasswordField {
+	ti := textinput.New()
+	ti.Placeholder = "password"
+	ti.EchoMode = textinput.EchoPassword
+	return PasswordField{&ti}
+}
+
+// SubjectField permet de saisir le sujet d'un message
+type SubjectField struct {
+	*textinput.Model
+}
+
+func (f SubjectField) Update(msg tea.Msg) (field, tea.Cmd) {
+	model, cmd := f.Model.Update(msg)
+	f.Model = &model
+	return f, cmd
+}
+
+func newSubjectField() SubjectField {
+	ti := textinput.New()
+	ti.Placeholder = "subject"
+	return SubjectField{&ti}
+}
+
+type ContentField struct {
+	*textarea.Model
+}
+
+func (f ContentField) Update(msg tea.Msg) (field, tea.Cmd) {
+	model, cmd := f.Model.Update(msg)
+	f.Model = &model
+	return f, cmd
+}
+
+func newContentField() ContentField {
+	ta := textarea.New()
+	ta.Placeholder = "content"
+	return ContentField{&ta}
+}
+
 func New(title string, msg tea.Msg) *Model {
 	m := Model{
-		Title:  title,
-		Msg:    msg,
-		Fields: []textinput.Model{},
+		Title: title,
+		Msg:   msg,
 	}
 
 	if _, ok := msg.(LoginFiller); ok {
-		login := textinput.New()
-		login.Placeholder = "login"
-		m.Fields = append(m.Fields, login)
+		m.Fields = append(m.Fields, newLoginField())
 	}
 
 	if _, ok := msg.(PasswordFiller); ok {
-		password := textinput.New()
-		password.Placeholder = "password"
-		password.EchoMode = textinput.EchoPassword
-		m.Fields = append(m.Fields, password)
+		m.Fields = append(m.Fields, newPasswordField())
+	}
+
+	if _, ok := msg.(SubjectFiller); ok {
+		m.Fields = append(m.Fields, newSubjectField())
+	}
+
+	if _, ok := msg.(ContentFiller); ok {
+		m.Fields = append(m.Fields, newContentField())
 	}
 
 	return &m
 }
 
-func (m *Model) current() int {
-	for i, field := range m.Fields {
-		if field.Focused() {
-			return i
-		}
-	}
-	return 0
-}
-
 func (m *Model) next() tea.Cmd {
 	var cmds []tea.Cmd
-	next := (m.current() + 1) % len(m.Fields)
+	m.Focus = (m.Focus + 1) % len(m.Fields)
 
 	for i := range m.Fields {
-		if i == next {
+		if i == m.Focus {
 			cmds = append(cmds, m.Fields[i].Focus())
 		} else {
 			m.Fields[i].Blur()
@@ -92,6 +171,9 @@ func (m *Model) next() tea.Cmd {
 }
 
 func (m *Model) Init() tea.Cmd {
+	if len(m.Fields) == 0 {
+		return nil // ne devrait pas arriver
+	}
 	return m.Fields[0].Focus()
 }
 
@@ -107,21 +189,31 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case key.Matches(msg, keys.Validate):
 			// passer au champ suivant si on n'est pas sur le dernier
-			if m.current() != len(m.Fields)-1 {
+			if m.Focus != len(m.Fields)-1 {
 				cmds = append(cmds, m.next())
 				break
 			}
 
-			// récupérer la valeur du champ login si il existe
-			if f, ok := m.Msg.(LoginFiller); ok {
-				login := m.Fields[0].Value()
-				m.Msg = f.SetLogin(login)
-			}
-
-			// récupérer la valeur du champ password si il existe
-			if f, ok := m.Msg.(PasswordFiller); ok {
-				password := m.Fields[0].Value()
-				m.Msg = f.SetPassword(password)
+			// récupérer les valeurs des champs
+			for _, field := range m.Fields {
+				switch field := field.(type) {
+				case LoginField:
+					if msg, ok := m.Msg.(LoginFiller); ok {
+						m.Msg = msg.SetLogin(field.Value())
+					}
+				case PasswordField:
+					if msg, ok := m.Msg.(PasswordFiller); ok {
+						m.Msg = msg.SetPassword(field.Value())
+					}
+				case SubjectField:
+					if msg, ok := m.Msg.(SubjectFiller); ok {
+						m.Msg = msg.SetSubject(field.Value())
+					}
+				case ContentField:
+					if msg, ok := m.Msg.(ContentFiller); ok {
+						m.Msg = msg.SetContent(field.Value())
+					}
+				}
 			}
 
 			// retourner le message complété pour qu'il soit traité
@@ -132,19 +224,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			)
 
 		case key.Matches(msg, keys.Cancel):
-			// effacer le champ Login si il existe
-			if f, ok := m.Msg.(LoginFiller); ok {
-				m.Msg = f.SetLogin("")
-			}
-
-			// effacer le champ password si il existe
-			if f, ok := m.Msg.(PasswordFiller); ok {
-				m.Msg = f.SetPassword("")
-			}
-
-			// retourner le message
+			// ne pas retourner de message rempli simplement fermer la fenêtre modale
 			cmds = append(cmds,
-				func() tea.Msg { return m.Msg },
 				func() tea.Msg { return FilledMsg{} },
 			)
 
@@ -168,12 +249,12 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *Model) View() string {
-	lines := []string{m.Title}
+	fields := []string{m.Title}
 	for i := range m.Fields {
-		lines = append(lines, m.Fields[i].View())
+		fields = append(fields, m.Fields[i].View())
 	}
 
 	return lg.JoinVertical(lg.Left,
-		lines...,
+		fields...,
 	)
 }

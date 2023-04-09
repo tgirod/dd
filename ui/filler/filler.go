@@ -10,18 +10,22 @@ import (
 
 type LoginFiller interface {
 	SetLogin(string) LoginFiller
+	GetLogin() string
 }
 
 type PasswordFiller interface {
 	SetPassword(string) PasswordFiller
+	GetPassword() string
 }
 
 type SubjectFiller interface {
 	SetSubject(string) SubjectFiller
+	GetSubject() string
 }
 
 type ContentFiller interface {
 	SetContent(string) ContentFiller
+	GetContent() string
 }
 
 type FilledMsg struct{}
@@ -58,6 +62,7 @@ type field interface {
 	Focus() tea.Cmd
 	Blur()
 	Value() string
+	SetValue(string)
 	Update(tea.Msg) (field, tea.Cmd)
 	View() string
 }
@@ -136,20 +141,28 @@ func New(title string, msg tea.Msg) *Model {
 		Msg:   msg,
 	}
 
-	if _, ok := msg.(LoginFiller); ok {
-		m.Fields = append(m.Fields, newLoginField())
+	if msg, ok := msg.(LoginFiller); ok {
+		login := newLoginField()
+		login.SetValue(msg.GetLogin())
+		m.Fields = append(m.Fields, login)
 	}
 
-	if _, ok := msg.(PasswordFiller); ok {
-		m.Fields = append(m.Fields, newPasswordField())
+	if msg, ok := msg.(PasswordFiller); ok {
+		password := newPasswordField()
+		password.SetValue(msg.GetPassword())
+		m.Fields = append(m.Fields, password)
 	}
 
-	if _, ok := msg.(SubjectFiller); ok {
-		m.Fields = append(m.Fields, newSubjectField())
+	if msg, ok := msg.(SubjectFiller); ok {
+		subject := newSubjectField()
+		subject.SetValue(msg.GetSubject())
+		m.Fields = append(m.Fields, subject)
 	}
 
-	if _, ok := msg.(ContentFiller); ok {
-		m.Fields = append(m.Fields, newContentField())
+	if msg, ok := msg.(ContentFiller); ok {
+		content := newContentField()
+		content.SetValue(msg.GetContent())
+		m.Fields = append(m.Fields, content)
 	}
 
 	return &m

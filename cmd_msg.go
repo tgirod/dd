@@ -29,9 +29,17 @@ func (m MessageSendMsg) SetSubject(subject string) filler.SubjectFiller {
 	return m
 }
 
+func (m MessageSendMsg) GetSubject() string {
+	return m.Subject
+}
+
 func (m MessageSendMsg) SetContent(content string) filler.ContentFiller {
 	m.Content = content
 	return m
+}
+
+func (m MessageSendMsg) GetContent() string {
+	return m.Content
 }
 
 type MessageReplyMsg struct {

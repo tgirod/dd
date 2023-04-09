@@ -19,6 +19,10 @@ func (p PayMsg) SetPassword(password string) filler.PasswordFiller {
 	return p
 }
 
+func (p PayMsg) GetPassword() string {
+	return p.Password
+}
+
 var yes = Cmd{
 	Name:       "yes",
 	ShortHelp:  "effectuer des opérations bancaires",

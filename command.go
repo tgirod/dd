@@ -474,6 +474,10 @@ func (i IdentifyMsg) SetPassword(password string) filler.PasswordFiller {
 	return i
 }
 
+func (i IdentifyMsg) GetPassword() string {
+	return i.Password
+}
+
 var identify = Cmd{
 	Name:      "identify",
 	ShortHelp: "validation d'identité avec le login/password",

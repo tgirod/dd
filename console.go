@@ -663,3 +663,15 @@ func (c *Console) MessageSend(m Message) {
 	eval.Output = fmt.Sprintf("message envoyé à %s", m.Recipient)
 	c.AppendOutput(eval)
 }
+
+func (c *Console) MessageReply(index int) (MessageSendMsg, error) {
+	if c.Identity == nil || index < 0 || index >= len(c.Identity.Messages) {
+		return MessageSendMsg{}, errMessageNotFound
+	}
+
+	msg := c.Identity.Messages[index]
+	return MessageSendMsg{
+		Recipient: msg.Sender,
+		Subject:   fmt.Sprintf("Re: %s", msg.Subject),
+	}, nil
+}

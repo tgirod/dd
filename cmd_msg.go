@@ -43,9 +43,7 @@ func (m MessageSendMsg) GetContent() string {
 }
 
 type MessageReplyMsg struct {
-	Index   int // identifiant du message auquel on répond
-	Subject string
-	Content string
+	Index int // identifiant du message auquel on répond
 }
 
 var message = Cmd{
@@ -113,7 +111,7 @@ var message = Cmd{
 		{
 			Path:      []string{"message"},
 			Name:      "reply",
-			ShortHelp: "écrire un message",
+			ShortHelp: "répondre à un message",
 			Args: []Arg{
 				{
 					Name:      "id",
@@ -121,8 +119,15 @@ var message = Cmd{
 				},
 			},
 			Parse: func(args []string) any {
-				return MessageSendMsg{
-					Recipient: args[0],
+				id, err := strconv.Atoi(args[0])
+				if err != nil {
+					return Eval{
+						Error: fmt.Errorf("ID : %w", errInvalidArgument),
+					}
+				}
+
+				return MessageReplyMsg{
+					Index: id,
 				}
 			},
 		},

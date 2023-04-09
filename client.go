@@ -112,6 +112,16 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		})
 
 	case MessageReplyMsg:
+		mess, err := c.Console.MessageReply(msg.Index)
+		if err != nil {
+			c.Console.AppendOutput(Eval{
+				Cmd:   fmt.Sprintf("message reply %d", msg.Index),
+				Error: err,
+			})
+			break
+		}
+		model := filler.New("saisissez votre réponse", mess)
+		cmds = append(cmds, c.OpenModal(model))
 
 	case DoorMsg:
 		c.Console.Door()

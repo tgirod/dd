@@ -41,6 +41,7 @@ var (
 	errNotIdentified      = errors.New("aucune identité active")
 	errLowCredit          = errors.New("crédit insuffisant")
 	errNegativeAmount     = errors.New("montant négatif")
+	errMessageNotFound    = errors.New("message introuvable")
 )
 
 type App struct {

@@ -3344,15 +3344,6 @@ var identities = []Identity{
 	{
 		Login:    "jesus",
 		Password: "roxor",
-		Messages: []Message{
-			{
-				From:    "crunch",
-				To:      "jesus",
-				Subject: "ca roule ?",
-				Unread:  true,
-				Content: "ca va mon pote ?",
-			},
-		},
 	},
 	{
 		Login:    "crunch",

@@ -103,6 +103,13 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.Console.MessageView(msg.Index)
 
 	case MessageSendMsg:
+		c.Console.MessageSend(Message{
+			Recipient: msg.Recipient,
+			Sender:    c.Console.Identity.Login,
+			Subject:   msg.Subject,
+			Unread:    true,
+			Content:   msg.Content,
+		})
 
 	case MessageReplyMsg:
 

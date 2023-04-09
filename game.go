@@ -24,21 +24,21 @@ type Identity struct {
 }
 
 type Message struct {
-	From    string // expéditeur
-	To      string // destinataire
-	Subject string // titre du message
-	Unread  bool   // pas encore lu
-	Content string // contenu du message
+	Recipient string // expéditeur
+	Sender    string // destinataire
+	Subject   string // titre du message
+	Content   string // contenu du message
+	Unread    bool   // pas encore lu
 }
 
-func (g *Game) Send(m Message) error {
+func (g *Game) MessageSend(m Message) error {
 	// trouver le destinataire
-	to, err := g.FindIdentity(m.To)
+	recipient, err := g.FindIdentity(m.Recipient)
 	if err != nil {
 		return err
 	}
 
-	to.Messages = append(to.Messages, m)
+	recipient.Messages = append(recipient.Messages, m)
 	return nil
 }
 

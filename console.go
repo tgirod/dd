@@ -641,10 +641,25 @@ func (c *Console) MessageView(index int) {
 	msg := c.Messages[index]
 	c.Messages[index].Unread = false
 
-	fmt.Fprintf(&b, "De : %s\n", msg.From)
+	fmt.Fprintf(&b, "De : %s\n", msg.Recipient)
 	fmt.Fprintf(&b, "Sujet : %s\n", msg.Subject)
 	fmt.Fprintln(&b, msg.Content)
 
 	eval.Output = b.String()
+	c.AppendOutput(eval)
+}
+
+func (c *Console) MessageSend(m Message) {
+	eval := Eval{
+		Cmd: "message send",
+	}
+
+	if err := c.Game.MessageSend(m); err != nil {
+		eval.Error = err
+		c.AppendOutput(eval)
+		return
+	}
+
+	eval.Output = fmt.Sprintf("message envoyé à %s", m.Recipient)
 	c.AppendOutput(eval)
 }

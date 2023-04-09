@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dd/ui/filler"
 	"fmt"
 	"strconv"
 )
@@ -21,6 +22,16 @@ type MessageSendMsg struct {
 	Recipient string // destinataire du message
 	Subject   string
 	Content   string
+}
+
+func (m MessageSendMsg) SetSubject(subject string) filler.SubjectFiller {
+	m.Subject = subject
+	return m
+}
+
+func (m MessageSendMsg) SetContent(content string) filler.ContentFiller {
+	m.Content = content
+	return m
 }
 
 type MessageReplyMsg struct {
@@ -84,9 +95,11 @@ var message = Cmd{
 				},
 			},
 			Parse: func(args []string) any {
-				return MessageSendMsg{
+				msg := MessageSendMsg{
 					Recipient: args[0],
 				}
+				model := filler.New("saisissez votre message", msg)
+				return OpenModalMsg(model)
 			},
 		},
 		{

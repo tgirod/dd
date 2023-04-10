@@ -234,7 +234,15 @@ var jack = Cmd{
 			}
 		}
 		msg := JackMsg{id}
-		model := loader.New(msg, 3*time.Second)
+		model := loader.New(
+			msg,
+			3*time.Second,
+			[]string{
+				"recherche d'une faille",
+				"exploit",
+				"accès",
+			},
+		)
 		return OpenModalMsg(model)
 	},
 }

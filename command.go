@@ -2,9 +2,11 @@ package main
 
 import (
 	"dd/ui/filler"
+	"dd/ui/loader"
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Cmd est une commande intermédiaire ou terminale dans le prompt
@@ -231,7 +233,9 @@ var jack = Cmd{
 				Error: fmt.Errorf("ID : %w", errInvalidArgument),
 			}
 		}
-		return JackMsg{id}
+		msg := JackMsg{id}
+		model := loader.New(msg, 3*time.Second)
+		return OpenModalMsg(model)
 	},
 }
 

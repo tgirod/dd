@@ -2,6 +2,7 @@ package main
 
 import (
 	"dd/ui/filler"
+	"dd/ui/loader"
 	"fmt"
 	"io"
 	"strings"
@@ -171,7 +172,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmd = c.OpenModal(msg.(tea.Model))
 		cmds = append(cmds, cmd)
 
-	case CloseModalMsg, filler.FilledMsg:
+	case CloseModalMsg, filler.FilledMsg, loader.LoadedMsg:
 		cmds = append(cmds, c.CloseModal())
 
 	case Eval:

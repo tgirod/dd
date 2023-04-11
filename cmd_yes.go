@@ -33,7 +33,7 @@ var yes = Cmd{
 			Path:      []string{"yes"},
 			Name:      "balance",
 			ShortHelp: "affiche le solde du compte",
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return BalanceMsg{}
 			},
 		},
@@ -51,7 +51,7 @@ var yes = Cmd{
 					ShortHelp: "montant à transférer",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				to := args[0]
 				amount, err := strconv.Atoi(args[1])
 				if err != nil {

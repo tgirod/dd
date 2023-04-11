@@ -13,20 +13,28 @@ import (
 // SubCmds == commande intermédiaire
 // Parse == commande terminale
 type Cmd struct {
-	Path       []string                // chemin qui mène à la commande
-	Name       string                  // nom de la commande
-	ShortHelp  string                  // phrase d'aide
-	SubCmds    []Cmd                   // sous-commandes (optionnel)
-	Args       []Arg                   // arguments (optionnel)
-	Connected  bool                    // la commande nécessite d'être connecté
-	Identified bool                    // la commande nécessite d'avoir une identité active
-	Parse      func(args []string) any // fonction exécutée (optionnel)
+	Path       []string // chemin qui mène à la commande
+	Name       string   // nom de la commande
+	ShortHelp  string   // phrase d'aide
+	SubCmds    []Cmd    // sous-commandes (optionnel)
+	Args       []Arg    // arguments (optionnel)
+	Connected  bool     // la commande nécessite d'être connecté
+	Identified bool     // la commande nécessite d'avoir une identité active
+	Run        func(
+		ctx Context,
+		args []string,
+	) any // fonction exécutée (optionnel)
 }
 
 // Arg décrit un argument. Il n'y a pas d'arguments optionnels
 type Arg struct {
 	Name      string
 	ShortHelp string
+}
+
+type Context struct {
+	*Console
+	Prompt []string
 }
 
 // Usage décrit l'utilisation d'une commande
@@ -73,21 +81,9 @@ func (c Cmd) CheckArgs(args []string) error {
 	return nil
 }
 
-type Context struct {
-	Connected  bool
-	Identified bool
-}
+func (c Cmd) Parse(ctx Context, args []string) any {
 
-func (c Cmd) Run(ctx Context, args []string) any {
-	if c.Connected && !ctx.Connected {
-		return Eval{
-			Cmd:    c.FullCmd(args),
-			Error:  errNotConnected,
-			Output: c.Help(args),
-		}
-	}
-
-	if c.Identified && !ctx.Identified {
+	if c.Identified && ctx.Console.Identity == nil {
 		return Eval{
 			Cmd:    c.FullCmd(args),
 			Error:  errNotIdentified,
@@ -96,7 +92,7 @@ func (c Cmd) Run(ctx Context, args []string) any {
 	}
 
 	if len(c.SubCmds) == 0 {
-		if c.Parse == nil {
+		if c.Run == nil {
 			// ne devrait pas arriver
 			return Eval{
 				Cmd:   c.FullCmd(args),
@@ -112,7 +108,7 @@ func (c Cmd) Run(ctx Context, args []string) any {
 			}
 		}
 		// parser les arguments et retourner un message
-		return c.Parse(args)
+		return c.Run(ctx, args)
 	}
 
 	if len(args) == 0 {
@@ -134,7 +130,7 @@ func (c Cmd) Run(ctx Context, args []string) any {
 	}
 
 	// continuer l'exécution sur la première commande qui match
-	return cmds[0].Run(ctx, args[1:])
+	return cmds[0].Parse(ctx, args[1:])
 }
 
 func (c Cmd) Help(args []string) string {
@@ -187,7 +183,7 @@ var quit = Cmd{
 	Name:      "quit",
 	ShortHelp: "ferme la connexion au serveur courant",
 	Connected: true,
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		return QuitMsg{}
 	},
 }
@@ -205,7 +201,7 @@ var load = Cmd{
 			ShortHelp: "code de la commande",
 		},
 	},
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		code := args[0]
 		return LoadMsg{code}
 	},
@@ -225,7 +221,7 @@ var jack = Cmd{
 			ShortHelp: "identifiant du lien",
 		},
 	},
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		// récupérer le lien
 		id, err := strconv.Atoi(args[0])
 		if err != nil {
@@ -252,7 +248,7 @@ type PlugMsg struct{}
 var plug = Cmd{
 	Name:      "plug",
 	ShortHelp: "active l'interface neuronale",
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		return PlugMsg{}
 	},
 }
@@ -264,7 +260,7 @@ type HelpMsg struct {
 var help = Cmd{
 	Name:      "help",
 	ShortHelp: "affiche l'aide",
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		return HelpMsg{args}
 	},
 }
@@ -292,7 +288,7 @@ var data = Cmd{
 					ShortHelp: "mot clef utilisé pour la recherche",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return DataSearchMsg{args[0]}
 			},
 		},
@@ -306,7 +302,7 @@ var data = Cmd{
 					ShortHelp: "identifiant de l'entrée à afficher",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return DataViewMsg{args[0]}
 			},
 		},
@@ -328,7 +324,7 @@ var link = Cmd{
 			Name:      "list",
 			Path:      []string{"link"},
 			ShortHelp: "affiche la liste des liens disponibles",
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return LinkListMsg{}
 			},
 		},
@@ -342,7 +338,7 @@ var link = Cmd{
 					ShortHelp: "identifiant du lien à suivre",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				// récupérer le lien
 				id, err := strconv.Atoi(args[0])
 				if err != nil {
@@ -362,7 +358,7 @@ var back = Cmd{
 	Name:      "back",
 	ShortHelp: "quitte le serveur actuel et se reconnecte au serveur précédent",
 	Connected: true,
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		return BackMsg{}
 	},
 }
@@ -382,7 +378,7 @@ var evade = Cmd{
 			Name:      "list",
 			Path:      []string{"evade"},
 			ShortHelp: "liste les zones mémoires disponibles pour une évasion",
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return EvadeListMsg{}
 			},
 		},
@@ -396,7 +392,7 @@ var evade = Cmd{
 					ShortHelp: "zone mémoire pour l'évasion",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return EvadeMsg{args[0]}
 			},
 		},
@@ -409,7 +405,7 @@ var index = Cmd{
 	Name:      "index",
 	ShortHelp: "liste les services disponibles dans le serveur courant",
 	Connected: true,
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		return IndexMsg{}
 	},
 }
@@ -427,7 +423,7 @@ var connect = Cmd{
 			ShortHelp: "adresse sur serveur auquel se connecter",
 		},
 	},
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		return ConnectMsg{args[0]}
 	},
 }
@@ -455,7 +451,7 @@ var registry = Cmd{
 					ShortHelp: "préfixe du nom du registre",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return RegistrySearchMsg{args[0]}
 			},
 		},
@@ -469,7 +465,7 @@ var registry = Cmd{
 					ShortHelp: "nom du registre à modifier",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return RegistryEditMsg{args[0]}
 			},
 		},
@@ -499,7 +495,7 @@ var identify = Cmd{
 			ShortHelp: "identifiant utilsateur",
 		},
 	},
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		msg := IdentifyMsg{Login: args[0]}
 		model := filler.New("entrez votre mot de passe", msg)
 		return OpenModalMsg(model)
@@ -512,7 +508,7 @@ var door = Cmd{
 	Name:      "door",
 	ShortHelp: "créé une backdoor dans le serveur",
 	Connected: true,
-	Parse: func(args []string) any {
+	Run: func(ctx Context, args []string) any {
 		return DoorMsg{}
 	},
 }

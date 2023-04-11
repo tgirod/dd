@@ -85,11 +85,8 @@ func NewConsole(game *Game) *Console {
 }
 
 func (c *Console) Run(args []string) any {
-	ctx := Context{
-		Connected:  c.Server != nil,
-		Identified: c.Identity != nil,
-	}
-	return c.Cmd.Run(ctx, args)
+	ctx := Context{c, args}
+	return c.Cmd.Parse(ctx, args)
 }
 
 func (c *Console) connect(address string) error {

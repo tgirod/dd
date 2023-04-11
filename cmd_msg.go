@@ -56,7 +56,7 @@ var message = Cmd{
 			Path:      []string{"message"},
 			Name:      "new",
 			ShortHelp: "lister les messages non lus",
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return MessageNewMsg{}
 			},
 		},
@@ -64,7 +64,7 @@ var message = Cmd{
 			Path:      []string{"message"},
 			Name:      "list",
 			ShortHelp: "lister tous les messages",
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				return MessageListMsg{}
 			},
 		},
@@ -78,7 +78,7 @@ var message = Cmd{
 					ShortHelp: "index du message à consulter",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				id, err := strconv.Atoi(args[0])
 				if err != nil {
 					return Eval{
@@ -100,7 +100,7 @@ var message = Cmd{
 					ShortHelp: "destinataire du message",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				msg := MessageSendMsg{
 					Recipient: args[0],
 				}
@@ -118,7 +118,7 @@ var message = Cmd{
 					ShortHelp: "identifiant du message auquel répondre",
 				},
 			},
-			Parse: func(args []string) any {
+			Run: func(ctx Context, args []string) any {
 				id, err := strconv.Atoi(args[0])
 				if err != nil {
 					return Eval{

@@ -28,7 +28,7 @@ type Message struct {
 	Sender    string // destinataire
 	Subject   string // titre du message
 	Content   string // contenu du message
-	Unread    bool   // pas encore lu
+	Opened    bool   // pas encore lu
 }
 
 func (g *Game) MessageSend(m Message) error {

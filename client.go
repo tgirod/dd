@@ -108,7 +108,6 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			Recipient: msg.Recipient,
 			Sender:    c.Console.Identity.Login,
 			Subject:   msg.Subject,
-			Unread:    true,
 			Content:   msg.Content,
 		})
 

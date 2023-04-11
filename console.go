@@ -597,7 +597,7 @@ func (c *Console) MessageNew() {
 
 	fmt.Fprintf(tw, "liste des messages non lus :\n")
 	for i, m := range c.Messages {
-		if m.Unread {
+		if !m.Opened {
 			fmt.Fprintf(tw, "%d\t%s\t\n", i, m.Subject)
 		}
 	}
@@ -639,7 +639,7 @@ func (c *Console) MessageView(index int) {
 	}
 
 	msg := c.Messages[index]
-	c.Messages[index].Unread = false
+	c.Messages[index].Opened = true
 
 	fmt.Fprintf(&b, "De : %s\n", msg.Recipient)
 	fmt.Fprintf(&b, "Sujet : %s\n", msg.Subject)

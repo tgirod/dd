@@ -85,7 +85,10 @@ func NewConsole(game *Game) *Console {
 }
 
 func (c *Console) Run(args []string) any {
-	ctx := Context{c, args}
+	ctx := Context{
+		Console: c,
+		Prompt:  strings.Join(args, " "),
+	}
 	return c.Cmd.Parse(ctx, args)
 }
 

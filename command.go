@@ -20,11 +20,10 @@ type Cmd struct {
 	Args       []Arg    // arguments (optionnel)
 	Connected  bool     // la commande nécessite d'être connecté
 	Identified bool     // la commande nécessite d'avoir une identité active
-	Run        func(
-		ctx Context,
-		args []string,
-	) any // fonction exécutée (optionnel)
+	Run        RunFunc  // fonction exécutée (optionnel)
 }
+
+type RunFunc func(ctx Context, args []string) any
 
 // Arg décrit un argument. Il n'y a pas d'arguments optionnels
 type Arg struct {
@@ -34,7 +33,7 @@ type Arg struct {
 
 type Context struct {
 	*Console
-	Prompt []string
+	Prompt string
 }
 
 // Usage décrit l'utilisation d'une commande
@@ -82,10 +81,17 @@ func (c Cmd) CheckArgs(args []string) error {
 }
 
 func (c Cmd) Parse(ctx Context, args []string) any {
-
-	if c.Identified && ctx.Console.Identity == nil {
+	if ctx.Console.Server == nil && c.Connected {
 		return Eval{
-			Cmd:    c.FullCmd(args),
+			Cmd:    ctx.Prompt,
+			Error:  errNotConnected,
+			Output: c.Help(args),
+		}
+	}
+
+	if ctx.Console.Identity == nil && c.Identified {
+		return Eval{
+			Cmd:    ctx.Prompt,
 			Error:  errNotIdentified,
 			Output: c.Help(args),
 		}

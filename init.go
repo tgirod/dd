@@ -3389,8 +3389,8 @@ var identities = []Identity{
 	},
 }
 
-var game = &Game{
-	Network: []Server{
+var net = &Network{
+	Servers: []Server{
 		dd,
 		d22,
 		kramps,

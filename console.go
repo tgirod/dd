@@ -44,7 +44,7 @@ type Console struct {
 	*Server
 
 	// état interne du jeu
-	*Game
+	*Network
 }
 
 type Result struct {
@@ -77,10 +77,10 @@ var baseCmds = Cmd{
 	},
 }
 
-func NewConsole(game *Game) *Console {
+func NewConsole(net *Network) *Console {
 	return &Console{
-		Cmd:  baseCmds,
-		Game: game,
+		Cmd:     baseCmds,
+		Network: net,
 	}
 }
 
@@ -310,7 +310,7 @@ func (c *Console) Jack(id int) {
 	}
 
 	target := c.Server.Links[id]
-	server, err := c.Game.FindServer(target.Address)
+	server, err := c.Network.FindServer(target.Address)
 	if err != nil {
 		eval.Error = err
 		c.AddResult(eval)
@@ -528,14 +528,14 @@ func (c *Console) Pay(to string, amount int, password string) {
 		Prompt: fmt.Sprintf("yes pay %s %d", to, amount),
 	}
 
-	if _, err := c.Game.CheckIdentity(c.Identity.Login, password); err != nil {
+	if _, err := c.Network.CheckIdentity(c.Identity.Login, password); err != nil {
 		eval.Error = err
 		c.AddResult(eval)
 		return
 	}
 
 	from := c.Identity.Login
-	if err := c.Game.Pay(from, to, amount); err != nil {
+	if err := c.Network.Pay(from, to, amount); err != nil {
 		eval.Error = err
 		c.AddResult(eval)
 		return
@@ -654,7 +654,7 @@ func (c *Console) MessageSend(m Message) {
 		Prompt: "message send",
 	}
 
-	if err := c.Game.MessageSend(m); err != nil {
+	if err := c.Network.MessageSend(m); err != nil {
 		eval.Error = err
 		c.AddResult(eval)
 		return

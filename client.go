@@ -30,7 +30,7 @@ type Client struct {
 	*Console // console enregistrée dans le jeu
 }
 
-func NewClient(width, height int, game *Game) *Client {
+func NewClient(width, height int, net *Network) *Client {
 	// barre de statut
 	status := statusbar.New(
 		statusbar.ColorConfig{
@@ -66,7 +66,7 @@ func NewClient(width, height int, game *Game) *Client {
 		input:   input,
 		output:  output,
 		status:  status,
-		Console: NewConsole(game),
+		Console: NewConsole(net),
 	}
 	return c
 }

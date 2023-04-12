@@ -46,14 +46,14 @@ var (
 
 type App struct {
 	s *ssh.Server
-	*Game
+	*Network
 }
 
 // NewApp créé un nouvel objet application
 func NewApp() *App {
 	var err error
 	a := new(App)
-	a.Game = game
+	a.Network = net
 
 	if a.s, err = wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", host, port)),
@@ -74,7 +74,7 @@ func (a *App) Start(filename string) {
 
 	// UnSerialize from given file
 	if filename != "" {
-		a.Game.UnSerialize(filename)
+		a.Network.UnSerialize(filename)
 		log.Printf("Reading Game Stat from %s", filename)
 	}
 
@@ -109,7 +109,7 @@ func (a *App) Handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	client := NewClient(
 		pty.Window.Width,
 		pty.Window.Height,
-		a.Game,
+		a.Network,
 	)
 
 	return client, []tea.ProgramOption{tea.WithAltScreen()}

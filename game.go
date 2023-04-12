@@ -9,9 +9,9 @@ import (
 	//"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
-// Game contient l'état du jeu et les méthodes utiles pour en simplifier l'accès
-type Game struct {
-	Network    []Server
+// Network contient l'état du jeu et les méthodes utiles pour en simplifier l'accès
+type Network struct {
+	Servers    []Server
 	Identities []Identity
 }
 
@@ -31,7 +31,7 @@ type Message struct {
 	Opened    bool   // pas encore lu
 }
 
-func (g *Game) MessageSend(m Message) error {
+func (g *Network) MessageSend(m Message) error {
 	// trouver le destinataire
 	recipient, err := g.FindIdentity(m.Recipient)
 	if err != nil {
@@ -42,7 +42,7 @@ func (g *Game) MessageSend(m Message) error {
 	return nil
 }
 
-func (g *Game) Pay(from, to string, amount int) error {
+func (g *Network) Pay(from, to string, amount int) error {
 	var src, dst *Identity
 	var err error
 
@@ -74,7 +74,7 @@ func randomString() string {
 	return base64.RawStdEncoding.EncodeToString(data)
 }
 
-func (g *Game) CreateRandomIdentity() Identity {
+func (g *Network) CreateRandomIdentity() Identity {
 	login := randomString()
 	password := randomString()
 	id := Identity{
@@ -87,11 +87,11 @@ func (g *Game) CreateRandomIdentity() Identity {
 	return id
 }
 
-func (g *Game) RemoveIdentity(login string) {
+func (g *Network) RemoveIdentity(login string) {
 
 }
 
-func (g *Game) CheckIdentity(login, password string) (*Identity, error) {
+func (g *Network) CheckIdentity(login, password string) (*Identity, error) {
 	for i, id := range g.Identities {
 		if id.Login == login && id.Password == password {
 			return &g.Identities[i], nil
@@ -100,7 +100,7 @@ func (g *Game) CheckIdentity(login, password string) (*Identity, error) {
 	return nil, errInvalidIdentity
 }
 
-func (g Game) FindIdentity(login string) (*Identity, error) {
+func (g Network) FindIdentity(login string) (*Identity, error) {
 	for i, identity := range g.Identities {
 		if identity.Login == login {
 			return &g.Identities[i], nil
@@ -110,16 +110,16 @@ func (g Game) FindIdentity(login string) (*Identity, error) {
 	return nil, fmt.Errorf("%s : %w", login, errIdentityNotFound)
 }
 
-func (g Game) FindServer(address string) (*Server, error) {
-	for i, server := range g.Network {
+func (g Network) FindServer(address string) (*Server, error) {
+	for i, server := range g.Servers {
 		if server.Address == address {
-			return &g.Network[i], nil
+			return &g.Servers[i], nil
 		}
 	}
 	return nil, fmt.Errorf("%s : %w", address, errServerNotFound)
 }
 
-func (g Game) Serialize() {
+func (g Network) Serialize() {
 	ret, err := json.MarshalIndent(g, "", " ")
 	if err != nil {
 		fmt.Println(err)
@@ -134,7 +134,7 @@ func (g Game) Serialize() {
 	}
 }
 
-func (g Game) UnSerialize(filename string) {
+func (g Network) UnSerialize(filename string) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		fmt.Println("Cannot open JSON file")

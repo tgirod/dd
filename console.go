@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const MAX_LEN_OUTPUT int = 10
+const MAX_RESULTS int = 10
 
 // Console représente le terminal depuis lequel le joueur accède au net
 type Console struct {
@@ -38,7 +38,7 @@ type Console struct {
 	History Stack
 
 	// liste des dernières commandes évaluées
-	Evals []Eval
+	Results []Result
 
 	// serveur auquel la console est connectée
 	*Server
@@ -47,8 +47,8 @@ type Console struct {
 	*Game
 }
 
-type Eval struct {
-	Cmd    string
+type Result struct {
+	Prompt string
 	Error  error
 	Output string
 }
@@ -124,8 +124,8 @@ func (c *Console) connect(address string) error {
 }
 
 func (c *Console) Connect(address string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("connect %s", address),
+	eval := Result{
+		Prompt: fmt.Sprintf("connect %s", address),
 	}
 
 	if err := c.connect(address); err != nil {
@@ -145,8 +145,8 @@ func (c *Console) Connect(address string) {
 }
 
 func (c *Console) LinkList() {
-	eval := Eval{
-		Cmd: "link",
+	eval := Result{
+		Prompt: "link",
 	}
 
 	b := strings.Builder{}
@@ -162,8 +162,8 @@ func (c *Console) LinkList() {
 }
 
 func (c *Console) Link(id int) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("link %d", id),
+	eval := Result{
+		Prompt: fmt.Sprintf("link %d", id),
 	}
 
 	if id < 0 || id >= len(c.Server.Links) {
@@ -188,8 +188,8 @@ func (c *Console) Link(id int) {
 }
 
 func (c *Console) Back() {
-	e := Eval{
-		Cmd: "back",
+	e := Result{
+		Prompt: "back",
 	}
 
 	if len(c.History) == 1 {
@@ -226,8 +226,8 @@ func (c *Console) InitMem() {
 }
 
 func (c *Console) Quit() {
-	eval := Eval{
-		Cmd: "quit",
+	eval := Result{
+		Prompt: "quit",
 	}
 
 	c.Server = nil
@@ -249,7 +249,7 @@ func (c *Console) Disconnect() {
 	c.Cmd = baseCmds
 
 	// affichage par défaut
-	eval := Eval{
+	eval := Result{
 		Output: "coupure de la connexion au réseau.",
 	}
 
@@ -272,8 +272,8 @@ coupure de la connexion au réseau.`
 }
 
 func (c *Console) Load(code string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("load %s", code),
+	eval := Result{
+		Prompt: fmt.Sprintf("load %s", code),
 	}
 
 	command, ok := Hack[code]
@@ -289,8 +289,8 @@ func (c *Console) Load(code string) {
 }
 
 func (c *Console) Plug() {
-	eval := Eval{
-		Cmd: "plug",
+	eval := Result{
+		Prompt: "plug",
 	}
 
 	c.DNI = true
@@ -299,8 +299,8 @@ func (c *Console) Plug() {
 }
 
 func (c *Console) Jack(id int) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("jack %d", id),
+	eval := Result{
+		Prompt: fmt.Sprintf("jack %d", id),
 	}
 
 	if id < 0 || id >= len(c.Server.Links) {
@@ -339,8 +339,8 @@ func (c *Console) StartAlert() {
 }
 
 func (c *Console) DataSearch(keyword string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("data search %s", keyword),
+	eval := Result{
+		Prompt: fmt.Sprintf("data search %s", keyword),
 	}
 
 	if len([]rune(keyword)) < 3 {
@@ -369,8 +369,8 @@ func (c *Console) DataSearch(keyword string) {
 }
 
 func (c *Console) DataView(id string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("data view %s", id),
+	eval := Result{
+		Prompt: fmt.Sprintf("data view %s", id),
 	}
 
 	entry, err := c.Server.FindEntry(id, c.Identity.Login)
@@ -393,16 +393,16 @@ func (c *Console) DataView(id string) {
 }
 
 func (c *Console) Help(args []string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("help %s", strings.Join(args, " ")),
+	eval := Result{
+		Prompt: fmt.Sprintf("help %s", strings.Join(args, " ")),
 	}
 	eval.Output = c.Cmd.Help(args)
 	c.AppendOutput(eval)
 }
 
 func (c *Console) EvadeList() {
-	eval := Eval{
-		Cmd: "evade",
+	eval := Result{
+		Prompt: "evade",
 	}
 
 	b := strings.Builder{}
@@ -422,8 +422,8 @@ func (c *Console) EvadeList() {
 }
 
 func (c *Console) Evade(zone string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("evade %s", zone),
+	eval := Result{
+		Prompt: fmt.Sprintf("evade %s", zone),
 	}
 
 	available, ok := c.Mem[zone]
@@ -446,8 +446,8 @@ func (c *Console) Evade(zone string) {
 }
 
 func (c *Console) RegistrySearch(name string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("registry search %s", name),
+	eval := Result{
+		Prompt: fmt.Sprintf("registry search %s", name),
 	}
 
 	search := c.Server.RegistrySearch(name)
@@ -465,8 +465,8 @@ func (c *Console) RegistrySearch(name string) {
 }
 
 func (c *Console) RegistryEdit(name string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("registry edit %s", name),
+	eval := Result{
+		Prompt: fmt.Sprintf("registry edit %s", name),
 	}
 
 	state, err := c.Server.RegistryEdit(name)
@@ -482,8 +482,8 @@ func (c *Console) RegistryEdit(name string) {
 }
 
 func (c *Console) Identify(login, password string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("identify %s %s", login, password),
+	eval := Result{
+		Prompt: fmt.Sprintf("identify %s %s", login, password),
 	}
 
 	identity, err := c.CheckIdentity(login, password)
@@ -506,8 +506,8 @@ func (c *Console) Identify(login, password string) {
 }
 
 func (c *Console) Index() {
-	eval := Eval{
-		Cmd: "index",
+	eval := Result{
+		Prompt: "index",
 	}
 
 	b := strings.Builder{}
@@ -524,8 +524,8 @@ func (c *Console) Index() {
 }
 
 func (c *Console) Pay(to string, amount int, password string) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("yes pay %s %d", to, amount),
+	eval := Result{
+		Prompt: fmt.Sprintf("yes pay %s %d", to, amount),
 	}
 
 	if _, err := c.Game.CheckIdentity(c.Identity.Login, password); err != nil {
@@ -546,8 +546,8 @@ func (c *Console) Pay(to string, amount int, password string) {
 }
 
 func (c *Console) Balance() {
-	eval := Eval{
-		Cmd: fmt.Sprintf("yes balance"),
+	eval := Result{
+		Prompt: fmt.Sprintf("yes balance"),
 	}
 
 	// FIXME on devrait avoir une copie de l'identité courante dans la console
@@ -562,16 +562,16 @@ func (c *Console) Balance() {
 	c.AppendOutput(eval)
 }
 
-func (c *Console) AppendOutput(o Eval) {
-	c.Evals = append(c.Evals, o)
-	if len(c.Evals) > MAX_LEN_OUTPUT {
-		c.Evals = c.Evals[len(c.Evals)-MAX_LEN_OUTPUT : len(c.Evals)]
+func (c *Console) AppendOutput(o Result) {
+	c.Results = append(c.Results, o)
+	if len(c.Results) > MAX_RESULTS {
+		c.Results = c.Results[len(c.Results)-MAX_RESULTS : len(c.Results)]
 	}
 }
 
 func (c *Console) Door() {
-	eval := Eval{
-		Cmd: fmt.Sprintf("door"),
+	eval := Result{
+		Prompt: fmt.Sprintf("door"),
 	}
 
 	// créer une nouvelle identité aléatoire
@@ -603,8 +603,8 @@ func (c *Console) MessageNew() {
 	}
 	tw.Flush()
 
-	c.AppendOutput(Eval{
-		Cmd:    "message new",
+	c.AppendOutput(Result{
+		Prompt: "message new",
 		Output: b.String(),
 	})
 }
@@ -619,15 +619,15 @@ func (c *Console) MessageList() {
 	}
 	tw.Flush()
 
-	c.AppendOutput(Eval{
-		Cmd:    "message new",
+	c.AppendOutput(Result{
+		Prompt: "message new",
 		Output: b.String(),
 	})
 }
 
 func (c *Console) MessageView(index int) {
-	eval := Eval{
-		Cmd: fmt.Sprintf("message view %d", index),
+	eval := Result{
+		Prompt: fmt.Sprintf("message view %d", index),
 	}
 
 	b := strings.Builder{}
@@ -650,8 +650,8 @@ func (c *Console) MessageView(index int) {
 }
 
 func (c *Console) MessageSend(m Message) {
-	eval := Eval{
-		Cmd: "message send",
+	eval := Result{
+		Prompt: "message send",
 	}
 
 	if err := c.Game.MessageSend(m); err != nil {

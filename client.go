@@ -114,9 +114,9 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case MessageReplyMsg:
 		mess, err := c.Console.MessageReply(msg.Index)
 		if err != nil {
-			c.Console.AppendOutput(Eval{
-				Cmd:   fmt.Sprintf("message reply %d", msg.Index),
-				Error: err,
+			c.Console.AppendOutput(Result{
+				Prompt: fmt.Sprintf("message reply %d", msg.Index),
+				Error:  err,
 			})
 			break
 		}
@@ -204,7 +204,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case CloseModalMsg, filler.FilledMsg, loader.LoadedMsg:
 		cmds = append(cmds, c.CloseModal())
 
-	case Eval:
+	case Result:
 		c.Console.AppendOutput(msg)
 		c.RenderOutput()
 
@@ -330,10 +330,10 @@ func (c *Client) View() string {
 
 func (c *Client) RenderOutput() {
 	b := strings.Builder{}
-	for _, e := range c.Console.Evals {
-		if e.Cmd != "" {
+	for _, e := range c.Console.Results {
+		if e.Prompt != "" {
 			fmt.Fprintf(&b, "> %s\n\n",
-				promptStyle.MaxWidth(c.width).Render(e.Cmd))
+				promptStyle.MaxWidth(c.width).Render(e.Prompt))
 		}
 
 		if e.Error != nil {

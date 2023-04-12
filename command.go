@@ -36,6 +36,13 @@ type Context struct {
 	Prompt string
 }
 
+// Result créé un objet Result de base par défaut
+func (c Context) Result() Result {
+	return Result{
+		Prompt: c.Prompt,
+	}
+}
+
 // Usage décrit l'utilisation d'une commande
 func (c Cmd) Usage() string {
 	b := strings.Builder{}
@@ -82,16 +89,16 @@ func (c Cmd) CheckArgs(args []string) error {
 
 func (c Cmd) Parse(ctx Context, args []string) any {
 	if ctx.Console.Server == nil && c.Connected {
-		return Eval{
-			Cmd:    ctx.Prompt,
+		return Result{
+			Prompt: ctx.Prompt,
 			Error:  errNotConnected,
 			Output: c.Help(args),
 		}
 	}
 
 	if ctx.Console.Identity == nil && c.Identified {
-		return Eval{
-			Cmd:    ctx.Prompt,
+		return Result{
+			Prompt: ctx.Prompt,
 			Error:  errNotIdentified,
 			Output: c.Help(args),
 		}
@@ -100,15 +107,15 @@ func (c Cmd) Parse(ctx Context, args []string) any {
 	if len(c.SubCmds) == 0 {
 		if c.Run == nil {
 			// ne devrait pas arriver
-			return Eval{
-				Cmd:   c.FullCmd(args),
-				Error: errInternalError,
+			return Result{
+				Prompt: c.FullCmd(args),
+				Error:  errInternalError,
 			}
 		}
 		// vérifier qu'il y a assez d'arguments
 		if err := c.CheckArgs(args); err != nil {
-			return Eval{
-				Cmd:    c.FullCmd(args),
+			return Result{
+				Prompt: c.FullCmd(args),
 				Error:  err,
 				Output: c.Help(args),
 			}
@@ -118,8 +125,8 @@ func (c Cmd) Parse(ctx Context, args []string) any {
 	}
 
 	if len(args) == 0 {
-		return Eval{
-			Cmd:    c.FullCmd(args),
+		return Result{
+			Prompt: c.FullCmd(args),
 			Error:  errMissingCommand,
 			Output: c.Help(args),
 		}
@@ -129,9 +136,9 @@ func (c Cmd) Parse(ctx Context, args []string) any {
 
 	if len(cmds) == 0 {
 		// aucune commande ne correspond a ce préfixe
-		return Eval{
-			Cmd:   c.FullCmd(args),
-			Error: fmt.Errorf("%s : %w", args[0], errInvalidCommand),
+		return Result{
+			Prompt: c.FullCmd(args),
+			Error:  fmt.Errorf("%s : %w", args[0], errInvalidCommand),
 		}
 	}
 
@@ -231,7 +238,7 @@ var jack = Cmd{
 		// récupérer le lien
 		id, err := strconv.Atoi(args[0])
 		if err != nil {
-			return Eval{
+			return Result{
 				Error: fmt.Errorf("ID : %w", errInvalidArgument),
 			}
 		}
@@ -348,7 +355,7 @@ var link = Cmd{
 				// récupérer le lien
 				id, err := strconv.Atoi(args[0])
 				if err != nil {
-					return Eval{
+					return Result{
 						Error: fmt.Errorf("ID : %w", errInvalidArgument),
 					}
 				}

@@ -81,7 +81,7 @@ var message = Cmd{
 			Run: func(ctx Context, args []string) any {
 				id, err := strconv.Atoi(args[0])
 				if err != nil {
-					return Eval{
+					return Result{
 						Error: fmt.Errorf("ID : %w", errInvalidArgument),
 					}
 				}
@@ -121,7 +121,7 @@ var message = Cmd{
 			Run: func(ctx Context, args []string) any {
 				id, err := strconv.Atoi(args[0])
 				if err != nil {
-					return Eval{
+					return Result{
 						Error: fmt.Errorf("ID : %w", errInvalidArgument),
 					}
 				}

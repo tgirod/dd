@@ -4,6 +4,7 @@ import (
 	"dd/ui/filler"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type BalanceMsg struct{}
@@ -55,7 +56,7 @@ var yes = Cmd{
 				to := args[0]
 				amount, err := strconv.Atoi(args[1])
 				if err != nil {
-					return Eval{
+					return Result{
 						Error: fmt.Errorf("montant : %w", errInvalidArgument),
 					}
 				}

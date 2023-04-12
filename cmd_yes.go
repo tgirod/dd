@@ -67,3 +67,17 @@ var yes = Cmd{
 		},
 	},
 }
+
+func YesBalance(ctx Context, args []string) any {
+	id := ctx.Console.Identity
+
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "Compte bancaire associé à l'identité %s\n", id.Login)
+	fmt.Fprintf(tw, "Solde du compte :\t%d Y€S\t\n", id.Yes)
+	tw.Flush()
+
+	eval := ctx.Result()
+	eval.Output = b.String()
+	return eval
+}

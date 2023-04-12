@@ -114,7 +114,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case MessageReplyMsg:
 		mess, err := c.Console.MessageReply(msg.Index)
 		if err != nil {
-			c.Console.AppendOutput(Result{
+			c.Console.AddResult(Result{
 				Prompt: fmt.Sprintf("message reply %d", msg.Index),
 				Error:  err,
 			})
@@ -205,7 +205,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, c.CloseModal())
 
 	case Result:
-		c.Console.AppendOutput(msg)
+		c.Console.AddResult(msg)
 		c.RenderOutput()
 
 	case SecurityMsg:

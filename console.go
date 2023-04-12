@@ -130,7 +130,7 @@ func (c *Console) Connect(address string) {
 
 	if err := c.connect(address); err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
@@ -141,7 +141,7 @@ func (c *Console) Connect(address string) {
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
 	fmt.Fprintf(&b, "%s\n", c.Server.Description)
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) LinkList() {
@@ -158,7 +158,7 @@ func (c *Console) LinkList() {
 	tw.Flush()
 
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Link(id int) {
@@ -168,14 +168,14 @@ func (c *Console) Link(id int) {
 
 	if id < 0 || id >= len(c.Server.Links) {
 		eval.Error = errInvalidArgument
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
 	target := c.Server.Links[id]
 	if err := c.connect(target.Address); err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
@@ -184,7 +184,7 @@ func (c *Console) Link(id int) {
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
 	fmt.Fprintf(&b, "%s\n", c.Server.Description)
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Back() {
@@ -194,7 +194,7 @@ func (c *Console) Back() {
 
 	if len(c.History) == 1 {
 		e.Error = errInvalidCommand
-		c.AppendOutput(e)
+		c.AddResult(e)
 		return
 	}
 
@@ -205,12 +205,12 @@ func (c *Console) Back() {
 
 	if err := c.connect(prevTarget.Address); err != nil {
 		e.Error = err
-		c.AppendOutput(e)
+		c.AddResult(e)
 		return
 	}
 
 	e.Output = fmt.Sprintf("connexion établie à l'adresse %s\n\n", c.Server.Address)
-	c.AppendOutput(e)
+	c.AddResult(e)
 }
 
 func (c *Console) IsConnected() bool {
@@ -238,7 +238,7 @@ func (c *Console) Quit() {
 	c.Cmd = baseCmds
 
 	eval.Output = "déconnexion effectuée"
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Disconnect() {
@@ -268,7 +268,7 @@ func (c *Console) Disconnect() {
 coupure de la connexion au réseau.`
 	}
 
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Load(code string) {
@@ -279,13 +279,13 @@ func (c *Console) Load(code string) {
 	command, ok := Hack[code]
 	if !ok {
 		eval.Error = fmt.Errorf("%s : %w", code, errInvalidArgument)
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
 	c.Cmd.SubCmds = append(c.Cmd.SubCmds, command)
 	eval.Output = fmt.Sprintf("%s : commande chargée", command.Name)
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Plug() {
@@ -295,7 +295,7 @@ func (c *Console) Plug() {
 
 	c.DNI = true
 	eval.Output = "interface neuronale directe activée"
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Jack(id int) {
@@ -305,7 +305,7 @@ func (c *Console) Jack(id int) {
 
 	if id < 0 || id >= len(c.Server.Links) {
 		eval.Error = errInvalidArgument
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
@@ -313,7 +313,7 @@ func (c *Console) Jack(id int) {
 	server, err := c.Game.FindServer(target.Address)
 	if err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
@@ -326,7 +326,7 @@ func (c *Console) Jack(id int) {
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
 	fmt.Fprintf(&b, "%s\n", c.Server.Description)
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) StartAlert() {
@@ -345,7 +345,7 @@ func (c *Console) DataSearch(keyword string) {
 
 	if len([]rune(keyword)) < 3 {
 		eval.Error = fmt.Errorf("%s : %w", keyword, errKeywordTooShort)
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
@@ -365,7 +365,7 @@ func (c *Console) DataSearch(keyword string) {
 	tw.Flush()
 
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) DataView(id string) {
@@ -376,7 +376,7 @@ func (c *Console) DataView(id string) {
 	entry, err := c.Server.FindEntry(id, c.Identity.Login)
 	if err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
@@ -388,7 +388,7 @@ func (c *Console) DataView(id string) {
 	fmt.Fprintf(&b, entry.Content)
 
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 
 }
 
@@ -397,7 +397,7 @@ func (c *Console) Help(args []string) {
 		Prompt: fmt.Sprintf("help %s", strings.Join(args, " ")),
 	}
 	eval.Output = c.Cmd.Help(args)
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) EvadeList() {
@@ -418,7 +418,7 @@ func (c *Console) EvadeList() {
 	tw.Flush()
 
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Evade(zone string) {
@@ -429,20 +429,20 @@ func (c *Console) Evade(zone string) {
 	available, ok := c.Mem[zone]
 	if !ok {
 		eval.Error = fmt.Errorf("%s : %w", zone, errMemNotFound)
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
 	if !available {
 		eval.Error = fmt.Errorf("%s : %w", zone, errMemUnavailable)
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
 	c.Mem[zone] = false
 	c.Countdown = c.Server.Scan
 	eval.Output = fmt.Sprintf("session relocalisée dans la zone mémoire %s", zone)
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) RegistrySearch(name string) {
@@ -461,7 +461,7 @@ func (c *Console) RegistrySearch(name string) {
 	tw.Flush()
 
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) RegistryEdit(name string) {
@@ -473,12 +473,12 @@ func (c *Console) RegistryEdit(name string) {
 
 	if err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
 	eval.Output = fmt.Sprintf("nouvel état du registre %s : %v\n", name, state)
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Identify(login, password string) {
@@ -489,7 +489,7 @@ func (c *Console) Identify(login, password string) {
 	identity, err := c.CheckIdentity(login, password)
 	if err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 	c.Identity = identity
@@ -502,7 +502,7 @@ func (c *Console) Identify(login, password string) {
 	}
 
 	eval.Output = fmt.Sprintf("Identité établie. Bienvenue, %s\n", login)
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Index() {
@@ -520,7 +520,7 @@ func (c *Console) Index() {
 	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
 
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Pay(to string, amount int, password string) {
@@ -530,19 +530,19 @@ func (c *Console) Pay(to string, amount int, password string) {
 
 	if _, err := c.Game.CheckIdentity(c.Identity.Login, password); err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
 	from := c.Identity.Login
 	if err := c.Game.Pay(from, to, amount); err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
 	eval.Output = fmt.Sprintf("transfert effectué")
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) Balance() {
@@ -559,10 +559,10 @@ func (c *Console) Balance() {
 	fmt.Fprintf(tw, "Solde du compte :\t%d Y€S\t\n", id.Yes)
 	tw.Flush()
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
-func (c *Console) AppendOutput(o Result) {
+func (c *Console) AddResult(o Result) {
 	c.Results = append(c.Results, o)
 	if len(c.Results) > MAX_RESULTS {
 		c.Results = c.Results[len(c.Results)-MAX_RESULTS : len(c.Results)]
@@ -587,7 +587,7 @@ func (c *Console) Door() {
 	fmt.Fprintf(&b, "cette backdoor sera détruite automatiquement après usage.\n")
 
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 // MessageNew affiche les messages non lus
@@ -603,7 +603,7 @@ func (c *Console) MessageNew() {
 	}
 	tw.Flush()
 
-	c.AppendOutput(Result{
+	c.AddResult(Result{
 		Prompt: "message new",
 		Output: b.String(),
 	})
@@ -619,7 +619,7 @@ func (c *Console) MessageList() {
 	}
 	tw.Flush()
 
-	c.AppendOutput(Result{
+	c.AddResult(Result{
 		Prompt: "message new",
 		Output: b.String(),
 	})
@@ -634,7 +634,7 @@ func (c *Console) MessageView(index int) {
 
 	if index < 0 || index >= len(c.Messages) {
 		eval.Error = errInvalidArgument
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
@@ -646,7 +646,7 @@ func (c *Console) MessageView(index int) {
 	fmt.Fprintln(&b, msg.Content)
 
 	eval.Output = b.String()
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) MessageSend(m Message) {
@@ -656,12 +656,12 @@ func (c *Console) MessageSend(m Message) {
 
 	if err := c.Game.MessageSend(m); err != nil {
 		eval.Error = err
-		c.AppendOutput(eval)
+		c.AddResult(eval)
 		return
 	}
 
 	eval.Output = fmt.Sprintf("message envoyé à %s", m.Recipient)
-	c.AppendOutput(eval)
+	c.AddResult(eval)
 }
 
 func (c *Console) MessageReply(index int) (MessageSendMsg, error) {

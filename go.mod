@@ -10,7 +10,7 @@ require (
 	github.com/charmbracelet/wish v1.0.0
 	github.com/knipferrc/teacup v0.3.0
 	github.com/lithammer/fuzzysearch v1.1.5
-	golang.org/x/text v0.5.0
+	golang.org/x/text v0.6.0
 )
 
 require (
@@ -32,6 +32,6 @@ require (
 	github.com/muesli/termenv v0.13.0 // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
 	golang.org/x/crypto v0.4.0 // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/term v0.3.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/term v0.4.0 // indirect
 )

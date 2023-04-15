@@ -1,8 +1,6 @@
 package main
 
 import (
-	"dd/ui/filler"
-	"dd/ui/loader"
 	"fmt"
 	"io"
 	"strings"
@@ -72,7 +70,10 @@ func NewClient(width, height int, net *Network) *Client {
 }
 
 func (c *Client) Init() tea.Cmd {
-	return textinput.Blink
+	return tea.Batch(
+		textinput.Blink, // clignottement du curseur
+		c.StartSecurity, // scan de sécurité toutes les secondes
+	)
 }
 
 type SecurityMsg struct {
@@ -91,104 +92,10 @@ func (c *Client) modalWindowSize() (int, int) {
 func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	var cmd tea.Cmd
-	var render bool = true // doit-on rafraichir le viewport ?
 
 	switch msg := msg.(type) {
-	case MessageNewMsg:
-		c.Console.MessageNew()
-
-	case MessageListMsg:
-		c.Console.MessageList()
-
-	case MessageViewMsg:
-		c.Console.MessageView(msg.Index)
-
-	case MessageSendMsg:
-		c.Console.MessageSend(Message{
-			Recipient: msg.Recipient,
-			Sender:    c.Console.Identity.Login,
-			Subject:   msg.Subject,
-			Content:   msg.Content,
-		})
-
-	case MessageReplyMsg:
-		mess, err := c.Console.MessageReply(msg.Index)
-		if err != nil {
-			c.Console.AddResult(Result{
-				Prompt: fmt.Sprintf("message reply %d", msg.Index),
-				Error:  err,
-			})
-			break
-		}
-		model := filler.New("saisissez votre réponse", mess)
-		cmds = append(cmds, c.OpenModal(model))
-
-	case DoorMsg:
-		c.Console.Door()
-
-	case BalanceMsg:
-		c.Console.Balance()
-
-	case PayMsg:
-		c.Console.Pay(msg.To, msg.Amount, msg.Password)
-
-	case BackMsg:
-		c.Console.Back()
-
-	case ConnectMsg:
-		c.Console.Connect(msg.Address)
-
-	case DataSearchMsg:
-		c.Console.DataSearch(msg.Keyword)
-
-	case DataViewMsg:
-		c.Console.DataView(msg.Id)
-
-	case HelpMsg:
-		c.Console.Help(msg.Args)
-
-	case IdentifyMsg:
-		c.Console.Identify(msg.Login, msg.Password)
-
-	case IndexMsg:
-		c.Console.Index()
-
-	case LinkListMsg:
-		c.Console.LinkList()
-
-	case LinkMsg:
-		c.Console.Link(msg.Id)
-
-	case LoadMsg:
-		c.Console.Load(msg.Code)
-
-	case PlugMsg:
-		c.Console.Plug()
-
-	case QuitMsg:
-		c.Console.Quit()
-
-	case RegistrySearchMsg:
-		c.Console.RegistrySearch(msg.Name)
-
-	case RegistryEditMsg:
-		c.Console.RegistryEdit(msg.Name)
-
-	case JackMsg:
-		c.Console.Jack(msg.Id)
-		cmds = append(cmds, c.StartSecurity)
-
-	case EvadeListMsg:
-		c.Console.EvadeList()
-		cmds = append(cmds, c.StartSecurity)
-
-	case EvadeMsg:
-		c.Console.Evade(msg.Zone)
-		cmds = append(cmds, c.StartSecurity)
-
 	case tea.WindowSizeMsg:
-		render = false
-		// redimensionner les différentes parties de l'interface
+		// gestion de la taille de fenêtre
 		c.width = msg.Width
 		c.height = msg.Height
 		c.status.Width = msg.Width
@@ -197,19 +104,25 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.input.Width = msg.Width
 
 	case OpenModalMsg:
-		render = false
+		// ouvrir une fenêtre modale
 		cmd = c.OpenModal(msg.(tea.Model))
 		cmds = append(cmds, cmd)
 
-	case CloseModalMsg, filler.FilledMsg, loader.LoadedMsg:
+	case CloseModalMsg:
+		// fermer une fenêtre modale
 		cmds = append(cmds, c.CloseModal())
 
 	case Result:
+		// afficher le résultat d'une commande
 		c.Console.AddResult(msg)
 		c.RenderOutput()
 
+	case Context:
+		// relancer l'exécution d'une commande
+		cmds = append(cmds, MsgToCmd(msg.Run()))
+
 	case SecurityMsg:
-		render = false
+		// boucle de sécurité
 		if c.Console.Alert {
 			// l'alerte est toujours là
 			// la routine de sécurité continue
@@ -217,7 +130,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case tea.KeyMsg:
-		render = false
+		// gestion du clavier
 		if c.modal != nil {
 			break
 		}
@@ -226,12 +139,14 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case tea.KeyCtrlC:
 			// quitter l'application client
 			cmds = append(cmds, tea.Quit)
+
 		case tea.KeyEnter:
 			// valider la commande
-			input := c.input.Value()
-			c.input.Reset()
-			cmd = c.Parse(input)
-			cmds = append(cmds, cmd)
+			prompt := c.input.Value()          // récupérer le prompt
+			c.input.Reset()                    // effacer le champ
+			msg := c.Parse(prompt)             // exécuter et récupérer le résultat
+			cmds = append(cmds, MsgToCmd(msg)) // injecter le résultat dans la boucle
+
 		case tea.KeyPgUp, tea.KeyPgDown:
 			// scroll de la sortie
 			c.output, cmd = c.output.Update(msg)
@@ -243,18 +158,16 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	default:
-		render = false
+		// passer tous les messages au prompt
 		if c.modal != nil {
 			break
 		}
 
-		// passer tous les messages au prompt
 		c.input, cmd = c.input.Update(msg)
 		cmds = append(cmds, cmd)
 	}
 
 	if c.modal != nil {
-		render = false
 		switch msg := msg.(type) {
 		case tea.WindowSizeMsg:
 			w, h := c.modalWindowSize()
@@ -264,10 +177,6 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			c.modal, cmd = c.modal.Update(msg)
 			cmds = append(cmds, cmd)
 		}
-	}
-
-	if render {
-		c.RenderOutput()
 	}
 
 	return c, tea.Batch(cmds...)
@@ -351,27 +260,7 @@ func (c *Client) RenderOutput() {
 	c.output.GotoBottom()
 }
 
-// Run parse et exécute la commande saisie par l'utilisateur
-func (c *Client) Parse(input string) tea.Cmd {
-	args := strings.Fields(input)
-
-	// construire la tea.Cmd qui parse et exécute la commande
-	return func() tea.Msg {
-		// exécuter la commande
-		return c.Console.Run(args)
-	}
-}
-
-func (c *Client) Delay() time.Duration {
-	if c.Console.DNI {
-		return time.Second * DNISpeed
-	} else {
-		return time.Second
-	}
-}
-
 func (c *Client) StartSecurity() tea.Msg {
-	c.StartAlert()
 	return SecurityMsg{c.Delay()}
 }
 

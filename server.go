@@ -182,8 +182,8 @@ func (s *Server) RegistryEdit(name string) (bool, error) {
 	return false, fmt.Errorf("%s : %w", name, errRegisterNotFound)
 }
 
-// Backdoor créé une backdoor dans le serveur
-func (s *Server) Backdoor(login string) {
+// CreateBackdoor créé une backdoor dans le serveur
+func (s *Server) CreateBackdoor(login string) {
 	acc := Account{
 		Login:    login,
 		Admin:    false,

@@ -1,12 +1,9 @@
 package main
 
-type RegistrySearchMsg struct {
-	Name string
-}
-
-type RegistryEditMsg struct {
-	Name string
-}
+import (
+	"fmt"
+	"strings"
+)
 
 var registry = Cmd{
 	Name:      "registry",
@@ -23,9 +20,7 @@ var registry = Cmd{
 					ShortHelp: "préfixe du nom du registre",
 				},
 			},
-			Run: func(ctx Context, args []string) any {
-				return RegistrySearchMsg{args[0]}
-			},
+			Run: RegistrySearch,
 		},
 		{
 			Name:      "edit",
@@ -37,9 +32,40 @@ var registry = Cmd{
 					ShortHelp: "nom du registre à modifier",
 				},
 			},
-			Run: func(ctx Context, args []string) any {
-				return RegistryEditMsg{args[0]}
-			},
+			Run: RegistryEdit,
 		},
 	},
+}
+
+func RegistryEdit(ctx Context) any {
+	res := ctx.Result()
+
+	name := ctx.Args[0]
+	state, err := ctx.Server.RegistryEdit(name)
+
+	if err != nil {
+		res.Error = err
+		return res
+	}
+
+	res.Output = fmt.Sprintf("nouvel état du registre %s : %v\n", name, state)
+	return res
+}
+
+func RegistrySearch(ctx Context) any {
+	res := ctx.Result()
+
+	name := ctx.Args[0]
+	search := ctx.Server.RegistrySearch(name)
+
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "NAME\tSTATE\tDESCRIPTION\t\n")
+	for _, r := range search {
+		fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
+	}
+	tw.Flush()
+
+	res.Output = b.String()
+	return res
 }

@@ -3,13 +3,8 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
-
-type LinkListMsg struct{}
-
-type LinkMsg struct {
-	Id int
-}
 
 var link = Cmd{
 	Name:      "link",
@@ -20,9 +15,7 @@ var link = Cmd{
 			Name:      "list",
 			Path:      []string{"link"},
 			ShortHelp: "affiche la liste des liens disponibles",
-			Run: func(ctx Context, args []string) any {
-				return LinkListMsg{}
-			},
+			Run:       LinkList,
 		},
 		{
 			Name:      "connect",
@@ -34,16 +27,51 @@ var link = Cmd{
 					ShortHelp: "identifiant du lien à suivre",
 				},
 			},
-			Run: func(ctx Context, args []string) any {
-				// récupérer le lien
-				id, err := strconv.Atoi(args[0])
-				if err != nil {
-					return Result{
-						Error: fmt.Errorf("ID : %w", errInvalidArgument),
-					}
-				}
-				return LinkMsg{id}
-			},
+			Run: LinkConnect,
 		},
 	},
+}
+
+func LinkList(ctx Context) any {
+	res := ctx.Result()
+
+	b := strings.Builder{}
+	tw := tw(&b)
+	fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
+	for i, t := range ctx.Server.Links {
+		fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
+	}
+	tw.Flush()
+
+	res.Output = b.String()
+	return res
+}
+
+func LinkConnect(ctx Context) any {
+	res := ctx.Result()
+
+	id, err := strconv.Atoi(ctx.Args[0])
+	if err != nil {
+		res.Error = errInvalidArgument
+		return res
+	}
+
+	if id < 0 || id >= len(ctx.Server.Links) {
+		res.Error = errInvalidArgument
+		return res
+	}
+
+	address := ctx.Server.Links[id].Address
+	if err := ctx.Console.Connect(address, false); err != nil {
+		res.Error = err
+		return res
+	}
+
+	ctx.History.Push(Link{address, ""})
+
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", ctx.Server.Address)
+	fmt.Fprintf(&b, "%s\n", ctx.Server.Description)
+	res.Output = b.String()
+	return res
 }

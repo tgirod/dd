@@ -5,7 +5,12 @@ type PlugMsg struct{}
 var plug = Cmd{
 	Name:      "plug",
 	ShortHelp: "active l'interface neuronale",
-	Run: func(ctx Context, args []string) any {
-		return PlugMsg{}
-	},
+	Run:       Plug,
+}
+
+func Plug(ctx Context) any {
+	res := ctx.Result()
+	ctx.DNI = true
+	res.Output = "interface neuronale directe activée"
+	return res
 }

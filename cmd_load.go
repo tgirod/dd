@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type LoadMsg struct {
 	Code string
 }
@@ -13,8 +15,20 @@ var load = Cmd{
 			ShortHelp: "code de la commande",
 		},
 	},
-	Run: func(ctx Context, args []string) any {
-		code := args[0]
-		return LoadMsg{code}
-	},
+	Run: Load,
+}
+
+func Load(ctx Context) any {
+	res := ctx.Result()
+
+	code := ctx.Args[0]
+	command, ok := Hack[code]
+	if !ok {
+		res.Error = fmt.Errorf("%s : %w", code, errInvalidArgument)
+		return res
+	}
+
+	ctx.Cmd.SubCmds = append(ctx.Cmd.SubCmds, command)
+	res.Output = fmt.Sprintf("%s : commande chargée", command.Name)
+	return res
 }

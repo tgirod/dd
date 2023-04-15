@@ -1,12 +1,31 @@
 package main
 
+import (
+	"fmt"
+	"strings"
+)
+
 type IndexMsg struct{}
 
 var index = Cmd{
 	Name:      "index",
 	ShortHelp: "liste les services disponibles dans le serveur courant",
 	Connected: true,
-	Run: func(ctx Context, args []string) any {
-		return IndexMsg{}
-	},
+	Run:       Index,
+}
+
+func Index(ctx Context) any {
+	res := ctx.Result()
+
+	b := strings.Builder{}
+
+	s := ctx.Server
+	b.WriteString(s.Description)
+	b.WriteString("\n")
+	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Links))
+	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries))
+	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
+
+	res.Output = b.String()
+	return res
 }

@@ -1,15 +1,10 @@
 package main
 
 import (
-	"dd/ui/loader"
 	"fmt"
 	"strconv"
-	"time"
+	"strings"
 )
-
-type JackMsg struct {
-	Id int
-}
 
 var jack = Cmd{
 	Name:      "jack",
@@ -21,24 +16,35 @@ var jack = Cmd{
 			ShortHelp: "identifiant du lien",
 		},
 	},
-	Run: func(ctx Context, args []string) any {
-		// récupérer le lien
-		id, err := strconv.Atoi(args[0])
-		if err != nil {
-			return Result{
-				Error: fmt.Errorf("ID : %w", errInvalidArgument),
-			}
-		}
-		msg := JackMsg{id}
-		model := loader.New(
-			msg,
-			3*time.Second,
-			[]string{
-				"recherche d'une faille",
-				"exploit",
-				"accès",
-			},
-		)
-		return OpenModalMsg(model)
-	},
+	Run: Jack,
+}
+
+func Jack(ctx Context) any {
+	res := ctx.Result()
+
+	id, err := strconv.Atoi(ctx.Args[0])
+	if err != nil {
+		res.Error = errInvalidArgument
+		return res
+	}
+
+	if id < 0 || id >= len(ctx.Server.Links) {
+		res.Error = errInvalidArgument
+		return res
+	}
+
+	address := ctx.Server.Links[id].Address
+	if err := ctx.Console.Connect(address, true); err != nil {
+		res.Error = err
+		return res
+	}
+
+	ctx.History.Push(Link{address, ""})
+	ctx.StartAlert()
+
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", ctx.Server.Address)
+	fmt.Fprintf(&b, "%s\n", ctx.Server.Description)
+	res.Output = b.String()
+	return res
 }

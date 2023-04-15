@@ -19,7 +19,7 @@ type Cmd struct {
 	Run        RunFunc  // fonction exécutée (optionnel)
 }
 
-type RunFunc func(ctx Context, args []string) any
+type RunFunc func(ctx Context) any
 
 // Arg décrit un argument. Il n'y a pas d'arguments optionnels
 type Arg struct {
@@ -29,14 +29,29 @@ type Arg struct {
 
 type Context struct {
 	*Console
-	Prompt string
+	Path []string
+	Args []string
+	Cmd
+}
+
+func (c Context) Prompt() string {
+	return fmt.Sprintf(
+		"%s %s",
+		strings.Join(c.Path, " "),
+		strings.Join(c.Args, " "),
+	)
 }
 
 // Result créé un objet Result de base par défaut
 func (c Context) Result() Result {
 	return Result{
-		Prompt: c.Prompt,
+		Prompt: c.Prompt(),
 	}
+}
+
+// Run exécute la commande dans son contexte
+func (c Context) Run() any {
+	return c.Cmd.Run(c)
 }
 
 // Usage décrit l'utilisation d'une commande
@@ -83,20 +98,20 @@ func (c Cmd) CheckArgs(args []string) error {
 	return nil
 }
 
-func (c Cmd) Parse(ctx Context, args []string) any {
+func (c Cmd) Parse(ctx Context) any {
 	if ctx.Console.Server == nil && c.Connected {
 		return Result{
-			Prompt: ctx.Prompt,
+			Prompt: ctx.Prompt(),
 			Error:  errNotConnected,
-			Output: c.Help(args),
+			Output: c.Help(ctx.Args),
 		}
 	}
 
 	if ctx.Console.Identity == nil && c.Identified {
 		return Result{
-			Prompt: ctx.Prompt,
+			Prompt: ctx.Prompt(),
 			Error:  errNotIdentified,
-			Output: c.Help(args),
+			Output: c.Help(ctx.Args),
 		}
 	}
 
@@ -104,42 +119,46 @@ func (c Cmd) Parse(ctx Context, args []string) any {
 		if c.Run == nil {
 			// ne devrait pas arriver
 			return Result{
-				Prompt: c.FullCmd(args),
+				Prompt: ctx.Prompt(),
 				Error:  errInternalError,
 			}
 		}
 		// vérifier qu'il y a assez d'arguments
-		if err := c.CheckArgs(args); err != nil {
+		if err := c.CheckArgs(ctx.Args); err != nil {
 			return Result{
-				Prompt: c.FullCmd(args),
+				Prompt: ctx.Prompt(),
 				Error:  err,
-				Output: c.Help(args),
+				Output: c.Help(ctx.Args),
 			}
 		}
 		// parser les arguments et retourner un message
-		return c.Run(ctx, args)
+		ctx.Cmd = c
+		return ctx.Run()
 	}
 
-	if len(args) == 0 {
+	if len(ctx.Args) == 0 {
 		return Result{
-			Prompt: c.FullCmd(args),
+			Prompt: ctx.Prompt(),
 			Error:  errMissingCommand,
-			Output: c.Help(args),
+			Output: c.Help(ctx.Args),
 		}
 	}
 
-	cmds := c.Match(args[0])
+	cmds := c.Match(ctx.Args[0])
 
 	if len(cmds) == 0 {
 		// aucune commande ne correspond a ce préfixe
 		return Result{
-			Prompt: c.FullCmd(args),
-			Error:  fmt.Errorf("%s : %w", args[0], errInvalidCommand),
+			Prompt: ctx.Prompt(),
+			Error:  fmt.Errorf("%s : %w", ctx.Args[0], errInvalidCommand),
+			Output: c.Help(ctx.Args),
 		}
 	}
 
 	// continuer l'exécution sur la première commande qui match
-	return cmds[0].Parse(ctx, args[1:])
+	ctx.Path = append(ctx.Path, ctx.Args[0])
+	ctx.Args = ctx.Args[1:]
+	return cmds[0].Parse(ctx)
 }
 
 func (c Cmd) Help(args []string) string {

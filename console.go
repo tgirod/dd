@@ -84,12 +84,13 @@ func NewConsole(net *Network) *Console {
 	}
 }
 
-func (c *Console) Run(args []string) any {
+func (c *Console) Parse(prompt string) any {
+	args := strings.Fields(prompt)
 	ctx := Context{
 		Console: c,
-		Prompt:  strings.Join(args, " "),
+		Args:    args,
 	}
-	return c.Cmd.Parse(ctx, args)
+	return c.Cmd.Parse(ctx)
 }
 
 func (c *Console) connect(address string) error {
@@ -117,104 +118,10 @@ func (c *Console) connect(address string) error {
 
 	if c.Account != nil && c.Account.Backdoor {
 		c.Server.RemoveAccount(c.Account.Login)
-		c.Game.RemoveIdentity(c.Account.Login)
+		c.Network.RemoveIdentity(c.Account.Login)
 	}
 	c.InitMem()
 	return nil
-}
-
-func (c *Console) Connect(address string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("connect %s", address),
-	}
-
-	if err := c.connect(address); err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
-	}
-
-	c.History.Clear()
-	c.History.Push(Link{address, ""})
-
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
-	fmt.Fprintf(&b, "%s\n", c.Server.Description)
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
-func (c *Console) LinkList() {
-	eval := Result{
-		Prompt: "link",
-	}
-
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
-	for i, t := range c.Server.Links {
-		fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
-	}
-	tw.Flush()
-
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
-func (c *Console) Link(id int) {
-	eval := Result{
-		Prompt: fmt.Sprintf("link %d", id),
-	}
-
-	if id < 0 || id >= len(c.Server.Links) {
-		eval.Error = errInvalidArgument
-		c.AddResult(eval)
-		return
-	}
-
-	target := c.Server.Links[id]
-	if err := c.connect(target.Address); err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
-	}
-
-	c.History.Push(target)
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
-	fmt.Fprintf(&b, "%s\n", c.Server.Description)
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
-func (c *Console) Back() {
-	e := Result{
-		Prompt: "back",
-	}
-
-	if len(c.History) == 1 {
-		e.Error = errInvalidCommand
-		c.AddResult(e)
-		return
-	}
-
-	// enlever le serveur actuel
-	c.History.Pop()
-
-	prevTarget, _ := c.History.Peek()
-
-	if err := c.connect(prevTarget.Address); err != nil {
-		e.Error = err
-		c.AddResult(e)
-		return
-	}
-
-	e.Output = fmt.Sprintf("connexion établie à l'adresse %s\n\n", c.Server.Address)
-	c.AddResult(e)
-}
-
-func (c *Console) IsConnected() bool {
-	return c.Server != nil
 }
 
 func (c *Console) InitMem() {
@@ -223,22 +130,6 @@ func (c *Console) InitMem() {
 		addr := fmt.Sprintf("%08x", rand.Uint32())
 		c.Mem[addr] = true
 	}
-}
-
-func (c *Console) Quit() {
-	eval := Result{
-		Prompt: "quit",
-	}
-
-	c.Server = nil
-	c.Identity = nil
-	c.Account = nil
-	c.Alert = false
-	c.History.Clear()
-	c.Cmd = baseCmds
-
-	eval.Output = "déconnexion effectuée"
-	c.AddResult(eval)
 }
 
 func (c *Console) Disconnect() {
@@ -271,64 +162,6 @@ coupure de la connexion au réseau.`
 	c.AddResult(eval)
 }
 
-func (c *Console) Load(code string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("load %s", code),
-	}
-
-	command, ok := Hack[code]
-	if !ok {
-		eval.Error = fmt.Errorf("%s : %w", code, errInvalidArgument)
-		c.AddResult(eval)
-		return
-	}
-
-	c.Cmd.SubCmds = append(c.Cmd.SubCmds, command)
-	eval.Output = fmt.Sprintf("%s : commande chargée", command.Name)
-	c.AddResult(eval)
-}
-
-func (c *Console) Plug() {
-	eval := Result{
-		Prompt: "plug",
-	}
-
-	c.DNI = true
-	eval.Output = "interface neuronale directe activée"
-	c.AddResult(eval)
-}
-
-func (c *Console) Jack(id int) {
-	eval := Result{
-		Prompt: fmt.Sprintf("jack %d", id),
-	}
-
-	if id < 0 || id >= len(c.Server.Links) {
-		eval.Error = errInvalidArgument
-		c.AddResult(eval)
-		return
-	}
-
-	target := c.Server.Links[id]
-	server, err := c.Network.FindServer(target.Address)
-	if err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
-	}
-
-	c.Server = server
-	c.Admin = false
-	c.InitMem()
-	c.History.Push(target)
-
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", c.Server.Address)
-	fmt.Fprintf(&b, "%s\n", c.Server.Description)
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
 func (c *Console) StartAlert() {
 	if !c.Alert {
 		c.Alert = true
@@ -338,159 +171,10 @@ func (c *Console) StartAlert() {
 	}
 }
 
-func (c *Console) DataSearch(keyword string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("data search %s", keyword),
-	}
-
-	if len([]rune(keyword)) < 3 {
-		eval.Error = fmt.Errorf("%s : %w", keyword, errKeywordTooShort)
-		c.AddResult(eval)
-		return
-	}
-
-	// construire la réponse à afficher
-	entries := c.Server.DataSearch(keyword, c.Identity.Login)
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
-	for _, e := range entries {
-		title := e.Title
-		fmt.Fprintf(tw, "%s\t%s\t%s\t\n",
-			e.ID,
-			strings.Join(e.Keywords, " "),
-			title,
-		)
-	}
-	tw.Flush()
-
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
-func (c *Console) DataView(id string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("data view %s", id),
-	}
-
-	entry, err := c.Server.FindEntry(id, c.Identity.Login)
-	if err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
-	}
-
-	// construire la réponse à afficher
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "TITLE: %s\n", entry.Title)
-	fmt.Fprintf(&b, "KEYWORDS: %s\n", strings.Join(entry.Keywords, " "))
-	fmt.Fprintf(&b, "-------------------------------------\n")
-	fmt.Fprintf(&b, entry.Content)
-
-	eval.Output = b.String()
-	c.AddResult(eval)
-
-}
-
-func (c *Console) Help(args []string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("help %s", strings.Join(args, " ")),
-	}
-	eval.Output = c.Cmd.Help(args)
-	c.AddResult(eval)
-}
-
-func (c *Console) EvadeList() {
-	eval := Result{
-		Prompt: "evade",
-	}
-
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "ZONE\tDISPONIBILITE\t\n")
-	for addr, available := range c.Mem {
-		if !available {
-			fmt.Fprintf(tw, "%s\t%s\t\n", addr, "INDISPONIBLE")
-		} else {
-			fmt.Fprintf(tw, "%s\t%s\t\n", addr, "OK")
-		}
-	}
-	tw.Flush()
-
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
-func (c *Console) Evade(zone string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("evade %s", zone),
-	}
-
-	available, ok := c.Mem[zone]
-	if !ok {
-		eval.Error = fmt.Errorf("%s : %w", zone, errMemNotFound)
-		c.AddResult(eval)
-		return
-	}
-
-	if !available {
-		eval.Error = fmt.Errorf("%s : %w", zone, errMemUnavailable)
-		c.AddResult(eval)
-		return
-	}
-
-	c.Mem[zone] = false
-	c.Countdown = c.Server.Scan
-	eval.Output = fmt.Sprintf("session relocalisée dans la zone mémoire %s", zone)
-	c.AddResult(eval)
-}
-
-func (c *Console) RegistrySearch(name string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("registry search %s", name),
-	}
-
-	search := c.Server.RegistrySearch(name)
-
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "NAME\tSTATE\tDESCRIPTION\t\n")
-	for _, r := range search {
-		fmt.Fprintf(tw, "%s\t%t\t%s\t\n", r.Name, r.State, r.Description)
-	}
-	tw.Flush()
-
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
-func (c *Console) RegistryEdit(name string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("registry edit %s", name),
-	}
-
-	state, err := c.Server.RegistryEdit(name)
-
-	if err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
-	}
-
-	eval.Output = fmt.Sprintf("nouvel état du registre %s : %v\n", name, state)
-	c.AddResult(eval)
-}
-
-func (c *Console) Identify(login, password string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("identify %s %s", login, password),
-	}
-
+func (c *Console) Identify(login, password string) error {
 	identity, err := c.CheckIdentity(login, password)
 	if err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
+		return err
 	}
 	c.Identity = identity
 
@@ -501,65 +185,7 @@ func (c *Console) Identify(login, password string) {
 		}
 	}
 
-	eval.Output = fmt.Sprintf("Identité établie. Bienvenue, %s\n", login)
-	c.AddResult(eval)
-}
-
-func (c *Console) Index() {
-	eval := Result{
-		Prompt: "index",
-	}
-
-	b := strings.Builder{}
-
-	s := c.Server
-	b.WriteString(s.Description)
-	b.WriteString("\n")
-	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Links))
-	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries))
-	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
-
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
-func (c *Console) Pay(to string, amount int, password string) {
-	eval := Result{
-		Prompt: fmt.Sprintf("yes pay %s %d", to, amount),
-	}
-
-	if _, err := c.Network.CheckIdentity(c.Identity.Login, password); err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
-	}
-
-	from := c.Identity.Login
-	if err := c.Network.Pay(from, to, amount); err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
-	}
-
-	eval.Output = fmt.Sprintf("transfert effectué")
-	c.AddResult(eval)
-}
-
-func (c *Console) Balance() {
-	eval := Result{
-		Prompt: fmt.Sprintf("yes balance"),
-	}
-
-	// FIXME on devrait avoir une copie de l'identité courante dans la console
-	id, _ := c.FindIdentity(c.Identity.Login)
-
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "Compte bancaire associé à l'identité %s\n", id.Login)
-	fmt.Fprintf(tw, "Solde du compte :\t%d Y€S\t\n", id.Yes)
-	tw.Flush()
-	eval.Output = b.String()
-	c.AddResult(eval)
+	return nil
 }
 
 func (c *Console) AddResult(o Result) {
@@ -567,27 +193,6 @@ func (c *Console) AddResult(o Result) {
 	if len(c.Results) > MAX_RESULTS {
 		c.Results = c.Results[len(c.Results)-MAX_RESULTS : len(c.Results)]
 	}
-}
-
-func (c *Console) Door() {
-	eval := Result{
-		Prompt: fmt.Sprintf("door"),
-	}
-
-	// créer une nouvelle identité aléatoire
-	id := c.CreateRandomIdentity()
-
-	// créer une backdoor associée
-	c.Server.Backdoor(id.Login)
-
-	b := strings.Builder{}
-	fmt.Fprintf(&b, "backdoor créée sur le serveur %s\n", c.Server.Address)
-	fmt.Fprintf(&b, "login: %s\n", id.Login)
-	fmt.Fprintf(&b, "password: %s\n", id.Password)
-	fmt.Fprintf(&b, "cette backdoor sera détruite automatiquement après usage.\n")
-
-	eval.Output = b.String()
-	c.AddResult(eval)
 }
 
 // MessageNew affiche les messages non lus
@@ -664,14 +269,54 @@ func (c *Console) MessageSend(m Message) {
 	c.AddResult(eval)
 }
 
-func (c *Console) MessageReply(index int) (MessageSendMsg, error) {
-	if c.Identity == nil || index < 0 || index >= len(c.Identity.Messages) {
-		return MessageSendMsg{}, errMessageNotFound
+// func (c *Console) MessageReply(index int) (MessageSendMsg, error) {
+// 	if c.Identity == nil || index < 0 || index >= len(c.Identity.Messages) {
+// 		return MessageSendMsg{}, errMessageNotFound
+// 	}
+
+// 	msg := c.Identity.Messages[index]
+// 	return MessageSendMsg{
+// 		Recipient: msg.Sender,
+// 		Subject:   fmt.Sprintf("Re: %s", msg.Subject),
+// 	}, nil
+// }
+
+func (c *Console) Delay() time.Duration {
+	if c.DNI {
+		return time.Second * DNISpeed
+	} else {
+		return time.Second
+	}
+}
+
+func (c *Console) Connect(address string, force bool) error {
+	server, err := c.FindServer(address)
+	if err != nil {
+		return err
 	}
 
-	msg := c.Identity.Messages[index]
-	return MessageSendMsg{
-		Recipient: msg.Sender,
-		Subject:   fmt.Sprintf("Re: %s", msg.Subject),
-	}, nil
+	login := ""
+	if c.Identity != nil {
+		login = c.Identity.Login
+	}
+
+	if !force {
+		account, err := server.CheckAccount(login)
+		if err != nil {
+			return err
+		}
+
+		c.Account = account
+	}
+
+	c.Server = server
+
+	if c.Account != nil && c.Account.Backdoor {
+		c.RemoveAccount(login)
+		c.RemoveIdentity(login)
+	}
+
+	c.InitMem()
+
+	return nil
 }

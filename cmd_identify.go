@@ -1,20 +1,6 @@
 package main
 
-import "dd/ui/filler"
-
-type IdentifyMsg struct {
-	Login    string
-	Password string
-}
-
-func (i IdentifyMsg) SetPassword(password string) filler.PasswordFiller {
-	i.Password = password
-	return i
-}
-
-func (i IdentifyMsg) GetPassword() string {
-	return i.Password
-}
+import "fmt"
 
 var identify = Cmd{
 	Name:      "identify",
@@ -25,9 +11,25 @@ var identify = Cmd{
 			ShortHelp: "identifiant utilsateur",
 		},
 	},
-	Run: func(ctx Context, args []string) any {
-		msg := IdentifyMsg{Login: args[0]}
-		model := filler.New("entrez votre mot de passe", msg)
+	Run: Identify,
+}
+
+func Identify(ctx Context) any {
+	if len(ctx.Args) < 2 {
+		// demander la saisie du mot de passe
+		model := NewField(ctx, "entrez votre mot de passe", "password", true)
 		return OpenModalMsg(model)
-	},
+	}
+
+	login := ctx.Args[0]
+	password := ctx.Args[1]
+
+	res := ctx.Result()
+	if err := ctx.Console.Identify(login, password); err != nil {
+		res.Error = err
+		return res
+	}
+
+	res.Output = fmt.Sprintf("vous êtes identifié en tant que %s", login)
+	return res
 }

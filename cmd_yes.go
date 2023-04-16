@@ -63,8 +63,8 @@ func YesPay(ctx Context) any {
 	}
 
 	if len(ctx.Args) == 2 {
-		// FIXME ouvrir un modal pour saisir le mdp
-		return res
+		model := NewField(ctx, "entrez votre mot de passe", "password", true)
+		return OpenModalMsg(model)
 	}
 
 	password := ctx.Args[2]

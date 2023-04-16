@@ -27,6 +27,7 @@ type Arg struct {
 	ShortHelp string
 }
 
+// Context décrit le contexte d'exécution d'une commande
 type Context struct {
 	*Console
 	Path []string
@@ -34,6 +35,7 @@ type Context struct {
 	Cmd
 }
 
+// Prompt reconstruit la commande entrée à l'origine
 func (c Context) Prompt() string {
 	return fmt.Sprintf(
 		"%s %s",
@@ -49,8 +51,78 @@ func (c Context) Result() Result {
 	}
 }
 
-// Run exécute la commande dans son contexte
-func (c Context) Run() any {
+func (c Context) Parse() any {
+	if c.Console.Server == nil && c.Connected {
+		return Result{
+			Prompt: c.Prompt(),
+			Error:  errNotConnected,
+			Output: c.Help(c.Args),
+		}
+	}
+
+	if c.Console.Identity == nil && c.Identified {
+		return Result{
+			Prompt: c.Prompt(),
+			Error:  errNotIdentified,
+			Output: c.Help(c.Args),
+		}
+	}
+
+	if len(c.SubCmds) > 0 {
+		// trouver la sous-commande à exécuter
+
+		// aucune sous-commande saisie
+		if len(c.Args) == 0 {
+			return Result{
+				Prompt: c.Prompt(),
+				Error:  errMissingCommand,
+				Output: c.Help(c.Args),
+			}
+		}
+
+		// chercher les sous-commandes avec le préfixe
+		cmds := c.Match(c.Args[0])
+
+		// aucune commande ne correspond a ce préfixe
+		if len(cmds) == 0 {
+			return Result{
+				Prompt: c.Prompt(),
+				Error:  fmt.Errorf("%s : %w", c.Args[0], errInvalidCommand),
+				Output: c.Help(c.Args),
+			}
+		}
+
+		// sélectionner la première commande qui correspond et poursuivre l'exécution
+		c.Path = append(c.Path, c.Args[0])
+		c.Args = c.Args[1:]
+		c.Cmd = cmds[0]
+		return c.Parse()
+	}
+
+	// on est arrivé au bout de l'arbre, la commande doit être exécutée
+
+	if c.Run == nil {
+		// ne devrait pas arriver
+		return Result{
+			Prompt: c.Prompt(),
+			Error:  errInternalError,
+		}
+	}
+
+	// vérifier qu'il y a assez d'arguments
+	if err := c.CheckArgs(c.Args); err != nil {
+		return Result{
+			Prompt: c.Prompt(),
+			Error:  err,
+			Output: c.Help(c.Args),
+		}
+	}
+
+	// lancer l'exécution de la commande et retourner le résultat
+	return c.Cmd.Run(c)
+}
+
+func (c Context) Resume() any {
 	return c.Cmd.Run(c)
 }
 
@@ -96,69 +168,6 @@ func (c Cmd) CheckArgs(args []string) error {
 		)
 	}
 	return nil
-}
-
-func (c Cmd) Parse(ctx Context) any {
-	if ctx.Console.Server == nil && c.Connected {
-		return Result{
-			Prompt: ctx.Prompt(),
-			Error:  errNotConnected,
-			Output: c.Help(ctx.Args),
-		}
-	}
-
-	if ctx.Console.Identity == nil && c.Identified {
-		return Result{
-			Prompt: ctx.Prompt(),
-			Error:  errNotIdentified,
-			Output: c.Help(ctx.Args),
-		}
-	}
-
-	if len(c.SubCmds) == 0 {
-		if c.Run == nil {
-			// ne devrait pas arriver
-			return Result{
-				Prompt: ctx.Prompt(),
-				Error:  errInternalError,
-			}
-		}
-		// vérifier qu'il y a assez d'arguments
-		if err := c.CheckArgs(ctx.Args); err != nil {
-			return Result{
-				Prompt: ctx.Prompt(),
-				Error:  err,
-				Output: c.Help(ctx.Args),
-			}
-		}
-		// parser les arguments et retourner un message
-		ctx.Cmd = c
-		return ctx.Run()
-	}
-
-	if len(ctx.Args) == 0 {
-		return Result{
-			Prompt: ctx.Prompt(),
-			Error:  errMissingCommand,
-			Output: c.Help(ctx.Args),
-		}
-	}
-
-	cmds := c.Match(ctx.Args[0])
-
-	if len(cmds) == 0 {
-		// aucune commande ne correspond a ce préfixe
-		return Result{
-			Prompt: ctx.Prompt(),
-			Error:  fmt.Errorf("%s : %w", ctx.Args[0], errInvalidCommand),
-			Output: c.Help(ctx.Args),
-		}
-	}
-
-	// continuer l'exécution sur la première commande qui match
-	ctx.Path = append(ctx.Path, ctx.Args[0])
-	ctx.Args = ctx.Args[1:]
-	return cmds[0].Parse(ctx)
 }
 
 func (c Cmd) Help(args []string) string {

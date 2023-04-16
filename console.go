@@ -89,8 +89,9 @@ func (c *Console) Parse(prompt string) any {
 	ctx := Context{
 		Console: c,
 		Args:    args,
+		Cmd:     c.Cmd,
 	}
-	return c.Cmd.Parse(ctx)
+	return ctx.Parse()
 }
 
 func (c *Console) connect(address string) error {

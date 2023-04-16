@@ -46,7 +46,7 @@ func (m *FieldModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *FieldModel) View() string {
-	return lg.JoinVertical(lg.Center,
+	return lg.JoinVertical(lg.Left,
 		m.title,
 		m.input.View(),
 	)
@@ -54,12 +54,14 @@ func (m *FieldModel) View() string {
 
 // Validate ajoute la saisie au contexte et relance l'exécution
 func (m *FieldModel) Validate() (tea.Model, tea.Cmd) {
+	// ajouter une argument au contexte
 	arg := m.input.Value()
-	m.ctx.Args = append(m.ctx.Args, arg)
-	res := m.ctx.Run()
+	ctx := m.ctx
+	ctx.Args = append(ctx.Args, arg)
+	// retourner le contexte à relancer
 	cmd := tea.Batch(
-		MsgToCmd(res),
 		MsgToCmd(CloseModalMsg{}),
+		MsgToCmd(ctx),
 	)
 	return m, cmd
 }

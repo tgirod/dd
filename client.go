@@ -118,8 +118,8 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.RenderOutput()
 
 	case Context:
-		// relancer l'exécution d'une commande
-		cmds = append(cmds, MsgToCmd(msg.Run()))
+		// reprendre l'exécution d'un contexte
+		cmds = append(cmds, MsgToCmd(msg.Resume()))
 
 	case SecurityMsg:
 		// boucle de sécurité

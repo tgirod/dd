@@ -63,7 +63,7 @@ func YesPay(ctx Context) any {
 	}
 
 	if len(ctx.Args) == 2 {
-		model := NewField(ctx, "entrez votre mot de passe", "password", true)
+		model := NewLine(ctx, "entrez votre mot de passe", "password", true)
 		return OpenModalMsg(model)
 	}
 

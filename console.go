@@ -215,61 +215,6 @@ func (c *Console) MessageNew() {
 	})
 }
 
-func (c *Console) MessageList() {
-	b := strings.Builder{}
-	tw := tw(&b)
-
-	fmt.Fprintf(tw, "liste de tous les messages :\n")
-	for i, m := range c.Messages {
-		fmt.Fprintf(tw, "%d\t%s\t\n", i, m.Subject)
-	}
-	tw.Flush()
-
-	c.AddResult(Result{
-		Prompt: "message new",
-		Output: b.String(),
-	})
-}
-
-func (c *Console) MessageView(index int) {
-	eval := Result{
-		Prompt: fmt.Sprintf("message view %d", index),
-	}
-
-	b := strings.Builder{}
-
-	if index < 0 || index >= len(c.Messages) {
-		eval.Error = errInvalidArgument
-		c.AddResult(eval)
-		return
-	}
-
-	msg := c.Messages[index]
-	c.Messages[index].Opened = true
-
-	fmt.Fprintf(&b, "De : %s\n", msg.Recipient)
-	fmt.Fprintf(&b, "Sujet : %s\n", msg.Subject)
-	fmt.Fprintln(&b, msg.Content)
-
-	eval.Output = b.String()
-	c.AddResult(eval)
-}
-
-func (c *Console) MessageSend(m Message) {
-	eval := Result{
-		Prompt: "message send",
-	}
-
-	if err := c.Network.MessageSend(m); err != nil {
-		eval.Error = err
-		c.AddResult(eval)
-		return
-	}
-
-	eval.Output = fmt.Sprintf("message envoyé à %s", m.Recipient)
-	c.AddResult(eval)
-}
-
 // func (c *Console) MessageReply(index int) (MessageSendMsg, error) {
 // 	if c.Identity == nil || index < 0 || index >= len(c.Identity.Messages) {
 // 		return MessageSendMsg{}, errMessageNotFound

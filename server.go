@@ -191,3 +191,8 @@ func (s *Server) CreateBackdoor(login string) {
 	}
 	s.Accounts = append(s.Accounts, acc)
 }
+
+// Deal with Forum
+func (s *Server) GetForum() (Forum, error) {
+	return GetForum("toile/" + s.Address)
+}

@@ -31,6 +31,7 @@ require (
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.13.0 // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
+	github.com/sahilm/fuzzy v0.1.0 // indirect
 	golang.org/x/crypto v0.4.0 // indirect
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/term v0.4.0 // indirect

@@ -42,6 +42,8 @@ var (
 	errLowCredit          = errors.New("crédit insuffisant")
 	errNegativeAmount     = errors.New("montant négatif")
 	errMessageNotFound    = errors.New("message introuvable")
+	errForumUnreachable   = errors.New("Forum inatteignable")
+	errTopicExists        = errors.New("TOPIC existe déjà")
 )
 
 type App struct {

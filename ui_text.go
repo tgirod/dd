@@ -1,15 +1,45 @@
 package main
 
 import (
+	bt_help "github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
 )
 
+type TextKeymap struct {
+	Validate key.Binding
+	Cancel   key.Binding
+}
+
+var DefaultTextKeymap = TextKeymap{
+	Validate: key.NewBinding(
+		key.WithKeys("tab", "valider"),
+		key.WithHelp("tab", "valider"),
+	),
+	Cancel: key.NewBinding(
+		key.WithKeys("esc"),
+		key.WithHelp("esc", "annuler"),
+	),
+}
+
+func (k TextKeymap) ShortHelp() []key.Binding {
+	return []key.Binding{k.Validate, k.Cancel}
+}
+
+func (k TextKeymap) FullHelp() [][]key.Binding {
+	return [][]key.Binding{
+		{k.Validate},
+		{k.Cancel},
+	}
+}
+
 type TextModel struct {
 	ctx   Context // contexte a exécuter après saisie
 	title string  // titre de la fenêtre modale
 	input textarea.Model
+	help  bt_help.Model
 }
 
 func NewText(ctx Context, title string, name string) *TextModel {
@@ -17,10 +47,14 @@ func NewText(ctx Context, title string, name string) *TextModel {
 		ctx:   ctx,
 		title: title,
 		input: textarea.New(),
+		help:  bt_help.New(),
 	}
 
 	m.input.Placeholder = name
-	m.input.SetWidth(40)
+	m.input.SetWidth(UI_WIDTH)
+	m.input.SetHeight(20)
+
+	m.help.Width = UI_WIDTH
 
 	return &m
 }
@@ -33,19 +67,23 @@ func (m *TextModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if msg.Type == tea.KeyEnter {
+		switch {
+		case key.Matches(msg, DefaultTextKeymap.Validate):
 			return m.Validate()
+		case key.Matches(msg, DefaultTextKeymap.Cancel):
+			return m.Cancel()
 		}
+		m.input, cmd = m.input.Update(msg)
 	}
-	m.input, cmd = m.input.Update(msg)
+
 	return m, cmd
 }
 
 func (m *TextModel) View() string {
-	return lg.JoinVertical(lg.Left,
-		m.title,
-		m.input.View(),
-	)
+	title := uiStyle.Copy().Align(lg.Center).MarginBottom(1).Render(m.title)
+	input := m.input.View()
+	help := uiStyle.Copy().MarginTop(1).Render(m.help.View(DefaultTextKeymap))
+	return uiStyle.Render(lg.JoinVertical(lg.Left, title, input, help))
 }
 
 // Validate ajoute la saisie au contexte et relance l'exécution
@@ -60,4 +98,8 @@ func (m *TextModel) Validate() (tea.Model, tea.Cmd) {
 		MsgToCmd(ctx),
 	)
 	return m, cmd
+}
+
+func (m *TextModel) Cancel() (tea.Model, tea.Cmd) {
+	return m, MsgToCmd(CloseModalMsg{})
 }

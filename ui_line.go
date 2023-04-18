@@ -8,6 +8,8 @@ import (
 	lg "github.com/charmbracelet/lipgloss"
 )
 
+const UI_WIDTH = 60
+
 type LineKeymap struct {
 	Validate key.Binding
 	Cancel   key.Binding
@@ -57,6 +59,8 @@ func NewLine(ctx Context, title string, name string, hidden bool) *LineModel {
 		m.input.EchoMode = textinput.EchoPassword
 	}
 
+	m.help.Width = UI_WIDTH
+
 	return &m
 }
 
@@ -74,12 +78,9 @@ func (m *LineModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m.Validate()
 		case key.Matches(msg, DefaultLineKeymap.Cancel):
 			return m.Cancel()
+		default:
+			m.input, cmd = m.input.Update(msg)
 		}
-		m.input, cmd = m.input.Update(msg)
-
-	case tea.WindowSizeMsg:
-		m.help.Width = msg.Width
-
 	default:
 		m.input, cmd = m.input.Update(msg)
 		return m, cmd
@@ -88,12 +89,13 @@ func (m *LineModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
+var uiStyle = lg.NewStyle().Width(UI_WIDTH)
+
 func (m *LineModel) View() string {
-	return lg.JoinVertical(lg.Left,
-		m.title,
-		m.input.View(),
-		m.help.View(DefaultLineKeymap),
-	)
+	title := uiStyle.Copy().Align(lg.Center).MarginBottom(1).Render(m.title)
+	input := m.input.View()
+	help := uiStyle.Copy().MarginTop(1).Render(m.help.View(DefaultLineKeymap))
+	return uiStyle.Render(lg.JoinVertical(lg.Left, title, input, help))
 }
 
 // Validate ajoute la saisie au contexte et relance l'exécution

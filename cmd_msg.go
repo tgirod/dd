@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/charmbracelet/bubbles/list"
 )
 
 var message = Cmd{
@@ -23,11 +25,11 @@ var message = Cmd{
 			Name:      "read",
 			ShortHelp: "lire un message",
 			Run:       MessageRead,
-			Args: []Arg{
-				{
-					Name:      "id",
-					ShortHelp: "index du message à lire",
-				},
+			Args:      []Arg{
+				// {
+				// 	Name:      "id",
+				// 	ShortHelp: "index du message à lire",
+				// },
 			},
 		},
 		{
@@ -72,8 +74,23 @@ func MessageList(ctx Context) any {
 	return res
 }
 
+func (m Message) Title() string       { return m.Sender }
+func (m Message) Description() string { return m.Subject }
+func (m Message) FilterValue() string { return m.Subject }
+
 func MessageRead(ctx Context) any {
 	res := ctx.Result()
+
+	if len(ctx.Args) < 1 {
+		messages := ctx.Identity.Messages
+		items := make([]list.Item, len(messages))
+		for i, m := range messages {
+			items[i] = m
+		}
+
+		model := NewListModel(ctx, items)
+		return OpenModalMsg(model)
+	}
 
 	index, err := strconv.Atoi(ctx.Args[0])
 	if err != nil {

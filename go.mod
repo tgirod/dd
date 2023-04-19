@@ -10,6 +10,7 @@ require (
 	github.com/charmbracelet/wish v1.0.0
 	github.com/knipferrc/teacup v0.3.0
 	github.com/lithammer/fuzzysearch v1.1.5
+	github.com/mattn/go-shellwords v1.0.12
 	golang.org/x/text v0.6.0
 )
 

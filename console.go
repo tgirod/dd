@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+
+	"github.com/mattn/go-shellwords"
 )
 
 const MAX_RESULTS int = 10
@@ -86,7 +88,15 @@ func NewConsole(net *Network) *Console {
 }
 
 func (c *Console) Parse(prompt string) any {
-	args := strings.Fields(prompt)
+	args, err := shellwords.Parse(prompt)
+	if err != nil {
+		return Result{
+			Prompt: prompt,
+			Error:  err,
+			Output: "",
+		}
+	}
+	// args := strings.Fields(prompt)
 	ctx := Context{
 		Console: c,
 		Args:    args,

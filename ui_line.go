@@ -1,7 +1,7 @@
 package main
 
 import (
-	bt_help "github.com/charmbracelet/bubbles/help"
+	hhelp "github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -41,7 +41,7 @@ type LineModel struct {
 	ctx   Context // contexte a exécuter après saisie
 	title string  // titre de la fenêtre modale
 	input textinput.Model
-	help  bt_help.Model
+	help  hhelp.Model
 }
 
 func NewLine(ctx Context, title string, name string, hidden bool) *LineModel {
@@ -49,7 +49,7 @@ func NewLine(ctx Context, title string, name string, hidden bool) *LineModel {
 		ctx:   ctx,
 		title: title,
 		input: textinput.New(),
-		help:  bt_help.New(),
+		help:  hhelp.New(),
 	}
 
 	m.input.Placeholder = name

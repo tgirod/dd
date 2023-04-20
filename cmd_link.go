@@ -15,37 +15,21 @@ var link = Cmd{
 			Name:      "list",
 			Path:      []string{"link"},
 			ShortHelp: "affiche la liste des liens disponibles",
-			Run:       LinkList,
-		},
-		{
-			Name:      "connect",
-			Path:      []string{"link"},
-			ShortHelp: "suit un lien vers un autre serveur",
+			Run:       LinkConnect,
 			Args: []Arg{
 				{
 					Name:      "id",
 					ShortHelp: "identifiant du lien à suivre",
+					Type:      LinkId,
 				},
 			},
-			Run: LinkConnect,
 		},
 	},
 }
 
-func LinkList(ctx Context) any {
-	res := ctx.Result()
-
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "ID\tDESCRIPTION\t\n")
-	for i, t := range ctx.Server.Links {
-		fmt.Fprintf(tw, "%d\t%s\t\n", i, t.Description)
-	}
-	tw.Flush()
-
-	res.Output = b.String()
-	return res
-}
+func (l Link) Title() string       { return l.Address }
+func (l Link) Description() string { return l.Desc }
+func (l Link) FilterValue() string { return l.Address }
 
 func LinkConnect(ctx Context) any {
 	res := ctx.Result()

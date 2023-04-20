@@ -26,10 +26,17 @@ var yes = Cmd{
 				{
 					Name:      "account",
 					ShortHelp: "compte à créditer",
+					Type:      Text,
 				},
 				{
 					Name:      "amount",
 					ShortHelp: "montant à transférer",
+					Type:      Amount,
+				},
+				{
+					Name:      "password",
+					ShortHelp: "mot de passe utilisateur",
+					Type:      Password,
 				},
 			},
 			Run: YesPay,
@@ -60,11 +67,6 @@ func YesPay(ctx Context) any {
 	if err != nil {
 		res.Error = errInvalidArgument
 		return res
-	}
-
-	if len(ctx.Args) == 2 {
-		model := NewLine(ctx, "entrez votre mot de passe", "password", true)
-		return OpenModalMsg(model)
 	}
 
 	password := ctx.Args[2]

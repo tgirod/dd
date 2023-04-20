@@ -14,6 +14,7 @@ var jack = Cmd{
 		{
 			Name:      "id",
 			ShortHelp: "identifiant du lien",
+			Type:      LinkId,
 		},
 	},
 	Run: Jack,

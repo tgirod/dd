@@ -24,6 +24,7 @@ var evade = Cmd{
 				{
 					Name:      "zone",
 					ShortHelp: "zone mémoire pour l'évasion",
+					Type:      Text,
 				},
 			},
 			Run: EvadeMove,

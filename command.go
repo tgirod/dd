@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	"github.com/charmbracelet/bubbles/list"
 )
 
 // Cmd est une commande intermédiaire ou terminale dans le prompt
@@ -21,8 +23,21 @@ type Cmd struct {
 
 type RunFunc func(ctx Context) any
 
+type ArgType int
+
+const (
+	Login     ArgType = iota // identifiant utilisateur
+	Password                 // mot de passe utilisateur
+	Text                     // ligne de texte libre
+	LongText                 // texte plus long
+	Amount                   // montant (nombre entier)
+	MessageId                // identifiant du message
+	LinkId                   // identifiant du lien
+)
+
 // Arg décrit un argument. Il n'y a pas d'arguments optionnels
 type Arg struct {
+	Type      ArgType
 	Name      string
 	ShortHelp string
 }
@@ -52,19 +67,23 @@ func (c Context) Result() Result {
 }
 
 func (c Context) Parse() any {
-	if c.Console.Server == nil && c.Connected {
+	return c.Cmd.Parse(c)
+}
+
+func (c Cmd) Parse(ctx Context) any {
+	if ctx.Console.Server == nil && c.Connected {
 		return Result{
-			Prompt: c.Prompt(),
+			Prompt: ctx.Prompt(),
 			Error:  errNotConnected,
-			Output: c.Help(c.Args),
+			Output: c.Help(ctx.Args),
 		}
 	}
 
-	if c.Console.Identity == nil && c.Identified {
+	if ctx.Console.Identity == nil && c.Identified {
 		return Result{
-			Prompt: c.Prompt(),
+			Prompt: ctx.Prompt(),
 			Error:  errNotIdentified,
-			Output: c.Help(c.Args),
+			Output: c.Help(ctx.Args),
 		}
 	}
 
@@ -72,31 +91,31 @@ func (c Context) Parse() any {
 		// trouver la sous-commande à exécuter
 
 		// aucune sous-commande saisie
-		if len(c.Args) == 0 {
+		if len(ctx.Args) == 0 {
 			return Result{
-				Prompt: c.Prompt(),
+				Prompt: ctx.Prompt(),
 				Error:  errMissingCommand,
-				Output: c.Help(c.Args),
+				Output: c.Help(ctx.Args),
 			}
 		}
 
 		// chercher les sous-commandes avec le préfixe
-		cmds := c.Match(c.Args[0])
+		cmds := c.Match(ctx.Args[0])
 
 		// aucune commande ne correspond a ce préfixe
 		if len(cmds) == 0 {
 			return Result{
-				Prompt: c.Prompt(),
-				Error:  fmt.Errorf("%s : %w", c.Args[0], errInvalidCommand),
-				Output: c.Help(c.Args),
+				Prompt: ctx.Prompt(),
+				Error:  fmt.Errorf("%s : %w", ctx.Args[0], errInvalidCommand),
+				Output: c.Help(ctx.Args),
 			}
 		}
 
 		// sélectionner la première commande qui correspond et poursuivre l'exécution
-		c.Path = append(c.Path, c.Args[0])
-		c.Args = c.Args[1:]
-		c.Cmd = cmds[0]
-		return c.Parse()
+		ctx.Cmd = cmds[0]
+		ctx.Path = append(ctx.Path, ctx.Args[0])
+		ctx.Args = ctx.Args[1:]
+		return ctx.Parse()
 	}
 
 	// on est arrivé au bout de l'arbre, la commande doit être exécutée
@@ -104,22 +123,47 @@ func (c Context) Parse() any {
 	if c.Run == nil {
 		// ne devrait pas arriver
 		return Result{
-			Prompt: c.Prompt(),
+			Prompt: ctx.Prompt(),
 			Error:  errInternalError,
 		}
 	}
 
-	// vérifier qu'il y a assez d'arguments
-	if err := c.CheckArgs(c.Args); err != nil {
-		return Result{
-			Prompt: c.Prompt(),
-			Error:  err,
-			Output: c.Help(c.Args),
+	// vérifier si tous les arguments sont fournis. Si ce n'est pas le cas, ouvrir une fenêtre modale pour la saisie des arguments manquants
+	if len(ctx.Args) < len(c.Args) {
+		// trouver le premier argument manquant
+		arg := c.Args[len(ctx.Args)]
+		// afficher une interface de saisie pour cet argument
+		switch arg.Type {
+		case Login, Text, Amount:
+			mod := NewLine(ctx, arg.ShortHelp, arg.Name, false)
+			return OpenModalMsg(mod)
+		case Password:
+			mod := NewLine(ctx, arg.ShortHelp, arg.Name, true)
+			return OpenModalMsg(mod)
+		case LongText:
+			mod := NewText(ctx, arg.ShortHelp, arg.Name)
+			return OpenModalMsg(mod)
+		case MessageId:
+			messages := ctx.Identity.Messages
+			items := make([]list.Item, len(messages))
+			for i, m := range messages {
+				items[i] = m
+			}
+			mod := NewList(ctx, items)
+			return OpenModalMsg(mod)
+		case LinkId:
+			links := ctx.Console.Server.Links
+			items := make([]list.Item, len(links))
+			for i, l := range links {
+				items[i] = l
+			}
+			mod := NewList(ctx, items)
+			return OpenModalMsg(mod)
 		}
 	}
 
 	// lancer l'exécution de la commande et retourner le résultat
-	return c.Cmd.Run(c)
+	return c.Run(ctx)
 }
 
 func (c Context) Resume() any {

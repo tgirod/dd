@@ -40,7 +40,7 @@ func (k ListKeymap) FullHelp() [][]key.Binding {
 	}
 }
 
-func NewListModel(ctx Context, items []list.Item) *ListModel {
+func NewList(ctx Context, items []list.Item) *ListModel {
 	m := ListModel{
 		ctx: ctx,
 		list: list.New(

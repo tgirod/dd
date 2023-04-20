@@ -18,6 +18,7 @@ var data = Cmd{
 				{
 					Name:      "keyword",
 					ShortHelp: "mot clef utilisé pour la recherche",
+					Type:      Text,
 				},
 			},
 			Run: DataSearch,
@@ -30,6 +31,7 @@ var data = Cmd{
 				{
 					Name:      "id",
 					ShortHelp: "identifiant de l'entrée à afficher",
+					Type:      Text,
 				},
 			},
 			Run: DataView,

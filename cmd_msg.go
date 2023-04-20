@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/charmbracelet/bubbles/list"
 )
 
 var message = Cmd{
@@ -25,11 +23,12 @@ var message = Cmd{
 			Name:      "read",
 			ShortHelp: "lire un message",
 			Run:       MessageRead,
-			Args:      []Arg{
-				// {
-				// 	Name:      "id",
-				// 	ShortHelp: "index du message à lire",
-				// },
+			Args: []Arg{
+				{
+					Type:      MessageId,
+					Name:      "index",
+					ShortHelp: "index du message à lire",
+				},
 			},
 		},
 		{
@@ -41,6 +40,17 @@ var message = Cmd{
 				{
 					Name:      "recipient",
 					ShortHelp: "destinataire du message",
+					Type:      Text,
+				},
+				{
+					Type:      Text,
+					Name:      "subject",
+					ShortHelp: "sujet du message",
+				},
+				{
+					Type:      LongText,
+					Name:      "content",
+					ShortHelp: "contenu du message",
 				},
 			},
 		},
@@ -53,6 +63,7 @@ var message = Cmd{
 				{
 					Name:      "id",
 					ShortHelp: "identifiant du message auquel répondre",
+					Type:      Text,
 				},
 			},
 		},
@@ -80,17 +91,6 @@ func (m Message) FilterValue() string { return m.Subject }
 
 func MessageRead(ctx Context) any {
 	res := ctx.Result()
-
-	if len(ctx.Args) < 1 {
-		messages := ctx.Identity.Messages
-		items := make([]list.Item, len(messages))
-		for i, m := range messages {
-			items[i] = m
-		}
-
-		model := NewListModel(ctx, items)
-		return OpenModalMsg(model)
-	}
 
 	index, err := strconv.Atoi(ctx.Args[0])
 	if err != nil {

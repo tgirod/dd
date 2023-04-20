@@ -3344,6 +3344,16 @@ var identities = []Identity{
 	{
 		Login:    "jesus",
 		Password: "roxor",
+		Messages: []Message{
+			{
+				Recipient: "jesus",
+				Sender:    "crunch",
+				Subject:   "ca va gros ?",
+				Content:   "un super message",
+				Opened:    false,
+			},
+		},
+		Yes: 100,
 	},
 	{
 		Login:    "crunch",

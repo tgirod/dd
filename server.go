@@ -82,7 +82,7 @@ type Link struct {
 	Address string
 
 	// description du lien
-	Description string
+	Desc string
 }
 
 func (s *Server) FindTarget(address string) (Link, error) {

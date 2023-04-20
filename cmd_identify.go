@@ -9,6 +9,12 @@ var identify = Cmd{
 		{
 			Name:      "login",
 			ShortHelp: "identifiant utilsateur",
+			Type:      Login,
+		},
+		{
+			Name:      "password",
+			ShortHelp: "mot de passe utilisateur",
+			Type:      Password,
 		},
 	},
 	Run: Identify,

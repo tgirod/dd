@@ -167,7 +167,7 @@ func (c Cmd) Parse(ctx Context) any {
 }
 
 func (c Context) Resume() any {
-	return c.Cmd.Run(c)
+	return c.Parse()
 }
 
 // Usage décrit l'utilisation d'une commande

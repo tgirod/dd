@@ -31,9 +31,9 @@ type Message struct {
 	Opened    bool   // pas encore lu
 }
 
-func (g *Network) MessageSend(m Message) error {
+func (n *Network) MessageSend(m Message) error {
 	// trouver le destinataire
-	recipient, err := g.FindIdentity(m.Recipient)
+	recipient, err := n.FindIdentity(m.Recipient)
 	if err != nil {
 		return err
 	}
@@ -42,15 +42,15 @@ func (g *Network) MessageSend(m Message) error {
 	return nil
 }
 
-func (g *Network) Pay(from, to string, amount int) error {
+func (n *Network) Pay(from, to string, amount int) error {
 	var src, dst *Identity
 	var err error
 
-	if src, err = g.FindIdentity(from); err != nil {
+	if src, err = n.FindIdentity(from); err != nil {
 		return errIdentityNotFound
 	}
 
-	if dst, err = g.FindIdentity(to); err != nil {
+	if dst, err = n.FindIdentity(to); err != nil {
 		return errIdentityNotFound
 	}
 
@@ -74,7 +74,7 @@ func randomString() string {
 	return base64.RawStdEncoding.EncodeToString(data)
 }
 
-func (g *Network) CreateRandomIdentity() Identity {
+func (n *Network) CreateRandomIdentity() Identity {
 	login := randomString()
 	password := randomString()
 	id := Identity{
@@ -83,44 +83,44 @@ func (g *Network) CreateRandomIdentity() Identity {
 		Name:     "",
 		Yes:      0,
 	}
-	g.Identities = append(g.Identities, id)
+	n.Identities = append(n.Identities, id)
 	return id
 }
 
-func (g *Network) RemoveIdentity(login string) {
+func (n *Network) RemoveIdentity(login string) {
 
 }
 
-func (g *Network) CheckIdentity(login, password string) (*Identity, error) {
-	for i, id := range g.Identities {
+func (n *Network) CheckIdentity(login, password string) (*Identity, error) {
+	for i, id := range n.Identities {
 		if id.Login == login && id.Password == password {
-			return &g.Identities[i], nil
+			return &n.Identities[i], nil
 		}
 	}
 	return nil, errInvalidIdentity
 }
 
-func (g Network) FindIdentity(login string) (*Identity, error) {
-	for i, identity := range g.Identities {
+func (n *Network) FindIdentity(login string) (*Identity, error) {
+	for i, identity := range n.Identities {
 		if identity.Login == login {
-			return &g.Identities[i], nil
+			return &n.Identities[i], nil
 		}
 	}
 
 	return nil, fmt.Errorf("%s : %w", login, errIdentityNotFound)
 }
 
-func (g Network) FindServer(address string) (*Server, error) {
-	for i, server := range g.Servers {
+func (n *Network) FindServer(address string) (*Server, error) {
+	for i, server := range n.Servers {
 		if server.Address == address {
-			return &g.Servers[i], nil
+			return &n.Servers[i], nil
 		}
 	}
 	return nil, fmt.Errorf("%s : %w", address, errServerNotFound)
 }
 
-func (g Network) Serialize() {
-	ret, err := json.MarshalIndent(g, "", " ")
+func (n *Network) Serialize() {
+	ret, err := json.MarshalIndent(n, "", " ")
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -134,12 +134,12 @@ func (g Network) Serialize() {
 	}
 }
 
-func (g Network) UnSerialize(filename string) {
+func (n *Network) UnSerialize(filename string) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		fmt.Println("Cannot open JSON file")
 	}
-	err = json.Unmarshal(content, &g)
+	err = json.Unmarshal(content, n)
 	if err != nil {
 		fmt.Println("Can't deserislize", content)
 	}

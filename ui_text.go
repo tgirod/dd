@@ -36,18 +36,20 @@ func (k TextKeymap) FullHelp() [][]key.Binding {
 }
 
 type TextModel struct {
-	ctx   Context // contexte a exécuter après saisie
-	title string  // titre de la fenêtre modale
-	input textarea.Model
-	help  bt_help.Model
+	ctx    Context // contexte a exécuter après saisie
+	title  string  // titre de la fenêtre modale
+	input  textarea.Model
+	help   bt_help.Model
+	cancel bool
 }
 
-func NewText(ctx Context, title string, name string) *TextModel {
+func NewText(ctx Context, title string, name string, cancel bool) *TextModel {
 	m := TextModel{
-		ctx:   ctx,
-		title: title,
-		input: textarea.New(),
-		help:  bt_help.New(),
+		ctx:    ctx,
+		title:  title,
+		input:  textarea.New(),
+		help:   bt_help.New(),
+		cancel: cancel,
 	}
 
 	m.input.Placeholder = name
@@ -101,5 +103,18 @@ func (m *TextModel) Validate() (tea.Model, tea.Cmd) {
 }
 
 func (m *TextModel) Cancel() (tea.Model, tea.Cmd) {
-	return m, MsgToCmd(CloseModalMsg{})
+	args := m.ctx.Args
+
+	// annuler la commande
+	if m.cancel || len(args) == 0 {
+		return m, MsgToCmd(CloseModalMsg{})
+	}
+
+	// retirer le dernier argument et relancer la commande
+	m.ctx.Args = args[0 : len(args)-1]
+	cmd := tea.Batch(
+		MsgToCmd(CloseModalMsg{}),
+		MsgToCmd(m.ctx),
+	)
+	return m, cmd
 }

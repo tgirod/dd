@@ -8,11 +8,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type ListModel struct {
-	ctx  Context
-	list list.Model
-}
-
 type ListKeymap struct {
 	Select key.Binding
 	Cancel key.Binding
@@ -40,14 +35,23 @@ func (k ListKeymap) FullHelp() [][]key.Binding {
 	}
 }
 
-func NewList(ctx Context, items []list.Item) *ListModel {
+type ListModel struct {
+	ctx      Context
+	list     list.Model
+	delegate list.ItemDelegate // affichage d'un item
+	cancel   bool              // la touche esc annule toute la commande
+}
+
+func NewList(ctx Context, items []list.Item, del list.ItemDelegate, cancel bool) *ListModel {
+	if del == nil {
+		del = list.NewDefaultDelegate()
+	}
+
 	m := ListModel{
-		ctx: ctx,
-		list: list.New(
-			items,
-			list.NewDefaultDelegate(),
-			0, 0,
-		),
+		ctx:      ctx,
+		list:     list.New(items, del, 0, 0),
+		delegate: del,
+		cancel:   cancel,
 	}
 
 	m.list.DisableQuitKeybindings()
@@ -102,5 +106,18 @@ func (m *ListModel) Select() (tea.Model, tea.Cmd) {
 }
 
 func (m *ListModel) Cancel() (tea.Model, tea.Cmd) {
-	return m, MsgToCmd(CloseModalMsg{})
+	args := m.ctx.Args
+
+	// annuler la commande
+	if m.cancel || len(args) == 0 {
+		return m, MsgToCmd(CloseModalMsg{})
+	}
+
+	// retirer le dernier argument et relancer la commande
+	m.ctx.Args = args[0 : len(args)-1]
+	cmd := tea.Batch(
+		MsgToCmd(CloseModalMsg{}),
+		MsgToCmd(m.ctx),
+	)
+	return m, cmd
 }

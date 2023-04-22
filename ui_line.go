@@ -38,18 +38,20 @@ func (k LineKeymap) FullHelp() [][]key.Binding {
 }
 
 type LineModel struct {
-	ctx   Context // contexte a exécuter après saisie
-	title string  // titre de la fenêtre modale
-	input textinput.Model
-	help  hhelp.Model
+	ctx    Context // contexte a exécuter après saisie
+	title  string  // titre de la fenêtre modale
+	input  textinput.Model
+	help   hhelp.Model
+	cancel bool
 }
 
-func NewLine(ctx Context, title string, name string, hidden bool) *LineModel {
+func NewLine(ctx Context, title string, name string, hidden bool, cancel bool) *LineModel {
 	m := LineModel{
-		ctx:   ctx,
-		title: title,
-		input: textinput.New(),
-		help:  hhelp.New(),
+		ctx:    ctx,
+		title:  title,
+		input:  textinput.New(),
+		help:   hhelp.New(),
+		cancel: cancel,
 	}
 
 	m.input.Placeholder = name
@@ -113,5 +115,18 @@ func (m *LineModel) Validate() (tea.Model, tea.Cmd) {
 }
 
 func (m *LineModel) Cancel() (tea.Model, tea.Cmd) {
-	return m, MsgToCmd(CloseModalMsg{})
+	args := m.ctx.Args
+
+	// annuler la commande
+	if m.cancel || len(args) == 0 {
+		return m, MsgToCmd(CloseModalMsg{})
+	}
+
+	// retirer le dernier argument et relancer la commande
+	m.ctx.Args = args[0 : len(args)-1]
+	cmd := tea.Batch(
+		MsgToCmd(CloseModalMsg{}),
+		MsgToCmd(m.ctx),
+	)
+	return m, cmd
 }

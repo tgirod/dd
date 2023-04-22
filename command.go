@@ -19,6 +19,7 @@ type Cmd struct {
 	Connected  bool     // la commande nécessite d'être connecté
 	Identified bool     // la commande nécessite d'avoir une identité active
 	Run        RunFunc  // fonction exécutée (optionnel)
+	Cancel     bool     // l'annulation d'une saisie entraine l'annulation de la commande
 }
 
 type RunFunc func(ctx Context) any
@@ -135,13 +136,13 @@ func (c Cmd) Parse(ctx Context) any {
 		// afficher une interface de saisie pour cet argument
 		switch arg.Type {
 		case Login, Text, Amount:
-			mod := NewLine(ctx, arg.ShortHelp, arg.Name, false)
+			mod := NewLine(ctx, arg.ShortHelp, arg.Name, false, c.Cancel)
 			return OpenModalMsg(mod)
 		case Password:
-			mod := NewLine(ctx, arg.ShortHelp, arg.Name, true)
+			mod := NewLine(ctx, arg.ShortHelp, arg.Name, true, c.Cancel)
 			return OpenModalMsg(mod)
 		case LongText:
-			mod := NewText(ctx, arg.ShortHelp, arg.Name)
+			mod := NewText(ctx, arg.ShortHelp, arg.Name, c.Cancel)
 			return OpenModalMsg(mod)
 		case MessageId:
 			messages := ctx.Identity.Messages
@@ -149,7 +150,7 @@ func (c Cmd) Parse(ctx Context) any {
 			for i, m := range messages {
 				items[i] = m
 			}
-			mod := NewList(ctx, items)
+			mod := NewList(ctx, items, nil, c.Cancel)
 			return OpenModalMsg(mod)
 		case LinkId:
 			links := ctx.Console.Server.Links
@@ -157,7 +158,7 @@ func (c Cmd) Parse(ctx Context) any {
 			for i, l := range links {
 				items[i] = l
 			}
-			mod := NewList(ctx, items)
+			mod := NewList(ctx, items, nil, c.Cancel)
 			return OpenModalMsg(mod)
 		}
 	}

@@ -21,12 +21,6 @@ var identify = Cmd{
 }
 
 func Identify(ctx Context) any {
-	if len(ctx.Args) < 2 {
-		// demander la saisie du mot de passe
-		model := NewLine(ctx, "entrez votre mot de passe", "password", true)
-		return OpenModalMsg(model)
-	}
-
 	login := ctx.Args[0]
 	password := ctx.Args[1]
 

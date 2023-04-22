@@ -121,18 +121,8 @@ func MessageWrite(ctx Context) any {
 
 	recipient := ctx.Args[0]
 
-	// récupérer le sujet
-	if len(ctx.Args) < 2 {
-		model := NewLine(ctx, "sujet du message", "sujet", false)
-		return OpenModalMsg(model)
-	}
 	subject := ctx.Args[1]
 
-	// récupérer le corps du message
-	if len(ctx.Args) < 3 {
-		model := NewText(ctx, "corps du message", "message")
-		return OpenModalMsg(model)
-	}
 	content := ctx.Args[2]
 
 	// envoyer le message
@@ -168,19 +158,7 @@ func MessageReply(ctx Context) any {
 
 	original := ctx.Messages[index]
 	recipient := original.Sender
-
-	// récupérer le sujet
-	if len(ctx.Args) < 2 {
-		model := NewLine(ctx, "sujet du message", "sujet", false)
-		return OpenModalMsg(model)
-	}
 	subject := ctx.Args[1]
-
-	// récupérer le corps du message
-	if len(ctx.Args) < 3 {
-		model := NewText(ctx, "corps du message", "message")
-		return OpenModalMsg(model)
-	}
 	content := ctx.Args[2]
 
 	// envoyer le message

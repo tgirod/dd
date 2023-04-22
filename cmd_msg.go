@@ -25,7 +25,7 @@ var message = Cmd{
 			Run:       MessageRead,
 			Args: []Arg{
 				{
-					Type:      MessageId,
+					Type:      MessageArg,
 					Name:      "index",
 					ShortHelp: "index du message à lire",
 				},
@@ -40,15 +40,15 @@ var message = Cmd{
 				{
 					Name:      "recipient",
 					ShortHelp: "destinataire du message",
-					Type:      Text,
+					Type:      TextArg,
 				},
 				{
-					Type:      Text,
+					Type:      TextArg,
 					Name:      "subject",
 					ShortHelp: "sujet du message",
 				},
 				{
-					Type:      LongText,
+					Type:      LongTextArg,
 					Name:      "content",
 					ShortHelp: "contenu du message",
 				},
@@ -63,7 +63,7 @@ var message = Cmd{
 				{
 					Name:      "id",
 					ShortHelp: "identifiant du message auquel répondre",
-					Type:      Text,
+					Type:      TextArg,
 				},
 			},
 		},

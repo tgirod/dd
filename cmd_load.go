@@ -13,7 +13,7 @@ var load = Cmd{
 		{
 			Name:      "code",
 			ShortHelp: "code de la commande",
-			Type:      Text,
+			Type:      TextArg,
 		},
 	},
 	Run: Load,

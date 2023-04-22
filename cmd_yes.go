@@ -26,17 +26,17 @@ var yes = Cmd{
 				{
 					Name:      "account",
 					ShortHelp: "compte à créditer",
-					Type:      Text,
+					Type:      TextArg,
 				},
 				{
 					Name:      "amount",
 					ShortHelp: "montant à transférer",
-					Type:      Amount,
+					Type:      AmountArg,
 				},
 				{
 					Name:      "password",
 					ShortHelp: "mot de passe utilisateur",
-					Type:      Password,
+					Type:      PasswordArg,
 				},
 			},
 			Run: YesPay,

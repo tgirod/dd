@@ -27,13 +27,15 @@ type RunFunc func(ctx Context) any
 type ArgType int
 
 const (
-	Login     ArgType = iota // identifiant utilisateur
-	Password                 // mot de passe utilisateur
-	Text                     // ligne de texte libre
-	LongText                 // texte plus long
-	Amount                   // montant (nombre entier)
-	MessageId                // identifiant du message
-	LinkId                   // identifiant du lien
+	LoginArg    ArgType = iota // identifiant utilisateur
+	PasswordArg                // mot de passe utilisateur
+	TextArg                    // ligne de texte libre
+	LongTextArg                // texte plus long
+	AmountArg                  // montant (nombre entier)
+	MessageArg                 // identifiant du message
+	LinkArg                    // identifiant du lien
+	TopicArg                   // identifiant d'un topic
+	PostArg                    // identifiant d'un post
 )
 
 // Arg décrit un argument. Il n'y a pas d'arguments optionnels
@@ -135,16 +137,16 @@ func (c Cmd) Parse(ctx Context) any {
 		arg := c.Args[len(ctx.Args)]
 		// afficher une interface de saisie pour cet argument
 		switch arg.Type {
-		case Login, Text, Amount:
+		case LoginArg, TextArg, AmountArg:
 			mod := NewLine(ctx, arg.ShortHelp, arg.Name, false, c.Cancel)
 			return OpenModalMsg(mod)
-		case Password:
+		case PasswordArg:
 			mod := NewLine(ctx, arg.ShortHelp, arg.Name, true, c.Cancel)
 			return OpenModalMsg(mod)
-		case LongText:
+		case LongTextArg:
 			mod := NewText(ctx, arg.ShortHelp, arg.Name, c.Cancel)
 			return OpenModalMsg(mod)
-		case MessageId:
+		case MessageArg:
 			messages := ctx.Identity.Messages
 			items := make([]list.Item, len(messages))
 			for i, m := range messages {
@@ -152,7 +154,7 @@ func (c Cmd) Parse(ctx Context) any {
 			}
 			mod := NewList(ctx, items, nil, c.Cancel)
 			return OpenModalMsg(mod)
-		case LinkId:
+		case LinkArg:
 			links := ctx.Console.Server.Links
 			items := make([]list.Item, len(links))
 			for i, l := range links {

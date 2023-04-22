@@ -18,7 +18,7 @@ var registry = Cmd{
 				{
 					Name:      "prefix",
 					ShortHelp: "préfixe du nom du registre",
-					Type:      Text,
+					Type:      TextArg,
 				},
 			},
 			Run: RegistrySearch,
@@ -31,7 +31,7 @@ var registry = Cmd{
 				{
 					Name:      "name",
 					ShortHelp: "nom du registre à modifier",
-					Type:      Text,
+					Type:      TextArg,
 				},
 			},
 			Run: RegistryEdit,

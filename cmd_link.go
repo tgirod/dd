@@ -20,7 +20,7 @@ var link = Cmd{
 				{
 					Name:      "id",
 					ShortHelp: "identifiant du lien à suivre",
-					Type:      LinkId,
+					Type:      LinkArg,
 				},
 			},
 		},

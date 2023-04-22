@@ -16,7 +16,7 @@ var connect = Cmd{
 		{
 			Name:      "address",
 			ShortHelp: "adresse sur serveur auquel se connecter",
-			Type:      Text,
+			Type:      TextArg,
 		},
 	},
 	Run: Connect,

@@ -40,6 +40,8 @@ type Server struct {
 
 	// liste des registres fournis par le serveur
 	Registers []Register
+
+	Posts []Post
 }
 
 // Account représente un compte utilisateur sur un serveur
@@ -192,7 +194,62 @@ func (s *Server) CreateBackdoor(login string) {
 	s.Accounts = append(s.Accounts, acc)
 }
 
-// Deal with Forum
-func (s *Server) GetForum() (Forum, error) {
-	return GetForum("toile/" + s.Address)
+type PostId int64 // time.UnixMicro()
+
+type Post struct {
+	ID      PostId
+	Parent  PostId
+	Date    time.Time
+	Author  string
+	Subject string
+	Content string
+}
+
+// Post retourne le post correspondant à l'ID
+func (s *Server) Post(id PostId) (Post, error) {
+	for _, p := range s.Posts {
+		if p.ID == id {
+			return p, nil
+		}
+	}
+	return Post{}, fmt.Errorf("%d : %w", id, errPostNotFound)
+}
+
+// Topics liste les posts qui n'ont pas de parent
+func (s *Server) Topics() []Post {
+	topics := make([]Post, 0, len(s.Posts))
+	for _, p := range s.Posts {
+		if p.Parent == 0 {
+			topics = append(topics, p)
+		}
+	}
+	return topics
+}
+
+// Replies retourne la liste des réponses à un post
+func (s *Server) Replies(parent PostId) []Post {
+	topics := make([]Post, 0, len(s.Posts))
+	for _, p := range s.Posts {
+		if p.Parent == parent {
+			topics = append(topics, p)
+		}
+	}
+	return topics
+}
+
+func (s *Server) NewPost(p Post) Post {
+	// nouveau post
+	p.ID = PostId(time.Now().UnixMicro())
+	s.Posts = append(s.Posts, p)
+	return p
+}
+
+func (s *Server) UpdatePost(p Post) (Post, error) {
+	for i, old := range s.Posts {
+		if old.ID == p.ID {
+			s.Posts[i] = p
+			return p, nil
+		}
+	}
+	return p, errPostNotFound
 }

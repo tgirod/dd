@@ -8,13 +8,14 @@ var quit = Cmd{
 }
 
 func Quit(ctx Context) any {
+	console := ctx.Value("console").(*Console)
 	res := ctx.Result()
 
-	ctx.Server = nil
-	ctx.Identity = nil
-	ctx.Account = nil
-	ctx.Alert = false
-	ctx.History.Clear()
+	console.Server = nil
+	console.Identity = nil
+	console.Account = nil
+	console.Alert = false
+	console.History.Clear()
 	// FIXME décharger les commandes de hack ?
 
 	res.Output = "déconnexion effectuée"

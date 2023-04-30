@@ -15,11 +15,12 @@ var index = Cmd{
 }
 
 func Index(ctx Context) any {
+	console := ctx.Value("console").(*Console)
 	res := ctx.Result()
 
 	b := strings.Builder{}
 
-	s := ctx.Server
+	s := console.Server
 	b.WriteString(s.Description)
 	b.WriteString("\n")
 	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Links))

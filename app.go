@@ -44,6 +44,7 @@ var (
 	errMessageNotFound    = errors.New("message introuvable")
 	errForumUnreachable   = errors.New("Forum inatteignable")
 	errTopicExists        = errors.New("TOPIC existe déjà")
+	errPostNotFound       = errors.New("Post introuvable")
 )
 
 type App struct {

@@ -15,16 +15,17 @@ var door = Cmd{
 }
 
 func Door(ctx Context) any {
+	console := ctx.Value("console").(*Console)
 	result := ctx.Result()
 
 	// créer une nouvelle identité aléatoire
-	id := ctx.CreateRandomIdentity()
+	id := console.CreateRandomIdentity()
 
 	// créer une backdoor associée dans le serveur
-	ctx.CreateBackdoor(id.Login)
+	console.CreateBackdoor(id.Login)
 
 	b := strings.Builder{}
-	fmt.Fprintf(&b, "backdoor créée sur le serveur %s\n", ctx.Server.Address)
+	fmt.Fprintf(&b, "backdoor créée sur le serveur %s\n", console.Server.Address)
 	fmt.Fprintf(&b, "login: %s\n", id.Login)
 	fmt.Fprintf(&b, "password: %s\n", id.Password)
 	fmt.Fprintf(&b, "cette backdoor sera détruite automatiquement après usage.\n")

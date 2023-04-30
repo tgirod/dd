@@ -13,23 +13,24 @@ var load = Cmd{
 		{
 			Name:      "code",
 			ShortHelp: "code de la commande",
-			Type:      TextArg,
+			Type:      HiddenArg,
 		},
 	},
 	Run: Load,
 }
 
 func Load(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	code := ctx.Value("code").(string)
 	res := ctx.Result()
 
-	code := ctx.Args[0]
 	command, ok := Hack[code]
 	if !ok {
 		res.Error = fmt.Errorf("%s : %w", code, errInvalidArgument)
 		return res
 	}
 
-	ctx.Cmd.SubCmds = append(ctx.Cmd.SubCmds, command)
+	console.Cmd.SubCmds = append(console.Cmd.SubCmds, command)
 	res.Output = fmt.Sprintf("%s : commande chargée", command.Name)
 	return res
 }

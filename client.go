@@ -151,6 +151,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// scroll de la sortie
 			c.output, cmd = c.output.Update(msg)
 			cmds = append(cmds, cmd)
+
 		default:
 			// passer le KeyMsg au prompt
 			c.input, cmd = c.input.Update(msg)

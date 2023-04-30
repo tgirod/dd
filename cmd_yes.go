@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -13,30 +12,28 @@ var yes = Cmd{
 	Identified: true,
 	SubCmds: []Cmd{
 		{
-			Path:      []string{"yes"},
 			Name:      "balance",
 			ShortHelp: "affiche le solde du compte",
 			Run:       YesBalance,
 		},
 		{
-			Path:      []string{"yes"},
 			Name:      "pay",
 			ShortHelp: "effectue un transfert de monnaie",
 			Args: []Arg{
 				{
 					Name:      "account",
 					ShortHelp: "compte à créditer",
-					Type:      TextArg,
+					Type:      ShortArg,
 				},
 				{
 					Name:      "amount",
 					ShortHelp: "montant à transférer",
-					Type:      AmountArg,
+					Type:      NumberArg,
 				},
 				{
 					Name:      "password",
 					ShortHelp: "mot de passe utilisateur",
-					Type:      PasswordArg,
+					Type:      HiddenArg,
 				},
 			},
 			Run: YesPay,
@@ -45,7 +42,8 @@ var yes = Cmd{
 }
 
 func YesBalance(ctx Context) any {
-	id := ctx.Console.Identity
+	console := ctx.Value("console").(*Console)
+	id := console.Identity
 
 	b := strings.Builder{}
 	tw := tw(&b)
@@ -59,24 +57,19 @@ func YesBalance(ctx Context) any {
 }
 
 func YesPay(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	to := ctx.Value("account").(string)
+	amount := ctx.Value("amount").(int)
+	password := ctx.Value("password").(string)
 	res := ctx.Result()
 
-	to := ctx.Args[0]
-
-	amount, err := strconv.Atoi(ctx.Args[1])
-	if err != nil {
-		res.Error = errInvalidArgument
-		return res
-	}
-
-	password := ctx.Args[2]
-	if _, err := ctx.Network.CheckIdentity(ctx.Identity.Login, password); err != nil {
+	if _, err := console.CheckIdentity(console.Identity.Login, password); err != nil {
 		res.Error = err
 		return res
 	}
 
-	from := ctx.Identity.Login
-	if err := ctx.Network.Pay(from, to, amount); err != nil {
+	from := console.Identity.Login
+	if err := console.Pay(from, to, amount); err != nil {
 		res.Error = err
 		return res
 	}

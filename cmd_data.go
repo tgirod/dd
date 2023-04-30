@@ -12,26 +12,24 @@ var data = Cmd{
 	SubCmds: []Cmd{
 		{
 			Name:      "search",
-			Path:      []string{"data"},
 			ShortHelp: "effectue une recherche par mot clef",
 			Args: []Arg{
 				{
 					Name:      "keyword",
 					ShortHelp: "mot clef utilisé pour la recherche",
-					Type:      TextArg,
+					Type:      ShortArg,
 				},
 			},
 			Run: DataSearch,
 		},
 		{
 			Name:      "view",
-			Path:      []string{"data"},
 			ShortHelp: "affiche le contenu d'une entrée",
 			Args: []Arg{
 				{
 					Name:      "id",
 					ShortHelp: "identifiant de l'entrée à afficher",
-					Type:      TextArg,
+					Type:      ShortArg,
 				},
 			},
 			Run: DataView,
@@ -40,16 +38,17 @@ var data = Cmd{
 }
 
 func DataSearch(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	keyword := ctx.Value("keyword").(string)
 	result := ctx.Result()
 
-	keyword := ctx.Args[0]
 	if len([]rune(keyword)) < 3 {
 		result.Error = fmt.Errorf("%s : %w", keyword, errKeywordTooShort)
 		return result
 	}
 
 	// construire la réponse à afficher
-	entries := ctx.Server.DataSearch(keyword, ctx.Identity.Login)
+	entries := console.Server.DataSearch(keyword, console.Identity.Login)
 	b := strings.Builder{}
 	tw := tw(&b)
 	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
@@ -68,10 +67,11 @@ func DataSearch(ctx Context) any {
 }
 
 func DataView(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	id := ctx.Value("id").(string)
 	result := ctx.Result()
 
-	id := ctx.Args[0]
-	entry, err := ctx.FindEntry(id, ctx.Identity.Login)
+	entry, err := console.FindEntry(id, console.Identity.Login)
 	if err != nil {
 		result.Error = err
 		return result

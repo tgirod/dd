@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -10,52 +9,49 @@ var link = Cmd{
 	Name:      "link",
 	ShortHelp: "utilise les liens pour se connecter à un autre serveur",
 	Connected: true,
-	SubCmds: []Cmd{
+	Args: []Arg{
 		{
-			Name:      "list",
-			Path:      []string{"link"},
-			ShortHelp: "affiche la liste des liens disponibles",
-			Run:       LinkConnect,
-			Args: []Arg{
-				{
-					Name:      "id",
-					ShortHelp: "identifiant du lien à suivre",
-					Type:      LinkArg,
-				},
+			Type:      SelectNumberArg,
+			Name:      "id",
+			ShortHelp: "identifiant du lien",
+			Options: func(ctx Context) []Option {
+				console := ctx.Value("console").(*Console)
+				links := console.Server.Links
+				opts := make([]Option, len(links))
+				for i, l := range links {
+					opts[i].Desc = fmt.Sprintf("%d -- %s", i, l.Desc)
+					opts[i].Value = i
+				}
+				return opts
 			},
 		},
 	},
+	Run: LinkCmd,
 }
 
-func (l Link) Title() string       { return l.Address }
-func (l Link) Description() string { return l.Desc }
-func (l Link) FilterValue() string { return l.Address }
-
-func LinkConnect(ctx Context) any {
+func LinkCmd(ctx Context) any {
+	console := ctx.Value("console").(*Console)
 	res := ctx.Result()
 
-	id, err := strconv.Atoi(ctx.Args[0])
-	if err != nil {
+	id := ctx.Value("id").(int)
+
+	if id < 0 || id >= len(console.Server.Links) {
 		res.Error = errInvalidArgument
 		return res
 	}
 
-	if id < 0 || id >= len(ctx.Server.Links) {
-		res.Error = errInvalidArgument
-		return res
-	}
+	link := console.Server.Links[id]
 
-	address := ctx.Server.Links[id].Address
-	if err := ctx.Console.Connect(address, false); err != nil {
+	if err := console.Connect(link.Address, false); err != nil {
 		res.Error = err
 		return res
 	}
 
-	ctx.History.Push(Link{address, ""})
+	console.History.Push(link)
 
 	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", ctx.Server.Address)
-	fmt.Fprintf(&b, "%s\n", ctx.Server.Description)
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Server.Address)
+	fmt.Fprintf(&b, "%s\n", console.Server.Description)
 	res.Output = b.String()
 	return res
 }

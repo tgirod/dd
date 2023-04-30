@@ -13,27 +13,28 @@ var back = Cmd{
 }
 
 func Back(ctx Context) any {
+	console := ctx.Value("console").(*Console)
 	result := ctx.Result()
 
-	if len(ctx.History) == 1 {
+	if len(console.History) == 1 {
 		result.Error = errInvalidCommand
 		return result
 	}
 
 	// enlever le serveur actuel
-	ctx.History.Pop()
+	console.History.Pop()
 
-	prev, _ := ctx.History.Peek()
+	prev, _ := console.History.Peek()
 
-	server, err := ctx.FindServer(prev.Address)
+	server, err := console.FindServer(prev.Address)
 	if err != nil {
 		result.Error = err
 		return result
 	}
 
 	login := ""
-	if ctx.Identity != nil {
-		login = ctx.Identity.Login
+	if console.Identity != nil {
+		login = console.Identity.Login
 	}
 
 	account, err := server.CheckAccount(login)
@@ -42,18 +43,18 @@ func Back(ctx Context) any {
 		return result
 	}
 
-	ctx.Console.Server = server
-	ctx.Console.Account = account
+	console.Server = server
+	console.Account = account
 
-	if ctx.Account != nil && ctx.Account.Backdoor {
-		ctx.RemoveAccount(login)
-		ctx.RemoveIdentity(login)
+	if console.Account != nil && console.Account.Backdoor {
+		console.RemoveAccount(login)
+		console.RemoveIdentity(login)
 	}
 
-	ctx.InitMem()
+	console.InitMem()
 
 	b := strings.Builder{}
-	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", ctx.Server.Address)
+	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Address)
 	result.Output = b.String()
 
 	return result

@@ -7,7 +7,9 @@ var help = Cmd{
 }
 
 func Help(ctx Context) any {
+	// FIXME
+	//console := ctx.Value("console").(*Console)
 	res := ctx.Result()
-	res.Output = ctx.Help(ctx.Args)
+	//res.Output = console.Help(ctx.Args)
 	return res
 }

@@ -2,40 +2,35 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
-
-	"github.com/charmbracelet/bubbles/list"
 )
 
 // Cmd est une commande intermédiaire ou terminale dans le prompt
 // SubCmds == commande intermédiaire
 // Parse == commande terminale
 type Cmd struct {
-	Path       []string // chemin qui mène à la commande
-	Name       string   // nom de la commande
-	ShortHelp  string   // phrase d'aide
-	SubCmds    []Cmd    // sous-commandes (optionnel)
-	Args       []Arg    // arguments (optionnel)
-	Connected  bool     // la commande nécessite d'être connecté
-	Identified bool     // la commande nécessite d'avoir une identité active
-	Run        RunFunc  // fonction exécutée (optionnel)
-	Cancel     bool     // l'annulation d'une saisie entraine l'annulation de la commande
+	Name       string  // nom de la commande
+	ShortHelp  string  // phrase d'aide
+	Args       []Arg   // arguments (optionnel)
+	SubCmds    []Cmd   // sous-commandes (optionnel)
+	Connected  bool    // la commande nécessite d'être connecté
+	Identified bool    // la commande nécessite d'avoir une identité active
+	Run        RunFunc // fonction exécutée (optionnel)
 }
 
 type RunFunc func(ctx Context) any
 
+// ArgType type d'argument possible
 type ArgType int
 
 const (
-	LoginArg    ArgType = iota // identifiant utilisateur
-	PasswordArg                // mot de passe utilisateur
-	TextArg                    // ligne de texte libre
-	LongTextArg                // texte plus long
-	AmountArg                  // montant (nombre entier)
-	MessageArg                 // identifiant du message
-	LinkArg                    // identifiant du lien
-	TopicArg                   // identifiant d'un topic
-	PostArg                    // identifiant d'un post
+	ShortArg ArgType = iota
+	HiddenArg
+	LongArg
+	NumberArg
+	SelectArg
+	SelectNumberArg
 )
 
 // Arg décrit un argument. Il n'y a pas d'arguments optionnels
@@ -43,23 +38,79 @@ type Arg struct {
 	Type      ArgType
 	Name      string
 	ShortHelp string
+	Options   func(ctx Context) []Option
+}
+
+type Option struct {
+	Desc   string
+	Value  any
+	Filter string
+}
+
+func (a Arg) Parse(arg string) (any, error) {
+	switch a.Type {
+	case ShortArg, HiddenArg, LongArg, SelectArg:
+		return arg, nil
+	case NumberArg, SelectNumberArg:
+		return strconv.Atoi(arg)
+	}
+	return arg, nil
+}
+
+func (a Arg) OpenModal(ctx Context, cmd Cmd) any {
+	switch a.Type {
+	case ShortArg:
+		return OpenModalMsg(NewLine(ctx, cmd, a.Name, a.ShortHelp, false))
+	case HiddenArg:
+		return OpenModalMsg(NewLine(ctx, cmd, a.Name, a.ShortHelp, true))
+	case LongArg:
+		return OpenModalMsg(NewText(ctx, cmd, a.Name, a.ShortHelp))
+	case NumberArg:
+		return OpenModalMsg(NewNumber(ctx, cmd, a.Name, a.ShortHelp))
+	case SelectArg, SelectNumberArg:
+		return OpenModalMsg(NewSelect(ctx, cmd, a.Name, a.ShortHelp, a.Options(ctx)))
+	}
+	return nil
 }
 
 // Context décrit le contexte d'exécution d'une commande
 type Context struct {
-	*Console
-	Path []string
-	Args []string
-	Cmd
+	parent *Context
+	key    any
+	value  any
+	cmd    Cmd
+}
+
+// New retourne un nouveau contexte encapsulant le contexte parent
+func (c Context) New(key, value any, cmd Cmd) Context {
+	return Context{
+		parent: &c,
+		key:    key,
+		value:  value,
+		cmd:    cmd,
+	}
+}
+
+// Value accède à une valeur stockée dans le contexte
+func (c Context) Value(key any) any {
+	if c.key == key {
+		return c.value
+	}
+
+	if c.parent != nil {
+		return c.parent.Value(key)
+	}
+
+	return nil
 }
 
 // Prompt reconstruit la commande entrée à l'origine
 func (c Context) Prompt() string {
-	return fmt.Sprintf(
-		"%s %s",
-		strings.Join(c.Path, " "),
-		strings.Join(c.Args, " "),
-	)
+	if c.value == "root" || c.parent == nil {
+		return ""
+	}
+
+	return fmt.Sprintf("%s %s", c.parent.Prompt(), c.value)
 }
 
 // Result créé un objet Result de base par défaut
@@ -69,60 +120,90 @@ func (c Context) Result() Result {
 	}
 }
 
-func (c Context) Parse() any {
-	return c.Cmd.Parse(c)
+func (c Context) Cancel() *Context {
+	return c.parent
 }
 
-func (c Cmd) Parse(ctx Context) any {
-	if ctx.Console.Server == nil && c.Connected {
-		return Result{
-			Prompt: ctx.Prompt(),
-			Error:  errNotConnected,
-			Output: c.Help(ctx.Args),
-		}
+func (c Cmd) Parse(ctx Context, args []string) any {
+	res := ctx.Result()
+	// récupérer la console
+	console, _ := ctx.Value("console").(*Console)
+
+	if console.Server == nil && c.Connected {
+		res.Error = errNotConnected
+		res.Output = c.Help(args)
+		return res
 	}
 
-	if ctx.Console.Identity == nil && c.Identified {
+	if console.Identity == nil && c.Identified {
 		return Result{
 			Prompt: ctx.Prompt(),
 			Error:  errNotIdentified,
-			Output: c.Help(ctx.Args),
+			Output: c.Help(args),
 		}
 	}
 
-	if len(c.SubCmds) > 0 {
-		// trouver la sous-commande à exécuter
+	// parser les arguments
+	for _, arg := range c.Args {
+		if ctx.Value(arg.Name) != nil {
+			// déjà dans le contexte, on passe au suivant
+			continue
+		}
 
+		if len(args) > 0 {
+			// parser un argument
+			key := arg.Name
+			value, err := arg.Parse(args[0])
+			if err != nil {
+				return Result{
+					Prompt: ctx.Prompt(),
+					Error:  errInvalidArgument,
+					Output: c.Help(args),
+				}
+			}
+			// retiré l'argument parsé et enregistrer dans le contexte
+			args = args[1:]
+			ctx = ctx.New(key, value, c)
+		} else {
+			// ouvrir une fenêtre de saisie
+			// BUG si aucun arg n'a été parsé jusqu'ici, ctx contient la mauvaise commande !
+			return arg.OpenModal(ctx, c)
+		}
+	}
+
+	// poursuivre l'exécution avec une sous-commande
+	if len(c.SubCmds) > 0 {
 		// aucune sous-commande saisie
-		if len(ctx.Args) == 0 {
+		// FIXME ouvrir une fenêtre modale qui liste les sous-commandes
+		if len(args) == 0 {
 			return Result{
 				Prompt: ctx.Prompt(),
 				Error:  errMissingCommand,
-				Output: c.Help(ctx.Args),
+				Output: c.Help(args),
 			}
 		}
 
 		// chercher les sous-commandes avec le préfixe
-		cmds := c.Match(ctx.Args[0])
+		cmds := c.Match(args[0])
 
 		// aucune commande ne correspond a ce préfixe
 		if len(cmds) == 0 {
 			return Result{
 				Prompt: ctx.Prompt(),
-				Error:  fmt.Errorf("%s : %w", ctx.Args[0], errInvalidCommand),
-				Output: c.Help(ctx.Args),
+				Error:  fmt.Errorf("%s : %w", args[0], errInvalidCommand),
+				Output: c.Help(args),
 			}
 		}
 
-		// sélectionner la première commande qui correspond et poursuivre l'exécution
-		ctx.Cmd = cmds[0]
-		ctx.Path = append(ctx.Path, ctx.Args[0])
-		ctx.Args = ctx.Args[1:]
-		return ctx.Parse()
+		// sauver le choix parsé
+		nextCmd := cmds[0]
+		ctx = ctx.New(c.Name, nextCmd.Name, c)
+
+		// poursuivre l'exécution
+		return nextCmd.Parse(ctx, args[1:])
 	}
 
-	// on est arrivé au bout de l'arbre, la commande doit être exécutée
-
+	// pas de sous-commande, donc commande terminale
 	if c.Run == nil {
 		// ne devrait pas arriver
 		return Result{
@@ -131,52 +212,18 @@ func (c Cmd) Parse(ctx Context) any {
 		}
 	}
 
-	// vérifier si tous les arguments sont fournis. Si ce n'est pas le cas, ouvrir une fenêtre modale pour la saisie des arguments manquants
-	if len(ctx.Args) < len(c.Args) {
-		// trouver le premier argument manquant
-		arg := c.Args[len(ctx.Args)]
-		// afficher une interface de saisie pour cet argument
-		switch arg.Type {
-		case LoginArg, TextArg, AmountArg:
-			mod := NewLine(ctx, arg.ShortHelp, arg.Name, false, c.Cancel)
-			return OpenModalMsg(mod)
-		case PasswordArg:
-			mod := NewLine(ctx, arg.ShortHelp, arg.Name, true, c.Cancel)
-			return OpenModalMsg(mod)
-		case LongTextArg:
-			mod := NewText(ctx, arg.ShortHelp, arg.Name, c.Cancel)
-			return OpenModalMsg(mod)
-		case MessageArg:
-			messages := ctx.Identity.Messages
-			items := make([]list.Item, len(messages))
-			for i, m := range messages {
-				items[i] = m
-			}
-			mod := NewList(ctx, items, nil, c.Cancel)
-			return OpenModalMsg(mod)
-		case LinkArg:
-			links := ctx.Console.Server.Links
-			items := make([]list.Item, len(links))
-			for i, l := range links {
-				items[i] = l
-			}
-			mod := NewList(ctx, items, nil, c.Cancel)
-			return OpenModalMsg(mod)
-		}
-	}
-
 	// lancer l'exécution de la commande et retourner le résultat
 	return c.Run(ctx)
 }
 
 func (c Context) Resume() any {
-	return c.Parse()
+	return c.cmd.Parse(c, []string{})
 }
 
 // Usage décrit l'utilisation d'une commande
 func (c Cmd) Usage() string {
 	b := strings.Builder{}
-	fmt.Fprintf(&b, "%s %s", strings.ToUpper(strings.Join(c.Path, " ")), c.Name)
+	fmt.Fprintf(&b, "%s", c.Name)
 	if len(c.SubCmds) > 0 {
 		fmt.Fprintf(&b, " <SUBCOMMAND>")
 		return b.String()
@@ -196,25 +243,6 @@ func (c Cmd) Match(prefix string) []Cmd {
 		}
 	}
 	return cmds
-}
-
-func (c Cmd) FullCmd(args []string) string {
-	return fmt.Sprintf("%s %s %s",
-		strings.Join(c.Path, " "),
-		c.Name,
-		strings.Join(args, " "),
-	)
-}
-
-// CheckArgs vérifie que la commande reçoit le bon nombre d'arguments
-func (c Cmd) CheckArgs(args []string) error {
-	if len(args) < len(c.Args) {
-		return fmt.Errorf("%s : %w",
-			c.Args[len(args)].Name,
-			errMissingArgument,
-		)
-	}
-	return nil
 }
 
 func (c Cmd) Help(args []string) string {

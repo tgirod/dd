@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -13,101 +12,99 @@ var message = Cmd{
 	Identified: true,
 	SubCmds: []Cmd{
 		{
-			Path:      []string{"message"},
-			Name:      "list",
-			ShortHelp: "lister les messages",
-			Run:       MessageList,
-		},
-		{
-			Path:      []string{"message"},
 			Name:      "read",
 			ShortHelp: "lire un message",
-			Run:       MessageRead,
 			Args: []Arg{
 				{
-					Type:      MessageArg,
-					Name:      "index",
-					ShortHelp: "index du message à lire",
+					Type:      SelectNumberArg,
+					Name:      "id",
+					ShortHelp: "id du message à lire",
+					Options: func(ctx Context) []Option {
+						console := ctx.Value("console").(*Console)
+						msgs := console.Identity.Messages
+						opts := make([]Option, len(msgs))
+						for i, m := range msgs {
+							opts[i].Desc = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
+							opts[i].Value = i
+						}
+						return opts
+					},
 				},
 			},
+			Run: MessageRead,
 		},
 		{
-			Path:      []string{"message"},
 			Name:      "write",
 			ShortHelp: "écrire un message",
-			Run:       MessageWrite,
 			Args: []Arg{
 				{
 					Name:      "recipient",
 					ShortHelp: "destinataire du message",
-					Type:      TextArg,
+					Type:      ShortArg,
 				},
 				{
-					Type:      TextArg,
+					Type:      ShortArg,
 					Name:      "subject",
 					ShortHelp: "sujet du message",
 				},
 				{
-					Type:      LongTextArg,
+					Type:      LongArg,
 					Name:      "content",
 					ShortHelp: "contenu du message",
 				},
 			},
+			Run: MessageWrite,
 		},
 		{
-			Path:      []string{"message"},
 			Name:      "reply",
 			ShortHelp: "répondre à un message",
-			Run:       MessageReply,
 			Args: []Arg{
 				{
 					Name:      "id",
-					ShortHelp: "identifiant du message auquel répondre",
-					Type:      TextArg,
+					ShortHelp: "id du message auquel répondre",
+					Type:      SelectNumberArg,
+					Options: func(ctx Context) []Option {
+						console := ctx.Value("console").(*Console)
+						msgs := console.Identity.Messages
+						opts := make([]Option, len(msgs))
+						for i, m := range msgs {
+							opts[i].Desc = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
+							opts[i].Value = i
+						}
+						return opts
+					},
+				},
+				{
+					Type:      ShortArg,
+					Name:      "subject",
+					ShortHelp: "sujet du message",
+				},
+				{
+					Type:      LongArg,
+					Name:      "content",
+					ShortHelp: "contenu du message",
 				},
 			},
+			Run: MessageReply,
 		},
 	},
 }
 
-func MessageList(ctx Context) any {
-	b := strings.Builder{}
-	tw := tw(&b)
-
-	fmt.Fprintf(tw, "liste de tous les messages :\n")
-	for i, m := range ctx.Messages {
-		fmt.Fprintf(tw, "%d\t%s\t\n", i, m.Subject)
-	}
-	tw.Flush()
-
-	res := ctx.Result()
-	res.Output = b.String()
-	return res
-}
-
-func (m Message) Title() string       { return m.Sender }
-func (m Message) Description() string { return m.Subject }
-func (m Message) FilterValue() string { return m.Subject }
-
 func MessageRead(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	id := ctx.Value("id").(int)
 	res := ctx.Result()
 
-	index, err := strconv.Atoi(ctx.Args[0])
-	if err != nil {
+	if id < 0 || id >= len(console.Identity.Messages) {
 		res.Error = errInvalidArgument
 		return res
 	}
-
-	if index < 0 || index >= len(ctx.Messages) {
-		res.Error = errInvalidArgument
-		return res
-	}
+	msg := console.Identity.Messages[id]
+	console.Messages[id].Opened = true
 
 	b := strings.Builder{}
 
-	msg := ctx.Messages[index]
-	ctx.Messages[index].Opened = true
-
+	fmt.Fprintf(&b, "ID : %d\n", id)
 	fmt.Fprintf(&b, "De : %s\n", msg.Recipient)
 	fmt.Fprintf(&b, "Sujet : %s\n", msg.Subject)
 	fmt.Fprintln(&b, msg.Content)
@@ -117,23 +114,21 @@ func MessageRead(ctx Context) any {
 }
 
 func MessageWrite(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	recipient := ctx.Value("recipient").(string)
+	subject := ctx.Value("subject").(string)
+	content := ctx.Value("content").(string)
 	res := ctx.Result()
-
-	recipient := ctx.Args[0]
-
-	subject := ctx.Args[1]
-
-	content := ctx.Args[2]
 
 	// envoyer le message
 	msg := Message{
 		Recipient: recipient,
-		Sender:    ctx.Identity.Login,
+		Sender:    console.Identity.Login,
 		Subject:   subject,
 		Content:   content,
 	}
 
-	if err := ctx.MessageSend(msg); err != nil {
+	if err := console.MessageSend(msg); err != nil {
 		res.Error = err
 		return res
 	}
@@ -143,33 +138,28 @@ func MessageWrite(ctx Context) any {
 }
 
 func MessageReply(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	id := ctx.Value("id").(int)
+	subject := ctx.Value("subject").(string)
+	content := ctx.Value("content").(string)
 	res := ctx.Result()
 
-	index, err := strconv.Atoi(ctx.Args[0])
-	if err != nil {
+	if id < 0 || id >= len(console.Identity.Messages) {
 		res.Error = errInvalidArgument
 		return res
 	}
 
-	if index < 0 || index >= len(ctx.Messages) {
-		res.Error = errInvalidArgument
-		return res
-	}
-
-	original := ctx.Messages[index]
-	recipient := original.Sender
-	subject := ctx.Args[1]
-	content := ctx.Args[2]
+	recipient := console.Identity.Messages[id].Sender
 
 	// envoyer le message
 	msg := Message{
 		Recipient: recipient,
-		Sender:    ctx.Identity.Login,
+		Sender:    console.Identity.Login,
 		Subject:   subject,
 		Content:   content,
 	}
 
-	if err := ctx.MessageSend(msg); err != nil {
+	if err := console.MessageSend(msg); err != nil {
 		res.Error = err
 		return res
 	}

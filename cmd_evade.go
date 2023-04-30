@@ -12,19 +12,17 @@ var evade = Cmd{
 	SubCmds: []Cmd{
 		{
 			Name:      "list",
-			Path:      []string{"evade"},
 			ShortHelp: "liste les zones mémoires disponibles pour une évasion",
 			Run:       EvadeList,
 		},
 		{
 			Name:      "move",
-			Path:      []string{"evade"},
 			ShortHelp: "effectue la manoeuvre d'evasion vers une zone mémoire",
 			Args: []Arg{
 				{
 					Name:      "zone",
 					ShortHelp: "zone mémoire pour l'évasion",
-					Type:      TextArg,
+					Type:      ShortArg,
 				},
 			},
 			Run: EvadeMove,
@@ -33,10 +31,11 @@ var evade = Cmd{
 }
 
 func EvadeMove(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	zone := ctx.Value("zone").(string)
 	res := ctx.Result()
 
-	zone := ctx.Args[0]
-	available, ok := ctx.Mem[zone]
+	available, ok := console.Mem[zone]
 	if !ok {
 		res.Error = fmt.Errorf("%s : %w", zone, errMemNotFound)
 		return res
@@ -47,19 +46,20 @@ func EvadeMove(ctx Context) any {
 		return res
 	}
 
-	ctx.Mem[zone] = false
-	ctx.Countdown = ctx.Server.Scan
+	console.Mem[zone] = false
+	console.Countdown = console.Server.Scan
 	res.Output = fmt.Sprintf("session relocalisée dans la zone mémoire %s", zone)
 	return res
 }
 
 func EvadeList(ctx Context) any {
+	console := ctx.Value("console").(*Console)
 	res := ctx.Result()
 
 	b := strings.Builder{}
 	tw := tw(&b)
 	fmt.Fprintf(tw, "ZONE\tDISPONIBILITE\t\n")
-	for addr, available := range ctx.Mem {
+	for addr, available := range console.Mem {
 		if !available {
 			fmt.Fprintf(tw, "%s\t%s\t\n", addr, "INDISPONIBLE")
 		} else {

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"strings"
 	"time"
 
 	"github.com/mattn/go-shellwords"
@@ -62,6 +61,7 @@ var Hack = map[string]Cmd{
 }
 
 var baseCmds = Cmd{
+	Name: "root",
 	SubCmds: []Cmd{
 		back,
 		yes,
@@ -76,7 +76,6 @@ var baseCmds = Cmd{
 		quit,
 		registry,
 		message,
-		forum,
 	},
 }
 
@@ -98,11 +97,12 @@ func (c *Console) Parse(prompt string) any {
 	}
 	// args := strings.Fields(prompt)
 	ctx := Context{
-		Console: c,
-		Args:    args,
-		Cmd:     c.Cmd,
+		parent: nil,
+		key:    "console",
+		value:  c,
+		cmd:    c.Cmd,
 	}
-	return ctx.Parse()
+	return c.Cmd.Parse(ctx, args)
 }
 
 func (c *Console) connect(address string) error {
@@ -206,37 +206,6 @@ func (c *Console) AddResult(o Result) {
 		c.Results = c.Results[len(c.Results)-MAX_RESULTS : len(c.Results)]
 	}
 }
-
-// MessageNew affiche les messages non lus
-func (c *Console) MessageNew() {
-	b := strings.Builder{}
-	tw := tw(&b)
-
-	fmt.Fprintf(tw, "liste des messages non lus :\n")
-	for i, m := range c.Messages {
-		if !m.Opened {
-			fmt.Fprintf(tw, "%d\t%s\t\n", i, m.Subject)
-		}
-	}
-	tw.Flush()
-
-	c.AddResult(Result{
-		Prompt: "message new",
-		Output: b.String(),
-	})
-}
-
-// func (c *Console) MessageReply(index int) (MessageSendMsg, error) {
-// 	if c.Identity == nil || index < 0 || index >= len(c.Identity.Messages) {
-// 		return MessageSendMsg{}, errMessageNotFound
-// 	}
-
-// 	msg := c.Identity.Messages[index]
-// 	return MessageSendMsg{
-// 		Recipient: msg.Sender,
-// 		Subject:   fmt.Sprintf("Re: %s", msg.Subject),
-// 	}, nil
-// }
 
 func (c *Console) Delay() time.Duration {
 	if c.DNI {

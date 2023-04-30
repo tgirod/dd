@@ -18,7 +18,7 @@ const (
 // Server représente un serveur sur le Net
 type Server struct {
 	// Addresse du serveur sur le réseau
-	Address string
+	Address string `storm:"id"`
 
 	// ce serveur accepte-t-il des connexions anonymes ?
 	Public bool
@@ -98,7 +98,7 @@ func (s *Server) FindTarget(address string) (Link, error) {
 
 // Entry est une entrée dans une base de données
 type Entry struct {
-	// clef unique
+	// identifiant unique
 	ID string
 
 	// mots-clefs utilisés pour la recherche

@@ -12,26 +12,24 @@ var registry = Cmd{
 	SubCmds: []Cmd{
 		{
 			Name:      "search",
-			Path:      []string{"registry"},
 			ShortHelp: "recherche dans les registres",
 			Args: []Arg{
 				{
 					Name:      "prefix",
 					ShortHelp: "préfixe du nom du registre",
-					Type:      TextArg,
+					Type:      ShortArg,
 				},
 			},
 			Run: RegistrySearch,
 		},
 		{
 			Name:      "edit",
-			Path:      []string{"registry"},
 			ShortHelp: "modifie un registre",
 			Args: []Arg{
 				{
 					Name:      "name",
 					ShortHelp: "nom du registre à modifier",
-					Type:      TextArg,
+					Type:      ShortArg,
 				},
 			},
 			Run: RegistryEdit,
@@ -40,10 +38,11 @@ var registry = Cmd{
 }
 
 func RegistryEdit(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	name := ctx.Value("name").(string)
 	res := ctx.Result()
 
-	name := ctx.Args[0]
-	state, err := ctx.Server.RegistryEdit(name)
+	state, err := console.Server.RegistryEdit(name)
 
 	if err != nil {
 		res.Error = err
@@ -55,10 +54,11 @@ func RegistryEdit(ctx Context) any {
 }
 
 func RegistrySearch(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	prefix := ctx.Value("prefix").(string)
 	res := ctx.Result()
 
-	name := ctx.Args[0]
-	search := ctx.Server.RegistrySearch(name)
+	search := console.Server.RegistrySearch(prefix)
 
 	b := strings.Builder{}
 	tw := tw(&b)

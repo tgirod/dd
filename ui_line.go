@@ -38,20 +38,22 @@ func (k LineKeymap) FullHelp() [][]key.Binding {
 }
 
 type LineModel struct {
-	ctx    Context // contexte a exécuter après saisie
-	title  string  // titre de la fenêtre modale
-	input  textinput.Model
-	help   hhelp.Model
-	cancel bool
+	ctx   Context // contexte a exécuter après saisie
+	cmd   Cmd     // commande pour laquelle la fenêtre est ouverte
+	name  string  // utilisé comme clef pour stocker le résultat
+	title string  // titre de la fenêtre modale
+	input textinput.Model
+	help  hhelp.Model
 }
 
-func NewLine(ctx Context, title string, name string, hidden bool, cancel bool) *LineModel {
+func NewLine(ctx Context, cmd Cmd, name string, title string, hidden bool) *LineModel {
 	m := LineModel{
-		ctx:    ctx,
-		title:  title,
-		input:  textinput.New(),
-		help:   hhelp.New(),
-		cancel: cancel,
+		ctx:   ctx,
+		cmd:   cmd,
+		name:  name,
+		title: title,
+		input: textinput.New(),
+		help:  hhelp.New(),
 	}
 
 	m.input.Placeholder = name
@@ -102,10 +104,9 @@ func (m *LineModel) View() string {
 
 // Validate ajoute la saisie au contexte et relance l'exécution
 func (m *LineModel) Validate() (tea.Model, tea.Cmd) {
-	// ajouter une argument au contexte
-	arg := m.input.Value()
-	ctx := m.ctx
-	ctx.Args = append(ctx.Args, arg)
+	// stocker dans le contexte
+	ctx := m.ctx.New(m.name, m.input.Value(), m.cmd)
+
 	// retourner le contexte à relancer
 	cmd := tea.Batch(
 		MsgToCmd(CloseModalMsg{}),
@@ -115,18 +116,9 @@ func (m *LineModel) Validate() (tea.Model, tea.Cmd) {
 }
 
 func (m *LineModel) Cancel() (tea.Model, tea.Cmd) {
-	args := m.ctx.Args
-
-	// annuler la commande
-	if m.cancel || len(args) == 0 {
-		return m, MsgToCmd(CloseModalMsg{})
-	}
-
-	// retirer le dernier argument et relancer la commande
-	m.ctx.Args = args[0 : len(args)-1]
-	cmd := tea.Batch(
+	ctx := m.ctx.Cancel()
+	return m, tea.Batch(
 		MsgToCmd(CloseModalMsg{}),
-		MsgToCmd(m.ctx),
+		MsgToCmd(ctx),
 	)
-	return m, cmd
 }

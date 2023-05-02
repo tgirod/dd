@@ -76,6 +76,7 @@ var baseCmds = Cmd{
 		quit,
 		registry,
 		message,
+		forum,
 	},
 }
 

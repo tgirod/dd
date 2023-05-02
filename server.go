@@ -194,62 +194,33 @@ func (s *Server) CreateBackdoor(login string) {
 	s.Accounts = append(s.Accounts, acc)
 }
 
-type PostId int64 // time.UnixMicro()
-
 type Post struct {
-	ID      PostId
-	Parent  PostId
+	Parent  int // index du parent
 	Date    time.Time
 	Author  string
 	Subject string
 	Content string
 }
 
-// Post retourne le post correspondant à l'ID
-func (s *Server) Post(id PostId) (Post, error) {
-	for _, p := range s.Posts {
-		if p.ID == id {
-			return p, nil
-		}
-	}
-	return Post{}, fmt.Errorf("%d : %w", id, errPostNotFound)
-}
-
 // Topics liste les posts qui n'ont pas de parent
 func (s *Server) Topics() []Post {
 	topics := make([]Post, 0, len(s.Posts))
 	for _, p := range s.Posts {
-		if p.Parent == 0 {
+		if p.Parent == -1 {
 			topics = append(topics, p)
 		}
 	}
 	return topics
 }
 
-// Replies retourne la liste des réponses à un post
-func (s *Server) Replies(parent PostId) []Post {
+// Replies retourne la liste de toutes les réponses à un post (récursivement)
+func (s *Server) Replies(parent int) []Post {
 	topics := make([]Post, 0, len(s.Posts))
-	for _, p := range s.Posts {
+	for i, p := range s.Posts {
 		if p.Parent == parent {
 			topics = append(topics, p)
+			topics = append(topics, s.Replies(i)...)
 		}
 	}
 	return topics
-}
-
-func (s *Server) NewPost(p Post) Post {
-	// nouveau post
-	p.ID = PostId(time.Now().UnixMicro())
-	s.Posts = append(s.Posts, p)
-	return p
-}
-
-func (s *Server) UpdatePost(p Post) (Post, error) {
-	for i, old := range s.Posts {
-		if old.ID == p.ID {
-			s.Posts[i] = p
-			return p, nil
-		}
-	}
-	return p, errPostNotFound
 }

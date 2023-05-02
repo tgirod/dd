@@ -12,10 +12,10 @@ import (
 type Cmd struct {
 	Name       string  // nom de la commande
 	ShortHelp  string  // phrase d'aide
-	Args       []Arg   // arguments (optionnel)
-	SubCmds    []Cmd   // sous-commandes (optionnel)
 	Connected  bool    // la commande nécessite d'être connecté
 	Identified bool    // la commande nécessite d'avoir une identité active
+	Args       []Arg   // arguments (optionnel)
+	SubCmds    []Cmd   // sous-commandes (optionnel)
 	Run        RunFunc // fonction exécutée (optionnel)
 }
 

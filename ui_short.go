@@ -10,12 +10,12 @@ import (
 
 const UI_WIDTH = 60
 
-type LineKeymap struct {
+type ShortKeymap struct {
 	Validate key.Binding
 	Cancel   key.Binding
 }
 
-var DefaultLineKeymap = LineKeymap{
+var DefaultShortKeymap = ShortKeymap{
 	Validate: key.NewBinding(
 		key.WithKeys("enter"),
 		key.WithHelp("enter", "valider"),
@@ -26,26 +26,26 @@ var DefaultLineKeymap = LineKeymap{
 	),
 }
 
-func (k LineKeymap) ShortHelp() []key.Binding {
+func (k ShortKeymap) ShortHelp() []key.Binding {
 	return []key.Binding{k.Validate, k.Cancel}
 }
 
-func (k LineKeymap) FullHelp() [][]key.Binding {
+func (k ShortKeymap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.Validate},
 		{k.Cancel},
 	}
 }
 
-type LineModel struct {
+type ShortModel struct {
 	ctx   Context // contexte a exécuter après saisie
 	node  Node    // noeud en cours
 	input textinput.Model
 	help  hhelp.Model
 }
 
-func NewLine(ctx Context, node Node, hidden bool) *LineModel {
-	m := LineModel{
+func NewShort(ctx Context, node Node, hidden bool) *ShortModel {
+	m := ShortModel{
 		ctx:   ctx,
 		node:  node,
 		input: textinput.New(),
@@ -64,19 +64,19 @@ func NewLine(ctx Context, node Node, hidden bool) *LineModel {
 	return &m
 }
 
-func (m *LineModel) Init() tea.Cmd {
+func (m *ShortModel) Init() tea.Cmd {
 	return m.input.Focus()
 }
 
-func (m *LineModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *ShortModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
-		case key.Matches(msg, DefaultLineKeymap.Validate):
+		case key.Matches(msg, DefaultShortKeymap.Validate):
 			return m.Validate()
-		case key.Matches(msg, DefaultLineKeymap.Cancel):
+		case key.Matches(msg, DefaultShortKeymap.Cancel):
 			return m.Cancel()
 		default:
 			m.input, cmd = m.input.Update(msg)
@@ -91,15 +91,15 @@ func (m *LineModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 var uiStyle = lg.NewStyle().Width(UI_WIDTH)
 
-func (m *LineModel) View() string {
+func (m *ShortModel) View() string {
 	title := uiStyle.Copy().Align(lg.Center).MarginBottom(1).Render(m.node.Help())
 	input := m.input.View()
-	help := uiStyle.Copy().MarginTop(1).Render(m.help.View(DefaultLineKeymap))
+	help := uiStyle.Copy().MarginTop(1).Render(m.help.View(DefaultShortKeymap))
 	return uiStyle.Render(lg.JoinVertical(lg.Left, title, input, help))
 }
 
 // Validate ajoute la saisie au contexte et relance l'exécution
-func (m *LineModel) Validate() (tea.Model, tea.Cmd) {
+func (m *ShortModel) Validate() (tea.Model, tea.Cmd) {
 	// stocker dans le contexte
 	ctx := m.ctx.WithContext(
 		m.node,
@@ -115,7 +115,7 @@ func (m *LineModel) Validate() (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m *LineModel) Cancel() (tea.Model, tea.Cmd) {
+func (m *ShortModel) Cancel() (tea.Model, tea.Cmd) {
 	return m, tea.Batch(
 		MsgToCmd(CloseModalMsg{}),
 	)

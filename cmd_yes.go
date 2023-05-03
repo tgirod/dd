@@ -27,7 +27,7 @@ var yes = Cmd{
 					next: Number{
 						name: "amount",
 						help: "montant à transférer",
-						next: String{
+						next: Hidden{
 							name: "password",
 							help: "mot de passe du compte",
 							next: Run(YesPay),

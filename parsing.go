@@ -333,7 +333,7 @@ func (h Hidden) Help() string {
 func (h Hidden) Parse(ctx Context, args []string) any {
 	if len(args) == 0 {
 		// ouvrir une fenêtre modale
-		modal := NewLine(ctx, h, true)
+		modal := NewShort(ctx, h, true)
 		return OpenModalMsg(modal)
 	}
 
@@ -343,4 +343,62 @@ func (h Hidden) Parse(ctx Context, args []string) any {
 
 func (h Hidden) Resume(ctx Context, args []string) any {
 	return h.next.Parse(ctx, args)
+}
+
+type Text struct {
+	name string
+	help string
+	next Node
+}
+
+func (t Text) String() string {
+	return t.name
+}
+
+func (t Text) Help() string {
+	return t.help
+}
+
+func (t Text) Parse(ctx Context, args []string) any {
+	if len(args) == 0 {
+		// ouvrir une fenêtre modale
+		modal := NewShort(ctx, t, false)
+		return OpenModalMsg(modal)
+	}
+
+	ctx = ctx.WithContext(t, t.name, args[0])
+	return t.next.Parse(ctx, args[1:])
+}
+
+func (t Text) Resume(ctx Context, args []string) any {
+	return t.next.Parse(ctx, args)
+}
+
+type LongText struct {
+	name string
+	help string
+	next Node
+}
+
+func (t LongText) String() string {
+	return t.name
+}
+
+func (t LongText) Help() string {
+	return t.help
+}
+
+func (t LongText) Parse(ctx Context, args []string) any {
+	if len(args) == 0 {
+		// ouvrir une fenêtre modale
+		modal := NewLong(ctx, t)
+		return OpenModalMsg(modal)
+	}
+
+	ctx = ctx.WithContext(t, t.name, args[0])
+	return t.next.Parse(ctx, args[1:])
+}
+
+func (t LongText) Resume(ctx Context, args []string) any {
+	return t.next.Parse(ctx, args)
 }

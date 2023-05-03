@@ -38,10 +38,10 @@ var message = Cmd{
 				next: String{
 					name: "recipient",
 					help: "destinataire du message",
-					next: String{
+					next: Text{
 						name: "subject",
 						help: "sujet du message",
-						next: String{
+						next: LongText{
 							name: "content",
 							help: "contenu du message",
 							next: Run(MessageWrite),
@@ -65,7 +65,7 @@ var message = Cmd{
 						}
 						return opts
 					},
-					next: String{
+					next: LongText{
 						name: "content",
 						help: "contenu du message",
 						next: Run(MessageReply),

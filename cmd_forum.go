@@ -64,10 +64,10 @@ var forum = Cmd{
 			{
 				name: "write",
 				help: "ouvrir un nouveau sujet",
-				next: String{
+				next: Text{
 					name: "subject",
 					help: "sujet du post",
-					next: String{
+					next: LongText{
 						name: "content",
 						help: "contenu du post",
 						next: Run(PostWrite),
@@ -85,7 +85,7 @@ var forum = Cmd{
 						name:    "post",
 						help:    "message dans la discussion",
 						options: postList,
-						next: String{
+						next: LongText{
 							name: "content",
 							help: "contenu de la réponse",
 							next: Run(PostReply),

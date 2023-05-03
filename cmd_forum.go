@@ -14,7 +14,7 @@ func topicList(ctx Context) []Option {
 		// un post est un topic si il est son propre parent
 		if p.Parent == i {
 			opts = append(opts, Option{
-				desc:  fmt.Sprintf("%d -- %s -- %s", i, p.Author, p.Subject),
+				desc:  fmt.Sprintf("%s -- %s", p.Author, p.Subject),
 				value: i,
 			})
 		}
@@ -30,7 +30,7 @@ func postList(ctx Context) []Option {
 	for i, p := range posts {
 		if p.Parent == topic {
 			opts = append(opts, Option{
-				desc:  fmt.Sprintf("%d -- %s -- %s", i, p.Author, p.Subject),
+				desc:  fmt.Sprintf("%s -- %s", p.Author, p.Subject),
 				value: i,
 			})
 		}

@@ -61,7 +61,7 @@ func (c Context) Prompt() string {
 		return ""
 	}
 
-	return fmt.Sprintf("%s %s", c.parent.Prompt(), c.value)
+	return fmt.Sprintf("%v %v", c.parent.Prompt(), c.value)
 }
 
 // Result créé un objet Result de base par défaut

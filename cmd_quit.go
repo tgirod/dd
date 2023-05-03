@@ -15,7 +15,8 @@ func Quit(ctx Context) any {
 	console.Account = nil
 	console.Alert = false
 	console.History.Clear()
-	console.Branch = baseCmds
+	// BUG comment retirer les commandes de hack ?
+	// console.Branch = baseCmds
 
 	return ctx.Result(nil, "déconnexion effectuée")
 }

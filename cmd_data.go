@@ -6,33 +6,30 @@ import (
 )
 
 var data = Cmd{
-	Name:      "data",
-	ShortHelp: "recherche des données sur le serveur",
-	Connected: true,
-	SubCmds: []Cmd{
-		{
-			Name:      "search",
-			ShortHelp: "effectue une recherche par mot clef",
-			Args: []Arg{
-				{
-					Name:      "keyword",
-					ShortHelp: "mot clef utilisé pour la recherche",
-					Type:      ShortArg,
+	name:      "data",
+	help:      "recherche des données sur le serveur",
+	connected: true,
+	next: Branch{
+		name: "action",
+		cmds: []Cmd{
+			{
+				name: "search",
+				help: "effectue une recherche par mot clef",
+				next: String{
+					name: "keyword",
+					help: "mot clef utilisé pour la recherche",
+					next: Run(DataSearch),
 				},
 			},
-			Run: DataSearch,
-		},
-		{
-			Name:      "view",
-			ShortHelp: "affiche le contenu d'une entrée",
-			Args: []Arg{
-				{
-					Name:      "id",
-					ShortHelp: "identifiant de l'entrée à afficher",
-					Type:      ShortArg,
+			{
+				name: "view",
+				help: "affiche le contenu d'une entrée",
+				next: String{
+					name: "id",
+					help: "identifiant de l'entrée à afficher",
+					next: Run(DataView),
 				},
 			},
-			Run: DataView,
 		},
 	},
 }
@@ -40,11 +37,9 @@ var data = Cmd{
 func DataSearch(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	keyword := ctx.Value("keyword").(string)
-	result := ctx.Result()
 
 	if len([]rune(keyword)) < 3 {
-		result.Error = fmt.Errorf("%s : %w", keyword, errKeywordTooShort)
-		return result
+		return ctx.Result(fmt.Errorf("%s : %w", keyword, errKeywordTooShort), "")
 	}
 
 	// construire la réponse à afficher
@@ -62,19 +57,16 @@ func DataSearch(ctx Context) any {
 	}
 	tw.Flush()
 
-	result.Output = b.String()
-	return result
+	return ctx.Result(nil, b.String())
 }
 
 func DataView(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("id").(string)
-	result := ctx.Result()
 
 	entry, err := console.FindEntry(id, console.Identity.Login)
 	if err != nil {
-		result.Error = err
-		return result
+		return ctx.Result(err, "")
 	}
 
 	// construire la réponse à afficher
@@ -84,6 +76,5 @@ func DataView(ctx Context) any {
 	fmt.Fprintf(&b, "-------------------------------------\n")
 	fmt.Fprintf(&b, entry.Content)
 
-	result.Output = b.String()
-	return result
+	return ctx.Result(nil, b.String())
 }

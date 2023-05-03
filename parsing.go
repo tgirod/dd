@@ -73,6 +73,20 @@ func (c Context) Result(err error, output string) Result {
 	}
 }
 
+func (c Context) Output(output string) Result {
+	return Result{
+		Prompt: c.Prompt(),
+		Output: output,
+	}
+}
+
+func (c Context) Error(err error) Result {
+	return Result{
+		Prompt: c.Prompt(),
+		Error:  err,
+	}
+}
+
 func (c Context) Resume(args []string) any {
 	return c.node.Resume(c, args)
 }

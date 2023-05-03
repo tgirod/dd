@@ -55,17 +55,27 @@ type Result struct {
 }
 
 var Hack = map[string]Cmd{
-	// "jack":  jack,
-	// "evade": evade,
-	// "door":  door,
+	"jack":  jack,
+	"evade": evade,
+	"door":  door,
 }
 
 var baseCmds = Branch{
 	name: "root",
 	cmds: []Cmd{
-		identify,
-		link,
+		back,
+		yes,
 		connect,
+		data,
+		identify,
+		index,
+		link,
+		load,
+		plug,
+		quit,
+		registry,
+		message,
+		forum,
 	},
 }
 

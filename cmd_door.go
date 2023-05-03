@@ -8,15 +8,14 @@ import (
 type DoorMsg struct{}
 
 var door = Cmd{
-	Name:      "door",
-	ShortHelp: "créé une backdoor dans le serveur",
-	Connected: true,
-	Run:       Door,
+	name:      "door",
+	help:      "créé une backdoor dans le serveur",
+	connected: true,
+	next:      Run(Door),
 }
 
 func Door(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-	result := ctx.Result()
 
 	// créer une nouvelle identité aléatoire
 	id := console.CreateRandomIdentity()
@@ -30,6 +29,5 @@ func Door(ctx Context) any {
 	fmt.Fprintf(&b, "password: %s\n", id.Password)
 	fmt.Fprintf(&b, "cette backdoor sera détruite automatiquement après usage.\n")
 
-	result.Output = b.String()
-	return result
+	return ctx.Result(nil, b.String())
 }

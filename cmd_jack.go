@@ -6,29 +6,35 @@ import (
 )
 
 var jack = Cmd{
-	Name:      "jack",
-	ShortHelp: "force l'accès à un lien",
-	Connected: true,
-	Args:      link.Args,
-	Run:       Jack,
+	name:      "jack",
+	help:      "force l'accès à un lien",
+	connected: true,
+	next: Select{
+		name: "id",
+		help: "identifiant du lien",
+		options: func(ctx Context) []Option {
+			console := ctx.Value("console").(*Console)
+			links := console.Server.Links
+			opts := make([]Option, len(links))
+			for i, l := range links {
+				opts[i].desc = l.Desc
+				opts[i].value = i
+			}
+			return opts
+		},
+		next: Run(Jack),
+	},
 }
 
 func Jack(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-	res := ctx.Result()
 
 	id := ctx.Value("id").(int)
-
-	if id < 0 || id >= len(console.Server.Links) {
-		res.Error = errInvalidArgument
-		return res
-	}
 
 	link := console.Server.Links[id]
 
 	if err := console.Connect(link.Address, true); err != nil {
-		res.Error = err
-		return res
+		return ctx.Error(err)
 	}
 
 	console.History.Push(link)
@@ -37,6 +43,5 @@ func Jack(ctx Context) any {
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Server.Address)
 	fmt.Fprintf(&b, "%s\n", console.Server.Description)
-	res.Output = b.String()
-	return res
+	return ctx.Output(b.String())
 }

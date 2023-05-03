@@ -91,10 +91,6 @@ func (c Context) Resume(args []string) any {
 	return c.node.Resume(c, args)
 }
 
-func (c Context) Cancel() *Context {
-	return c.parent
-}
-
 // Node est un noeud dans l'arbre de parsing
 type Node interface {
 	String() string                        // nom du noeud
@@ -318,4 +314,33 @@ func (s Select) Parse(ctx Context, args []string) any {
 
 func (s Select) Resume(ctx Context, args []string) any {
 	return s.next.Parse(ctx, args)
+}
+
+type Hidden struct {
+	name string
+	help string
+	next Node
+}
+
+func (h Hidden) String() string {
+	return h.name
+}
+
+func (h Hidden) Help() string {
+	return h.help
+}
+
+func (h Hidden) Parse(ctx Context, args []string) any {
+	if len(args) == 0 {
+		// ouvrir une fenêtre modale
+		modal := NewLine(ctx, h, true)
+		return OpenModalMsg(modal)
+	}
+
+	ctx = ctx.WithContext(h, h.name, args[0])
+	return h.next.Parse(ctx, args[1:])
+}
+
+func (h Hidden) Resume(ctx Context, args []string) any {
+	return h.next.Parse(ctx, args)
 }

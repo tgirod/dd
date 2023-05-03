@@ -10,7 +10,7 @@ var identify = Cmd{
 	next: String{
 		name: "login",
 		help: "identifiant utilisateur",
-		next: String{
+		next: Hidden{
 			name: "password",
 			help: "mot de passe utilisateur",
 			next: Run(Identify),

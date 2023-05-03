@@ -6,19 +6,18 @@ import (
 )
 
 var back = Cmd{
-	Name:      "back",
-	ShortHelp: "quitte le serveur actuel et se reconnecte au serveur précédent",
-	Connected: true,
-	Run:       Back,
+	name:       "back",
+	help:       "quitte le serveur actuel et se reconnecte au serveur précédent",
+	connected:  true,
+	identified: false,
+	next:       Run(Back),
 }
 
 func Back(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-	result := ctx.Result()
 
 	if len(console.History) == 1 {
-		result.Error = errInvalidCommand
-		return result
+		return ctx.Result(errInvalidCommand, "")
 	}
 
 	// enlever le serveur actuel
@@ -28,8 +27,7 @@ func Back(ctx Context) any {
 
 	server, err := console.FindServer(prev.Address)
 	if err != nil {
-		result.Error = err
-		return result
+		return ctx.Result(err, "")
 	}
 
 	login := ""
@@ -39,8 +37,7 @@ func Back(ctx Context) any {
 
 	account, err := server.CheckAccount(login)
 	if err != nil {
-		result.Error = err
-		return result
+		return ctx.Result(err, "")
 	}
 
 	console.Server = server
@@ -55,7 +52,5 @@ func Back(ctx Context) any {
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Address)
-	result.Output = b.String()
-
-	return result
+	return ctx.Result(nil, b.String())
 }

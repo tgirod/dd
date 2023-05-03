@@ -105,7 +105,7 @@ func (m *LineModel) View() string {
 // Validate ajoute la saisie au contexte et relance l'exécution
 func (m *LineModel) Validate() (tea.Model, tea.Cmd) {
 	// stocker dans le contexte
-	ctx := m.ctx.New(m.name, m.input.Value(), m.cmd)
+	ctx := m.ctx.WithContext(m.name, m.input.Value(), m.cmd)
 
 	// retourner le contexte à relancer
 	cmd := tea.Batch(

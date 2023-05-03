@@ -3,21 +3,19 @@ package main
 import "fmt"
 
 var identify = Cmd{
-	Name:      "identify",
-	ShortHelp: "validation d'identité avec le login/password",
-	Args: []Arg{
-		{
-			Name:      "login",
-			ShortHelp: "identifiant utilsateur",
-			Type:      ShortArg,
-		},
-		{
-			Name:      "password",
-			ShortHelp: "mot de passe utilisateur",
-			Type:      HiddenArg,
+	name:       "identify",
+	help:       "validation d'identité avec le login/password",
+	connected:  false,
+	identified: false,
+	next: String{
+		name: "login",
+		help: "identifiant utilisateur",
+		next: String{
+			name: "password",
+			help: "mot de passe utilisateur",
+			next: Run(Identify),
 		},
 	},
-	Run: Identify,
 }
 
 func Identify(ctx Context) any {
@@ -25,12 +23,9 @@ func Identify(ctx Context) any {
 	login := ctx.Value("login").(string)
 	password := ctx.Value("password").(string)
 
-	res := ctx.Result()
 	if err := console.Identify(login, password); err != nil {
-		res.Error = err
-		return res
+		return ctx.Result(err, "")
 	}
 
-	res.Output = fmt.Sprintf("vous êtes identifié en tant que %s", login)
-	return res
+	return ctx.Result(nil, fmt.Sprintf("vous êtes identifié en tant que %s", login))
 }

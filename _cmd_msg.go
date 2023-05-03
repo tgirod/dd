@@ -6,6 +6,37 @@ import (
 )
 
 var message = Cmd{
+	name:       "message",
+	help:       "consulter et envoyer des messages privés",
+	connected:  true,
+	identified: true,
+	next: Branch{
+		name: "action",
+		cmds: []Cmd{
+			{
+				name: "read",
+				help: "lire un message",
+				next: Select{
+					name: "id",
+					help: "id du message à lire",
+					options: func(ctx Context) []Option {
+						console := ctx.Value("console").(*Console)
+						msgs := console.Identity.Messages
+						opts := make([]Option, len(msgs))
+						for i, m := range msgs {
+							opts[i].value = i
+							opts[i].desc = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
+						}
+						return opts
+					},
+					next: nil,
+				},
+			},
+		},
+	},
+}
+
+var message = Cmd{
 	Name:       "message",
 	ShortHelp:  "consulter et envoyer des messages privés",
 	Connected:  true,

@@ -126,7 +126,7 @@ func (m *SelectModel) Select() (tea.Model, tea.Cmd) {
 	item := m.list.SelectedItem().(Option)
 
 	// stocker le choix dans le contexte
-	ctx := m.ctx.New(m.name, item.Value, m.cmd)
+	ctx := m.ctx.WithContext(m.name, item.Value, m.cmd)
 
 	cmd := tea.Batch(
 		MsgToCmd(CloseModalMsg{}),

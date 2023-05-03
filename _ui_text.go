@@ -1,24 +1,22 @@
 package main
 
 import (
-	"strconv"
-
-	hhelp "github.com/charmbracelet/bubbles/help"
+	bt_help "github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
-	"github.com/charmbracelet/bubbles/textinput"
+	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
 )
 
-type NumberKeymap struct {
+type TextKeymap struct {
 	Validate key.Binding
 	Cancel   key.Binding
 }
 
-var DefaultNumberKeymap = NumberKeymap{
+var DefaultTextKeymap = TextKeymap{
 	Validate: key.NewBinding(
-		key.WithKeys("enter"),
-		key.WithHelp("enter", "valider"),
+		key.WithKeys("tab", "valider"),
+		key.WithHelp("tab", "valider"),
 	),
 	Cancel: key.NewBinding(
 		key.WithKeys("esc"),
@@ -26,86 +24,76 @@ var DefaultNumberKeymap = NumberKeymap{
 	),
 }
 
-func (k NumberKeymap) ShortHelp() []key.Binding {
+func (k TextKeymap) ShortHelp() []key.Binding {
 	return []key.Binding{k.Validate, k.Cancel}
 }
 
-func (k NumberKeymap) FullHelp() [][]key.Binding {
+func (k TextKeymap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.Validate},
 		{k.Cancel},
 	}
 }
 
-type NumberModel struct {
+type TextModel struct {
 	ctx   Context // contexte a exécuter après saisie
 	cmd   Cmd     // commande pour laquelle la fenêtre est ouverte
-	name  string  // utilisé comme clef pour stocker le résultat
+	name  string  // nom de l'argument
 	title string  // titre de la fenêtre modale
-	input textinput.Model
-	help  hhelp.Model
+	input textarea.Model
+	help  bt_help.Model
 }
 
-func NewNumber(ctx Context, cmd Cmd, name string, title string) *NumberModel {
-	m := NumberModel{
+func NewText(ctx Context, cmd Cmd, name string, title string) *TextModel {
+	m := TextModel{
 		ctx:   ctx,
 		cmd:   cmd,
 		name:  name,
 		title: title,
-		input: textinput.New(),
-		help:  hhelp.New(),
+		input: textarea.New(),
+		help:  bt_help.New(),
 	}
 
 	m.input.Placeholder = name
-	m.input.Width = 30
+	m.input.SetWidth(UI_WIDTH)
+	m.input.SetHeight(20)
 
 	m.help.Width = UI_WIDTH
 
 	return &m
 }
 
-func (m *NumberModel) Init() tea.Cmd {
+func (m *TextModel) Init() tea.Cmd {
 	return m.input.Focus()
 }
 
-func (m *NumberModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *TextModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
-		case key.Matches(msg, DefaultNumberKeymap.Validate):
+		case key.Matches(msg, DefaultTextKeymap.Validate):
 			return m.Validate()
-		case key.Matches(msg, DefaultNumberKeymap.Cancel):
+		case key.Matches(msg, DefaultTextKeymap.Cancel):
 			return m.Cancel()
-		default:
-			m.input, cmd = m.input.Update(msg)
 		}
-	default:
 		m.input, cmd = m.input.Update(msg)
-		return m, cmd
 	}
 
-	return m, nil
+	return m, cmd
 }
 
-func (m *NumberModel) View() string {
+func (m *TextModel) View() string {
 	title := uiStyle.Copy().Align(lg.Center).MarginBottom(1).Render(m.title)
 	input := m.input.View()
-	help := uiStyle.Copy().MarginTop(1).Render(m.help.View(DefaultNumberKeymap))
+	help := uiStyle.Copy().MarginTop(1).Render(m.help.View(DefaultTextKeymap))
 	return uiStyle.Render(lg.JoinVertical(lg.Left, title, input, help))
 }
 
 // Validate ajoute la saisie au contexte et relance l'exécution
-func (m *NumberModel) Validate() (tea.Model, tea.Cmd) {
-	value, err := strconv.Atoi(m.input.Value())
-	if err != nil {
-		m.input.Reset()
-		return m, nil
-	}
-
+func (m *TextModel) Validate() (tea.Model, tea.Cmd) {
 	// stocker dans le contexte
-	ctx := m.ctx.New(m.name, value, m.cmd)
+	ctx := m.ctx.WithContext(m.name, m.input.Value(), m.cmd)
 
 	// retourner le contexte à relancer
 	cmd := tea.Batch(
@@ -115,7 +103,7 @@ func (m *NumberModel) Validate() (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m *NumberModel) Cancel() (tea.Model, tea.Cmd) {
+func (m *TextModel) Cancel() (tea.Model, tea.Cmd) {
 	ctx := m.ctx.Cancel()
 	return m, tea.Batch(
 		MsgToCmd(CloseModalMsg{}),

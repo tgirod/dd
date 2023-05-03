@@ -119,7 +119,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case Context:
 		// reprendre l'exécution d'un contexte
-		cmds = append(cmds, MsgToCmd(msg.Resume()))
+		cmd := func() tea.Msg {
+			return msg.Resume([]string{})
+		}
+		cmds = append(cmds, cmd)
 
 	case SecurityMsg:
 		// boucle de sécurité

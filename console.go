@@ -15,7 +15,7 @@ type Console struct {
 	ID int
 
 	// racine de l'arbre des commandes
-	Cmd
+	Branch
 
 	// identité active sur la console
 	*Identity
@@ -55,34 +55,43 @@ type Result struct {
 }
 
 var Hack = map[string]Cmd{
-	"jack":  jack,
-	"evade": evade,
-	"door":  door,
+	// "jack":  jack,
+	// "evade": evade,
+	// "door":  door,
 }
 
-var baseCmds = Cmd{
-	Name: "root",
-	SubCmds: []Cmd{
-		back,
-		yes,
-		connect,
-		data,
-		help,
+var baseCmds = Branch{
+	name: "root",
+	cmds: []Cmd{
 		identify,
-		index,
 		link,
-		load,
-		plug,
-		quit,
-		registry,
-		message,
-		forum,
+		connect,
 	},
 }
 
+// var baseCmds = Cmd{
+// 	Name: "root",
+// 	SubCmds: []Cmd{
+// 		back,
+// 		yes,
+// 		connect,
+// 		data,
+// 		help,
+// 		identify,
+// 		index,
+// 		link,
+// 		load,
+// 		plug,
+// 		quit,
+// 		registry,
+// 		message,
+// 		forum,
+// 	},
+// }
+
 func NewConsole(net *Network) *Console {
 	return &Console{
-		Cmd:     baseCmds,
+		Branch:  baseCmds,
 		Network: net,
 	}
 }
@@ -96,14 +105,14 @@ func (c *Console) Parse(prompt string) any {
 			Output: "",
 		}
 	}
-	// args := strings.Fields(prompt)
+
 	ctx := Context{
 		parent: nil,
 		key:    "console",
 		value:  c,
-		cmd:    c.Cmd,
+		node:   nil,
 	}
-	return c.Cmd.Parse(ctx, args)
+	return c.Branch.Parse(ctx, args)
 }
 
 func (c *Console) connect(address string) error {
@@ -150,7 +159,7 @@ func (c *Console) Disconnect() {
 	c.Admin = false
 	c.Alert = false
 	c.History.Clear()
-	c.Cmd = baseCmds
+	c.Branch = baseCmds
 
 	// affichage par défaut
 	eval := Result{

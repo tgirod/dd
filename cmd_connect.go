@@ -10,23 +10,23 @@ type ConnectMsg struct {
 }
 
 var connect = Cmd{
-	Name:       "connect",
-	ShortHelp:  "établit la connexion avec un serveur",
-	Args:       []Arg{{Name: "address", ShortHelp: "adresse sur serveur auquel se connecter", Type: ShortArg}},
-	SubCmds:    []Cmd{},
-	Connected:  false,
-	Identified: false,
-	Run:        Connect,
+	name:       "connect",
+	help:       "établit la connexion avec un serveur",
+	connected:  false,
+	identified: false,
+	next: String{
+		name: "address",
+		help: "adresse du serveur auquel se connecter",
+		next: Run(Connect),
+	},
 }
 
 func Connect(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	address := ctx.Value("address").(string)
-	result := ctx.Result()
 
 	if err := console.Connect(address, false); err != nil {
-		result.Error = err
-		return result
+		return ctx.Result(err, "")
 	}
 
 	console.History.Clear()
@@ -35,6 +35,5 @@ func Connect(ctx Context) any {
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Server.Address)
 	fmt.Fprintf(&b, "%s\n", console.Server.Description)
-	result.Output = b.String()
-	return result
+	return ctx.Result(nil, b.String())
 }

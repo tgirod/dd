@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 var jack = Cmd{
@@ -22,7 +23,11 @@ var jack = Cmd{
 			}
 			return opts
 		},
-		next: Run(Jack),
+		next: Run(func(ctx Context) any {
+			ctx = ctx.WithContext(Run(Jack), "", nil)
+			m := NewLoader(ctx, 5*time.Second, []string{"hack en cours"})
+			return OpenModalMsg(m)
+		}),
 	},
 }
 

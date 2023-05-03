@@ -10,7 +10,7 @@ import (
 )
 
 type LoaderModel struct {
-	Context
+	ctx      Context
 	bar      progress.Model
 	duration time.Duration
 	status   []string
@@ -18,11 +18,12 @@ type LoaderModel struct {
 
 func NewLoader(ctx Context, duration time.Duration, status []string) *LoaderModel {
 	m := LoaderModel{
-		ctx,
-		progress.New(progress.WithDefaultGradient()),
-		duration,
-		status,
+		ctx:      ctx,
+		bar:      progress.New(progress.WithDefaultGradient()),
+		duration: duration,
+		status:   status,
 	}
+
 	m.bar.SetSpringOptions(1, 0)
 	return &m
 }
@@ -50,7 +51,7 @@ func (m *LoaderModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tickMsg:
 		if m.bar.Percent() >= 1.0 {
 			cmds = append(cmds,
-				func() tea.Msg { return m.Context },
+				func() tea.Msg { return m.ctx },
 				func() tea.Msg { return CloseModalMsg{} },
 			)
 			break

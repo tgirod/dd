@@ -141,8 +141,19 @@ func (b Branch) Parse(ctx Context, args []string) any {
 	// un argument à parser, on sélectionne le prochain noeud
 	for _, cmd := range b.cmds {
 		if strings.HasPrefix(cmd.name, args[0]) {
+			// HACK vérifier l'identité et la connectivité
+			console := ctx.Value("console").(*Console)
+			if cmd.connected && console.Server == nil {
+				return ctx.Error(errNotConnected)
+			}
+
+			if cmd.identified && console.Identity == nil {
+				return ctx.Error(errNotIdentified)
+			}
+
 			// une commande correspond, on enregistre dans le contexte et on continue
 			ctx = ctx.WithContext(b, b.name, cmd)
+
 			return cmd.next.Parse(ctx, args[1:])
 		}
 	}

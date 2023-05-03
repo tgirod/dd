@@ -8,15 +8,14 @@ import (
 type IndexMsg struct{}
 
 var index = Cmd{
-	Name:      "index",
-	ShortHelp: "liste les services disponibles dans le serveur courant",
-	Connected: true,
-	Run:       Index,
+	name:      "index",
+	help:      "liste les services disponibles dans le serveur courant",
+	connected: true,
+	next:      Run(Index),
 }
 
 func Index(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-	res := ctx.Result()
 
 	b := strings.Builder{}
 
@@ -27,6 +26,5 @@ func Index(ctx Context) any {
 	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries))
 	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers))
 
-	res.Output = b.String()
-	return res
+	return ctx.Result(nil, b.String())
 }

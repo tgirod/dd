@@ -31,13 +31,6 @@ func LinkCmd(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("id").(int)
 
-	if id < 0 || id >= len(console.Server.Links) {
-		return ctx.Result(
-			fmt.Errorf("%v : %w", id, errInvalidArgument),
-			"",
-		)
-	}
-
 	link := console.Server.Links[id]
 
 	if err := console.Connect(link.Address, false); err != nil {

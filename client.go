@@ -28,7 +28,7 @@ type Client struct {
 	*Console // console enregistrée dans le jeu
 }
 
-func NewClient(width, height int, net *Network) *Client {
+func NewClient(width, height int) *Client {
 	// barre de statut
 	status := statusbar.New(
 		statusbar.ColorConfig{
@@ -64,7 +64,7 @@ func NewClient(width, height int, net *Network) *Client {
 		input:   input,
 		output:  output,
 		status:  status,
-		Console: NewConsole(net),
+		Console: NewConsole(),
 	}
 	return c
 }
@@ -195,13 +195,10 @@ var (
 
 func (c *Client) View() string {
 	// mise à jour de la barre de statut
-	login := "anon"
-	if c.Console.Identity != nil {
-		login = fmt.Sprintf("id=%s", c.Console.Identity.Login)
-	}
+	login := c.Console.Identity.Login
 
 	admin := "user"
-	if c.Console.Session != nil && c.Console.Account != nil && c.Console.Account.Admin {
+	if c.Console.Session != nil && c.Console.Account.Admin {
 		admin = "admin"
 	}
 

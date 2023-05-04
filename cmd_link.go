@@ -15,11 +15,11 @@ var link = Cmd{
 		help: "identifiant du lien",
 		options: func(ctx Context) []Option {
 			console := ctx.Value("console").(*Console)
-			links := console.Server.Links
+			links := console.Server.Links()
 			opts := make([]Option, len(links))
 			for i, l := range links {
 				opts[i].help = l.Desc
-				opts[i].value = i
+				opts[i].value = l.ID
 			}
 			return opts
 		},
@@ -31,20 +31,17 @@ func LinkCmd(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("id").(int)
 
-	link := console.Server.Links[id]
+	link, err := console.Server.Link(id)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
 	if err := console.Connect(link.Address, false); err != nil {
-		return ctx.Result(
-			err,
-			"",
-		)
+		return ctx.Error(err)
 	}
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Server.Address)
 	fmt.Fprintf(&b, "%s\n", console.Server.Description)
-	return ctx.Result(
-		nil,
-		b.String(),
-	)
+	return ctx.Output(b.String())
 }

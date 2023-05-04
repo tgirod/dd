@@ -22,7 +22,7 @@ type Console struct {
 	*Session
 
 	// identité active
-	*Identity
+	Identity
 
 	// l'alerte est-elle activée ?
 	Alert bool
@@ -38,14 +38,11 @@ type Console struct {
 
 	// liste des dernières commandes évaluées
 	Results []Result
-
-	// état interne du jeu
-	*Network
 }
 
 type Session struct {
-	*Server
-	*Account
+	Server
+	Account
 	Parent *Session
 }
 
@@ -110,10 +107,9 @@ var baseCmds = Branch{
 // 	},
 // }
 
-func NewConsole(net *Network) *Console {
+func NewConsole() *Console {
 	return &Console{
-		Branch:  baseCmds,
-		Network: net,
+		Branch: baseCmds,
 	}
 }
 
@@ -133,38 +129,8 @@ func (c *Console) Parse(prompt string) any {
 		value:  c,
 		node:   nil,
 	}
+
 	return c.Branch.Parse(ctx, args)
-}
-
-func (c *Console) connect(address string) error {
-	var err error
-	var server *Server
-	var account *Account
-
-	// récupérer le serveur
-	if server, err = c.FindServer(address); err != nil {
-		return fmt.Errorf("%s : %w", address, err)
-	}
-
-	// vérifier que l'utilisateur a le droit de se connecter
-	login := ""
-	if c.Identity != nil {
-		login = c.Identity.Login
-	}
-	if account, err = server.CheckAccount(login); err != nil {
-		return err
-	}
-	c.Account = account
-
-	// enregistrer le nouveau serveur
-	c.Server = server
-
-	if c.Account != nil && c.Account.Backdoor {
-		c.Server.RemoveAccount(c.Account.Login)
-		c.Network.RemoveIdentity(c.Account.Login)
-	}
-	c.InitMem()
-	return nil
 }
 
 func (c *Console) InitMem() {
@@ -176,11 +142,9 @@ func (c *Console) InitMem() {
 }
 
 func (c *Console) Disconnect() {
-	c.Server = nil
-	c.Identity = nil
-	c.Admin = false
-	c.Alert = false
 	c.Session = nil
+	c.Identity = Identity{}
+	c.Alert = false
 	// BUG
 	// c.Branch = baseCmds
 
@@ -217,15 +181,15 @@ func (c *Console) StartAlert() {
 }
 
 func (c *Console) Identify(login, password string) error {
-	identity, err := c.CheckIdentity(login, password)
+	identity, err := CheckIdentity(login, password)
 	if err != nil {
 		return err
 	}
 	c.Identity = identity
 
 	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
-	if c.Server != nil {
-		if account, err := c.CheckAccount(login); err == nil {
+	if c.Session != nil {
+		if account, err := c.FindAccount(identity.Login); err == nil {
 			c.Account = account
 		}
 	}
@@ -249,20 +213,17 @@ func (c *Console) Delay() time.Duration {
 }
 
 func (c *Console) Connect(address string, force bool) error {
-	server, err := c.FindServer(address)
+	server, err := FindServer(address)
 	if err != nil {
 		return err
 	}
 
 	// login de l'identité courante (si elle existe)
-	login := ""
-	if c.Identity != nil {
-		login = c.Identity.Login
-	}
+	login := c.Identity.Login
 
-	account := server.FindAccount(login)
+	account, err := server.FindAccount(login)
 
-	if !force && !server.Public && account == nil {
+	if err != nil && !force && !server.Public {
 		return fmt.Errorf("%s : %w", login, errInvalidAccount)
 	}
 
@@ -272,9 +233,9 @@ func (c *Console) Connect(address string, force bool) error {
 		Parent:  c.Session,
 	}
 
-	if c.Account != nil && c.Account.Backdoor {
-		c.RemoveAccount(login)
-		c.RemoveIdentity(login)
+	if c.Account.Backdoor {
+		c.RemoveAccount(account)
+		RemoveIdentity(c.Identity)
 	}
 
 	c.InitMem()

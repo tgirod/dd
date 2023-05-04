@@ -24,7 +24,7 @@ var message = Cmd{
 						msgs := console.Identity.Messages
 						opts := make([]Option, len(msgs))
 						for i, m := range msgs {
-							opts[i].value = i
+							opts[i].value = m.ID
 							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
 						}
 						return opts
@@ -60,7 +60,7 @@ var message = Cmd{
 						msgs := console.Identity.Messages
 						opts := make([]Option, len(msgs))
 						for i, m := range msgs {
-							opts[i].value = i
+							opts[i].value = m.ID
 							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
 						}
 						return opts
@@ -107,7 +107,7 @@ func MessageWrite(ctx Context) any {
 		Content:   content,
 	}
 
-	if err := console.MessageSend(msg); err != nil {
+	if _, err := MessageSend(msg); err != nil {
 		return ctx.Result(err, "")
 	}
 
@@ -130,7 +130,7 @@ func MessageReply(ctx Context) any {
 		Content:   content,
 	}
 
-	if err := console.MessageSend(msg); err != nil {
+	if _, err := MessageSend(msg); err != nil {
 		return ctx.Result(err, "")
 	}
 

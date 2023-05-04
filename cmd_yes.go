@@ -58,12 +58,12 @@ func YesPay(ctx Context) any {
 	amount := ctx.Value("amount").(int)
 	password := ctx.Value("password").(string)
 
-	if _, err := console.CheckIdentity(console.Identity.Login, password); err != nil {
+	if _, err := CheckIdentity(console.Identity.Login, password); err != nil {
 		return ctx.Result(err, "")
 	}
 
 	from := console.Identity.Login
-	if err := console.Pay(from, to, amount); err != nil {
+	if err := Pay(from, to, amount); err != nil {
 		return ctx.Result(err, "")
 	}
 

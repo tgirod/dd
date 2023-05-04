@@ -2,18 +2,8 @@ package main
 
 import (
 	"encoding/base64"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"math/rand"
-	//"github.com/lithammer/fuzzysearch/fuzzy"
 )
-
-// Network contient l'état du jeu et les méthodes utiles pour en simplifier l'accès
-type Network struct {
-	Servers    []Server
-	Identities []Identity
-}
 
 type Identity struct {
 	Login    string `storm:"id"`
@@ -32,27 +22,26 @@ type Message struct {
 	Opened    bool   `storm:"index"` // pas encore lu
 }
 
-func (n *Network) MessageSend(m Message) error {
+func MessageSend(m Message) (Message, error) {
 	// trouver le destinataire
-	recipient, err := n.FindIdentity(m.Recipient)
+	_, err := FindIdentity(m.Recipient)
 	if err != nil {
+		return m, err
+	}
+
+	return Save(m)
+}
+
+func Pay(from, to string, amount int) error {
+	var src, dst Identity
+	var err error
+
+	if src, err = FindIdentity(from); err != nil {
 		return err
 	}
 
-	recipient.Messages = append(recipient.Messages, m)
-	return nil
-}
-
-func (n *Network) Pay(from, to string, amount int) error {
-	var src, dst *Identity
-	var err error
-
-	if src, err = n.FindIdentity(from); err != nil {
-		return errIdentityNotFound
-	}
-
-	if dst, err = n.FindIdentity(to); err != nil {
-		return errIdentityNotFound
+	if dst, err = FindIdentity(to); err != nil {
+		return err
 	}
 
 	if src.Yes < amount {
@@ -75,7 +64,7 @@ func randomString() string {
 	return base64.RawStdEncoding.EncodeToString(data)
 }
 
-func (n *Network) CreateRandomIdentity() Identity {
+func CreateRandomIdentity() (Identity, error) {
 	login := randomString()
 	password := randomString()
 	id := Identity{
@@ -84,64 +73,31 @@ func (n *Network) CreateRandomIdentity() Identity {
 		Name:     "",
 		Yes:      0,
 	}
-	n.Identities = append(n.Identities, id)
-	return id
+
+	return Save(id)
 }
 
-func (n *Network) RemoveIdentity(login string) {
-
+func RemoveIdentity(identity Identity) error {
+	return Delete(identity)
 }
 
-func (n *Network) CheckIdentity(login, password string) (*Identity, error) {
-	for i, id := range n.Identities {
-		if id.Login == login && id.Password == password {
-			return &n.Identities[i], nil
-		}
-	}
-	return nil, errInvalidIdentity
-}
-
-func (n *Network) FindIdentity(login string) (*Identity, error) {
-	for i, identity := range n.Identities {
-		if identity.Login == login {
-			return &n.Identities[i], nil
-		}
-	}
-
-	return nil, fmt.Errorf("%s : %w", login, errIdentityNotFound)
-}
-
-func (n *Network) FindServer(address string) (*Server, error) {
-	for i, server := range n.Servers {
-		if server.Address == address {
-			return &n.Servers[i], nil
-		}
-	}
-	return nil, fmt.Errorf("%s : %w", address, errServerNotFound)
-}
-
-func (n *Network) Serialize() {
-	ret, err := json.MarshalIndent(n, "", " ")
+func CheckIdentity(login, password string) (Identity, error) {
+	identity, err := FindIdentity(login)
 	if err != nil {
-		fmt.Println(err)
-	} else {
-
-		//What you get is a byte array, which needs to be converted into a string
-		//fmt.Println(string(ret))
-
-		// Write byte array to file
-		_ = ioutil.WriteFile("network.json", ret, 0644)
-
+		return identity, err
 	}
+
+	if identity.Password != password {
+		return identity, errInvalidIdentity
+	}
+
+	return identity, nil
 }
 
-func (n *Network) UnSerialize(filename string) {
-	content, err := ioutil.ReadFile(filename)
-	if err != nil {
-		fmt.Println("Cannot open JSON file")
-	}
-	err = json.Unmarshal(content, n)
-	if err != nil {
-		fmt.Println("Can't deserislize", content)
-	}
+func FindIdentity(login string) (Identity, error) {
+	return One[Identity]("Login", login)
+}
+
+func FindServer(address string) (Server, error) {
+	return One[Server]("Address", address)
 }

@@ -46,14 +46,14 @@ var (
 
 type App struct {
 	s *ssh.Server
-	*Network
 }
 
 // NewApp créé un nouvel objet application
 func NewApp() *App {
+	Init() // FIXME réinitialise la db à chaque démarrage
+
 	var err error
 	a := new(App)
-	a.Network = net
 
 	if a.s, err = wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", host, port)),
@@ -71,12 +71,6 @@ func NewApp() *App {
 
 // Start démarre le serveur, en attente de connexions
 func (a *App) Start(filename string) {
-
-	// UnSerialize from given file
-	if filename != "" {
-		a.Network.UnSerialize(filename)
-		log.Printf("Reading Game Stat from %s", filename)
-	}
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
@@ -109,7 +103,6 @@ func (a *App) Handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	client := NewClient(
 		pty.Window.Width,
 		pty.Window.Height,
-		a.Network,
 	)
 
 	return client, []tea.ProgramOption{tea.WithAltScreen()}

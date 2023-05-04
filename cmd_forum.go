@@ -8,16 +8,13 @@ import (
 
 func topicList(ctx Context) []Option {
 	console := ctx.Value("console").(*Console)
-	posts := console.Server.Posts
-	opts := make([]Option, 0, len(posts))
-	for i, p := range posts {
-		// un post est un topic si il est son propre parent
-		if p.Parent == i {
-			opts = append(opts, Option{
-				help:  fmt.Sprintf("%s -- %s", p.Author, p.Subject),
-				value: i,
-			})
-		}
+	topics := console.Server.Topics()
+	opts := make([]Option, 0, len(topics))
+	for _, t := range topics {
+		opts = append(opts, Option{
+			help:  fmt.Sprintf("%s -- %s", t.Author, t.Subject),
+			value: t.ID,
+		})
 	}
 	return opts
 }
@@ -25,13 +22,13 @@ func topicList(ctx Context) []Option {
 func postList(ctx Context) []Option {
 	console := ctx.Value("console").(*Console)
 	topic := ctx.Value("topic").(int)
-	posts := console.Server.Posts
+	posts := console.Server.Thread(topic)
 	opts := make([]Option, 0, len(posts))
-	for i, p := range posts {
+	for _, p := range posts {
 		if p.Parent == topic {
 			opts = append(opts, Option{
 				help:  fmt.Sprintf("%s -- %s", p.Author, p.Subject),
-				value: i,
+				value: p.ID,
 			})
 		}
 	}
@@ -101,7 +98,10 @@ func PostRead(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("post").(int)
 
-	post := console.Server.Posts[id]
+	post, err := console.Server.Post(id)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
 	b := strings.Builder{}
 
@@ -122,16 +122,19 @@ func PostWrite(ctx Context) any {
 	content := ctx.Value("content").(string)
 
 	post := Post{
-		Parent:  len(console.Posts),
+		Server:  console.Server.Address,
 		Date:    time.Now(),
 		Author:  console.Account.Login,
 		Subject: subject,
 		Content: content,
 	}
 
-	console.Server.Posts = append(console.Server.Posts, post)
+	post, err := Save(post)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
-	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", len(console.Server.Posts)))
+	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", post.ID))
 }
 
 func PostReply(ctx Context) any {
@@ -139,18 +142,25 @@ func PostReply(ctx Context) any {
 	id := ctx.Value("post").(int)
 	content := ctx.Value("content").(string)
 
-	original := console.Posts[id]
-	parent := console.Posts[original.Parent]
+	original, err := console.Server.Post(id)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
 	post := Post{
-		Parent:  original.Parent,
+		Server:  console.Server.Address,
+		ID:      id,
+		Parent:  original.ID,
 		Date:    time.Now(),
 		Author:  console.Account.Login,
-		Subject: fmt.Sprintf("Re: %s", parent.Subject),
+		Subject: fmt.Sprintf("Re: %s", original.Subject),
 		Content: content,
 	}
 
-	console.Server.Posts = append(console.Server.Posts, post)
+	post, err = Save(post)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
-	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", len(console.Server.Posts)))
+	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", post.ID))
 }

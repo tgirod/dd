@@ -143,11 +143,11 @@ func (b Branch) Parse(ctx Context, args []string) any {
 		if strings.HasPrefix(cmd.name, args[0]) {
 			// HACK vérifier l'identité et la connectivité
 			console := ctx.Value("console").(*Console)
-			if cmd.connected && console.Server == nil {
+			if cmd.connected && console.Session == nil {
 				return ctx.Error(errNotConnected)
 			}
 
-			if cmd.identified && console.Identity == nil {
+			if cmd.identified && console.Identity.Login == "" {
 				return ctx.Error(errNotIdentified)
 			}
 

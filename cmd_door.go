@@ -18,10 +18,16 @@ func Door(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 
 	// créer une nouvelle identité aléatoire
-	id := console.CreateRandomIdentity()
+	id, err := CreateRandomIdentity()
+	if err != nil {
+		return ctx.Error(err)
+	}
 
 	// créer une backdoor associée dans le serveur
-	console.CreateBackdoor(id.Login)
+	_, err = console.CreateBackdoor(id)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "backdoor créée sur le serveur %s\n", console.Server.Address)

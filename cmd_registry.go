@@ -13,10 +13,10 @@ var registry = Cmd{
 		help: "nom du registre",
 		options: func(ctx Context) []Option {
 			console := ctx.Value("console").(*Console)
-			opts := make([]Option, len(console.Registers))
-			for i, r := range console.Registers {
+			opts := make([]Option, len(console.Registers()))
+			for i, r := range console.Registers() {
 				opts[i] = Option{
-					value: i,
+					value: r.ID,
 					help:  fmt.Sprintf("%s : %s", r.Description, r.State),
 				}
 			}
@@ -28,12 +28,12 @@ var registry = Cmd{
 			options: func(ctx Context) []Option {
 				console := ctx.Value("console").(*Console)
 				id := ctx.Value("id").(int)
-				reg := console.Registers[id]
+				reg, _ := console.Register(id) // FIXME ignore une erreur
 				opts := make([]Option, len(reg.Options))
 				for i, o := range reg.Options {
 					opts[i] = Option{
-						value: o,
-						help:  "",
+						value: i,
+						help:  o,
 					}
 				}
 				return opts
@@ -46,10 +46,13 @@ var registry = Cmd{
 func RegistryEdit(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("id").(int)
-	state := ctx.Value("state").(string)
+	state := ctx.Value("state").(int)
 
-	reg := console.Registers[id]
-	reg.State = state
+	reg, err := console.Register(id)
+	if err != nil {
+		return ctx.Error(err)
+	}
+	reg.State = reg.Options[state]
 
-	return ctx.Output(fmt.Sprintf("nouvel état du registre : %s\n", state))
+	return ctx.Output(fmt.Sprintf("nouvel état du registre : %s\n", reg.State))
 }

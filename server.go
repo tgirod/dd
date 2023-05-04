@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
+	"github.com/asdine/storm/v3/q"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
@@ -15,25 +15,11 @@ type Server struct {
 	// ce serveur accepte-t-il des connexions anonymes ?
 	Public bool
 
-	// liste des comptes utilisateurs enregistrés
-	Accounts []Account
-
 	// informations affichées lors de la connexion
 	Description string
 
 	// durée du scan avant de se faire repérer par le serveur
 	Scan time.Duration
-
-	// liste des liens fournis par le serveur
-	Links []Link
-
-	// liste des données fournies par le serveur
-	Entries []Entry
-
-	// liste des registres fournis par le serveur
-	Registers []Register
-
-	Posts []Post
 }
 
 // Account représente un compte utilisateur sur un serveur
@@ -45,41 +31,12 @@ type Account struct {
 }
 
 // FindAccount cherche un compte utilisateur correspondant au login
-func (s *Server) FindAccount(login string) *Account {
-	for i, a := range s.Accounts {
-		if a.Login == login {
-			return &s.Accounts[i]
-		}
-	}
-	return nil
+func (s Server) FindAccount(login string) (Account, error) {
+	return First[Account](q.Eq("Server", s.Address), q.Eq("Login", login))
 }
 
-func (s *Server) CheckAccount(login string) (*Account, error) {
-	// cherche un compte utilisateur valide
-	for i, a := range s.Accounts {
-		if a.Login == login {
-			return &s.Accounts[i], nil
-		}
-	}
-
-	// si le serveur est public, autoriser l'accès quoi qu'il arrive
-	if s.Public {
-		return nil, nil
-	}
-
-	return nil, fmt.Errorf("%s : %w", login, errInvalidIdentity)
-}
-
-func (s *Server) RemoveAccount(login string) {
-	for i, a := range s.Accounts {
-		if a.Login == login {
-			// retirer la backdoor après usage
-			last := len(s.Accounts) - 1
-			s.Accounts[i] = s.Accounts[last]
-			s.Accounts = s.Accounts[:last]
-			return
-		}
-	}
+func (s Server) RemoveAccount(account Account) error {
+	return Delete(account)
 }
 
 type Link struct {
@@ -93,13 +50,19 @@ type Link struct {
 	Desc string
 }
 
-func (s *Server) FindTarget(address string) (Link, error) {
-	for _, t := range s.Links {
-		if t.Address == address {
-			return t, nil
-		}
+func (s Server) Links() []Link {
+	links, err := Find[Link](q.Eq("Server", s.Address))
+	if err != nil {
+		panic(err)
 	}
-	return Link{}, errInvalidArgument
+	return links
+}
+
+func (s Server) Link(id int) (Link, error) {
+	return First[Link](
+		q.Eq("Server", s.Address),
+		q.Eq("ID", id),
+	)
 }
 
 // Entry est une entrée dans une base de données
@@ -113,7 +76,7 @@ type Entry struct {
 	Keywords []string
 
 	// accessible uniquement au propriétaire
-	Owner string
+	Owner string `storm:"index"`
 
 	// titre de l'entrée
 	Title string
@@ -122,27 +85,40 @@ type Entry struct {
 	Content string
 }
 
-func (s *Server) DataSearch(keyword string, owner string) []Entry {
-	result := make([]Entry, 0, len(s.Entries))
-	for _, e := range s.Entries {
-		if e.Match(keyword) {
-			if e.Owner == "" || e.Owner == owner {
-				result = append(result, e)
-			}
-		}
+func (s Server) Entries() []Entry {
+	entries, err := Find[Entry](q.Eq("Server", s.Address))
+	if err != nil {
+		panic(err)
 	}
-	return result
+	return entries
 }
 
-func (s *Server) FindEntry(id string, owner string) (Entry, error) {
-	for _, e := range s.Entries {
-		if e.ID == id {
-			if e.Owner == "" || e.Owner == owner {
-				return e, nil
-			}
-		}
+func (s Server) DataSearch(keyword string, owner string) []Entry {
+	// FIXME je n'utilise pas le keyword, créer un q.Matcher
+	entries, err := Find[Entry](
+		q.Eq("Server", s.Address),
+		q.Or(
+			q.Eq("Owner", ""),
+			q.Eq("Owner", owner),
+		),
+	)
+
+	if err != nil {
+		panic(err)
 	}
-	return Entry{}, errInvalidArgument
+
+	return entries
+}
+
+func (s Server) FindEntry(id string, owner string) (Entry, error) {
+	return First[Entry](
+		q.Eq("Server", s.Address),
+		q.Eq("ID", id),
+		q.Or(
+			q.Eq("Owner", ""),
+			q.Eq("Owner", owner),
+		),
+	)
 }
 
 // Match détermine si l'entrée contient le mot-clef
@@ -160,45 +136,108 @@ type Register struct {
 	Options     []string // valeurs possible
 }
 
+func (s Server) Registers() []Register {
+	registers, err := Find[Register](q.Eq("Server", s.Address))
+	if err != nil {
+		panic(err)
+	}
+	return registers
+}
+
+func (s Server) Register(id int) (Register, error) {
+	return First[Register](
+		q.Eq("Server", s.Address),
+		q.Eq("ID", id),
+	)
+}
+
 // CreateBackdoor créé une backdoor dans le serveur
-func (s *Server) CreateBackdoor(login string) {
+func (s Server) CreateBackdoor(identity Identity) (Account, error) {
 	acc := Account{
-		Login:    login,
+		Login:    identity.Login,
+		Server:   s.Address,
 		Admin:    false,
 		Backdoor: true,
 	}
-	s.Accounts = append(s.Accounts, acc)
+	return Save(acc)
 }
 
 type Post struct {
 	Server  string `storm:"index"`
 	ID      int    `storm:"id,increment"`
-	Parent  int    // index du parent
+	Parent  int    `storm:"index"`
 	Date    time.Time
 	Author  string
 	Subject string
 	Content string
 }
 
-// Topics liste les posts qui n'ont pas de parent
-func (s *Server) Topics() []Post {
-	topics := make([]Post, 0, len(s.Posts))
-	for _, p := range s.Posts {
-		if p.Parent == -1 {
-			topics = append(topics, p)
-		}
+func (s Server) Posts() []Post {
+	posts, err := Find[Post](q.Eq("Server", s.Address))
+	if err != nil {
+		panic(err)
 	}
-	return topics
+	return posts
 }
 
-// Replies retourne la liste de toutes les réponses à un post (récursivement)
-func (s *Server) Replies(parent int) []Post {
-	topics := make([]Post, 0, len(s.Posts))
-	for i, p := range s.Posts {
-		if p.Parent == parent {
-			topics = append(topics, p)
-			topics = append(topics, s.Replies(i)...)
-		}
+func (s Server) Post(id int) (Post, error) {
+	return First[Post](
+		q.Eq("Server", s.Address),
+		q.Eq("ID", id),
+	)
+}
+
+// Topics liste les posts qui n'ont pas de parent
+func (s Server) Topics() []Post {
+	posts, err := Find[Post](
+		q.Eq("Server", s.Address),
+		q.Eq("Parent", 0),
+	)
+	if err != nil {
+		panic(err)
 	}
-	return topics
+	return posts
+}
+
+// Replies retourne la liste des réponses à un post
+func (s Server) Replies(parent int) []Post {
+	posts, err := Find[Post](
+		q.Eq("Server", s.Address),
+		q.Eq("Parent", parent),
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	return posts
+}
+
+func concat[T any](slices ...[]T) []T {
+	var res []T
+	for _, s := range slices {
+		res = append(res, s...)
+	}
+	return res
+}
+
+func (s Server) Thread(parent int) []Post {
+	thread, err := Find[Post](
+		q.Eq("Server", s.Address),
+		q.Eq("Parent", parent),
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	// insérer les réponses
+	for i, p := range thread {
+		rec := s.Thread(p.ID)
+		thread = concat(
+			thread[:i+1],
+			rec,
+			thread[i+1:],
+		)
+	}
+
+	return thread
 }

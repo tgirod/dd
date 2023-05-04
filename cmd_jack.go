@@ -42,7 +42,6 @@ func Jack(ctx Context) any {
 		return ctx.Error(err)
 	}
 
-	console.History.Push(link)
 	console.StartAlert()
 
 	b := strings.Builder{}

@@ -9,14 +9,7 @@ var quit = Cmd{
 
 func Quit(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-
-	console.Server = nil
-	console.Identity = nil
-	console.Account = nil
-	console.Alert = false
-	console.History.Clear()
-	// BUG comment retirer les commandes de hack ?
-	// console.Branch = baseCmds
+	console.Disconnect()
 
 	return ctx.Result(nil, "déconnexion effectuée")
 }

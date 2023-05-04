@@ -201,7 +201,7 @@ func (c *Client) View() string {
 	}
 
 	admin := "user"
-	if c.Console.Account != nil && c.Console.Account.Admin {
+	if c.Console.Session != nil && c.Console.Account != nil && c.Console.Account.Admin {
 		admin = "admin"
 	}
 
@@ -212,16 +212,11 @@ func (c *Client) View() string {
 		timer = fmt.Sprintf("%02d:%02d", min, sec)
 	}
 
-	// historique complet
-	b := strings.Builder{}
-	if len(c.Console.History) == 0 {
-		b.WriteString("déconnecté")
+	// chemin de connexion
+	hist := "déconnecté"
+	if c.Console.Session != nil {
+		hist = c.Console.Session.Path()
 	}
-	for _, h := range c.Console.History {
-		fmt.Fprintf(&b, "%s/", h.Address)
-	}
-
-	hist := fmt.Sprintf("net=%s", b.String())
 
 	c.status.SetContent(timer, hist, login, admin)
 

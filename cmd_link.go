@@ -40,8 +40,6 @@ func LinkCmd(ctx Context) any {
 		)
 	}
 
-	console.History.Push(link)
-
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Server.Address)
 	fmt.Fprintf(&b, "%s\n", console.Server.Description)

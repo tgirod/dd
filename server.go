@@ -44,6 +44,16 @@ type Account struct {
 	Backdoor bool
 }
 
+// FindAccount cherche un compte utilisateur correspondant au login
+func (s *Server) FindAccount(login string) *Account {
+	for i, a := range s.Accounts {
+		if a.Login == login {
+			return &s.Accounts[i]
+		}
+	}
+	return nil
+}
+
 func (s *Server) CheckAccount(login string) (*Account, error) {
 	// cherche un compte utilisateur valide
 	for i, a := range s.Accounts {

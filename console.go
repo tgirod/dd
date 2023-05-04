@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/mattn/go-shellwords"
@@ -17,11 +18,11 @@ type Console struct {
 	// racine de l'arbre des commandes
 	Branch
 
-	// identité active sur la console
-	*Identity
+	// informations sur la connexion au réseau
+	*Session
 
-	// compte utilisateur sur le serveur courant
-	*Account
+	// identité active
+	*Identity
 
 	// l'alerte est-elle activée ?
 	Alert bool
@@ -35,17 +36,27 @@ type Console struct {
 	// interface neurale directe
 	DNI bool
 
-	// Pile de serveurs visités lors de cette connexion
-	History Stack
-
 	// liste des dernières commandes évaluées
 	Results []Result
 
-	// serveur auquel la console est connectée
-	*Server
-
 	// état interne du jeu
 	*Network
+}
+
+type Session struct {
+	*Server
+	*Account
+	Parent *Session
+}
+
+func (s Session) Path() string {
+	var path []string
+	sess := &s
+	for sess != nil {
+		path = append([]string{sess.Server.Address}, path...)
+		sess = sess.Parent
+	}
+	return strings.Join(path, "/")
 }
 
 type Result struct {
@@ -166,10 +177,12 @@ func (c *Console) InitMem() {
 
 func (c *Console) Disconnect() {
 	c.Server = nil
+	c.Identity = nil
 	c.Admin = false
 	c.Alert = false
-	c.History.Clear()
-	c.Branch = baseCmds
+	c.Session = nil
+	// BUG
+	// c.Branch = baseCmds
 
 	// affichage par défaut
 	eval := Result{
@@ -241,21 +254,23 @@ func (c *Console) Connect(address string, force bool) error {
 		return err
 	}
 
+	// login de l'identité courante (si elle existe)
 	login := ""
 	if c.Identity != nil {
 		login = c.Identity.Login
 	}
 
-	if !force {
-		account, err := server.CheckAccount(login)
-		if err != nil {
-			return err
-		}
+	account := server.FindAccount(login)
 
-		c.Account = account
+	if !force && !server.Public && account == nil {
+		return fmt.Errorf("%s : %w", login, errInvalidAccount)
 	}
 
-	c.Server = server
+	c.Session = &Session{
+		Server:  server,
+		Account: account,
+		Parent:  c.Session,
+	}
 
 	if c.Account != nil && c.Account.Backdoor {
 		c.RemoveAccount(login)

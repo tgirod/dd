@@ -26,11 +26,8 @@ func Connect(ctx Context) any {
 	address := ctx.Value("address").(string)
 
 	if err := console.Connect(address, false); err != nil {
-		return ctx.Result(err, "")
+		return ctx.Error(err)
 	}
-
-	console.History.Clear()
-	console.History.Push(Link{address, ""})
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Server.Address)

@@ -1,5 +1,5 @@
 - [x] reste de niv d'accréditation
-- [ ] persistance des données
+- [x] persistance des données (voir branche db)
 - [ ] session
 - [ ] usurpation d'identité
 - [x] registres : liste de valeurs

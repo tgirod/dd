@@ -25,7 +25,7 @@ var message = Cmd{
 						opts := make([]Option, len(msgs))
 						for i, m := range msgs {
 							opts[i].value = i
-							opts[i].desc = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
+							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
 						}
 						return opts
 					},
@@ -61,7 +61,7 @@ var message = Cmd{
 						opts := make([]Option, len(msgs))
 						for i, m := range msgs {
 							opts[i].value = i
-							opts[i].desc = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
+							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
 						}
 						return opts
 					},

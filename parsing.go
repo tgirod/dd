@@ -278,7 +278,7 @@ type Select struct {
 
 type Option struct {
 	value any
-	desc  string
+	help  string
 }
 
 func (s Select) String() string {
@@ -292,7 +292,7 @@ func (s Select) Help() string {
 func (s Select) List(ctx Context) string {
 	b := strings.Builder{}
 	for _, o := range s.options(ctx) {
-		fmt.Fprintf(&b, "%v : %s\n", o.value, o.desc)
+		fmt.Fprintf(&b, "%v : %s\n", o.value, o.help)
 	}
 	return b.String()
 }

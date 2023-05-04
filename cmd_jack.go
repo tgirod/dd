@@ -18,7 +18,7 @@ var jack = Cmd{
 			links := console.Server.Links
 			opts := make([]Option, len(links))
 			for i, l := range links {
-				opts[i].desc = l.Desc
+				opts[i].help = l.Desc
 				opts[i].value = i
 			}
 			return opts

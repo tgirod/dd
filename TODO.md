@@ -2,5 +2,5 @@
 - [ ] persistance des données
 - [ ] session
 - [ ] usurpation d'identité
-- [ ] registres : liste de valeurs
+- [x] registres : liste de valeurs
 - [ ] data : on en fait quoi ?

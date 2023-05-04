@@ -3,12 +3,8 @@ package main
 import (
 	"fmt"
 	"time"
-	"unicode"
 
 	"github.com/lithammer/fuzzysearch/fuzzy"
-	"golang.org/x/text/runes"
-	"golang.org/x/text/transform"
-	"golang.org/x/text/unicode/norm"
 )
 
 // Server représente un serveur sur le Net
@@ -141,39 +137,9 @@ func (e Entry) Match(keyword string) bool {
 
 // Register représente registre mémoire qui peut être modifié pour contrôler quelque chose
 type Register struct {
-	Name        string
-	State       bool
 	Description string
-}
-
-func (r *Register) Match(name string) bool {
-	return fuzzy.MatchNormalizedFold(name, r.Name)
-}
-
-func (s *Server) RegistrySearch(name string) []Register {
-	result := make([]Register, 0, len(s.Registers))
-	for _, r := range s.Registers {
-		if r.Match(name) {
-			result = append(result, r)
-		}
-	}
-	return result
-}
-
-func normalize(s string) string {
-	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
-	out, _, _ := transform.String(t, s)
-	return out
-}
-
-func (s *Server) RegistryEdit(name string) (bool, error) {
-	for i, r := range s.Registers {
-		if r.Name == name {
-			s.Registers[i].State = !s.Registers[i].State
-			return s.Registers[i].State, nil
-		}
-	}
-	return false, fmt.Errorf("%s : %w", name, errRegisterNotFound)
+	State       string   // état actuel
+	Options     []string // valeurs possible
 }
 
 // CreateBackdoor créé une backdoor dans le serveur

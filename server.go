@@ -11,10 +11,6 @@ import (
 	"golang.org/x/text/unicode/norm"
 )
 
-const (
-	PUBLIC_PRIVILEGE int = 1
-)
-
 // Server représente un serveur sur le Net
 type Server struct {
 	// Addresse du serveur sur le réseau
@@ -103,9 +99,6 @@ type Entry struct {
 
 	// mots-clefs utilisés pour la recherche
 	Keywords []string
-
-	// niveau de privilège requis
-	Restricted int
 
 	// accessible uniquement au propriétaire
 	Owner string

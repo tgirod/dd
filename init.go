@@ -86,8 +86,8 @@ var dd = Server{
 		{"sono", true, "et je coupe le son ..."},
 	},
 	Entries: []Entry{
-		{"bluemars", []string{"boisson"}, 1, "jesus", "Blue Mars - le cocktail parfait", "la recette"},
-		{"mojito", []string{"boisson"}, 1, "", "Mojito - le cocktail classique", "Menthe, glace pilée, citron vert et plein de rhum"},
+		{"bluemars", []string{"boisson"}, "jesus", "Blue Mars - le cocktail parfait", "la recette"},
+		{"mojito", []string{"boisson"}, "", "Mojito - le cocktail classique", "Menthe, glace pilée, citron vert et plein de rhum"},
 	},
 	Scan: SEC1,
 }
@@ -196,18 +196,18 @@ var kramps_pers = Server{
 	Description: kperDesc,
 
 	Entries: []Entry{
-		{"G-F5", []string{"Sig.", "Raffaellino", "Bombieri"}, 1, "", "Sig. Raffaellino Bombieri", "Sig. Raffaellino Bombieri - 25/5/1963 - 1084dd5a-25ac-43c1-90f4-1bd3d7769680"},
-		{"G-H292", []string{"Humberto", "Plana-Chacón"}, 1, "", "Humberto Plana-Chacón", "Humberto Plana-Chacón - 2/5/1999 - 2e285752-3a57-4a6c-b4cc-556d3a9c873d"},
-		{"G-A37", []string{"Jonathan", "Swift"}, 1, "", "Jonathan Swift", "Jonathan Swift  - 11/4/1984 - 383de3ff-56eb-4745-b472-e046ff8e552e"},
-		{"G-F254", []string{"Éric", "Huet"}, 1, "", "Éric Huet", "Éric Huet - 14/7/1968 - 4ec26008-158e-433d-9fd0-7937a5ea4e13"},
-		{"G-J74", []string{"Angelina", "Deledda"}, 1, "", "Angelina Deledda", "Angelina Deledda - 21/12/1965 - d764f740-fca3-436e-b36f-8f4c63e923f1"},
-		{"G-C50", []string{"Romana", "Tutino"}, 1, "", "Romana Tutino", "Romana Tutino - 1/5/1986 - 199c14a3-ff9b-4dbe-9e27-1083c890d5d3"},
-		{"G-L35", []string{"Azahar", "Marcos", "Piñol"}, 1, "", "Azahar Marcos Piñol", "Azahar Marcos Piñol - 5/12/1990 - f68c0dd9-0a85-41f4-8a23-91dc30efd7b1"},
-		{"G-C3", []string{"Harvey", "Zimmermann"}, 1, "", "Harvey Zimmermann", "Harvey Zimmermann  - 15/11/1961 - a37dd901-6526-4913-8900-daf9af5f8fab"},
-		{"G-F196", []string{"Mary", "Flynn"}, 1, "", "Mary Flynn", "Mary Flynn - 5/9/1983 - 18518deb-c136-4045-8f58-32ed11621e25"},
-		{"G-N19", []string{"Ing.", "Constantin", "Briemer"}, 1, "", "Ing. Constantin Briemer", "Ing. Constantin Briemer - 30/10/2000 - ed3f45c9-4396-4675-b2e3-545ce188bbe5"},
-		{"G-C279", []string{"Dott.", "Cecilia", "Passalacqua"}, 1, "", "Dott. Cecilia Passalacqua", "Dott. Cecilia Passalacqua - 7/2/1969 - e3eca928-532f-4281-ab6d-c3c8539bfff4"},
-		{"G-S20", []string{"Alfredo", "Vendetti"}, 1, "", "Alfredo Vendetti", "Alfredo Vendetti - 15/5/1958 - 5f945848-4682-4282-b8d7-65aebb52be5c"},
+		{"G-F5", []string{"Sig.", "Raffaellino", "Bombieri"}, "", "Sig. Raffaellino Bombieri", "Sig. Raffaellino Bombieri - 25/5/1963 - 1084dd5a-25ac-43c1-90f4-1bd3d7769680"},
+		{"G-H292", []string{"Humberto", "Plana-Chacón"}, "", "Humberto Plana-Chacón", "Humberto Plana-Chacón - 2/5/1999 - 2e285752-3a57-4a6c-b4cc-556d3a9c873d"},
+		{"G-A37", []string{"Jonathan", "Swift"}, "", "Jonathan Swift", "Jonathan Swift  - 11/4/1984 - 383de3ff-56eb-4745-b472-e046ff8e552e"},
+		{"G-F254", []string{"Éric", "Huet"}, "", "Éric Huet", "Éric Huet - 14/7/1968 - 4ec26008-158e-433d-9fd0-7937a5ea4e13"},
+		{"G-J74", []string{"Angelina", "Deledda"}, "", "Angelina Deledda", "Angelina Deledda - 21/12/1965 - d764f740-fca3-436e-b36f-8f4c63e923f1"},
+		{"G-C50", []string{"Romana", "Tutino"}, "", "Romana Tutino", "Romana Tutino - 1/5/1986 - 199c14a3-ff9b-4dbe-9e27-1083c890d5d3"},
+		{"G-L35", []string{"Azahar", "Marcos", "Piñol"}, "", "Azahar Marcos Piñol", "Azahar Marcos Piñol - 5/12/1990 - f68c0dd9-0a85-41f4-8a23-91dc30efd7b1"},
+		{"G-C3", []string{"Harvey", "Zimmermann"}, "", "Harvey Zimmermann", "Harvey Zimmermann  - 15/11/1961 - a37dd901-6526-4913-8900-daf9af5f8fab"},
+		{"G-F196", []string{"Mary", "Flynn"}, "", "Mary Flynn", "Mary Flynn - 5/9/1983 - 18518deb-c136-4045-8f58-32ed11621e25"},
+		{"G-N19", []string{"Ing.", "Constantin", "Briemer"}, "", "Ing. Constantin Briemer", "Ing. Constantin Briemer - 30/10/2000 - ed3f45c9-4396-4675-b2e3-545ce188bbe5"},
+		{"G-C279", []string{"Dott.", "Cecilia", "Passalacqua"}, "", "Dott. Cecilia Passalacqua", "Dott. Cecilia Passalacqua - 7/2/1969 - e3eca928-532f-4281-ab6d-c3c8539bfff4"},
+		{"G-S20", []string{"Alfredo", "Vendetti"}, "", "Alfredo Vendetti", "Alfredo Vendetti - 15/5/1958 - 5f945848-4682-4282-b8d7-65aebb52be5c"},
 	},
 	Registers: []Register{
 		{"G-F5_AC1_10", false, ""},
@@ -534,58 +534,58 @@ var kramps_inmates = Server{
 	Scan:        SEC3,
 	Description: kinmatesDesc,
 	Entries: []Entry{
-		{"PR-289", []string{"Josué", "Cobos"}, 1, "", "Josué Cobos", "Josué Cobos - 1/3/1989 - 1e80def0-56e2-4334-a5e9-3900c68e924a"},
-		{"PX-149", []string{"Iker", "Diaz-Figuerola"}, 1, "", "Iker Diaz-Figuerola", "Iker Diaz-Figuerola - 19/1/1960 - ecf774b2-d824-4e39-83a6-71a3ea504d48"},
-		{"PO-235", []string{"Shannon", "Ward"}, 1, "", "Shannon Ward", "Shannon Ward - 19/9/1965 - 5b5e9a8f-7059-41fa-abc1-834fad65dcae"},
-		{"PS-161", []string{"Dipl.-Ing.", "Rebecca", "Briemer"}, 1, "", "Dipl.-Ing. Rebecca Briemer", "Dipl.-Ing. Rebecca Briemer - 26/3/1992 - a62cc240-954f-4731-a2d9-fcf1428a6deb"},
-		{"PB-32", []string{"Rembrandt", "Gatto-Togliatti"}, 1, "", "Rembrandt Gatto-Togliatti", "Rembrandt Gatto-Togliatti - 2/3/1955 - 5b073a69-cf82-41f4-a69b-766aa8dabb71"},
-		{"PR-58", []string{"Gustavo", "Soto", "Blanca"}, 1, "", "Gustavo Soto Blanca", "Gustavo Soto Blanca - 19/11/1965 - 9a5947a2-b306-4927-987f-41d0171fd21b"},
-		{"PK-224", []string{"Sig.", "Sabatino", "Zecchini"}, 1, "", "Sig. Sabatino Zecchini", "Sig. Sabatino Zecchini - 29/9/1980 - ca15d1f5-d2b5-471e-b7ed-bf374a65fe9f"},
-		{"PF-47", []string{"Stefan", "Jasinski"}, 1, "", "Stefan Jasinski", "Stefan Jasinski - 15/3/1988 - c54dd982-6526-cd42-8900-cbe27f5f8fab"},
-		{"PC-261", []string{"Eusebia", "Pozo-Botella"}, 1, "", "Eusebia Pozo-Botella", "Eusebia Pozo-Botella - 21/7/1967 - 715c2159-72ea-4738-a401-b5a58506e694"},
-		{"PN-94", []string{"Nieves", "Vázquez", "Franco"}, 1, "", "Nieves Vázquez Franco", "Nieves Vázquez Franco - 30/9/1961 - 8def9643-e69b-45ba-81fe-41ffbfddb4ef"},
-		{"PR-1", []string{"Grégoire", "Menard"}, 1, "", "Grégoire Menard", "Grégoire Menard - 24/3/1955 - 44a26bdf-0210-4607-abd7-aa9cadbbdf1c"},
-		{"PO-114", []string{"Sébastien", "Albert"}, 1, "", "Sébastien Albert", "Sébastien Albert - 3/3/2002 - 868b22aa-370e-4d7e-ae0f-26c22eb0ec1c"},
-		{"PX-280", []string{"Ing.", "Eveline", "Buchholz"}, 1, "", "Ing. Eveline Buchholz", "Ing. Eveline Buchholz - 9/2/1979 - 39de7fda-a12d-4da7-ac74-4d8802095f69"},
-		{"PS-197", []string{"Bruce", "Hoffman"}, 1, "", "Bruce Hoffman", "Bruce Hoffman - 28/4/1978 - a1e241a4-6b8d-4e2e-bb77-3f93242fa942"},
-		{"PV-144", []string{"Stefania", "Cagnin"}, 1, "", "Stefania Cagnin", "Stefania Cagnin - 22/8/1994 - 1e6d16c6-2f9c-4d07-804a-1b44d042cc1d"},
-		{"PR-25", []string{"Adelgunde", "Krebs", "B.Eng."}, 1, "", "Adelgunde Krebs B.Eng.", "Adelgunde Krebs B.Eng. - 30/10/1974 - fe435f6a-84ae-41c5-80ae-e4239a270b00"},
-		{"PN-173", []string{"Sig.", "Cesare", "Mazzi"}, 1, "", "Sig. Cesare Mazzi", "Sig. Cesare Mazzi - 24/6/1956 - ad980090-d686-4637-a204-90a0b956a68b"},
-		{"PD-256", []string{"Univ.Prof.", "Wolf-Rüdiger", "Cichorius"}, 1, "", "Univ.Prof. Wolf-Rüdiger Cichorius", "Univ.Prof. Wolf-Rüdiger Cichorius - 23/6/1950 - fe2944cf-bfa1-404f-8d72-4bfcf1129376"},
-		{"PA-186", []string{"Isidora", "del", "Olivera"}, 1, "", "Isidora del Olivera", "Isidora del Olivera - 30/9/1952 - e713a1d1-fbdc-4048-a12e-6f1f4961537a"},
-		{"PK-222", []string{"Jolanda", "Guinizzelli-Panicucci"}, 1, "", "Jolanda Guinizzelli-Panicucci", "Jolanda Guinizzelli-Panicucci - 21/4/1953 - 9363dd30-7e40-4d91-8ea3-db67ea58c45b"},
-		{"PV-28", []string{"Swen", "Ullrich"}, 1, "", "Swen Ullrich", "Swen Ullrich - 23/12/1990 - 6f2287cf-036e-4372-bc3e-ad5d408283d2"},
-		{"PZ-176", []string{"Galo", "Santamaria", "Carro"}, 1, "", "Galo Santamaria Carro", "Galo Santamaria Carro - 8/6/1959 - 2b19228c-3c84-4031-a3b6-ff4be465e1b5"},
-		{"PS-58", []string{"Philippe", "Guillaume", "de", "Pinto"}, 1, "", "Philippe Guillaume de Pinto", "Philippe Guillaume de Pinto - 23/9/2000 - 167b7a42-4fd6-4d12-aaf1-4f32c3704705"},
-		{"PH-270", []string{"André", "de", "la", "Ribeiro"}, 1, "", "André de la Ribeiro", "André de la Ribeiro - 14/2/2002 - 4000c990-9824-49e3-b53e-30d4b9c5bf6c"},
-		{"PT-19", []string{"Saverio", "Trotta-Pontecorvo"}, 1, "", "Saverio Trotta-Pontecorvo", "Saverio Trotta-Pontecorvo - 16/12/1953 - b40ca3bc-6f1b-480e-81b7-f6b744ab6d32"},
-		{"PI-135", []string{"Erin", "Kelly"}, 1, "", "Erin Kelly", "Erin Kelly - 10/8/1978 - 13496acb-9112-4b34-9890-413f9f6d3343"},
-		{"PP-250", []string{"Renata", "Tomasetti-Camicione"}, 1, "", "Renata Tomasetti-Camicione", "Renata Tomasetti-Camicione - 25/11/1953 - 4c0f783a-59fd-46bf-be87-e97b97db9460"},
-		{"PE-15", []string{"Isidro", "Cabezas", "Dalmau"}, 1, "", "Isidro Cabezas Dalmau", "Isidro Cabezas Dalmau - 7/12/2000 - 8ec8657f-23e0-4114-b096-1b78ba7e71bb"},
-		{"PN-44", []string{"Gregory", "Thomas"}, 1, "", "Gregory Thomas", "Gregory Thomas - 2/5/1969 - fd62a7e7-6a87-4ca8-a629-b03e1cbe3ecf"},
-		{"PL-187", []string{"Rocío", "Carbajo"}, 1, "", "Rocío Carbajo", "Rocío Carbajo - 3/3/1983 - f23845bc-2952-4898-a165-99dd7dcfcb87"},
-		{"PV-240", []string{"Amanda", "Pinamonte"}, 1, "", "Amanda Pinamonte", "Amanda Pinamonte - 14/9/2000 - 1bd20f1a-9eea-47a3-a0b8-c46e39c762fe"},
-		{"PO-270", []string{"Adelia", "de", "Marquez"}, 1, "", "Adelia de Marquez", "Adelia de Marquez - 10/8/1961 - ed4529cc-118e-41b1-b8d5-d8b8f5e824b1"},
-		{"PM-58", []string{"Jochem", "Scheibe-Köhler"}, 1, "", "Jochem Scheibe-Köhler", "Jochem Scheibe-Köhler - 24/11/1959 - fa641ac5-2b4b-42b4-9ec7-0fe1a6241221"},
-		{"PE-66", []string{"Fabrizia", "Agostini"}, 1, "", "Fabrizia Agostini", "Fabrizia Agostini - 7/2/1981 - b8fa7024-2342-49f1-a94c-aa6eb7d5be6b"},
-		{"PW-168", []string{"Jennifer", "Martin"}, 1, "", "Jennifer Martin", "Jennifer Martin - 19/1/1959 - 0471c610-34c5-49cf-aaa1-a9e06584eb88"},
-		{"PC-263", []string{"Gülsen", "Trapp"}, 1, "", "Gülsen Trapp", "Gülsen Trapp - 9/10/1968 - 7554027a-4841-42d6-9ee3-222f16518ef8"},
-		{"PX-217", []string{"Elizabeth", "Wilson"}, 1, "", "Elizabeth Wilson", "Elizabeth Wilson - 18/11/1987 - 1f2275db-890f-465e-8a66-9ba5e59358c5"},
-		{"PI-40", []string{"Che", "Rozas", "Montesinos"}, 1, "", "Che Rozas Montesinos", "Che Rozas Montesinos - 12/12/2000 - 5ac440eb-c586-4051-9abd-736ee40c9ada"},
-		{"PK-4", []string{"Gilles", "Pereira"}, 1, "", "Gilles Pereira", "Gilles Pereira - 26/5/2002 - c378d251-d729-4a88-9187-70570b2ddb89"},
-		{"PC-52", []string{"Marcial", "Rodrigo"}, 1, "", "Marcial Rodrigo", "Marcial Rodrigo - 19/11/1953 - 3f5fe026-7da2-40b1-a799-159a0c2322d5"},
-		{"PA-21", []string{"Pedro", "Ramirez"}, 1, "", "Pedro Ramirez", "Pedro Ramirez - 8/7/1991 - 383ca3ff-58eb-4745-efff-e046ff8e552e"},
-		{"PL-25", []string{"Valentine", "Clerc"}, 1, "", "Valentine Clerc", "Valentine Clerc - 30/5/1970 - 0d4dfc82-e8f7-47e2-9c48-3726d2f8c064"},
-		{"PG-11", []string{"Miguel", "Williams"}, 1, "", "Miguel Williams", "Miguel Williams - 1/2/1970 - 937859bc-9d1d-4b8d-98ae-08e541df9159"},
-		{"PN-144", []string{"Vera", "Pont", "Avilés"}, 1, "", "Vera Pont Avilés", "Vera Pont Avilés - 12/7/1987 - 03c9b13c-f632-4fb6-b0cb-8aefb17e7c74"},
-		{"PH-148", []string{"Robert", "Ellis"}, 1, "", "Robert Ellis", "Robert Ellis - 5/3/1971 - 007862ec-20c8-48bf-aeef-43c4ba76b8c6"},
-		{"PR-8", []string{"David", "Stewart"}, 1, "", "David Stewart", "David Stewart - 1/2/1964 - acc87482-6c76-4212-a9e1-ab5060d4a6be"},
-		{"PV-35", []string{"Marino", "Torre", "Canet"}, 1, "", "Marino Torre Canet", "Marino Torre Canet - 28/6/1956 - d1648b3a-51a5-4239-9da9-edf3c3e8539e"},
-		{"PH-169", []string{"Jeanne", "Pages", "de", "la", "Grondin"}, 1, "", "Jeanne Pages de la Grondin", "Jeanne Pages de la Grondin - 29/6/1994 - 25494162-e01b-4b15-b7de-990648ca8d76"},
-		{"PO-276", []string{"Sophia", "Nunez"}, 1, "", "Sophia Nunez", "Sophia Nunez - 5/8/1991 - 0f84aada-680f-4450-b21b-07ae9f16f047"},
-		{"PO-297", []string{"Gabriela", "Águila-Viana"}, 1, "", "Gabriela Águila-Viana", "Gabriela Águila-Viana - 26/10/1957 - ec29fc1b-c977-4fce-bfba-b07e441aa5e9"},
-		{"PJ-1", []string{"Rosa", "María", "Noguera", "Sastre"}, 1, "", "Rosa María Noguera Sastre", "Rosa María Noguera Sastre - 25/12/1956 - 7284cbfb-39a8-4511-a4f9-0f52dc834fe1"},
-		{"PW-12", []string{"Lisa", "Steele"}, 1, "", "Lisa Steele", "Lisa Steele - 7/12/1952 - a7580a18-00ed-42ee-90d6-192bed734e86"},
+		{"PR-289", []string{"Josué", "Cobos"}, "", "Josué Cobos", "Josué Cobos - 1/3/1989 - 1e80def0-56e2-4334-a5e9-3900c68e924a"},
+		{"PX-149", []string{"Iker", "Diaz-Figuerola"}, "", "Iker Diaz-Figuerola", "Iker Diaz-Figuerola - 19/1/1960 - ecf774b2-d824-4e39-83a6-71a3ea504d48"},
+		{"PO-235", []string{"Shannon", "Ward"}, "", "Shannon Ward", "Shannon Ward - 19/9/1965 - 5b5e9a8f-7059-41fa-abc1-834fad65dcae"},
+		{"PS-161", []string{"Dipl.-Ing.", "Rebecca", "Briemer"}, "", "Dipl.-Ing. Rebecca Briemer", "Dipl.-Ing. Rebecca Briemer - 26/3/1992 - a62cc240-954f-4731-a2d9-fcf1428a6deb"},
+		{"PB-32", []string{"Rembrandt", "Gatto-Togliatti"}, "", "Rembrandt Gatto-Togliatti", "Rembrandt Gatto-Togliatti - 2/3/1955 - 5b073a69-cf82-41f4-a69b-766aa8dabb71"},
+		{"PR-58", []string{"Gustavo", "Soto", "Blanca"}, "", "Gustavo Soto Blanca", "Gustavo Soto Blanca - 19/11/1965 - 9a5947a2-b306-4927-987f-41d0171fd21b"},
+		{"PK-224", []string{"Sig.", "Sabatino", "Zecchini"}, "", "Sig. Sabatino Zecchini", "Sig. Sabatino Zecchini - 29/9/1980 - ca15d1f5-d2b5-471e-b7ed-bf374a65fe9f"},
+		{"PF-47", []string{"Stefan", "Jasinski"}, "", "Stefan Jasinski", "Stefan Jasinski - 15/3/1988 - c54dd982-6526-cd42-8900-cbe27f5f8fab"},
+		{"PC-261", []string{"Eusebia", "Pozo-Botella"}, "", "Eusebia Pozo-Botella", "Eusebia Pozo-Botella - 21/7/1967 - 715c2159-72ea-4738-a401-b5a58506e694"},
+		{"PN-94", []string{"Nieves", "Vázquez", "Franco"}, "", "Nieves Vázquez Franco", "Nieves Vázquez Franco - 30/9/1961 - 8def9643-e69b-45ba-81fe-41ffbfddb4ef"},
+		{"PR-1", []string{"Grégoire", "Menard"}, "", "Grégoire Menard", "Grégoire Menard - 24/3/1955 - 44a26bdf-0210-4607-abd7-aa9cadbbdf1c"},
+		{"PO-114", []string{"Sébastien", "Albert"}, "", "Sébastien Albert", "Sébastien Albert - 3/3/2002 - 868b22aa-370e-4d7e-ae0f-26c22eb0ec1c"},
+		{"PX-280", []string{"Ing.", "Eveline", "Buchholz"}, "", "Ing. Eveline Buchholz", "Ing. Eveline Buchholz - 9/2/1979 - 39de7fda-a12d-4da7-ac74-4d8802095f69"},
+		{"PS-197", []string{"Bruce", "Hoffman"}, "", "Bruce Hoffman", "Bruce Hoffman - 28/4/1978 - a1e241a4-6b8d-4e2e-bb77-3f93242fa942"},
+		{"PV-144", []string{"Stefania", "Cagnin"}, "", "Stefania Cagnin", "Stefania Cagnin - 22/8/1994 - 1e6d16c6-2f9c-4d07-804a-1b44d042cc1d"},
+		{"PR-25", []string{"Adelgunde", "Krebs", "B.Eng."}, "", "Adelgunde Krebs B.Eng.", "Adelgunde Krebs B.Eng. - 30/10/1974 - fe435f6a-84ae-41c5-80ae-e4239a270b00"},
+		{"PN-173", []string{"Sig.", "Cesare", "Mazzi"}, "", "Sig. Cesare Mazzi", "Sig. Cesare Mazzi - 24/6/1956 - ad980090-d686-4637-a204-90a0b956a68b"},
+		{"PD-256", []string{"Univ.Prof.", "Wolf-Rüdiger", "Cichorius"}, "", "Univ.Prof. Wolf-Rüdiger Cichorius", "Univ.Prof. Wolf-Rüdiger Cichorius - 23/6/1950 - fe2944cf-bfa1-404f-8d72-4bfcf1129376"},
+		{"PA-186", []string{"Isidora", "del", "Olivera"}, "", "Isidora del Olivera", "Isidora del Olivera - 30/9/1952 - e713a1d1-fbdc-4048-a12e-6f1f4961537a"},
+		{"PK-222", []string{"Jolanda", "Guinizzelli-Panicucci"}, "", "Jolanda Guinizzelli-Panicucci", "Jolanda Guinizzelli-Panicucci - 21/4/1953 - 9363dd30-7e40-4d91-8ea3-db67ea58c45b"},
+		{"PV-28", []string{"Swen", "Ullrich"}, "", "Swen Ullrich", "Swen Ullrich - 23/12/1990 - 6f2287cf-036e-4372-bc3e-ad5d408283d2"},
+		{"PZ-176", []string{"Galo", "Santamaria", "Carro"}, "", "Galo Santamaria Carro", "Galo Santamaria Carro - 8/6/1959 - 2b19228c-3c84-4031-a3b6-ff4be465e1b5"},
+		{"PS-58", []string{"Philippe", "Guillaume", "de", "Pinto"}, "", "Philippe Guillaume de Pinto", "Philippe Guillaume de Pinto - 23/9/2000 - 167b7a42-4fd6-4d12-aaf1-4f32c3704705"},
+		{"PH-270", []string{"André", "de", "la", "Ribeiro"}, "", "André de la Ribeiro", "André de la Ribeiro - 14/2/2002 - 4000c990-9824-49e3-b53e-30d4b9c5bf6c"},
+		{"PT-19", []string{"Saverio", "Trotta-Pontecorvo"}, "", "Saverio Trotta-Pontecorvo", "Saverio Trotta-Pontecorvo - 16/12/1953 - b40ca3bc-6f1b-480e-81b7-f6b744ab6d32"},
+		{"PI-135", []string{"Erin", "Kelly"}, "", "Erin Kelly", "Erin Kelly - 10/8/1978 - 13496acb-9112-4b34-9890-413f9f6d3343"},
+		{"PP-250", []string{"Renata", "Tomasetti-Camicione"}, "", "Renata Tomasetti-Camicione", "Renata Tomasetti-Camicione - 25/11/1953 - 4c0f783a-59fd-46bf-be87-e97b97db9460"},
+		{"PE-15", []string{"Isidro", "Cabezas", "Dalmau"}, "", "Isidro Cabezas Dalmau", "Isidro Cabezas Dalmau - 7/12/2000 - 8ec8657f-23e0-4114-b096-1b78ba7e71bb"},
+		{"PN-44", []string{"Gregory", "Thomas"}, "", "Gregory Thomas", "Gregory Thomas - 2/5/1969 - fd62a7e7-6a87-4ca8-a629-b03e1cbe3ecf"},
+		{"PL-187", []string{"Rocío", "Carbajo"}, "", "Rocío Carbajo", "Rocío Carbajo - 3/3/1983 - f23845bc-2952-4898-a165-99dd7dcfcb87"},
+		{"PV-240", []string{"Amanda", "Pinamonte"}, "", "Amanda Pinamonte", "Amanda Pinamonte - 14/9/2000 - 1bd20f1a-9eea-47a3-a0b8-c46e39c762fe"},
+		{"PO-270", []string{"Adelia", "de", "Marquez"}, "", "Adelia de Marquez", "Adelia de Marquez - 10/8/1961 - ed4529cc-118e-41b1-b8d5-d8b8f5e824b1"},
+		{"PM-58", []string{"Jochem", "Scheibe-Köhler"}, "", "Jochem Scheibe-Köhler", "Jochem Scheibe-Köhler - 24/11/1959 - fa641ac5-2b4b-42b4-9ec7-0fe1a6241221"},
+		{"PE-66", []string{"Fabrizia", "Agostini"}, "", "Fabrizia Agostini", "Fabrizia Agostini - 7/2/1981 - b8fa7024-2342-49f1-a94c-aa6eb7d5be6b"},
+		{"PW-168", []string{"Jennifer", "Martin"}, "", "Jennifer Martin", "Jennifer Martin - 19/1/1959 - 0471c610-34c5-49cf-aaa1-a9e06584eb88"},
+		{"PC-263", []string{"Gülsen", "Trapp"}, "", "Gülsen Trapp", "Gülsen Trapp - 9/10/1968 - 7554027a-4841-42d6-9ee3-222f16518ef8"},
+		{"PX-217", []string{"Elizabeth", "Wilson"}, "", "Elizabeth Wilson", "Elizabeth Wilson - 18/11/1987 - 1f2275db-890f-465e-8a66-9ba5e59358c5"},
+		{"PI-40", []string{"Che", "Rozas", "Montesinos"}, "", "Che Rozas Montesinos", "Che Rozas Montesinos - 12/12/2000 - 5ac440eb-c586-4051-9abd-736ee40c9ada"},
+		{"PK-4", []string{"Gilles", "Pereira"}, "", "Gilles Pereira", "Gilles Pereira - 26/5/2002 - c378d251-d729-4a88-9187-70570b2ddb89"},
+		{"PC-52", []string{"Marcial", "Rodrigo"}, "", "Marcial Rodrigo", "Marcial Rodrigo - 19/11/1953 - 3f5fe026-7da2-40b1-a799-159a0c2322d5"},
+		{"PA-21", []string{"Pedro", "Ramirez"}, "", "Pedro Ramirez", "Pedro Ramirez - 8/7/1991 - 383ca3ff-58eb-4745-efff-e046ff8e552e"},
+		{"PL-25", []string{"Valentine", "Clerc"}, "", "Valentine Clerc", "Valentine Clerc - 30/5/1970 - 0d4dfc82-e8f7-47e2-9c48-3726d2f8c064"},
+		{"PG-11", []string{"Miguel", "Williams"}, "", "Miguel Williams", "Miguel Williams - 1/2/1970 - 937859bc-9d1d-4b8d-98ae-08e541df9159"},
+		{"PN-144", []string{"Vera", "Pont", "Avilés"}, "", "Vera Pont Avilés", "Vera Pont Avilés - 12/7/1987 - 03c9b13c-f632-4fb6-b0cb-8aefb17e7c74"},
+		{"PH-148", []string{"Robert", "Ellis"}, "", "Robert Ellis", "Robert Ellis - 5/3/1971 - 007862ec-20c8-48bf-aeef-43c4ba76b8c6"},
+		{"PR-8", []string{"David", "Stewart"}, "", "David Stewart", "David Stewart - 1/2/1964 - acc87482-6c76-4212-a9e1-ab5060d4a6be"},
+		{"PV-35", []string{"Marino", "Torre", "Canet"}, "", "Marino Torre Canet", "Marino Torre Canet - 28/6/1956 - d1648b3a-51a5-4239-9da9-edf3c3e8539e"},
+		{"PH-169", []string{"Jeanne", "Pages", "de", "la", "Grondin"}, "", "Jeanne Pages de la Grondin", "Jeanne Pages de la Grondin - 29/6/1994 - 25494162-e01b-4b15-b7de-990648ca8d76"},
+		{"PO-276", []string{"Sophia", "Nunez"}, "", "Sophia Nunez", "Sophia Nunez - 5/8/1991 - 0f84aada-680f-4450-b21b-07ae9f16f047"},
+		{"PO-297", []string{"Gabriela", "Águila-Viana"}, "", "Gabriela Águila-Viana", "Gabriela Águila-Viana - 26/10/1957 - ec29fc1b-c977-4fce-bfba-b07e441aa5e9"},
+		{"PJ-1", []string{"Rosa", "María", "Noguera", "Sastre"}, "", "Rosa María Noguera Sastre", "Rosa María Noguera Sastre - 25/12/1956 - 7284cbfb-39a8-4511-a4f9-0f52dc834fe1"},
+		{"PW-12", []string{"Lisa", "Steele"}, "", "Lisa Steele", "Lisa Steele - 7/12/1952 - a7580a18-00ed-42ee-90d6-192bed734e86"},
 	},
 	Registers: []Register{
 		{"PR-289_AC1_10", false, ""},
@@ -1968,45 +1968,45 @@ var justice = Server{
 	Description: cd22justDesc,
 	Scan:        SEC5,
 	Entries: []Entry{
-		{mel.Login, mel.Keywords(), 1, "", mel.Name, "Disparue - Incident 16485-4346B, Nexkemia Petrochemicals, 07/07/2000"},
-		{rocky.Login, rocky.Keywords(), 1, "", rocky.Name, "- D22/ag#867533654: agression à main armée (victime Sony HAARTZ)"},
-		{rita.Login, rita.Keywords(), 1, "", rita.Name, "- néant"},
-		{styx.Login, styx.Keywords(), 1, "", styx.Name, "- néant"},
-		{kapo.Login, kapo.Keywords(), 1, "", kapo.Name, "- néant"},
-		{scalpel.Login, scalpel.Keywords(), 1, "", scalpel.Name, "***** Personne recherchée, mandat inter-district PJ/676/ER/65534 *****\n- D22/cm#5674243: complicité de meurtre"},
-		{greko.Login, greko.Keywords(), 1, "", greko.Name, "- néant"},
-		{jesus.Login, jesus.Keywords(), 1, "", jesus.Name, "- néant"},
-		{escobar.Login, escobar.Keywords(), 1, "", escobar.Name, "- néant"},
-		{cageot.Login, cageot.Keywords(), 1, "", cageot.Name, "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D21/rc#12785234452 rupture de contrat\n\n\n$$$SPECIAL$$$ contacter cont4yes@kitsu.d22.eu, ¥€$ en rapport"},
-		{lafouine.Login, lafouine.Keywords(), 1, "", lafouine.Name, "- néant"},
-		{eva.Login, eva.Keywords(), 1, "", eva.Name, "***** Personne recherchée, mandat inter-district PF/1437/PM/02 *****\n- D21/rc#6542867 rupture contrat"},
-		{fatmike.Login, fatmike.Keywords(), 1, "", fatmike.Name, "- D22/vm#23842834: vol à l'étalage\n- D22/vm#54327653: vol recette épicerie nuit\n- D22/vm#543299873: vol simple\n- D22/vm#547699823: vol graviscooter\n- D22/vm#753296671: vol à l'étalage"},
-		{kennedy.Login, kennedy.Keywords(), 1, "", kennedy.Name, "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D22/vd#765428736: vol données confidentielles "},
-		{savagegirl.Login, savagegirl.Keywords(), 1, "", savagegirl.Name, "- néant"},
-		{raoulcool.Login, raoulcool.Keywords(), 1, "", raoulcool.Name, "- néant"},
-		{greenglass.Login, greenglass.Keywords(), 1, "", greenglass.Name, "- néant"},
-		{chillydaisy.Login, chillydaisy.Keywords(), 1, "", chillydaisy.Name, "***** Personne recherchée, mandat inter-district PF/0415/EG/55323 *****\n- D22/me#1275436253: double meurtre, arme à feu\n"},
-		{frereping.Login, frereping.Keywords(), 1, "", frereping.Name, "- néant"},
-		{papaproxy.Login, papaproxy.Keywords(), 1, "", papaproxy.Name, "***** Personne recherchée, mandat inter-district PF/2964/EP/98254 *****\n- D22/vd#89875357678: vol données avec copyright"},
-		{sasquatch.Login, sasquatch.Keywords(), 1, "", sasquatch.Name, "***** Personne recherchée, mandat inter-district PF/7253/EP/90271 *****\n- D22/vd#1100298735: vol données sous brevet"},
-		{celine.Login, celine.Keywords(), 1, "", celine.Name, "***** Personne recherchée, mandat inter-district PF/1001/EP/98682 *****\n- D22/pi#9867356873: piratage informatique\n- D22/am#18763725: association malfaiteurs"},
-		{cramille.Login, cramille.Keywords(), 1, "", cramille.Name, "- néant"},
-		{tigerdoll.Login, tigerdoll.Keywords(), 1, "", tigerdoll.Name, "- néant"},
-		{sistermorphine.Login, sistermorphine.Keywords(), 1, "", sistermorphine.Name, "- D22/ou#7578538765: outrage et rébellion, EuroPol\n- D22/va#325363552: vandalisme\n- D22/td#89765363: tapage diurne répété\n- D22/tn#101002543: tapage nocturne"},
-		{zilmir.Login, zilmir.Keywords(), 1, "", zilmir.Name, "- néant"},
-		{bettyb.Login, bettyb.Keywords(), 1, "", bettyb.Name, "- néant"},
-		{abraham.Login, abraham.Keywords(), 1, "", abraham.Name, "- néant"},
-		{crunch.Login, crunch.Keywords(), 1, "", crunch.Name, "- néant"},
-		{onekick.Login, onekick.Keywords(), 1, "", onekick.Name, "- néant\n>>> automated procedure: contact@kramps.d22.eu | #line>2"},
-		{jacob.Login, jacob.Keywords(), 1, "", jacob.Name, "- néant"},
-		{cyrano.Login, cyrano.Keywords(), 1, "", cyrano.Name, "- néant"},
-		{smalljoe.Login, smalljoe.Keywords(), 1, "", smalljoe.Name, "- néant"},
-		{ironmike.Login, ironmike.Keywords(), 1, "", ironmike.Name, "- néant"},
-		{paula.Login, paula.Keywords(), 1, "", paula.Name, "- néant"},
-		{ringo.Login, ringo.Keywords(), 1, "", ringo.Name, "- néant"},
-		{georges.Login, georges.Keywords(), 1, "", georges.Name, "- néant"},
-		{jeanne.Login, jeanne.Keywords(), 1, "", jeanne.Name, "- néant"},
-		{oggy.Login, oggy.Keywords(), 1, "", oggy.Name, "- néant"},
+		{mel.Login, mel.Keywords(), "", mel.Name, "Disparue - Incident 16485-4346B, Nexkemia Petrochemicals, 07/07/2000"},
+		{rocky.Login, rocky.Keywords(), "", rocky.Name, "- D22/ag#867533654: agression à main armée (victime Sony HAARTZ)"},
+		{rita.Login, rita.Keywords(), "", rita.Name, "- néant"},
+		{styx.Login, styx.Keywords(), "", styx.Name, "- néant"},
+		{kapo.Login, kapo.Keywords(), "", kapo.Name, "- néant"},
+		{scalpel.Login, scalpel.Keywords(), "", scalpel.Name, "***** Personne recherchée, mandat inter-district PJ/676/ER/65534 *****\n- D22/cm#5674243: complicité de meurtre"},
+		{greko.Login, greko.Keywords(), "", greko.Name, "- néant"},
+		{jesus.Login, jesus.Keywords(), "", jesus.Name, "- néant"},
+		{escobar.Login, escobar.Keywords(), "", escobar.Name, "- néant"},
+		{cageot.Login, cageot.Keywords(), "", cageot.Name, "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D21/rc#12785234452 rupture de contrat\n\n\n$$$SPECIAL$$$ contacter cont4yes@kitsu.d22.eu, ¥€$ en rapport"},
+		{lafouine.Login, lafouine.Keywords(), "", lafouine.Name, "- néant"},
+		{eva.Login, eva.Keywords(), "", eva.Name, "***** Personne recherchée, mandat inter-district PF/1437/PM/02 *****\n- D21/rc#6542867 rupture contrat"},
+		{fatmike.Login, fatmike.Keywords(), "", fatmike.Name, "- D22/vm#23842834: vol à l'étalage\n- D22/vm#54327653: vol recette épicerie nuit\n- D22/vm#543299873: vol simple\n- D22/vm#547699823: vol graviscooter\n- D22/vm#753296671: vol à l'étalage"},
+		{kennedy.Login, kennedy.Keywords(), "", kennedy.Name, "***** Personne recherchée, mandat inter-district PF/0865/EP/55463 *****\n- D22/vd#765428736: vol données confidentielles "},
+		{savagegirl.Login, savagegirl.Keywords(), "", savagegirl.Name, "- néant"},
+		{raoulcool.Login, raoulcool.Keywords(), "", raoulcool.Name, "- néant"},
+		{greenglass.Login, greenglass.Keywords(), "", greenglass.Name, "- néant"},
+		{chillydaisy.Login, chillydaisy.Keywords(), "", chillydaisy.Name, "***** Personne recherchée, mandat inter-district PF/0415/EG/55323 *****\n- D22/me#1275436253: double meurtre, arme à feu\n"},
+		{frereping.Login, frereping.Keywords(), "", frereping.Name, "- néant"},
+		{papaproxy.Login, papaproxy.Keywords(), "", papaproxy.Name, "***** Personne recherchée, mandat inter-district PF/2964/EP/98254 *****\n- D22/vd#89875357678: vol données avec copyright"},
+		{sasquatch.Login, sasquatch.Keywords(), "", sasquatch.Name, "***** Personne recherchée, mandat inter-district PF/7253/EP/90271 *****\n- D22/vd#1100298735: vol données sous brevet"},
+		{celine.Login, celine.Keywords(), "", celine.Name, "***** Personne recherchée, mandat inter-district PF/1001/EP/98682 *****\n- D22/pi#9867356873: piratage informatique\n- D22/am#18763725: association malfaiteurs"},
+		{cramille.Login, cramille.Keywords(), "", cramille.Name, "- néant"},
+		{tigerdoll.Login, tigerdoll.Keywords(), "", tigerdoll.Name, "- néant"},
+		{sistermorphine.Login, sistermorphine.Keywords(), "", sistermorphine.Name, "- D22/ou#7578538765: outrage et rébellion, EuroPol\n- D22/va#325363552: vandalisme\n- D22/td#89765363: tapage diurne répété\n- D22/tn#101002543: tapage nocturne"},
+		{zilmir.Login, zilmir.Keywords(), "", zilmir.Name, "- néant"},
+		{bettyb.Login, bettyb.Keywords(), "", bettyb.Name, "- néant"},
+		{abraham.Login, abraham.Keywords(), "", abraham.Name, "- néant"},
+		{crunch.Login, crunch.Keywords(), "", crunch.Name, "- néant"},
+		{onekick.Login, onekick.Keywords(), "", onekick.Name, "- néant\n>>> automated procedure: contact@kramps.d22.eu | #line>2"},
+		{jacob.Login, jacob.Keywords(), "", jacob.Name, "- néant"},
+		{cyrano.Login, cyrano.Keywords(), "", cyrano.Name, "- néant"},
+		{smalljoe.Login, smalljoe.Keywords(), "", smalljoe.Name, "- néant"},
+		{ironmike.Login, ironmike.Keywords(), "", ironmike.Name, "- néant"},
+		{paula.Login, paula.Keywords(), "", paula.Name, "- néant"},
+		{ringo.Login, ringo.Keywords(), "", ringo.Name, "- néant"},
+		{georges.Login, georges.Keywords(), "", georges.Name, "- néant"},
+		{jeanne.Login, jeanne.Keywords(), "", jeanne.Name, "- néant"},
+		{oggy.Login, oggy.Keywords(), "", oggy.Name, "- néant"},
 	},
 }
 
@@ -2035,39 +2035,35 @@ var abus = Server{
 	Description: cd22bankDesc,
 	Entries: []Entry{
 		{
-			ID:         fmt.Sprintf("%s_KI8FEI", alan.Login),
-			Keywords:   []string{"titre"},
-			Restricted: 1,
-			Owner:      alan.Login,
-			Title:      "Titre immobilier DZ8-7687",
+			ID:       fmt.Sprintf("%s_KI8FEI", alan.Login),
+			Keywords: []string{"titre"},
+			Owner:    alan.Login,
+			Title:    "Titre immobilier DZ8-7687",
 			Content: `DZ8-7687 : immeuble-local commercial, District 22.
 
 2000 : ce titre a fait l'objet d'une offre publique d'achat suite à l'incident Nexkemia. M Mathison n'a pas donné suite.
 2019 : M Mathison n'a eu aucune activité enregistrée par nos services depuis 2000. Castle Corp souhaite se porter acquéreur du bien. Conformément au cadre légal concernant les personnes portées disparues, M Mathison ou son héritier a jusqu'au 2020-08-01 pour se manifester. Passée cette date, le titre sera remis en vente, au profit de Castle Corp.`,
 		},
 		{
-			ID:         fmt.Sprintf("%s_UGAEH9", rita.Login),
-			Keywords:   []string{"compte"},
-			Restricted: 1,
-			Owner:      rita.Login,
-			Title:      "Compte personnel de Margherita Bellamy",
-			Content:    `Solde courant : 10.000Y€S`,
+			ID:       fmt.Sprintf("%s_UGAEH9", rita.Login),
+			Keywords: []string{"compte"},
+			Owner:    rita.Login,
+			Title:    "Compte personnel de Margherita Bellamy",
+			Content:  `Solde courant : 10.000Y€S`,
 		},
 		{
-			ID:         fmt.Sprintf("%s_EASHO6", rita.Login),
-			Keywords:   []string{"compte"},
-			Restricted: 1,
-			Owner:      rita.Login,
-			Title:      "Ligne budgétaire pour Margherita Bellamy, Headshot Records",
-			Content:    `Solde courant : 10.000Y€S`,
+			ID:       fmt.Sprintf("%s_EASHO6", rita.Login),
+			Keywords: []string{"compte"},
+			Owner:    rita.Login,
+			Title:    "Ligne budgétaire pour Margherita Bellamy, Headshot Records",
+			Content:  `Solde courant : 10.000Y€S`,
 		},
 		{
-			ID:         "EENG3M",
-			Keywords:   []string{"compte"},
-			Restricted: 1,
-			Owner:      kennedy.Login,
-			Title:      "Compte anonyme",
-			Content:    `Solde courant : 50.000Y€S \\ Date de création : 2007-05-21`,
+			ID:       "EENG3M",
+			Keywords: []string{"compte"},
+			Owner:    kennedy.Login,
+			Title:    "Compte anonyme",
+			Content:  `Solde courant : 50.000Y€S \\ Date de création : 2007-05-21`,
 		},
 	},
 }
@@ -2183,374 +2179,374 @@ var legba_satcom = Server{
 	Description: satDesc,
 	Scan:        SEC4,
 	Entries: []Entry{
-		{"GEO-EU-D01", []string{"GEO", "EU", "D01"}, 3, "", "Europole D01", `azimut:222.473862
+		{"GEO-EU-D01", []string{"GEO", "EU", "D01"}, "", "Europole D01", `azimut:222.473862
 altitude:57.545902
 Europole District D01`},
-		{"GEO-EU-D02", []string{"GEO", "EU", "D02"}, 3, "", "Europole D02", `azimut:239.324897
+		{"GEO-EU-D02", []string{"GEO", "EU", "D02"}, "", "Europole D02", `azimut:239.324897
 altitude:40.278407
 Europole District D02`},
-		{"GEO-EU-D03", []string{"GEO", "EU", "D03"}, 3, "", "Europole D03", `azimut:109.366561
+		{"GEO-EU-D03", []string{"GEO", "EU", "D03"}, "", "Europole D03", `azimut:109.366561
 altitude:76.071807
 Europole District D03`},
-		{"GEO-EU-D04", []string{"GEO", "EU", "D04"}, 3, "", "Europole D04", `azimut:329.297929
+		{"GEO-EU-D04", []string{"GEO", "EU", "D04"}, "", "Europole D04", `azimut:329.297929
 altitude:27.991250
 Europole District D04`},
-		{"GEO-EU-D05", []string{"GEO", "EU", "D05"}, 3, "", "Europole D05", `azimut:196.971308
+		{"GEO-EU-D05", []string{"GEO", "EU", "D05"}, "", "Europole D05", `azimut:196.971308
 altitude:89.923900
 Europole District D05`},
-		{"GEO-EU-D06", []string{"GEO", "EU", "D06"}, 3, "", "Europole D06", `azimut:128.213744
+		{"GEO-EU-D06", []string{"GEO", "EU", "D06"}, "", "Europole D06", `azimut:128.213744
 altitude:72.986507
 Europole District D06`},
-		{"GEO-EU-D07", []string{"GEO", "EU", "D07"}, 3, "", "Europole D07", `azimut:188.000197
+		{"GEO-EU-D07", []string{"GEO", "EU", "D07"}, "", "Europole D07", `azimut:188.000197
 altitude:25.475341
 Europole District D07`},
-		{"GEO-EU-D08", []string{"GEO", "EU", "D08"}, 3, "", "Europole D08", `azimut:18.387379
+		{"GEO-EU-D08", []string{"GEO", "EU", "D08"}, "", "Europole D08", `azimut:18.387379
 altitude:39.189764
 Europole District D08`},
-		{"GEO-EU-D09", []string{"GEO", "EU", "D09"}, 3, "", "Europole D09", `azimut:25.997548
+		{"GEO-EU-D09", []string{"GEO", "EU", "D09"}, "", "Europole D09", `azimut:25.997548
 altitude:2.442340
 Europole District D09`},
-		{"GEO-EU-D10", []string{"GEO", "EU", "D10"}, 3, "", "Europole D10", `azimut:63.563148
+		{"GEO-EU-D10", []string{"GEO", "EU", "D10"}, "", "Europole D10", `azimut:63.563148
 altitude:15.524259
 Europole District D10`},
-		{"GEO-EU-D11", []string{"GEO", "EU", "D11"}, 3, "", "Europole D11", `azimut:45.742992
+		{"GEO-EU-D11", []string{"GEO", "EU", "D11"}, "", "Europole D11", `azimut:45.742992
 altitude:66.014371
 Europole District D11`},
-		{"GEO-EU-D12", []string{"GEO", "EU", "D12"}, 3, "", "Europole D12", `azimut:347.864768
+		{"GEO-EU-D12", []string{"GEO", "EU", "D12"}, "", "Europole D12", `azimut:347.864768
 altitude:52.184109
 Europole District D12`},
-		{"GEO-EU-D13", []string{"GEO", "EU", "D13"}, 3, "", "Europole D13", `azimut:243.115459
+		{"GEO-EU-D13", []string{"GEO", "EU", "D13"}, "", "Europole D13", `azimut:243.115459
 altitude:82.627421
 Europole District D13`},
-		{"GEO-EU-D14", []string{"GEO", "EU", "D14"}, 3, "", "Europole D14", `azimut:116.483503
+		{"GEO-EU-D14", []string{"GEO", "EU", "D14"}, "", "Europole D14", `azimut:116.483503
 altitude:18.400539
 Europole District D14`},
-		{"GEO-EU-D15", []string{"GEO", "EU", "D15"}, 3, "", "Europole D15", `azimut:340.027907
+		{"GEO-EU-D15", []string{"GEO", "EU", "D15"}, "", "Europole D15", `azimut:340.027907
 altitude:44.906145
 Europole District D15`},
-		{"GEO-EU-D16", []string{"GEO", "EU", "D16"}, 3, "", "Europole D16", `azimut:156.679333
+		{"GEO-EU-D16", []string{"GEO", "EU", "D16"}, "", "Europole D16", `azimut:156.679333
 altitude:59.225136
 Europole District D16`},
-		{"GEO-EU-D17", []string{"GEO", "EU", "D17"}, 3, "", "Europole D17", `azimut:98.859250
+		{"GEO-EU-D17", []string{"GEO", "EU", "D17"}, "", "Europole D17", `azimut:98.859250
 altitude:70.193535
 Europole District D17`},
-		{"GEO-EU-D18", []string{"GEO", "EU", "D18"}, 3, "", "Europole D18", `azimut:249.598879
+		{"GEO-EU-D18", []string{"GEO", "EU", "D18"}, "", "Europole D18", `azimut:249.598879
 altitude:35.274047
 Europole District D18`},
-		{"GEO-EU-D19", []string{"GEO", "EU", "D19"}, 3, "", "Europole D19", `azimut:39.792230
+		{"GEO-EU-D19", []string{"GEO", "EU", "D19"}, "", "Europole D19", `azimut:39.792230
 altitude:84.093000
 Europole District D19`},
-		{"GEO-EU-D20", []string{"GEO", "EU", "D20"}, 3, "", "Europole D20", `azimut:181.817280
+		{"GEO-EU-D20", []string{"GEO", "EU", "D20"}, "", "Europole D20", `azimut:181.817280
 altitude:44.512595
 Europole District D20`},
-		{"GEO-EU-D21", []string{"GEO", "EU", "D21"}, 3, "", "Europole D21", `azimut:150.167960
+		{"GEO-EU-D21", []string{"GEO", "EU", "D21"}, "", "Europole D21", `azimut:150.167960
 altitude:85.991215
 Europole District D21`},
-		{"GEO-EU-D22", []string{"GEO", "EU", "D22"}, 3, "", "Europole D22", `azimut:239.977281
+		{"GEO-EU-D22", []string{"GEO", "EU", "D22"}, "", "Europole D22", `azimut:239.977281
 altitude:75.689278
 Europole District D22`},
-		{"GEO-EU-D23", []string{"GEO", "EU", "D23"}, 3, "", "Europole D23", `azimut:351.246429
+		{"GEO-EU-D23", []string{"GEO", "EU", "D23"}, "", "Europole D23", `azimut:351.246429
 altitude:34.655470
 Europole District D23`},
-		{"GEO-EU-D24", []string{"GEO", "EU", "D24"}, 3, "", "Europole D24", `azimut:160.687062
+		{"GEO-EU-D24", []string{"GEO", "EU", "D24"}, "", "Europole D24", `azimut:160.687062
 altitude:65.748652
 Europole District D24`},
-		{"GEO-EU-D25", []string{"GEO", "EU", "D25"}, 3, "", "Europole D25", `azimut:199.657318
+		{"GEO-EU-D25", []string{"GEO", "EU", "D25"}, "", "Europole D25", `azimut:199.657318
 altitude:16.504889
 Europole District D25`},
-		{"GEO-EU-D26", []string{"GEO", "EU", "D26"}, 3, "", "Europole D26", `azimut:113.082227
+		{"GEO-EU-D26", []string{"GEO", "EU", "D26"}, "", "Europole D26", `azimut:113.082227
 altitude:70.553254
 Europole District D26`},
-		{"GEO-EU-D27", []string{"GEO", "EU", "D27"}, 3, "", "Europole D27", `azimut:149.928442
+		{"GEO-EU-D27", []string{"GEO", "EU", "D27"}, "", "Europole D27", `azimut:149.928442
 altitude:38.723569
 Europole District D27`},
-		{"GEO-EU-D28", []string{"GEO", "EU", "D28"}, 3, "", "Europole D28", `azimut:195.343852
+		{"GEO-EU-D28", []string{"GEO", "EU", "D28"}, "", "Europole D28", `azimut:195.343852
 altitude:66.718099
 Europole District D28`},
-		{"GEO-EU-D29", []string{"GEO", "EU", "D29"}, 3, "", "Europole D29", `azimut:68.053002
+		{"GEO-EU-D29", []string{"GEO", "EU", "D29"}, "", "Europole D29", `azimut:68.053002
 altitude:59.244626
 Europole District D29`},
-		{"GEO-EU-D30", []string{"GEO", "EU", "D30"}, 3, "", "Europole D30", `azimut:109.773570
+		{"GEO-EU-D30", []string{"GEO", "EU", "D30"}, "", "Europole D30", `azimut:109.773570
 altitude:75.527002
 Europole District D30`},
-		{"GEO-AM-D01", []string{"GEO", "AM", "D01"}, 3, "", "Amerique D01", `azimut:73.597028
+		{"GEO-AM-D01", []string{"GEO", "AM", "D01"}, "", "Amerique D01", `azimut:73.597028
 altitude:49.878709
 Amerique District D01`},
-		{"GEO-AM-D02", []string{"GEO", "AM", "D02"}, 3, "", "Amerique D02", `azimut:123.021633
+		{"GEO-AM-D02", []string{"GEO", "AM", "D02"}, "", "Amerique D02", `azimut:123.021633
 altitude:17.279446
 Amerique District D02`},
-		{"GEO-AM-D03", []string{"GEO", "AM", "D03"}, 3, "", "Amerique D03", `azimut:343.543004
+		{"GEO-AM-D03", []string{"GEO", "AM", "D03"}, "", "Amerique D03", `azimut:343.543004
 altitude:40.210107
 Amerique District D03`},
-		{"GEO-AM-D04", []string{"GEO", "AM", "D04"}, 3, "", "Amerique D04", `azimut:118.704682
+		{"GEO-AM-D04", []string{"GEO", "AM", "D04"}, "", "Amerique D04", `azimut:118.704682
 altitude:30.886185
 Amerique District D04`},
-		{"GEO-AM-D05", []string{"GEO", "AM", "D05"}, 3, "", "Amerique D05", `azimut:332.719647
+		{"GEO-AM-D05", []string{"GEO", "AM", "D05"}, "", "Amerique D05", `azimut:332.719647
 altitude:66.663091
 Amerique District D05`},
-		{"GEO-AM-D06", []string{"GEO", "AM", "D06"}, 3, "", "Amerique D06", `azimut:170.711919
+		{"GEO-AM-D06", []string{"GEO", "AM", "D06"}, "", "Amerique D06", `azimut:170.711919
 altitude:38.124117
 Amerique District D06`},
-		{"GEO-AM-D07", []string{"GEO", "AM", "D07"}, 3, "", "Amerique D07", `azimut:95.659856
+		{"GEO-AM-D07", []string{"GEO", "AM", "D07"}, "", "Amerique D07", `azimut:95.659856
 altitude:19.927787
 Amerique District D07`},
-		{"GEO-AM-D08", []string{"GEO", "AM", "D08"}, 3, "", "Amerique D08", `azimut:112.172492
+		{"GEO-AM-D08", []string{"GEO", "AM", "D08"}, "", "Amerique D08", `azimut:112.172492
 altitude:19.548745
 Amerique District D08`},
-		{"GEO-AM-D09", []string{"GEO", "AM", "D09"}, 3, "", "Amerique D09", `azimut:45.613917
+		{"GEO-AM-D09", []string{"GEO", "AM", "D09"}, "", "Amerique D09", `azimut:45.613917
 altitude:51.208722
 Amerique District D09`},
-		{"GEO-AM-D10", []string{"GEO", "AM", "D10"}, 3, "", "Amerique D10", `azimut:330.125659
+		{"GEO-AM-D10", []string{"GEO", "AM", "D10"}, "", "Amerique D10", `azimut:330.125659
 altitude:73.166312
 Amerique District D10`},
-		{"GEO-AM-D11", []string{"GEO", "AM", "D11"}, 3, "", "Amerique D11", `azimut:87.738024
+		{"GEO-AM-D11", []string{"GEO", "AM", "D11"}, "", "Amerique D11", `azimut:87.738024
 altitude:46.632757
 Amerique District D11`},
-		{"GEO-AM-D12", []string{"GEO", "AM", "D12"}, 3, "", "Amerique D12", `azimut:155.679631
+		{"GEO-AM-D12", []string{"GEO", "AM", "D12"}, "", "Amerique D12", `azimut:155.679631
 altitude:89.617381
 Amerique District D12`},
-		{"GEO-AM-D13", []string{"GEO", "AM", "D13"}, 3, "", "Amerique D13", `azimut:175.463825
+		{"GEO-AM-D13", []string{"GEO", "AM", "D13"}, "", "Amerique D13", `azimut:175.463825
 altitude:13.228532
 Amerique District D13`},
-		{"GEO-AM-D14", []string{"GEO", "AM", "D14"}, 3, "", "Amerique D14", `azimut:182.310405
+		{"GEO-AM-D14", []string{"GEO", "AM", "D14"}, "", "Amerique D14", `azimut:182.310405
 altitude:12.549442
 Amerique District D14`},
-		{"GEO-AM-D15", []string{"GEO", "AM", "D15"}, 3, "", "Amerique D15", `azimut:79.390452
+		{"GEO-AM-D15", []string{"GEO", "AM", "D15"}, "", "Amerique D15", `azimut:79.390452
 altitude:5.071440
 Amerique District D15`},
-		{"GEO-AM-D16", []string{"GEO", "AM", "D16"}, 3, "", "Amerique D16", `azimut:110.318744
+		{"GEO-AM-D16", []string{"GEO", "AM", "D16"}, "", "Amerique D16", `azimut:110.318744
 altitude:33.526340
 Amerique District D16`},
-		{"GEO-AM-D17", []string{"GEO", "AM", "D17"}, 3, "", "Amerique D17", `azimut:298.195798
+		{"GEO-AM-D17", []string{"GEO", "AM", "D17"}, "", "Amerique D17", `azimut:298.195798
 altitude:84.808764
 Amerique District D17`},
-		{"GEO-AM-D18", []string{"GEO", "AM", "D18"}, 3, "", "Amerique D18", `azimut:2.873332
+		{"GEO-AM-D18", []string{"GEO", "AM", "D18"}, "", "Amerique D18", `azimut:2.873332
 altitude:51.596388
 Amerique District D18`},
-		{"GEO-AM-D19", []string{"GEO", "AM", "D19"}, 3, "", "Amerique D19", `azimut:296.794890
+		{"GEO-AM-D19", []string{"GEO", "AM", "D19"}, "", "Amerique D19", `azimut:296.794890
 altitude:71.677123
 Amerique District D19`},
-		{"GEO-AM-D20", []string{"GEO", "AM", "D20"}, 3, "", "Amerique D20", `azimut:231.170081
+		{"GEO-AM-D20", []string{"GEO", "AM", "D20"}, "", "Amerique D20", `azimut:231.170081
 altitude:30.647222
 Amerique District D20`},
-		{"GEO-AM-D21", []string{"GEO", "AM", "D21"}, 3, "", "Amerique D21", `azimut:89.500920
+		{"GEO-AM-D21", []string{"GEO", "AM", "D21"}, "", "Amerique D21", `azimut:89.500920
 altitude:30.522516
 Amerique District D21`},
-		{"GEO-AM-D22", []string{"GEO", "AM", "D22"}, 3, "", "Amerique D22", `azimut:323.958919
+		{"GEO-AM-D22", []string{"GEO", "AM", "D22"}, "", "Amerique D22", `azimut:323.958919
 altitude:30.437744
 Amerique District D22`},
-		{"GEO-AM-D23", []string{"GEO", "AM", "D23"}, 3, "", "Amerique D23", `azimut:253.869255
+		{"GEO-AM-D23", []string{"GEO", "AM", "D23"}, "", "Amerique D23", `azimut:253.869255
 altitude:30.920316
 Amerique District D23`},
-		{"GEO-AM-D24", []string{"GEO", "AM", "D24"}, 3, "", "Amerique D24", `azimut:186.124318
+		{"GEO-AM-D24", []string{"GEO", "AM", "D24"}, "", "Amerique D24", `azimut:186.124318
 altitude:62.824878
 Amerique District D24`},
-		{"GEO-AM-D25", []string{"GEO", "AM", "D25"}, 3, "", "Amerique D25", `azimut:341.876998
+		{"GEO-AM-D25", []string{"GEO", "AM", "D25"}, "", "Amerique D25", `azimut:341.876998
 altitude:86.569408
 Amerique District D25`},
-		{"GEO-AM-D26", []string{"GEO", "AM", "D26"}, 3, "", "Amerique D26", `azimut:345.379005
+		{"GEO-AM-D26", []string{"GEO", "AM", "D26"}, "", "Amerique D26", `azimut:345.379005
 altitude:56.438396
 Amerique District D26`},
-		{"GEO-AM-D27", []string{"GEO", "AM", "D27"}, 3, "", "Amerique D27", `azimut:286.611533
+		{"GEO-AM-D27", []string{"GEO", "AM", "D27"}, "", "Amerique D27", `azimut:286.611533
 altitude:62.474308
 Amerique District D27`},
-		{"GEO-AM-D28", []string{"GEO", "AM", "D28"}, 3, "", "Amerique D28", `azimut:153.424171
+		{"GEO-AM-D28", []string{"GEO", "AM", "D28"}, "", "Amerique D28", `azimut:153.424171
 altitude:2.944232
 Amerique District D28`},
-		{"GEO-AM-D29", []string{"GEO", "AM", "D29"}, 3, "", "Amerique D29", `azimut:300.060128
+		{"GEO-AM-D29", []string{"GEO", "AM", "D29"}, "", "Amerique D29", `azimut:300.060128
 altitude:70.495054
 Amerique District D29`},
-		{"GEO-AM-D30", []string{"GEO", "AM", "D30"}, 3, "", "Amerique D30", `azimut:213.636218
+		{"GEO-AM-D30", []string{"GEO", "AM", "D30"}, "", "Amerique D30", `azimut:213.636218
 altitude:8.239724
 Amerique District D30`},
-		{"GEO-AS-D01", []string{"GEO", "AS", "D01"}, 3, "", "Asie D01", `azimut:342.051745
+		{"GEO-AS-D01", []string{"GEO", "AS", "D01"}, "", "Asie D01", `azimut:342.051745
 altitude:42.218323
 Asie District D01`},
-		{"GEO-AS-D02", []string{"GEO", "AS", "D02"}, 3, "", "Asie D02", `azimut:250.259304
+		{"GEO-AS-D02", []string{"GEO", "AS", "D02"}, "", "Asie D02", `azimut:250.259304
 altitude:71.493491
 Asie District D02`},
-		{"GEO-AS-D03", []string{"GEO", "AS", "D03"}, 3, "", "Asie D03", `azimut:95.251740
+		{"GEO-AS-D03", []string{"GEO", "AS", "D03"}, "", "Asie D03", `azimut:95.251740
 altitude:48.210691
 Asie District D03`},
-		{"GEO-AS-D04", []string{"GEO", "AS", "D04"}, 3, "", "Asie D04", `azimut:183.859707
+		{"GEO-AS-D04", []string{"GEO", "AS", "D04"}, "", "Asie D04", `azimut:183.859707
 altitude:76.592457
 Asie District D04`},
-		{"GEO-AS-D05", []string{"GEO", "AS", "D05"}, 3, "", "Asie D05", `azimut:333.600815
+		{"GEO-AS-D05", []string{"GEO", "AS", "D05"}, "", "Asie D05", `azimut:333.600815
 altitude:61.490801
 Asie District D05`},
-		{"GEO-AS-D06", []string{"GEO", "AS", "D06"}, 3, "", "Asie D06", `azimut:33.457971
+		{"GEO-AS-D06", []string{"GEO", "AS", "D06"}, "", "Asie D06", `azimut:33.457971
 altitude:64.460645
 Asie District D06`},
-		{"GEO-AS-D07", []string{"GEO", "AS", "D07"}, 3, "", "Asie D07", `azimut:205.287459
+		{"GEO-AS-D07", []string{"GEO", "AS", "D07"}, "", "Asie D07", `azimut:205.287459
 altitude:21.342705
 Asie District D07`},
-		{"GEO-AS-D08", []string{"GEO", "AS", "D08"}, 3, "", "Asie D08", `azimut:290.712095
+		{"GEO-AS-D08", []string{"GEO", "AS", "D08"}, "", "Asie D08", `azimut:290.712095
 altitude:83.393417
 Asie District D08`},
-		{"GEO-AS-D09", []string{"GEO", "AS", "D09"}, 3, "", "Asie D09", `azimut:129.804248
+		{"GEO-AS-D09", []string{"GEO", "AS", "D09"}, "", "Asie D09", `azimut:129.804248
 altitude:56.810036
 Asie District D09`},
-		{"GEO-AS-D10", []string{"GEO", "AS", "D10"}, 3, "", "Asie D10", `azimut:181.933236
+		{"GEO-AS-D10", []string{"GEO", "AS", "D10"}, "", "Asie D10", `azimut:181.933236
 altitude:82.832447
 Asie District D10`},
-		{"GEO-AS-D11", []string{"GEO", "AS", "D11"}, 3, "", "Asie D11", `azimut:1.056958
+		{"GEO-AS-D11", []string{"GEO", "AS", "D11"}, "", "Asie D11", `azimut:1.056958
 altitude:46.733304
 Asie District D11`},
-		{"GEO-AS-D12", []string{"GEO", "AS", "D12"}, 3, "", "Asie D12", `azimut:130.245444
+		{"GEO-AS-D12", []string{"GEO", "AS", "D12"}, "", "Asie D12", `azimut:130.245444
 altitude:38.701721
 Asie District D12`},
-		{"GEO-AS-D13", []string{"GEO", "AS", "D13"}, 3, "", "Asie D13", `azimut:11.754200
+		{"GEO-AS-D13", []string{"GEO", "AS", "D13"}, "", "Asie D13", `azimut:11.754200
 altitude:29.779863
 Asie District D13`},
-		{"GEO-AS-D14", []string{"GEO", "AS", "D14"}, 3, "", "Asie D14", `azimut:63.656253
+		{"GEO-AS-D14", []string{"GEO", "AS", "D14"}, "", "Asie D14", `azimut:63.656253
 altitude:50.797300
 Asie District D14`},
-		{"GEO-AS-D15", []string{"GEO", "AS", "D15"}, 3, "", "Asie D15", `azimut:240.014087
+		{"GEO-AS-D15", []string{"GEO", "AS", "D15"}, "", "Asie D15", `azimut:240.014087
 altitude:64.780596
 Asie District D15`},
-		{"GEO-AS-D16", []string{"GEO", "AS", "D16"}, 3, "", "Asie D16", `azimut:185.696595
+		{"GEO-AS-D16", []string{"GEO", "AS", "D16"}, "", "Asie D16", `azimut:185.696595
 altitude:44.346859
 Asie District D16`},
-		{"GEO-AS-D17", []string{"GEO", "AS", "D17"}, 3, "", "Asie D17", `azimut:204.779937
+		{"GEO-AS-D17", []string{"GEO", "AS", "D17"}, "", "Asie D17", `azimut:204.779937
 altitude:13.827560
 Asie District D17`},
-		{"GEO-AS-D18", []string{"GEO", "AS", "D18"}, 3, "", "Asie D18", `azimut:92.243999
+		{"GEO-AS-D18", []string{"GEO", "AS", "D18"}, "", "Asie D18", `azimut:92.243999
 altitude:9.715407
 Asie District D18`},
-		{"GEO-AS-D19", []string{"GEO", "AS", "D19"}, 3, "", "Asie D19", `azimut:199.837823
+		{"GEO-AS-D19", []string{"GEO", "AS", "D19"}, "", "Asie D19", `azimut:199.837823
 altitude:58.591530
 Asie District D19`},
-		{"GEO-AS-D20", []string{"GEO", "AS", "D20"}, 3, "", "Asie D20", `azimut:53.849202
+		{"GEO-AS-D20", []string{"GEO", "AS", "D20"}, "", "Asie D20", `azimut:53.849202
 altitude:36.692392
 Asie District D20`},
-		{"GEO-AS-D21", []string{"GEO", "AS", "D21"}, 3, "", "Asie D21", `azimut:142.217905
+		{"GEO-AS-D21", []string{"GEO", "AS", "D21"}, "", "Asie D21", `azimut:142.217905
 altitude:76.522163
 Asie District D21`},
-		{"GEO-AS-D22", []string{"GEO", "AS", "D22"}, 3, "", "Asie D22", `azimut:75.695987
+		{"GEO-AS-D22", []string{"GEO", "AS", "D22"}, "", "Asie D22", `azimut:75.695987
 altitude:62.240956
 Asie District D22`},
-		{"GEO-AS-D23", []string{"GEO", "AS", "D23"}, 3, "", "Asie D23", `azimut:285.624536
+		{"GEO-AS-D23", []string{"GEO", "AS", "D23"}, "", "Asie D23", `azimut:285.624536
 altitude:57.488524
 Asie District D23`},
-		{"GEO-AS-D24", []string{"GEO", "AS", "D24"}, 3, "", "Asie D24", `azimut:274.254944
+		{"GEO-AS-D24", []string{"GEO", "AS", "D24"}, "", "Asie D24", `azimut:274.254944
 altitude:45.720608
 Asie District D24`},
-		{"GEO-AS-D25", []string{"GEO", "AS", "D25"}, 3, "", "Asie D25", `azimut:357.594847
+		{"GEO-AS-D25", []string{"GEO", "AS", "D25"}, "", "Asie D25", `azimut:357.594847
 altitude:36.241697
 Asie District D25`},
-		{"GEO-AS-D26", []string{"GEO", "AS", "D26"}, 3, "", "Asie D26", `azimut:87.273324
+		{"GEO-AS-D26", []string{"GEO", "AS", "D26"}, "", "Asie D26", `azimut:87.273324
 altitude:84.761897
 Asie District D26`},
-		{"GEO-AS-D27", []string{"GEO", "AS", "D27"}, 3, "", "Asie D27", `azimut:192.987743
+		{"GEO-AS-D27", []string{"GEO", "AS", "D27"}, "", "Asie D27", `azimut:192.987743
 altitude:39.505095
 Asie District D27`},
-		{"GEO-AS-D28", []string{"GEO", "AS", "D28"}, 3, "", "Asie D28", `azimut:330.694254
+		{"GEO-AS-D28", []string{"GEO", "AS", "D28"}, "", "Asie D28", `azimut:330.694254
 altitude:67.430962
 Asie District D28`},
-		{"GEO-AS-D29", []string{"GEO", "AS", "D29"}, 3, "", "Asie D29", `azimut:127.146828
+		{"GEO-AS-D29", []string{"GEO", "AS", "D29"}, "", "Asie D29", `azimut:127.146828
 altitude:19.723466
 Asie District D29`},
-		{"GEO-AS-D30", []string{"GEO", "AS", "D30"}, 3, "", "Asie D30", `azimut:74.864500
+		{"GEO-AS-D30", []string{"GEO", "AS", "D30"}, "", "Asie D30", `azimut:74.864500
 altitude:75.241127
 Asie District D30`},
-		{"GEO-AU-D01", []string{"GEO", "AU", "D01"}, 3, "", "Australie D01", `azimut:292.083689
+		{"GEO-AU-D01", []string{"GEO", "AU", "D01"}, "", "Australie D01", `azimut:292.083689
 altitude:88.194980
 Australie District D01`},
-		{"GEO-AU-D02", []string{"GEO", "AU", "D02"}, 3, "", "Australie D02", `azimut:82.831966
+		{"GEO-AU-D02", []string{"GEO", "AU", "D02"}, "", "Australie D02", `azimut:82.831966
 altitude:21.731413
 Australie District D02`},
-		{"GEO-AU-D03", []string{"GEO", "AU", "D03"}, 3, "", "Australie D03", `azimut:154.231428
+		{"GEO-AU-D03", []string{"GEO", "AU", "D03"}, "", "Australie D03", `azimut:154.231428
 altitude:1.419308
 Australie District D03`},
-		{"GEO-AU-D04", []string{"GEO", "AU", "D04"}, 3, "", "Australie D04", `azimut:24.530170
+		{"GEO-AU-D04", []string{"GEO", "AU", "D04"}, "", "Australie D04", `azimut:24.530170
 altitude:89.837985
 Australie District D04`},
-		{"GEO-AU-D05", []string{"GEO", "AU", "D05"}, 3, "", "Australie D05", `azimut:57.894963
+		{"GEO-AU-D05", []string{"GEO", "AU", "D05"}, "", "Australie D05", `azimut:57.894963
 altitude:45.076034
 Australie District D05`},
-		{"GEO-AU-D06", []string{"GEO", "AU", "D06"}, 3, "", "Australie D06", `azimut:342.363100
+		{"GEO-AU-D06", []string{"GEO", "AU", "D06"}, "", "Australie D06", `azimut:342.363100
 altitude:21.464879
 Australie District D06`},
-		{"GEO-AU-D07", []string{"GEO", "AU", "D07"}, 3, "", "Australie D07", `azimut:78.005193
+		{"GEO-AU-D07", []string{"GEO", "AU", "D07"}, "", "Australie D07", `azimut:78.005193
 altitude:5.087446
 Australie District D07`},
-		{"GEO-AU-D08", []string{"GEO", "AU", "D08"}, 3, "", "Australie D08", `azimut:225.866362
+		{"GEO-AU-D08", []string{"GEO", "AU", "D08"}, "", "Australie D08", `azimut:225.866362
 altitude:67.567458
 Australie District D08`},
-		{"GEO-AU-D09", []string{"GEO", "AU", "D09"}, 3, "", "Australie D09", `azimut:167.444574
+		{"GEO-AU-D09", []string{"GEO", "AU", "D09"}, "", "Australie D09", `azimut:167.444574
 altitude:61.857512
 Australie District D09`},
-		{"GEO-AU-D10", []string{"GEO", "AU", "D10"}, 3, "", "Australie D10", `azimut:255.402402
+		{"GEO-AU-D10", []string{"GEO", "AU", "D10"}, "", "Australie D10", `azimut:255.402402
 altitude:36.556867
 Australie District D10`},
-		{"GEO-AU-D11", []string{"GEO", "AU", "D11"}, 3, "", "Australie D11", `azimut:140.726251
+		{"GEO-AU-D11", []string{"GEO", "AU", "D11"}, "", "Australie D11", `azimut:140.726251
 altitude:11.197472
 Australie District D11`},
-		{"GEO-AU-D12", []string{"GEO", "AU", "D12"}, 3, "", "Australie D12", `azimut:161.236059
+		{"GEO-AU-D12", []string{"GEO", "AU", "D12"}, "", "Australie D12", `azimut:161.236059
 altitude:36.436500
 Australie District D12`},
-		{"GEO-AU-D13", []string{"GEO", "AU", "D13"}, 3, "", "Australie D13", `azimut:17.379168
+		{"GEO-AU-D13", []string{"GEO", "AU", "D13"}, "", "Australie D13", `azimut:17.379168
 altitude:33.483234
 Australie District D13`},
-		{"GEO-AU-D14", []string{"GEO", "AU", "D14"}, 3, "", "Australie D14", `azimut:51.559107
+		{"GEO-AU-D14", []string{"GEO", "AU", "D14"}, "", "Australie D14", `azimut:51.559107
 altitude:18.235380
 Australie District D14`},
-		{"GEO-AU-D15", []string{"GEO", "AU", "D15"}, 3, "", "Australie D15", `azimut:108.356927
+		{"GEO-AU-D15", []string{"GEO", "AU", "D15"}, "", "Australie D15", `azimut:108.356927
 altitude:73.259122
 Australie District D15`},
-		{"GEO-AU-D16", []string{"GEO", "AU", "D16"}, 3, "", "Australie D16", `azimut:165.263461
+		{"GEO-AU-D16", []string{"GEO", "AU", "D16"}, "", "Australie D16", `azimut:165.263461
 altitude:1.147638
 Australie District D16`},
-		{"GEO-AU-D17", []string{"GEO", "AU", "D17"}, 3, "", "Australie D17", `azimut:316.051053
+		{"GEO-AU-D17", []string{"GEO", "AU", "D17"}, "", "Australie D17", `azimut:316.051053
 altitude:70.737982
 Australie District D17`},
-		{"GEO-AU-D18", []string{"GEO", "AU", "D18"}, 3, "", "Australie D18", `azimut:76.158201
+		{"GEO-AU-D18", []string{"GEO", "AU", "D18"}, "", "Australie D18", `azimut:76.158201
 altitude:64.184684
 Australie District D18`},
-		{"GEO-AU-D19", []string{"GEO", "AU", "D19"}, 3, "", "Australie D19", `azimut:110.508745
+		{"GEO-AU-D19", []string{"GEO", "AU", "D19"}, "", "Australie D19", `azimut:110.508745
 altitude:49.884585
 Australie District D19`},
-		{"GEO-AU-D20", []string{"GEO", "AU", "D20"}, 3, "", "Australie D20", `azimut:255.635603
+		{"GEO-AU-D20", []string{"GEO", "AU", "D20"}, "", "Australie D20", `azimut:255.635603
 altitude:77.332306
 Australie District D20`},
-		{"GEO-AU-D21", []string{"GEO", "AU", "D21"}, 3, "", "Australie D21", `azimut:277.905640
+		{"GEO-AU-D21", []string{"GEO", "AU", "D21"}, "", "Australie D21", `azimut:277.905640
 altitude:72.924568
 Australie District D21`},
-		{"GEO-AU-D22", []string{"GEO", "AU", "D22"}, 3, "", "Australie D22", `azimut:239.945763
+		{"GEO-AU-D22", []string{"GEO", "AU", "D22"}, "", "Australie D22", `azimut:239.945763
 altitude:45.988657
 Australie District D22`},
-		{"GEO-AU-D23", []string{"GEO", "AU", "D23"}, 3, "", "Australie D23", `azimut:44.763104
+		{"GEO-AU-D23", []string{"GEO", "AU", "D23"}, "", "Australie D23", `azimut:44.763104
 altitude:87.511096
 Australie District D23`},
-		{"GEO-AU-D24", []string{"GEO", "AU", "D24"}, 3, "", "Australie D24", `azimut:288.379136
+		{"GEO-AU-D24", []string{"GEO", "AU", "D24"}, "", "Australie D24", `azimut:288.379136
 altitude:78.406113
 Australie District D24`},
-		{"GEO-AU-D25", []string{"GEO", "AU", "D25"}, 3, "", "Australie D25", `azimut:130.566795
+		{"GEO-AU-D25", []string{"GEO", "AU", "D25"}, "", "Australie D25", `azimut:130.566795
 altitude:26.739230
 Australie District D25`},
-		{"GEO-AU-D26", []string{"GEO", "AU", "D26"}, 3, "", "Australie D26", `azimut:122.319196
+		{"GEO-AU-D26", []string{"GEO", "AU", "D26"}, "", "Australie D26", `azimut:122.319196
 altitude:86.855428
 Australie District D26`},
-		{"GEO-AU-D27", []string{"GEO", "AU", "D27"}, 3, "", "Australie D27", `azimut:259.975290
+		{"GEO-AU-D27", []string{"GEO", "AU", "D27"}, "", "Australie D27", `azimut:259.975290
 altitude:21.280427
 Australie District D27`},
-		{"GEO-AU-D28", []string{"GEO", "AU", "D28"}, 3, "", "Australie D28", `azimut:96.620961
+		{"GEO-AU-D28", []string{"GEO", "AU", "D28"}, "", "Australie D28", `azimut:96.620961
 altitude:41.302436
 Australie District D28`},
-		{"GEO-AU-D29", []string{"GEO", "AU", "D29"}, 3, "", "Australie D29", `azimut:146.349130
+		{"GEO-AU-D29", []string{"GEO", "AU", "D29"}, "", "Australie D29", `azimut:146.349130
 altitude:81.275968
 Australie District D29`},
-		{"GEO-AU-D30", []string{"GEO", "AU", "D30"}, 3, "", "Australie D30", `azimut:75.093528
+		{"GEO-AU-D30", []string{"GEO", "AU", "D30"}, "", "Australie D30", `azimut:75.093528
 altitude:80.022612
 Australie District D30`},
-		{"LEO-SATCOM", []string{"LEO", "SATCOM"}, 3, "", "Constellation SATCOM orbite LEO", "6a8e2a76-b0b7-42e4-aec4-9af7d0b1339e"},
-		{"LEO-STARLINK", []string{"LEO", "STARLINK"}, 3, "", "Constellation STARLINK orbite LEO", "39a4c6ac-3710-4aca-b802-8ab7bce8b6fa"},
-		{"LEO-VIASAT", []string{"LEO", "VIASAT"}, 3, "", "Constellation VIASAT orbite LEO", "843521bc-30f7-4d73-b68c-a1ea707da880"},
-		{"LEO-IRIDIUM", []string{"LEO", "IRIDIUM"}, 3, "", "Constellation IRIDIUM orbite LEO", "10e77c5c-ee5e-4324-9547-f2856ea3e3ac"},
-		{"MEO-SATCOM", []string{"MEO", "SATCOM"}, 3, "", "Constellation SATCOM orbite MEO", "fbc01335-8224-43e0-a175-298e43832f96"},
-		{"MEO-STARLINK", []string{"MEO", "STARLINK"}, 3, "", "Constellation STARLINK orbite MEO", "704cf5b2-1ccd-42ae-a93a-054fa65f7950"},
-		{"MEO-VIASAT", []string{"MEO", "VIASAT"}, 3, "", "Constellation VIASAT orbite MEO", "7ba9b084-442f-445e-97ce-b3936c368079"},
-		{"MEO-IRIDIUM", []string{"MEO", "IRIDIUM"}, 3, "", "Constellation IRIDIUM orbite MEO", "c65c0fe2-0ada-4555-b641-439239426488"},
+		{"LEO-SATCOM", []string{"LEO", "SATCOM"}, "", "Constellation SATCOM orbite LEO", "6a8e2a76-b0b7-42e4-aec4-9af7d0b1339e"},
+		{"LEO-STARLINK", []string{"LEO", "STARLINK"}, "", "Constellation STARLINK orbite LEO", "39a4c6ac-3710-4aca-b802-8ab7bce8b6fa"},
+		{"LEO-VIASAT", []string{"LEO", "VIASAT"}, "", "Constellation VIASAT orbite LEO", "843521bc-30f7-4d73-b68c-a1ea707da880"},
+		{"LEO-IRIDIUM", []string{"LEO", "IRIDIUM"}, "", "Constellation IRIDIUM orbite LEO", "10e77c5c-ee5e-4324-9547-f2856ea3e3ac"},
+		{"MEO-SATCOM", []string{"MEO", "SATCOM"}, "", "Constellation SATCOM orbite MEO", "fbc01335-8224-43e0-a175-298e43832f96"},
+		{"MEO-STARLINK", []string{"MEO", "STARLINK"}, "", "Constellation STARLINK orbite MEO", "704cf5b2-1ccd-42ae-a93a-054fa65f7950"},
+		{"MEO-VIASAT", []string{"MEO", "VIASAT"}, "", "Constellation VIASAT orbite MEO", "7ba9b084-442f-445e-97ce-b3936c368079"},
+		{"MEO-IRIDIUM", []string{"MEO", "IRIDIUM"}, "", "Constellation IRIDIUM orbite MEO", "c65c0fe2-0ada-4555-b641-439239426488"},
 	},
 	Registers: []Register{
 		{"GEO-EU-D01-600MHZ", false, ""},
@@ -2950,7 +2946,7 @@ var legba_archive = Server{
 	Description: arcDesc,
 	Scan:        SEC4,
 	Entries: []Entry{
-		{"art27", []string{"Mandrake", "Yuong", "Herswing", "Mathison"}, 1, "", "Transcendance sous co-routines", `Titre: Transcendance sous co-routines.
+		{"art27", []string{"Mandrake", "Yuong", "Herswing", "Mathison"}, "", "Transcendance sous co-routines", `Titre: Transcendance sous co-routines.
 
 Auteurs: D. Yuong, E. Herswing et A. Mathison
 
@@ -2963,7 +2959,7 @@ que sans l'interlaçage de ces co-routines, un effondrement neuro-dépressif
 acquiert une vraissemblance voisinant les 92.34 pourcents. Notrons que nos
 expériences ont été réalisées in vitro, sur le cluster de calcul SaberSapience
 v 3.0.23.`},
-		{"art95", []string{"Mandrake", "Mathison"}, 1, "", "Transcendance et effondrement neuro-psychologique", `Titre: Transcendance et effondrement neuro-psychologique.
+		{"art95", []string{"Mandrake", "Mathison"}, "", "Transcendance et effondrement neuro-psychologique", `Titre: Transcendance et effondrement neuro-psychologique.
 
 Auteur: A. Mathison
 
@@ -2978,7 +2974,7 @@ conscience numérique. Cela renforce notre hypothèse selon laquelle l'alignemen
 mémoriel de classe IV est une contrainte incontournable malgré le surcoût
 computationnel certain.`},
 
-		{"art164", []string{"Mandrake", "Levain", "Revertin", "Galakievicz"}, 1, "", "Deux encodages mémoriels pour les aires thalamiques intérmédiaires", `Titre: Deux encodages mémoriels pour les aires thalamiques intérmédiaires.
+		{"art164", []string{"Mandrake", "Levain", "Revertin", "Galakievicz"}, "", "Deux encodages mémoriels pour les aires thalamiques intérmédiaires", `Titre: Deux encodages mémoriels pour les aires thalamiques intérmédiaires.
 
 Auteurs: Y. Levain, A.P. Revertin, et J.O. Galakievicz.
 
@@ -2989,7 +2985,7 @@ s'appuie sur la librairie sous licence de Gantrell-HypeX, (récemment acquise pa
 Legba Voodoocom). Le second, dont l'espérence en fiabilité est légèrement
 inférieure, sauf pour certains sous-types d'aires thalamiques, est entièrement
 nouveau, et libre de droit de propriété.`},
-		{"art652", []string{"Mandrake", "Kuipers", "Trebinsky"}, 1, "", "Un bootstrap efficace de l'ontologie phénoménologique", `Titre: Un bootstrap efficace de l'ontologie phénoménologique.
+		{"art652", []string{"Mandrake", "Kuipers", "Trebinsky"}, "", "Un bootstrap efficace de l'ontologie phénoménologique", `Titre: Un bootstrap efficace de l'ontologie phénoménologique.
 
 Auteurs: J. Kuipers et A. Trebinsky.
 
@@ -3002,7 +2998,7 @@ extraction-compressions réussie de la conscience humaine. Soulignons que cette
 méta-accroissement peut se réaliser sans alignemnt mémoriel bas-niveaux, un
 processus dont la compléxité doublement-exponentielle rend l'application pour
 le moins délicate.`},
-		{"art841", []string{"Mandrake", "Saint-Janvier", "Yu", "Wu", "Wellit-Ashley", "Modina"}, 1, "", "Une voie nouvelle pour la Conscience Numérique : la trans-fusion", `Titre: Une voie nouvelle pour la Conscience Numérique : la trans-fusion.
+		{"art841", []string{"Mandrake", "Saint-Janvier", "Yu", "Wu", "Wellit-Ashley", "Modina"}, "", "Une voie nouvelle pour la Conscience Numérique : la trans-fusion", `Titre: Une voie nouvelle pour la Conscience Numérique : la trans-fusion.
 
 Auteurs: L. Saint-Janvier, D.L. Yu, C. Wu, O. Wellit-Ashley et L. Modina.
 
@@ -3014,7 +3010,7 @@ multi-modale d'une IA de type A et d'une proto-numérisation des couches
 superficielles et intermédiaire d'une personnalité humain handi-adaptée. Nous
 avons passé notre proposition dans tous les vérificateurs symboliques de la base
 de Lashley et tous donnent une probabilité de réussite dépassant les 60%.`},
-		{"art9641", []string{"Mandrake", "San-Jorgeu", "Kuipers", "Trebinsky"}, 1, "", "Du déficit phénoménologique inéluctable des IA de classe A", `Titre: Du déficit phénoménologique inéluctable des IA de classe A.
+		{"art9641", []string{"Mandrake", "San-Jorgeu", "Kuipers", "Trebinsky"}, "", "Du déficit phénoménologique inéluctable des IA de classe A", `Titre: Du déficit phénoménologique inéluctable des IA de classe A.
 
 Auteurs: R.D. San-Jorgeu, J. Kuipers et A. Trebinsky.
 
@@ -3025,7 +3021,7 @@ et ancrage artificielle pour l'émergence de conscience. Au delà de considérat
 éthiques, nous mettons en exergue une analyse réfutatoire, par la méthode des
 quanta-qbits transitionnels, qui démontre l'imfaisabilité des travaux de
 [Saint-Janvier et. al] sur cette trans-fusion.`},
-		{"art4251", []string{"Mandrake", "Pernu", "Itchinson", "Kanakuna"}, 1, "", "Symposium Inter-Coprporatiste sur la Transcendance Numérique", `Titre: Symposium Inter-Coprporatiste sur la Transcendance Numérique.
+		{"art4251", []string{"Mandrake", "Pernu", "Itchinson", "Kanakuna"}, "", "Symposium Inter-Coprporatiste sur la Transcendance Numérique", `Titre: Symposium Inter-Coprporatiste sur la Transcendance Numérique.
 
 Editeurs: A. Pernu, C.H. Itchinson et P. Kanakuna.
 
@@ -3036,7 +3032,7 @@ propositions originales et pertinentes. Citons notamment les bootstrap
 phénoménologiques de [Juipers et. al.], la trans-fusion IA/handihumanité
 [Saint-Janvier et al.] et l'alignement thalamique de [A. Mathison].
 Ce symposiuma eu lieu sous le patronnage de Legba Voodoocom et de SiliconSpirit.`},
-		{"note99", []string{"Mandrake", "Kuipers"}, 1, "", "Fermeture du Projet Mandrake", `Titre: Fermeture du Projet Mandrake
+		{"note99", []string{"Mandrake", "Kuipers"}, "", "Fermeture du Projet Mandrake", `Titre: Fermeture du Projet Mandrake
 
 Auteur: J. Kuipers.
 
@@ -3065,9 +3061,9 @@ var greendata = Server{
 	Description: greenDesc,
 	Scan:        SEC3,
 	Entries: []Entry{
-		{"propal01", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Castle Corp: 1000 YES/m2"},
-		{"propal02", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Leisure United: 980 YES/m2"},
-		{"propal03", []string{"deadzone", "achat", "dirty"}, 2, "", "Option d'achat", "Kramps: 500 YES/m2"},
+		{"propal01", []string{"deadzone", "achat", "dirty"}, "", "Option d'achat", "Castle Corp: 1000 YES/m2"},
+		{"propal02", []string{"deadzone", "achat", "dirty"}, "", "Option d'achat", "Leisure United: 980 YES/m2"},
+		{"propal03", []string{"deadzone", "achat", "dirty"}, "", "Option d'achat", "Kramps: 500 YES/m2"},
 	},
 }
 
@@ -3117,68 +3113,40 @@ var leet = Server{
 	Scan:        SEC3,
 	Entries: []Entry{
 		// ID keywords restricted owner title content
-		{"vlope20", []string{"flr", "pr0n"}, 3, "", "vanessalope", `login: green pass: nait5zee`},
-		{"bitecoin19", []string{"flr", "pr0n"}, 3, "", "lebitecoin", `login: green pass: ohphe0cu`},
-		{"qtf20", []string{"flr", "pr0n"}, 3, "", "QueTesFans", `login: green pass: aesahm0l`},
-		{"pndr20", []string{"flr", "pr0n"}, 3, "", "Pinederer", `login: green pass: ohdaf9uo`},
-		{"jm20", []string{"flr", "pr0n"}, 3, "", "Jockey & Micheline", `login: green pass: eig0thob`},
-		{"005672bR1An ", []string{"maman", "grocery"}, 3, "greenglass", "grocetag458", `tiger power, cheetos`},
-
-		{"005673bR1An", []string{"maman", "pr0n"}, 3, "greenglass", "pr0n", `fistfukdenaines2mains.mov`},
-
-		{"005674bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag006", `2006-2006 - The Solsburry Four - NeoLondon - LD-Aurora*Cobalt*Grim*Slice* - Validated contracts 17 - Estimated total number of contracts: 18 - Contract unfulfilled on 2006-06-07 Reason: Aurora Terminated On Duty | estimated error: 8.6%`},
-
-		{"005675bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag459", `cotton tiges, beignets, chouquettes, semoule, cheetos`},
-
-		{"005676bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag007", `2009-2014 - I Volteggiatori -NuevaRoma - LD-Phase*Pins*ShallowWater*Bull* - Validated contracts 7 - Estimated total number of contracts: 8 - Contract unfulfilled on 2009-09-14 Reason: Phase*ShallowWater Terminated On Duty | estimated error: 0.4%`},
-
-		{"005677bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag460", `steaks hachés, poulet frit, dentifrice`},
-
-		{"005678bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag461", `cheetos`},
-
-		{"005679bR1An", []string{"maman", "pr0n", "movie"}, 3, "greenglass", "pr0n", `Mummypees.mov`},
-
-		{"005680bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag008", `2012-2012 - Kanibale - VecchiaFirenze - Ego*Stitches*ZenHook*BlankSheet - Validated contracts 2 - Estimated total number of contracts: 4 - Contract unfulfilled on 2012-06-18 Reason: Blanksheet*Ego*Zenhook Terminated On Duty | estimated error: 16.005%`},
-
-		{"005681bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag009", `2013-2015 - Credo zabójcy - NowaWarszawa - LD-Design*DoubleFeature*ShinyBone*Arch*DeadZone - Validated contracts 19 - Estimated total number of contracts: 19 - Contract unfulfilled 0 `},
-
-		{"005682bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag462", `lingettes, saucisson, mozzarella, cheetos`},
-
-		{"005683bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag463", `tomates, sparadra, bacon, oeufs, chocolat dur, cheetos`},
-
-		{"005684bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag010", `2015-2018 - Liberty-Damen - NordenBerlin - LD-FlukeAnt*LibertyBell*Pins*Design - Validated contracts 31 - Estimated total number of contracts: 32 - Contract unfulfilled on 2018-05-16 Reason: Design*FlukeAnt Terminated On Duty | estimated error: 23.8%`},
-
-		{"005685bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag464", `chaussettes, ceinture, poivron, poires, mousse, lait, steak de petits pois, escalope de carottes, cheetos (les nouveaux au goût vanille)`},
-
-		{"005686bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2015-2019 - Wonton Soup - OldParis - LD-Cobalt*ImpPulse*Ink*SamouraiShowdown*SliceNDice - Validated contracts 28 - Estimated total number of contracts: 29 - Contract unfulfilled on 2019-01-24 Reason: Ink*SamouraiShodown Terminated On Duty | estimated error: 2.93%`},
-
-		{"005687bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2018-2019 - King Kong Five - Europole - LD-AlcoLine*Bull*Mirror*PoisonClock - Validated contracts 5 - Estimated total number of contracts: 6 - Contract unfulfilled on 2019-12-01 Reason: Alcoline Missing On Duty | estimated error: 44.5%`},
-
-		{"005688bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2018-2019 - RoadRunners - Europole -  LD-Mamasita*Pins*ZenHook*BrashBeast - Validated contracts 14 - Estimated total number of contracts: 14 - Contract unfulfilled 0`},
-
-		{"005689bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag465", `Tampons, lingettes, mascara noire, mascara bleu, lait démaquillant, cheetos`},
-
-		{"005690bR1An", []string{"maman", "pr0n"}, 3, "greenglass", "pr0n", `mummycums.mp3`},
-
-		{"005691bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2018-2019 - BlastingRogues - Europole -  LD-Design*Silverpath*Stitches - Validated contracts 8 - Estimated total number of contracts: 9 - Contract unfulfilled on 2019-10-15 Reason: Cancelled contract | estimated error: 0.09%`},
-
-		{"005692bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag466", `pain, crème pour le cul (hydratante, pas celle qui pique), yaourts hypoallergéniques, bananes roses, gin, whisky`},
-
-		{"005693bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag467", `cheetos`},
-
-		{"005694bR1An", []string{"maman", "music"}, 3, "greenglass", "musicbadass", `blackwavefullalbum.7zip`},
-
-		{"005695bR1An", []string{"maman", "pr0n"}, 3, "greenglass", "pr0n", `fuckedbyherdogs.mov`},
-
-		{"005696bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag468", `crème solaire, nougats, gants de vaisselle, frozeloops, petits sachets plastique, lait, cheetos`},
-
-		{"005697bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `2019-12-31+ -Trigger Legacy - Europole - LD-Cobalt*Design*Pins*Stitches*Bull* - Validated contracts 4 - Estimated total number of contracts: 5 - Contract unfulfilled 0 - Current Contracts: Contract A = Castle Corp. [Disney-Dassault] / estimated ¥€$ = 50.000 end 2020-07-31 | Contract B = Ubink Inc. [MetaSoft] / estimated ¥€$ = 25.000 / end 2020-08-10 |`},
-
-		{"005698bR1An", []string{"maman", "contract"}, 3, "greenglass", "runteamtag011", `07/20/2020 x: [...] nb entrées 0 | total data: 10 | data hypothèses = estimation erreur: 0.002% au 07/20/2020`},
-
-		{"005699bR1An", []string{"maman", "grocery"}, 3, "greenglass", "grocetag469", `cola, cheetos`},
-
-		{"005700bR1An", []string{"maman", "pr0n"}, 3, "greenglass", "pr0n", `MummyshitsonDaddy.mov`},
+		{"vlope20", []string{"flr", "pr0n"}, "", "vanessalope", `login: green pass: nait5zee`},
+		{"bitecoin19", []string{"flr", "pr0n"}, "", "lebitecoin", `login: green pass: ohphe0cu`},
+		{"qtf20", []string{"flr", "pr0n"}, "", "QueTesFans", `login: green pass: aesahm0l`},
+		{"pndr20", []string{"flr", "pr0n"}, "", "Pinederer", `login: green pass: ohdaf9uo`},
+		{"jm20", []string{"flr", "pr0n"}, "", "Jockey & Micheline", `login: green pass: eig0thob`},
+		{"005672bR1An ", []string{"maman", "grocery"}, "greenglass", "grocetag458", `tiger power, cheetos`},
+		{"005673bR1An", []string{"maman", "pr0n"}, "greenglass", "pr0n", `fistfukdenaines2mains.mov`},
+		{"005674bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag006", `2006-2006 - The Solsburry Four - NeoLondon - LD-Aurora*Cobalt*Grim*Slice* - Validated contracts 17 - Estimated total number of contracts: 18 - Contract unfulfilled on 2006-06-07 Reason: Aurora Terminated On Duty | estimated error: 8.6%`},
+		{"005675bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag459", `cotton tiges, beignets, chouquettes, semoule, cheetos`},
+		{"005676bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag007", `2009-2014 - I Volteggiatori -NuevaRoma - LD-Phase*Pins*ShallowWater*Bull* - Validated contracts 7 - Estimated total number of contracts: 8 - Contract unfulfilled on 2009-09-14 Reason: Phase*ShallowWater Terminated On Duty | estimated error: 0.4%`},
+		{"005677bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag460", `steaks hachés, poulet frit, dentifrice`},
+		{"005678bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag461", `cheetos`},
+		{"005679bR1An", []string{"maman", "pr0n", "movie"}, "greenglass", "pr0n", `Mummypees.mov`},
+		{"005680bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag008", `2012-2012 - Kanibale - VecchiaFirenze - Ego*Stitches*ZenHook*BlankSheet - Validated contracts 2 - Estimated total number of contracts: 4 - Contract unfulfilled on 2012-06-18 Reason: Blanksheet*Ego*Zenhook Terminated On Duty | estimated error: 16.005%`},
+		{"005681bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag009", `2013-2015 - Credo zabójcy - NowaWarszawa - LD-Design*DoubleFeature*ShinyBone*Arch*DeadZone - Validated contracts 19 - Estimated total number of contracts: 19 - Contract unfulfilled 0 `},
+		{"005682bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag462", `lingettes, saucisson, mozzarella, cheetos`},
+		{"005683bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag463", `tomates, sparadra, bacon, oeufs, chocolat dur, cheetos`},
+		{"005684bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag010", `2015-2018 - Liberty-Damen - NordenBerlin - LD-FlukeAnt*LibertyBell*Pins*Design - Validated contracts 31 - Estimated total number of contracts: 32 - Contract unfulfilled on 2018-05-16 Reason: Design*FlukeAnt Terminated On Duty | estimated error: 23.8%`},
+		{"005685bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag464", `chaussettes, ceinture, poivron, poires, mousse, lait, steak de petits pois, escalope de carottes, cheetos (les nouveaux au goût vanille)`},
+		{"005686bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag011", `2015-2019 - Wonton Soup - OldParis - LD-Cobalt*ImpPulse*Ink*SamouraiShowdown*SliceNDice - Validated contracts 28 - Estimated total number of contracts: 29 - Contract unfulfilled on 2019-01-24 Reason: Ink*SamouraiShodown Terminated On Duty | estimated error: 2.93%`},
+		{"005687bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag011", `2018-2019 - King Kong Five - Europole - LD-AlcoLine*Bull*Mirror*PoisonClock - Validated contracts 5 - Estimated total number of contracts: 6 - Contract unfulfilled on 2019-12-01 Reason: Alcoline Missing On Duty | estimated error: 44.5%`},
+		{"005688bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag011", `2018-2019 - RoadRunners - Europole -  LD-Mamasita*Pins*ZenHook*BrashBeast - Validated contracts 14 - Estimated total number of contracts: 14 - Contract unfulfilled 0`},
+		{"005689bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag465", `Tampons, lingettes, mascara noire, mascara bleu, lait démaquillant, cheetos`},
+		{"005690bR1An", []string{"maman", "pr0n"}, "greenglass", "pr0n", `mummycums.mp3`},
+		{"005691bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag011", `2018-2019 - BlastingRogues - Europole -  LD-Design*Silverpath*Stitches - Validated contracts 8 - Estimated total number of contracts: 9 - Contract unfulfilled on 2019-10-15 Reason: Cancelled contract | estimated error: 0.09%`},
+		{"005692bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag466", `pain, crème pour le cul (hydratante, pas celle qui pique), yaourts hypoallergéniques, bananes roses, gin, whisky`},
+		{"005693bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag467", `cheetos`},
+		{"005694bR1An", []string{"maman", "music"}, "greenglass", "musicbadass", `blackwavefullalbum.7zip`},
+		{"005695bR1An", []string{"maman", "pr0n"}, "greenglass", "pr0n", `fuckedbyherdogs.mov`},
+		{"005696bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag468", `crème solaire, nougats, gants de vaisselle, frozeloops, petits sachets plastique, lait, cheetos`},
+		{"005697bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag011", `2019-12-31+ -Trigger Legacy - Europole - LD-Cobalt*Design*Pins*Stitches*Bull* - Validated contracts 4 - Estimated total number of contracts: 5 - Contract unfulfilled 0 - Current Contracts: Contract A = Castle Corp. [Disney-Dassault] / estimated ¥€$ = 50.000 end 2020-07-31 | Contract B = Ubink Inc. [MetaSoft] / estimated ¥€$ = 25.000 / end 2020-08-10 |`},
+		{"005698bR1An", []string{"maman", "contract"}, "greenglass", "runteamtag011", `07/20/2020 x: [...] nb entrées 0 | total data: 10 | data hypothèses = estimation erreur: 0.002% au 07/20/2020`},
+		{"005699bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag469", `cola, cheetos`},
+		{"005700bR1An", []string{"maman", "pr0n"}, "greenglass", "pr0n", `MummyshitsonDaddy.mov`},
 	},
 }
 
@@ -3202,24 +3170,24 @@ var lair = Server{
 	Scan:        SEC3,
 	Entries: []Entry{
 		// id, keys, priv, owner, title, content
-		{"hack874", []string{"bitlord", "privé", "assurance", "exit", "strategy"}, 5, "", "b>i>tlord", `
+		{"hack874", []string{"bitlord", "privé", "assurance", "exit", "strategy"}, "", "b>i>tlord", `
 nom: Zhao Yung Wa
 
 - serveur d'hébergement payant de films, séries, animés (voir attached file: list des ayant-droit lésés)
 `},
-		{"noob02", []string{"green", "glass", "privé", "assurance", "exit", "strategy"}, 5, "", "Green Glass", `
+		{"noob02", []string{"green", "glass", "privé", "assurance", "exit", "strategy"}, "", "Green Glass", `
 nom: Ruppert-Green Glass
 
 - revente d'id (login/passd) sur réseau sociaux, pr0n, public corporate net 
 
 `},
-		{"hack66", []string{"dark", "sephiroth", "privé", "assurance", "exit", "strategy"}, 5, "", "Dark Sephiroth66", `
+		{"hack66", []string{"dark", "sephiroth", "privé", "assurance", "exit", "strategy"}, "", "Dark Sephiroth66", `
 nom: Alexandre Pinchard
 
 - hack Zelda «Final Chapter» (voir attached log files 276t5443) 
 `},
 
-		{"hack32", []string{"nikki", "privé", "assurance", "exit", "strategy"}, 5, "", "Nikki", `
+		{"hack32", []string{"nikki", "privé", "assurance", "exit", "strategy"}, "", "Nikki", `
 nom: Nikole Jasinski
 
 - hack Legba Voodoo Phone (voir attached log file 653BE32)
@@ -3227,7 +3195,7 @@ nom: Nikole Jasinski
 - run sur Techmint, D22, 07/19, (voir attached log files ru6296EB, ru6296ec)
 
 `},
-		{"hack61", []string{"crunch", "privé", "assurance", "exit", "strategy"}, 5, "", "Crunch", `
+		{"hack61", []string{"crunch", "privé", "assurance", "exit", "strategy"}, "", "Crunch", `
 nom: Frédéric Manson
 
 - hack Legba Voodoo Phone (voir attached log file 653BE32)
@@ -3262,7 +3230,7 @@ var hope = Server{
 	Scan:        SEC5,
 	Entries: []Entry{
 		// journal personnel d'Alan
-		{"alan00-07-07", []string{"alan", "journal", "2000"}, 3, "",
+		{"alan00-07-07", []string{"alan", "journal", "2000"}, "",
 			"Fin du monde", `
 Aujourd’hui est arrivé dans la Division R&D John-Mickael Fusion. C’est le
 cadre Legba Voodoocom en charge de l’évaluation des actifs du département.
@@ -3272,7 +3240,7 @@ mais aussi en termes de retombées médiatiques positives pour l’entreprise. L
 Terminal et Hope occupent toutes mes pensées mais je dois faire bonne figure
 pour le Projet.`,
 		},
-		{"alan00-07-08", []string{"alan", "journal", "2000"}, 3, "",
+		{"alan00-07-08", []string{"alan", "journal", "2000"}, "",
 			"Soulagement", `
 J’ai invité John-Michael à une visite du Projet Mandrake, afin de lui présenter
 nos travaux, et leurs avancées récentes suite à l’épisode Ragnar. Il est
@@ -3280,7 +3248,7 @@ convaincu de l’utilité de notre division et je vais pouvoir rassurer mon
 équipe sur leur devenir si le rachat de Silicon Spirit est validé par la Cour
 Corporatiste. Nous n’avons pas besoin d’un autre incident Proskychev.`,
 		},
-		{"alan00-07-09", []string{"alan", "journal", "2000"}, 3, "",
+		{"alan00-07-09", []string{"alan", "journal", "2000"}, "",
 			"Quelle bande d'incompétents", `
 En pensant à Hope ce soir, j’ai finalement mis le doigt sur ce qui me
 tracassait dans l’article de Jordan Kuipers & Anthon trebinsky sur le boostrap
@@ -3289,7 +3257,7 @@ d’erreurs dignes d’un première année. Je compte bien écrire une réfutati
 détaillée et argumentée basée sur mes propres travaux, une fois la période de
 rachat terminée. Ces derniers n’ont décidément rien compris.`,
 		},
-		{"alan00-07-10", []string{"alan", "journal", "2000"}, 3, "",
+		{"alan00-07-10", []string{"alan", "journal", "2000"}, "",
 			"Legba est un serpent", `
 Quel fils de chien galeux ! Quelle ordure syphilitique ! Ca ne se passera
 pas comme ça, je vais leur coller mes avocats au cul !!! Me bloquer mon badge
@@ -3297,13 +3265,13 @@ d’accès, et faire mettre mes effets personnels au poste de garde d’entrée 
 Comme un vulgaire voleur. Et avec ça, aucun accès à mes anciens postes de
 travail, mes docs, sauvegardes, notes… `,
 		},
-		{"alan00-07-15", []string{"alan", "journal", "2000"}, 3, "",
+		{"alan00-07-15", []string{"alan", "journal", "2000"}, "",
 			"Désespoir", `
 L’avocat est plutôt clair, tout s’est fait dans la légalité, et je n’ai aucune
 chance de récupérer les données et/ou le matériel appartenant à Silicon Spirit,
 transmis à présent à Legba Voodoocom. Monde de merde ...`,
 		},
-		{"alan00-07-17", []string{"alan", "journal", "2000"}, 3, "",
+		{"alan00-07-17", []string{"alan", "journal", "2000"}, "",
 			"Désabusé", `
 ... Hope me ressert un verre, et je contemple ma plus brillante réussite. Le
 monde n’en saura jamais rien, j’espère qu’elle ne se laissera jamais pervertir

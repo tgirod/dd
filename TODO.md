@@ -1,0 +1,6 @@
+- [x] reste de niv d'accréditation
+- [ ] persistance des données
+- [ ] session
+- [ ] usurpation d'identité
+- [ ] registres : liste de valeurs
+- [ ] data : on en fait quoi ?

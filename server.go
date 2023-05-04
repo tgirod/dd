@@ -151,7 +151,6 @@ type Register struct {
 	Name        string
 	State       bool
 	Description string
-	Restricted  int
 }
 
 func (r *Register) Match(name string) bool {

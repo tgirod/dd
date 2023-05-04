@@ -38,7 +38,8 @@ type Server struct {
 
 // Account représente un compte utilisateur sur un serveur
 type Account struct {
-	Login    string
+	Login    string `storm:"id"`
+	Server   string `storm:"index"` // le serveur concerné
 	Admin    bool
 	Backdoor bool
 }
@@ -72,6 +73,9 @@ func (s *Server) RemoveAccount(login string) {
 }
 
 type Link struct {
+	ID     int    `storm:"id,increment"`
+	Server string `storm:"index"`
+
 	// adresse du serveur de destination
 	Address string
 
@@ -90,8 +94,10 @@ func (s *Server) FindTarget(address string) (Link, error) {
 
 // Entry est une entrée dans une base de données
 type Entry struct {
+	Server string `storm:"index"`
+
 	// identifiant unique
-	ID string
+	ID string `storm:"id"`
 
 	// mots-clefs utilisés pour la recherche
 	Keywords []string
@@ -137,6 +143,8 @@ func (e Entry) Match(keyword string) bool {
 
 // Register représente registre mémoire qui peut être modifié pour contrôler quelque chose
 type Register struct {
+	Server      string `storm:"index"`
+	ID          int    `storm:"id,increment"`
 	Description string
 	State       string   // état actuel
 	Options     []string // valeurs possible
@@ -153,7 +161,9 @@ func (s *Server) CreateBackdoor(login string) {
 }
 
 type Post struct {
-	Parent  int // index du parent
+	Server  string `storm:"index"`
+	ID      int    `storm:"id,increment"`
+	Parent  int    // index du parent
 	Date    time.Time
 	Author  string
 	Subject string

@@ -16,7 +16,7 @@ type Network struct {
 }
 
 type Identity struct {
-	Login    string
+	Login    string `storm:"id"`
 	Password string
 	Name     string
 	Yes      int
@@ -24,11 +24,12 @@ type Identity struct {
 }
 
 type Message struct {
-	Recipient string // expéditeur
+	ID        int    `storm:"id,increment"`
+	Recipient string `storm:"index"` // expéditeur
 	Sender    string // destinataire
 	Subject   string // titre du message
 	Content   string // contenu du message
-	Opened    bool   // pas encore lu
+	Opened    bool   `storm:"index"` // pas encore lu
 }
 
 func (n *Network) MessageSend(m Message) error {

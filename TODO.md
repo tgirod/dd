@@ -5,6 +5,9 @@
 - [ ] data : on en fait quoi ?
 - [ ] usurpation d'identité
 - [ ] nouvelle modèle de sécurité pour remplacer le niveau d'accréditation
+- [ ] mise en page
+  - [x] Select ne renvoit pas une erreur avec la liste, mais un message gentil
+  - [ ] belle tabulation parce que pour l'instant c'est moche
 
 # proposition de modèle de sécurité
 

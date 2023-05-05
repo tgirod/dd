@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 var (
@@ -276,6 +278,7 @@ func (n Number) Resume(ctx Context, args []string) any {
 type Select struct {
 	name    string
 	help    string
+	header  string
 	options func(ctx Context) []Option
 	next    Node
 }
@@ -293,8 +296,15 @@ func (s Select) Help() string {
 	return s.help
 }
 
+var underline = lipgloss.NewStyle().Underline(true)
+
 func (s Select) List(ctx Context) string {
 	b := strings.Builder{}
+	header := s.header
+	if header == "" {
+		header = s.help
+	}
+	fmt.Fprintln(&b, underline.Render(header))
 	for _, o := range s.options(ctx) {
 		fmt.Fprintf(&b, "%v : %s\n", o.value, o.help)
 	}
@@ -304,11 +314,7 @@ func (s Select) List(ctx Context) string {
 func (s Select) Parse(ctx Context, args []string) any {
 	if len(args) == 0 {
 		// afficher la liste des choix possibles
-
-		return ctx.Result(
-			fmt.Errorf("%s : %w", s.name, errMissingArgument),
-			s.List(ctx),
-		)
+		return ctx.Output(s.List(ctx))
 	}
 
 	// vérifier que la valeur est valide

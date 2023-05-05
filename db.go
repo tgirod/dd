@@ -59,3 +59,7 @@ func First[T any](matchers ...q.Matcher) (T, error) {
 	err := db.Select(matchers...).First(&one)
 	return one, err
 }
+
+func Query(matchers ...q.Matcher) storm.Query {
+	return db.Select(matchers...)
+}

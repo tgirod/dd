@@ -64,6 +64,7 @@ var Hack = map[string]Cmd{
 	"jack":  jack,
 	"evade": evade,
 	"door":  door,
+	"imp":   imp,
 }
 
 var baseCmds = Branch{

@@ -33,6 +33,15 @@ type Account struct {
 	Server   string `storm:"index"` // le serveur concerné
 	Admin    bool
 	Backdoor bool
+	Groups   []string `storm:"index"`
+}
+
+func (s Server) Accounts() []Account {
+	accounts, err := Find[Account](s.Match())
+	if err != nil {
+		panic(err)
+	}
+	return accounts
 }
 
 // FindAccount cherche un compte utilisateur correspondant au login
@@ -50,6 +59,7 @@ func (s Server) RemoveAccount(account Account) error {
 type Link struct {
 	ID     int    `storm:"id,increment"`
 	Server string `storm:"index"`
+	Group  string `storm:"index"`
 
 	// adresse du serveur de destination
 	Address string
@@ -76,6 +86,7 @@ func (s Server) Link(id int) (Link, error) {
 // Entry est une entrée dans une base de données
 type Entry struct {
 	Server string `storm:"index"`
+	Group  string `storm:"index"`
 
 	// identifiant unique
 	ID string `storm:"id"`
@@ -148,6 +159,7 @@ func (e Entry) Match(keyword string) bool {
 // Register représente registre mémoire qui peut être modifié pour contrôler quelque chose
 type Register struct {
 	Server      string `storm:"index"`
+	Group       string `storm:"index"`
 	ID          int    `storm:"id,increment"`
 	Description string
 	State       string   // état actuel
@@ -182,6 +194,7 @@ func (s Server) CreateBackdoor(identity Identity) (Account, error) {
 
 type Post struct {
 	Server  string `storm:"index"`
+	Group   string `storm:"index"`
 	ID      int    `storm:"id,increment"`
 	Parent  int    `storm:"index"`
 	Date    time.Time

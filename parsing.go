@@ -45,6 +45,10 @@ func (c Context) Value(key any) any {
 	return nil
 }
 
+func (c Context) Console() *Console {
+	return c.Value("console").(*Console)
+}
+
 func (c Context) Print() string {
 	b := strings.Builder{}
 	ctx := &c

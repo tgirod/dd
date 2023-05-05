@@ -23,6 +23,10 @@ type Server struct {
 	Scan time.Duration
 }
 
+func (s Server) Match() q.Matcher {
+	return q.Eq("Server", s.Address)
+}
+
 // Account représente un compte utilisateur sur un serveur
 type Account struct {
 	Login    string `storm:"id"`
@@ -33,7 +37,10 @@ type Account struct {
 
 // FindAccount cherche un compte utilisateur correspondant au login
 func (s Server) FindAccount(login string) (Account, error) {
-	return First[Account](q.Eq("Server", s.Address), q.Eq("Login", login))
+	return First[Account](
+		s.Match(),
+		q.Eq("Login", login),
+	)
 }
 
 func (s Server) RemoveAccount(account Account) error {
@@ -52,7 +59,7 @@ type Link struct {
 }
 
 func (s Server) Links() []Link {
-	links, err := Find[Link](q.Eq("Server", s.Address))
+	links, err := Find[Link](s.Match())
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +68,7 @@ func (s Server) Links() []Link {
 
 func (s Server) Link(id int) (Link, error) {
 	return First[Link](
-		q.Eq("Server", s.Address),
+		s.Match(),
 		q.Eq("ID", id),
 	)
 }
@@ -87,7 +94,7 @@ type Entry struct {
 }
 
 func (s Server) Entries() []Entry {
-	entries, err := Find[Entry](q.Eq("Server", s.Address))
+	entries, err := Find[Entry](s.Match())
 	if err != nil {
 		panic(err)
 	}
@@ -106,7 +113,7 @@ func (m KeywordMatcher) Match(v any) (bool, error) {
 
 func (s Server) DataSearch(keyword string, owner string) []Entry {
 	entries, err := Find[Entry](
-		q.Eq("Server", s.Address),
+		s.Match(),
 		q.Or(
 			q.Eq("Owner", ""),
 			q.Eq("Owner", owner),
@@ -123,7 +130,7 @@ func (s Server) DataSearch(keyword string, owner string) []Entry {
 
 func (s Server) FindEntry(id string, owner string) (Entry, error) {
 	return First[Entry](
-		q.Eq("Server", s.Address),
+		s.Match(),
 		q.Eq("ID", id),
 		q.Or(
 			q.Eq("Owner", ""),
@@ -148,7 +155,7 @@ type Register struct {
 }
 
 func (s Server) Registers() []Register {
-	registers, err := Find[Register](q.Eq("Server", s.Address))
+	registers, err := Find[Register](s.Match())
 	if err != nil {
 		panic(err)
 	}
@@ -157,7 +164,7 @@ func (s Server) Registers() []Register {
 
 func (s Server) Register(id int) (Register, error) {
 	return First[Register](
-		q.Eq("Server", s.Address),
+		s.Match(),
 		q.Eq("ID", id),
 	)
 }
@@ -184,7 +191,7 @@ type Post struct {
 }
 
 func (s Server) Posts() []Post {
-	posts, err := Find[Post](q.Eq("Server", s.Address))
+	posts, err := Find[Post](s.Match())
 	if err != nil {
 		panic(err)
 	}
@@ -193,7 +200,7 @@ func (s Server) Posts() []Post {
 
 func (s Server) Post(id int) (Post, error) {
 	return First[Post](
-		q.Eq("Server", s.Address),
+		s.Match(),
 		q.Eq("ID", id),
 	)
 }
@@ -201,7 +208,7 @@ func (s Server) Post(id int) (Post, error) {
 // Topics liste les posts qui n'ont pas de parent
 func (s Server) Topics() []Post {
 	posts, err := Find[Post](
-		q.Eq("Server", s.Address),
+		s.Match(),
 		q.Eq("Parent", 0),
 	)
 	if err != nil {
@@ -213,7 +220,7 @@ func (s Server) Topics() []Post {
 // Replies retourne la liste des réponses à un post
 func (s Server) Replies(parent int) []Post {
 	posts, err := Find[Post](
-		q.Eq("Server", s.Address),
+		s.Match(),
 		q.Eq("Parent", parent),
 	)
 	if err != nil {
@@ -233,7 +240,7 @@ func concat[T any](slices ...[]T) []T {
 
 func (s Server) Thread(parent int) []Post {
 	thread, err := Find[Post](
-		q.Eq("Server", s.Address),
+		s.Match(),
 		q.Eq("Parent", parent),
 	)
 	if err != nil {

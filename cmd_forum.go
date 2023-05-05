@@ -52,10 +52,12 @@ var forum = Cmd{
 				next: Select{
 					name:    "topic",
 					help:    "sujet de discussion",
+					header:  "liste des sujets de discussions sur ce serveur",
 					options: topicList,
 					next: Select{
 						name:    "post",
 						help:    "message dans la discussion",
+						header:  "liste des messages dans ce sujet de discussion",
 						options: postList,
 						next:    Run(PostRead),
 					},
@@ -80,10 +82,12 @@ var forum = Cmd{
 				next: Select{
 					name:    "topic",
 					help:    "sujet de discussion",
+					header:  "liste des sujets de discussions sur ce serveur",
 					options: topicList,
 					next: Select{
 						name:    "post",
 						help:    "message dans la discussion",
+						header:  "liste des messages dans ce sujet de discussion",
 						options: postList,
 						next: LongText{
 							name: "content",

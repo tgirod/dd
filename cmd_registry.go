@@ -9,8 +9,9 @@ var registry = Cmd{
 	help:      "liste et manipule les registres du serveur",
 	connected: true,
 	next: Select{
-		name: "id",
-		help: "nom du registre",
+		name:   "id",
+		help:   "nom du registre",
+		header: "liste des registres disponibles dans ce serveur",
 		options: func(ctx Context) []Option {
 			console := ctx.Value("console").(*Console)
 			opts := make([]Option, len(console.Registers))
@@ -23,8 +24,9 @@ var registry = Cmd{
 			return opts
 		},
 		next: Select{
-			name: "state",
-			help: "état à écrire dans le registre",
+			name:   "state",
+			help:   "état à écrire dans le registre",
+			header: "liste des états possibles pour ce registre",
 			options: func(ctx Context) []Option {
 				console := ctx.Value("console").(*Console)
 				id := ctx.Value("id").(int)

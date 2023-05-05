@@ -10,8 +10,9 @@ var evade = Cmd{
 	connected:  true,
 	identified: false,
 	next: Select{
-		name: "mem",
-		help: "zone mémoire vers laquelle se déplacer",
+		name:   "mem",
+		help:   "zone mémoire vers laquelle se déplacer",
+		header: "liste des zones mémoire disponibles sur ce serveur",
 		options: func(ctx Context) []Option {
 			console := ctx.Value("console").(*Console)
 			opts := make([]Option, 0, len(console.Mem))

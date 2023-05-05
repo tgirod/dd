@@ -17,8 +17,9 @@ var message = Cmd{
 				name: "read",
 				help: "lire un message",
 				next: Select{
-					name: "id",
-					help: "id du message à lire",
+					name:   "id",
+					help:   "id du message à lire",
+					header: "liste des messages reçus et envoyés",
 					options: func(ctx Context) []Option {
 						console := ctx.Value("console").(*Console)
 						msgs := console.Identity.Messages
@@ -53,8 +54,9 @@ var message = Cmd{
 				name: "reply",
 				help: "répondre à un message",
 				next: Select{
-					name: "id",
-					help: "id du message auquel répondre",
+					name:   "id",
+					help:   "id du message auquel répondre",
+					header: "liste des messages reçus et envoyés",
 					options: func(ctx Context) []Option {
 						console := ctx.Value("console").(*Console)
 						msgs := console.Identity.Messages

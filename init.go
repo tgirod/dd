@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"time"
-
-	"github.com/asdine/storm/v3/q"
 )
 
 const (
@@ -80,4 +77,11 @@ func Init() {
 	Save(Account{Login: "jesus", Server: dd.Address, Admin: true, Backdoor: false})
 	Save(Link{Server: dd.Address, Address: d22.Address, Desc: "serveur public du District 22"})
 	Save(Register{Server: dd.Address, Description: "machine à café", State: "on", Options: []string{"on", "off", "overdrive"}})
+	Save(Entry{
+		Server:   dd.Address,
+		ID:       "bluemars",
+		Keywords: []string{"boisson"},
+		Title:    "blue mars",
+		Content:  "cocktail",
+	})
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"time"
 
 	"github.com/asdine/storm/v3/q"
@@ -73,7 +74,7 @@ type Entry struct {
 	ID string `storm:"id"`
 
 	// mots-clefs utilisés pour la recherche
-	Keywords []string
+	Keywords []string `storm:"index"`
 
 	// accessible uniquement au propriétaire
 	Owner string `storm:"index"`
@@ -93,14 +94,24 @@ func (s Server) Entries() []Entry {
 	return entries
 }
 
+type KeywordMatcher string
+
+func (m KeywordMatcher) Match(v any) (bool, error) {
+	entry, ok := v.(Entry)
+	if !ok {
+		return false, errors.New("type incompatible")
+	}
+	return entry.Match(string(m)), nil
+}
+
 func (s Server) DataSearch(keyword string, owner string) []Entry {
-	// FIXME je n'utilise pas le keyword, créer un q.Matcher
 	entries, err := Find[Entry](
 		q.Eq("Server", s.Address),
 		q.Or(
 			q.Eq("Owner", ""),
 			q.Eq("Owner", owner),
 		),
+		KeywordMatcher(keyword),
 	)
 
 	if err != nil {

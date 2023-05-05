@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"time"
 )
 
@@ -12,14 +13,70 @@ const (
 	SEC5 = time.Second * 30
 )
 
-var dd = Server{
-	Address:     "dd.local",
-	Public:      true,
-	Description: ddDesc,
-	Scan:        SEC1,
+func InitServer(
+	s Server,
+	accounts []Account,
+	links []Link,
+	entries []Entry,
+	registers []Register,
+	posts []Post,
+) {
+	addr := s.Address
+	if addr == "" {
+		panic("le serveur n'a pas d'adresse")
+	}
+
+	if _, err := Save(s); err != nil {
+		log.Fatal(err)
+	}
+
+	for _, a := range accounts {
+		a.Server = addr
+		if _, err := Save(a); err != nil {
+			log.Fatalf("%v : %v\n", a, err)
+		}
+	}
+	for _, l := range links {
+		l.Server = addr
+		if _, err := Save(l); err != nil {
+			log.Fatalf("%v : %v\n", l, err)
+		}
+	}
+	for _, e := range entries {
+		e.Server = addr
+		if _, err := Save(e); err != nil {
+			log.Fatalf("%v : %v\n", e, err)
+		}
+	}
+	for _, r := range registers {
+		r.Server = addr
+		if _, err := Save(r); err != nil {
+			log.Fatalf("%v : %v\n", r, err)
+		}
+	}
+	for _, p := range posts {
+		p.Server = addr
+		if _, err := Save(p); err != nil {
+			log.Fatalf("%v : %v\n", p, err)
+		}
+	}
 }
 
-var ddDesc = `
+func Reset() {
+	db.Drop(Identity{})
+	db.Drop(Message{})
+	db.Drop(Server{})
+	db.Drop(Account{})
+	db.Drop(Link{})
+	db.Drop(Entry{})
+	db.Drop(Register{})
+	db.Drop(Post{})
+}
+
+func Init() {
+	Reset()
+
+	var ddDesc = `
  ____  _      _           ____  _     _        _      _
 |  _ \(_)_ __| |_ _   _  |  _ \(_)___| |_ _ __(_) ___| |_
 | | | | | '__| __| | | | | | | | / __| __| '__| |/ __| __|
@@ -32,8 +89,31 @@ Ce serveur est connecté au Net par le biais d'un accès illégal. Merci de ne p
 faire n'importe quoi.
 
 Tape "index" pour avoir la liste des services fournis par le serveur. Si tu as
-besoin d'aide, demande à ton nerd préféré.
-`
+besoin d'aide, demande à ton nerd préféré.`
+
+	var dd = Server{
+		Address:     "dd.local",
+		Public:      true,
+		Description: ddDesc,
+		Scan:        SEC1,
+	}
+
+	InitServer(dd,
+		[]Account{
+			{Login: "jesus", Admin: true},
+		},
+		[]Link{
+			{Address: d22.Address, Desc: "serveur public du District 22"},
+		},
+		[]Entry{
+			{ID: "bluemars", Keywords: []string{"boisson"}, Title: "blue mars", Content: "cocktail"},
+		},
+		[]Register{
+			{Description: "machine à café", State: "on", Options: []string{"on", "off", "overdrive"}},
+		},
+		[]Post{},
+	)
+}
 
 var d22 = Server{
 	Address:     "d22.eu",
@@ -62,26 +142,3 @@ var dd22Desc = `
            Bienvenue sur le serveur public du District 22 d'Europole.
            Un noeud du plus grand fournisseur d'accès de Méga-Europe. 
 `
-
-func Init() {
-	db.Drop(Identity{})
-	db.Drop(Message{})
-	db.Drop(Server{})
-	db.Drop(Account{})
-	db.Drop(Link{})
-	db.Drop(Entry{})
-	db.Drop(Register{})
-	db.Drop(Post{})
-
-	Save(dd)
-	Save(Account{Login: "jesus", Server: dd.Address, Admin: true, Backdoor: false})
-	Save(Link{Server: dd.Address, Address: d22.Address, Desc: "serveur public du District 22"})
-	Save(Register{Server: dd.Address, Description: "machine à café", State: "on", Options: []string{"on", "off", "overdrive"}})
-	Save(Entry{
-		Server:   dd.Address,
-		ID:       "bluemars",
-		Keywords: []string{"boisson"},
-		Title:    "blue mars",
-		Content:  "cocktail",
-	})
-}

@@ -73,10 +73,7 @@ func Reset() {
 	db.Drop(Post{})
 }
 
-func Init() {
-	Reset()
-
-	var ddDesc = `
+var ddDesc = `
  ____  _      _           ____  _     _        _      _
 |  _ \(_)_ __| |_ _   _  |  _ \(_)___| |_ _ __(_) ___| |_
 | | | | | '__| __| | | | | | | | / __| __| '__| |/ __| __|
@@ -91,35 +88,11 @@ faire n'importe quoi.
 Tape "index" pour avoir la liste des services fournis par le serveur. Si tu as
 besoin d'aide, demande à ton nerd préféré.`
 
-	var dd = Server{
-		Address:     "dd.local",
-		Public:      true,
-		Description: ddDesc,
-		Scan:        SEC1,
-	}
-
-	InitServer(dd,
-		[]Account{
-			{Login: "jesus", Admin: true},
-		},
-		[]Link{
-			{Address: d22.Address, Desc: "serveur public du District 22"},
-		},
-		[]Entry{
-			{ID: "bluemars", Keywords: []string{"boisson"}, Title: "blue mars", Content: "cocktail"},
-		},
-		[]Register{
-			{Description: "machine à café", State: "on", Options: []string{"on", "off", "overdrive"}},
-		},
-		[]Post{},
-	)
-}
-
-var d22 = Server{
-	Address:     "d22.eu",
+var dd = Server{
+	Address:     "dd.local",
 	Public:      true,
-	Description: dd22Desc,
-	Scan:        SEC2,
+	Description: ddDesc,
+	Scan:        SEC1,
 }
 
 var dd22Desc = `
@@ -140,5 +113,39 @@ var dd22Desc = `
                                                                              
 
            Bienvenue sur le serveur public du District 22 d'Europole.
-           Un noeud du plus grand fournisseur d'accès de Méga-Europe. 
-`
+           Un noeud du plus grand fournisseur d'accès de Méga-Europe.`
+
+var d22 = Server{
+	Address:     "d22.eu",
+	Public:      true,
+	Description: dd22Desc,
+	Scan:        SEC2,
+}
+
+func Init() {
+	Reset()
+
+	InitServer(dd,
+		[]Account{
+			{Login: "jesus", Admin: true},
+		},
+		[]Link{
+			{Address: d22.Address, Desc: "serveur public du District 22"},
+		},
+		[]Entry{
+			{ID: "bluemars", Keywords: []string{"boisson"}, Title: "blue mars", Content: "cocktail"},
+		},
+		[]Register{
+			{Description: "machine à café", State: "on", Options: []string{"on", "off", "overdrive"}},
+		},
+		[]Post{},
+	)
+
+	InitServer(d22,
+		[]Account{},
+		[]Link{},
+		[]Entry{},
+		[]Register{},
+		[]Post{},
+	)
+}

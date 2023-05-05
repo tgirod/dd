@@ -36,6 +36,16 @@ type Account struct {
 	Groups   []string `storm:"index"`
 }
 
+// Member test si le compte est membre du groupe
+func (a Account) Member(group string) bool {
+	for _, g := range a.Groups {
+		if group == g {
+			return true
+		}
+	}
+	return false
+}
+
 func (s Server) Accounts() []Account {
 	accounts, err := Find[Account](s.Match())
 	if err != nil {

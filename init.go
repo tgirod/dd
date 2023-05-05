@@ -13,6 +13,16 @@ const (
 	SEC5 = time.Second * 30
 )
 
+func InitNetwork(
+	identities []Identity,
+) {
+	for _, i := range identities {
+		if _, err := Save(i); err != nil {
+			log.Fatalf("%v : %v\n", i, err)
+		}
+	}
+}
+
 func InitServer(
 	s Server,
 	accounts []Account,
@@ -124,6 +134,23 @@ var d22 = Server{
 
 func Init() {
 	Reset()
+
+	InitNetwork(
+		[]Identity{
+			{
+				Login:    "jesus",
+				Password: "roxor",
+				Name:     "Jesus",
+				Yes:      100,
+			},
+			{
+				Login:    "crunch",
+				Password: "hack",
+				Name:     "Crunch",
+				Yes:      0,
+			},
+		},
+	)
 
 	InitServer(dd,
 		[]Account{

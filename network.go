@@ -3,6 +3,10 @@ package main
 import (
 	"encoding/base64"
 	"math/rand"
+	"time"
+
+	"github.com/asdine/storm/v3"
+	"github.com/asdine/storm/v3/q"
 )
 
 type Identity struct {
@@ -10,26 +14,58 @@ type Identity struct {
 	Password string
 	Name     string
 	Yes      int
-	Messages []Message
 }
 
 type Message struct {
-	ID        int    `storm:"id,increment"`
-	Recipient string `storm:"index"` // expéditeur
-	Sender    string // destinataire
-	Subject   string // titre du message
-	Content   string // contenu du message
-	Opened    bool   `storm:"index"` // pas encore lu
+	ID      int       `storm:"id,increment"`
+	From    string    `storm:"index"` // destinataire
+	To      string    `storm:"index"` // expéditeur
+	Date    time.Time `storm:"index"` // date de transmission
+	Subject string    // titre du message
+	Content string    // contenu du message
+	Opened  bool      `storm:"index"` // pas encore lu
 }
 
-func MessageSend(m Message) (Message, error) {
+func (i Identity) Messages() []Message {
+	query := Query(
+		q.Or(
+			q.Eq("From", i.Login),
+			q.Eq("To", i.Login),
+		),
+	).OrderBy("Date").Reverse()
+	var messages []Message
+	err := query.Find(&messages)
+	if err != nil && err != storm.ErrNotFound {
+		panic(err)
+	}
+	return messages
+}
+
+func (i Identity) Message(id int) (Message, error) {
+	return First[Message](
+		q.Eq("ID", id),
+		q.Or(
+			q.Eq("From", i.Login),
+			q.Eq("To", i.Login),
+		),
+	)
+}
+
+func (i Identity) Send(to, subject, content string) (Message, error) {
 	// trouver le destinataire
-	_, err := FindIdentity(m.Recipient)
+	_, err := FindIdentity(to)
 	if err != nil {
-		return m, err
+		return Message{}, err
 	}
 
-	return Save(m)
+	return Save(Message{
+		From:    i.Login,
+		To:      to,
+		Date:    time.Now(),
+		Subject: subject,
+		Content: content,
+		Opened:  false,
+	})
 }
 
 func Pay(from, to string, amount int) error {

@@ -29,6 +29,8 @@ func Door(ctx Context) any {
 		return ctx.Error(err)
 	}
 
+	console.StartAlert()
+
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "backdoor créée sur le serveur %s\n", console.Server.Address)
 	fmt.Fprintf(&b, "login: %s\n", id.Login)

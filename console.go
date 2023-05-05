@@ -178,6 +178,15 @@ func (c *Console) StartAlert() {
 	}
 }
 
+func (c *Console) TickAlert() {
+	// décrémenter d'une seconde
+	c.Countdown -= time.Second
+
+	if c.Countdown <= 0 {
+		c.Disconnect()
+	}
+}
+
 func (c *Console) Identify(login, password string) error {
 	identity, err := CheckIdentity(login, password)
 	if err != nil {

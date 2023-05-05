@@ -71,14 +71,12 @@ func NewClient(width, height int, net *Network) *Client {
 
 func (c *Client) Init() tea.Cmd {
 	return tea.Batch(
-		textinput.Blink, // clignottement du curseur
-		c.StartSecurity, // scan de sécurité toutes les secondes
+		textinput.Blink,  // clignottement du curseur
+		c.TickSecurity(), // routine de sécurité
 	)
 }
 
-type SecurityMsg struct {
-	Wait time.Duration // temps avant de relancer la routine de sécurité
-}
+type SecurityMsg struct{}
 
 type OpenModalMsg tea.Model
 
@@ -125,12 +123,10 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, cmd)
 
 	case SecurityMsg:
-		// boucle de sécurité
 		if c.Console.Alert {
-			// l'alerte est toujours là
-			// la routine de sécurité continue
-			cmds = append(cmds, tea.Every(msg.Wait, c.Security))
+			c.Console.TickAlert()
 		}
+		cmds = append(cmds, c.TickSecurity())
 
 	case tea.KeyMsg:
 		// gestion du clavier
@@ -259,22 +255,12 @@ func (c *Client) RenderOutput() {
 	c.output.GotoBottom()
 }
 
-func (c *Client) StartSecurity() tea.Msg {
-	return SecurityMsg{c.Delay()}
-}
-
-func (c *Client) Security(t time.Time) tea.Msg {
-	// décrémenter d'une seconde
-	c.Countdown -= time.Second
-
-	if c.Countdown > 0 {
-		// tant que l'horloge n'est pas à arrivée à 0, on ne fait rien
-		return SecurityMsg{c.Delay()}
-	}
-
-	c.Console.Disconnect()
-	c.RenderOutput()
-	return nil
+// TickSecurity déclenche un scan de sécurité
+// cette méthode est appelée toutes les secondes
+func (c *Client) TickSecurity() tea.Cmd {
+	return tea.Every(c.Delay(), func(t time.Time) tea.Msg {
+		return SecurityMsg{}
+	})
 }
 
 func (c *Client) OpenModal(model tea.Model) tea.Cmd {

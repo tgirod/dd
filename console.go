@@ -174,11 +174,9 @@ func (s *Session) InitMem() {
 }
 
 func (c *Console) Disconnect() {
-	c.Server = nil
-	c.Identity = nil
-	c.Admin = false
-	c.Alert = false
 	c.Session = nil
+	c.Identity = nil
+	c.Alert = false
 	// BUG
 	// c.Branch = baseCmds
 
@@ -211,6 +209,15 @@ func (c *Console) StartAlert() {
 		c.Countdown = c.Server.Scan
 	} else if c.Server.Scan < c.Countdown {
 		c.Countdown = c.Server.Scan
+	}
+}
+
+func (c *Console) TickAlert() {
+	// décrémenter d'une seconde
+	c.Countdown -= time.Second
+
+	if c.Countdown <= 0 {
+		c.Disconnect()
 	}
 }
 

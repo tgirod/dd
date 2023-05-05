@@ -128,7 +128,7 @@ func MessageReply(ctx Context) any {
 		return ctx.Error(err)
 	}
 
-	subject := ctx.Value("subject").(string)
+	subject := fmt.Sprintf("Re: %s", original.Subject)
 	content := ctx.Value("content").(string)
 
 	if _, err := identity.Send(original.From, subject, content); err != nil {

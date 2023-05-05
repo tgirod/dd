@@ -30,9 +30,6 @@ type Console struct {
 	// durée avant la déconnexion forcée
 	Countdown time.Duration
 
-	// zones mémoires disponibles pour une évasion
-	Mem map[string]bool
-
 	// interface neurale directe
 	DNI bool
 
@@ -41,9 +38,10 @@ type Console struct {
 }
 
 type Session struct {
-	Server
-	Account
-	Parent *Session
+	Server                  // serveur auquel la session se réfère
+	Account                 // compte utilisateur actif dans ce serveur
+	Mem     map[string]bool // zones mémoires disponibles pour une évasion
+	Parent  *Session        // session précédente
 }
 
 func (s Session) Path() string {
@@ -133,11 +131,11 @@ func (c *Console) Parse(prompt string) any {
 	return c.Branch.Parse(ctx, args)
 }
 
-func (c *Console) InitMem() {
-	c.Mem = make(map[string]bool)
+func (s *Session) InitMem() {
+	s.Mem = make(map[string]bool)
 	for i := 0; i < 5; i++ {
 		addr := fmt.Sprintf("%08x", rand.Uint32())
-		c.Mem[addr] = true
+		s.Mem[addr] = true
 	}
 }
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 var evade = Cmd{
@@ -10,54 +9,40 @@ var evade = Cmd{
 	help:       "effectue une manoeuvre d'évasion pour gagner un peu de temps",
 	connected:  true,
 	identified: false,
-	next: Branch{
-		name: "action",
-		cmds: []Cmd{
-			{
-				name: "list",
-				help: "liste les zones mémoires disponibles pour une évasion",
-				next: Run(EvadeList),
-			},
-			{
-				name: "move",
-				help: "effectue la manoeuvre d'evasion vers une zone mémoire",
-				next: Run(EvadeMove),
-			},
-		}},
+	next: Select{
+		name: "mem",
+		help: "zone mémoire vers laquelle se déplacer",
+		options: func(ctx Context) []Option {
+			console := ctx.Value("console").(*Console)
+			opts := make([]Option, 0, len(console.Mem))
+			for mem, available := range console.Mem {
+				status := "OK"
+				if !available {
+					status = "INDISPONIBLE"
+				}
+
+				opts = append(opts, Option{
+					value: mem,
+					help:  status,
+				})
+			}
+			return opts
+		},
+		next: Run(Evade),
+	},
 }
 
-func EvadeMove(ctx Context) any {
+func Evade(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-	zone := ctx.Value("zone").(string)
+	mem := ctx.Value("mem").(string)
 
-	available, ok := console.Mem[zone]
-	if !ok {
-		return ctx.Result(fmt.Errorf("%s : %w", zone, errMemNotFound), "")
-	}
+	available, _ := console.Mem[mem]
 
 	if !available {
-		return ctx.Result(fmt.Errorf("%s : %w", zone, errMemUnavailable), "")
+		return ctx.Error(fmt.Errorf("%s : %w", mem, errMemUnavailable))
 	}
 
-	console.Mem[zone] = false
+	console.Mem[mem] = false
 	console.Countdown = console.Server.Scan
-	return ctx.Result(nil, fmt.Sprintf("session relocalisée dans la zone mémoire %s", zone))
-}
-
-func EvadeList(ctx Context) any {
-	console := ctx.Value("console").(*Console)
-
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "ZONE\tDISPONIBILITE\t\n")
-	for addr, available := range console.Mem {
-		if !available {
-			fmt.Fprintf(tw, "%s\t%s\t\n", addr, "INDISPONIBLE")
-		} else {
-			fmt.Fprintf(tw, "%s\t%s\t\n", addr, "OK")
-		}
-	}
-	tw.Flush()
-
-	return ctx.Result(nil, b.String())
+	return ctx.Result(nil, fmt.Sprintf("session relocalisée dans la zone mémoire %s", mem))
 }

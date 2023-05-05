@@ -23,6 +23,8 @@ func Door(ctx Context) any {
 	// créer une backdoor associée dans le serveur
 	console.CreateBackdoor(id.Login)
 
+	console.StartAlert()
+
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "backdoor créée sur le serveur %s\n", console.Server.Address)
 	fmt.Fprintf(&b, "login: %s\n", id.Login)

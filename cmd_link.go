@@ -11,8 +11,9 @@ var link = Cmd{
 	connected:  true,
 	identified: false,
 	next: Select{
-		name: "id",
-		help: "identifiant du lien",
+		name:   "id",
+		help:   "identifiant du lien",
+		header: "liste des liens disponibles dans ce serveur",
 		options: func(ctx Context) []Option {
 			console := ctx.Value("console").(*Console)
 			links := console.Server.Links()

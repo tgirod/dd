@@ -32,7 +32,6 @@ func (s Server) Match() q.Matcher {
 type Account struct {
 	Login    string `storm:"id"`
 	Server   string `storm:"index"` // le serveur concerné
-	Admin    bool
 	Backdoor bool
 	Groups   []string `storm:"index"`
 }
@@ -216,7 +215,6 @@ func (s Server) CreateBackdoor(identity Identity) (Account, error) {
 	acc := Account{
 		Login:    identity.Login,
 		Server:   s.Address,
-		Admin:    false,
 		Backdoor: true,
 	}
 	return Save(acc)

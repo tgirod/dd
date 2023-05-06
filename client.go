@@ -193,9 +193,9 @@ func (c *Client) View() string {
 	// mise à jour de la barre de statut
 	login := c.Console.Identity.Login
 
-	admin := "user"
-	if c.Console.Session != nil && c.Console.Account.Admin {
-		admin = "admin"
+	groups := "public"
+	if c.Session != nil && len(c.Groups) > 0 {
+		groups = strings.Join(c.Groups, " ")
 	}
 
 	timer := "--:--"
@@ -211,7 +211,7 @@ func (c *Client) View() string {
 		hist = c.Console.Session.Path()
 	}
 
-	c.status.SetContent(timer, hist, login, admin)
+	c.status.SetContent(timer, hist, login, groups)
 
 	if c.modal != nil {
 		content := modalStyle.Render(c.modal.View())

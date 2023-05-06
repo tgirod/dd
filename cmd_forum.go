@@ -35,6 +35,44 @@ func postList(ctx Context) ([]Option, error) {
 	return opts, nil
 }
 
+func threadList(ctx Context) ([]Option, error) {
+	console := ctx.Console()
+	topic := ctx.Value("topic").(int)
+	// récupérer le post racine
+	root, err := console.Server.Post(topic, console.Account)
+	if err != nil {
+		return []Option{}, err
+	}
+	// récupérer le thread
+	thread, err := console.Server.Thread(root, console.Account)
+	return thread.ToOptions(""), nil
+}
+
+var rep = strings.NewReplacer("├", "│", "└", " ")
+
+func (t Thread) ToOptions(prefix string) []Option {
+	// afficher le message à la racine du thread
+	opts := []Option{
+		{
+			value: t.Post.ID,
+			help:  fmt.Sprintf("%s %s", prefix, t.Post.Subject),
+		},
+	}
+
+	// pour les messages qui suivent la racine, le préfixe change pour poursuivre les traits
+	prefix = rep.Replace(prefix)
+
+	// appel récursif sur chaque réponse
+	for i, reply := range t.Replies {
+		if i < len(t.Replies)-1 {
+			opts = append(opts, reply.ToOptions(prefix+" ├")...)
+		} else {
+			opts = append(opts, reply.ToOptions(prefix+" └")...)
+		}
+	}
+	return opts
+}
+
 var forum = Cmd{
 	name:       "forum",
 	help:       "participer au forum du serveur",
@@ -55,7 +93,7 @@ var forum = Cmd{
 						name:    "post",
 						help:    "message dans la discussion",
 						header:  "liste des messages dans ce sujet de discussion",
-						options: postList,
+						options: threadList,
 						next:    Run(PostRead),
 					},
 				},
@@ -85,7 +123,7 @@ var forum = Cmd{
 						name:    "post",
 						help:    "message dans la discussion",
 						header:  "liste des messages dans ce sujet de discussion",
-						options: postList,
+						options: threadList,
 						next: LongText{
 							name: "content",
 							help: "contenu de la réponse",
@@ -153,7 +191,6 @@ func PostReply(ctx Context) any {
 
 	post := Post{
 		Server:  console.Server.Address,
-		ID:      id,
 		Parent:  original.ID,
 		Date:    time.Now(),
 		Author:  console.Account.Login,

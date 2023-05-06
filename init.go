@@ -154,7 +154,12 @@ func Init() {
 
 	InitServer(dd,
 		[]Account{
-			{Login: "jesus", Admin: true},
+			{
+				Login:    "jesus",
+				Server:   "",
+				Backdoor: false,
+				Groups:   []string{"admin", "h4ck3r"},
+			},
 		},
 		[]Link{
 			{Address: d22.Address, Desc: "serveur public du District 22"},

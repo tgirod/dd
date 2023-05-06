@@ -3,8 +3,8 @@
 - [x] session
 - [x] registres : liste de valeurs
 - [ ] data : on en fait quoi ?
-- [ ] usurpation d'identité
-- [ ] nouvelle modèle de sécurité pour remplacer le niveau d'accréditation
+- [x] usurpation d'identité (imp)
+- [x] nouveau modèle de sécurité pour remplacer le niveau d'accréditation (imp)
 - [ ] mise en page
   - [x] Select ne renvoit pas une erreur avec la liste, mais un message gentil
   - [ ] belle tabulation parce que pour l'instant c'est moche

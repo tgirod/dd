@@ -197,8 +197,11 @@ func (c *Console) Identify(login, password string) error {
 
 	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
 	if c.Session != nil {
-		if account, err := c.FindAccount(identity.Login); err == nil {
+		account, err := c.FindAccount(identity.Login)
+		if err == nil {
 			c.Account = account
+		} else {
+			c.Account = Account{}
 		}
 	}
 

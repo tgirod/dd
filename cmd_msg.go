@@ -20,7 +20,7 @@ var message = Cmd{
 					name:   "id",
 					help:   "id du message à lire",
 					header: "liste des messages reçus et envoyés",
-					options: func(ctx Context) []Option {
+					options: func(ctx Context) ([]Option, error) {
 						console := ctx.Value("console").(*Console)
 						msgs := console.Identity.Messages()
 						opts := make([]Option, len(msgs))
@@ -28,7 +28,7 @@ var message = Cmd{
 							opts[i].value = m.ID
 							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.From, m.Subject)
 						}
-						return opts
+						return opts, nil
 					},
 					next: Run(MessageRead),
 				},
@@ -57,7 +57,7 @@ var message = Cmd{
 					name:   "id",
 					help:   "id du message auquel répondre",
 					header: "liste des messages reçus et envoyés",
-					options: func(ctx Context) []Option {
+					options: func(ctx Context) ([]Option, error) {
 						console := ctx.Value("console").(*Console)
 						msgs := console.Identity.Messages()
 						opts := make([]Option, len(msgs))
@@ -65,7 +65,7 @@ var message = Cmd{
 							opts[i].value = m.ID
 							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.From, m.Subject)
 						}
-						return opts
+						return opts, nil
 					},
 					next: LongText{
 						name: "content",

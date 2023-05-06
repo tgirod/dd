@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func topicList(ctx Context) []Option {
+func topicList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
 	topics := console.Server.Topics(console.Account)
 	opts := make([]Option, 0, len(topics))
@@ -16,13 +16,13 @@ func topicList(ctx Context) []Option {
 			value: t.ID,
 		})
 	}
-	return opts
+	return opts, nil
 }
 
-func postList(ctx Context) []Option {
+func postList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
 	topic := ctx.Value("topic").(int)
-	posts := console.Server.Thread(topic, console.Account)
+	posts := console.Server.RecReplies(topic, console.Account)
 	opts := make([]Option, 0, len(posts))
 	for _, p := range posts {
 		if p.Parent == topic {
@@ -32,7 +32,7 @@ func postList(ctx Context) []Option {
 			})
 		}
 	}
-	return opts
+	return opts, nil
 }
 
 var forum = Cmd{

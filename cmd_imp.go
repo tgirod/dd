@@ -13,7 +13,7 @@ var imp = Cmd{
 	next: Select{
 		name: "login",
 		help: "compte utilisateur a usurper",
-		options: func(ctx Context) []Option {
+		options: func(ctx Context) ([]Option, error) {
 			c := ctx.Console()
 			accounts := c.Accounts()
 			opts := make([]Option, len(accounts))
@@ -23,7 +23,7 @@ var imp = Cmd{
 					help:  strings.Join(a.Groups, " "),
 				}
 			}
-			return opts
+			return opts, nil
 		},
 		next: Run(Imp),
 	},

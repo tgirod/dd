@@ -14,7 +14,7 @@ var link = Cmd{
 		name:   "id",
 		help:   "identifiant du lien",
 		header: "liste des liens disponibles dans ce serveur",
-		options: func(ctx Context) []Option {
+		options: func(ctx Context) ([]Option, error) {
 			console := ctx.Value("console").(*Console)
 			links := console.Server.Links(console.Account)
 			opts := make([]Option, len(links))
@@ -22,7 +22,7 @@ var link = Cmd{
 				opts[i].help = l.Desc
 				opts[i].value = l.ID
 			}
-			return opts
+			return opts, nil
 		},
 		next: Run(LinkCmd),
 	},

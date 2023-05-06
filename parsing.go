@@ -279,7 +279,7 @@ type Select struct {
 	name    string
 	help    string
 	header  string
-	options func(ctx Context) []Option
+	options func(ctx Context) ([]Option, error)
 	next    Node
 }
 
@@ -298,27 +298,37 @@ func (s Select) Help() string {
 
 var underline = lipgloss.NewStyle().Underline(true)
 
-func (s Select) List(ctx Context) string {
+func (s Select) List(options []Option) string {
+	// construire le header
 	b := strings.Builder{}
 	header := s.header
 	if header == "" {
 		header = s.help
 	}
 	fmt.Fprintln(&b, underline.Render(header))
-	for _, o := range s.options(ctx) {
+
+	// afficher les options
+	for _, o := range options {
 		fmt.Fprintf(&b, "%v : %s\n", o.value, o.help)
 	}
+
 	return b.String()
 }
 
 func (s Select) Parse(ctx Context, args []string) any {
-	if len(args) == 0 {
-		// afficher la liste des choix possibles
-		return ctx.Output(s.List(ctx))
+	// récupérer la liste des options possibles
+	options, err := s.options(ctx)
+	if err != nil {
+		return ctx.Error(err)
 	}
 
-	// vérifier que la valeur est valide
-	for _, o := range s.options(ctx) {
+	if len(args) == 0 {
+		// afficher la liste des choix possibles
+		return ctx.Output(s.List(options))
+	}
+
+	// vérifier la validité de l'option choisie
+	for _, o := range options {
 		if fmt.Sprintf("%v", o.value) == args[0] {
 			// la valeur est valide, continuer le parsing
 			ctx = ctx.WithContext(s, s.name, o.value)
@@ -327,9 +337,8 @@ func (s Select) Parse(ctx Context, args []string) any {
 	}
 
 	// la valeur saisie est invalide
-	return ctx.Result(
+	return ctx.Error(
 		fmt.Errorf("%s : %w", s.name, errInvalidArgument),
-		s.List(ctx),
 	)
 }
 

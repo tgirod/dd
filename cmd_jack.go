@@ -16,7 +16,7 @@ var jack = Cmd{
 		header: "liste des liens disponibles dans ce serveur",
 		options: func(ctx Context) []Option {
 			console := ctx.Value("console").(*Console)
-			links := console.Server.Links()
+			links := console.Server.Links(console.Account)
 			opts := make([]Option, len(links))
 			for i, l := range links {
 				opts[i].help = l.Desc
@@ -37,7 +37,7 @@ func Jack(ctx Context) any {
 
 	id := ctx.Value("id").(int)
 
-	link, err := console.Server.Link(id)
+	link, err := console.Server.Link(id, console.Account)
 	if err != nil {
 		return ctx.Error(err)
 	}

@@ -8,7 +8,7 @@ import (
 
 func topicList(ctx Context) []Option {
 	console := ctx.Value("console").(*Console)
-	topics := console.Server.Topics()
+	topics := console.Server.Topics(console.Account)
 	opts := make([]Option, 0, len(topics))
 	for _, t := range topics {
 		opts = append(opts, Option{
@@ -22,7 +22,7 @@ func topicList(ctx Context) []Option {
 func postList(ctx Context) []Option {
 	console := ctx.Value("console").(*Console)
 	topic := ctx.Value("topic").(int)
-	posts := console.Server.Thread(topic)
+	posts := console.Server.Thread(topic, console.Account)
 	opts := make([]Option, 0, len(posts))
 	for _, p := range posts {
 		if p.Parent == topic {
@@ -102,7 +102,7 @@ func PostRead(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("post").(int)
 
-	post, err := console.Server.Post(id)
+	post, err := console.Server.Post(id, console.Account)
 	if err != nil {
 		return ctx.Error(err)
 	}
@@ -146,7 +146,7 @@ func PostReply(ctx Context) any {
 	id := ctx.Value("post").(int)
 	content := ctx.Value("content").(string)
 
-	original, err := console.Server.Post(id)
+	original, err := console.Server.Post(id, console.Account)
 	if err != nil {
 		return ctx.Error(err)
 	}

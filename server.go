@@ -307,3 +307,31 @@ func (s Server) RecReplies(parent int, a Account) []Post {
 
 	return thread
 }
+
+type Thread struct {
+	Post
+	Replies []Thread
+}
+
+func (s Server) Thread(p Post, a Account) (Thread, error) {
+	replies, err := Find[Post](
+		s.Match(),
+		a.Match(),
+		q.Eq("Parent", p.ID),
+	)
+
+	thread := Thread{Post: p}
+	if err != nil {
+		return thread, err
+	}
+
+	for _, r := range replies {
+		sub, err := s.Thread(r, a)
+		if err != nil {
+			return thread, err
+		}
+		thread.Replies = append(thread.Replies, sub)
+	}
+
+	return thread, nil
+}

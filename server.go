@@ -285,7 +285,7 @@ func concat[T any](slices ...[]T) []T {
 	return res
 }
 
-func (s Server) Thread(parent int, a Account) []Post {
+func (s Server) RecReplies(parent int, a Account) []Post {
 	thread, err := Find[Post](
 		s.Match(),
 		a.Match(),
@@ -297,7 +297,7 @@ func (s Server) Thread(parent int, a Account) []Post {
 
 	// insérer les réponses
 	for i, p := range thread {
-		rec := s.Thread(p.ID, a)
+		rec := s.RecReplies(p.ID, a)
 		thread = concat(
 			thread[:i+1],
 			rec,

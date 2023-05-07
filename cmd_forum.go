@@ -12,7 +12,7 @@ func topicList(ctx Context) ([]Option, error) {
 	opts := make([]Option, 0, len(topics))
 	for _, t := range topics {
 		opts = append(opts, Option{
-			help:  fmt.Sprintf("%s -- %s", t.Author, t.Subject),
+			help:  fmt.Sprintf("%s\t%s\t%s\t", t.Date.Format(time.DateTime), t.Author, t.Subject),
 			value: t.ID,
 		})
 	}
@@ -27,7 +27,7 @@ func postList(ctx Context) ([]Option, error) {
 	for _, p := range posts {
 		if p.Parent == topic {
 			opts = append(opts, Option{
-				help:  fmt.Sprintf("%s -- %s", p.Author, p.Subject),
+				help:  fmt.Sprintf("%s\t%s\t%s\t", p.Date.Format(time.DateTime), p.Author, p.Subject),
 				value: p.ID,
 			})
 		}
@@ -48,14 +48,14 @@ func threadList(ctx Context) ([]Option, error) {
 	return thread.ToOptions(""), nil
 }
 
-var rep = strings.NewReplacer("├", "│", "└", " ")
+var rep = strings.NewReplacer("├", "│", "└", " ", "─", " ")
 
 func (t Thread) ToOptions(prefix string) []Option {
 	// afficher le message à la racine du thread
 	opts := []Option{
 		{
 			value: t.Post.ID,
-			help:  fmt.Sprintf("%s %s", prefix, t.Post.Subject),
+			help:  fmt.Sprintf("%s\t%s\t%s%s\t", t.Date.Format(time.DateTime), t.Author, prefix, t.Subject),
 		},
 	}
 
@@ -65,9 +65,9 @@ func (t Thread) ToOptions(prefix string) []Option {
 	// appel récursif sur chaque réponse
 	for i, reply := range t.Replies {
 		if i < len(t.Replies)-1 {
-			opts = append(opts, reply.ToOptions(prefix+" ├")...)
+			opts = append(opts, reply.ToOptions(prefix+"├─ ")...)
 		} else {
-			opts = append(opts, reply.ToOptions(prefix+" └")...)
+			opts = append(opts, reply.ToOptions(prefix+"└─ ")...)
 		}
 	}
 	return opts

@@ -49,8 +49,10 @@ type App struct {
 }
 
 // NewApp créé un nouvel objet application
-func NewApp() *App {
-	Init() // FIXME réinitialise la db à chaque démarrage
+func NewApp(init bool) *App {
+	if init {
+		Init()
+	}
 
 	var err error
 	a := new(App)
@@ -70,7 +72,7 @@ func NewApp() *App {
 }
 
 // Start démarre le serveur, en attente de connexions
-func (a *App) Start(filename string) {
+func (a *App) Start() {
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)

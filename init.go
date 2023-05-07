@@ -16,7 +16,9 @@ const (
 func InitNetwork(
 	identities []Identity,
 ) {
+	log.Println("identités")
 	for _, i := range identities {
+		log.Println("\t", i.Login)
 		if _, err := Save(i); err != nil {
 			log.Fatalf("%v : %v\n", i, err)
 		}
@@ -36,35 +38,46 @@ func InitServer(
 		panic("le serveur n'a pas d'adresse")
 	}
 
+	log.Println("server", s.Address)
 	if _, err := Save(s); err != nil {
 		log.Fatal(err)
 	}
 
+	log.Println("accounts")
 	for _, a := range accounts {
+		log.Println("\t", a.Login)
 		a.Server = addr
 		if _, err := Save(a); err != nil {
 			log.Fatalf("%v : %v\n", a, err)
 		}
 	}
+	log.Println("links")
 	for _, l := range links {
+		log.Println("\t", l.Address)
 		l.Server = addr
 		if _, err := Save(l); err != nil {
 			log.Fatalf("%v : %v\n", l, err)
 		}
 	}
+	log.Println("entries")
 	for _, e := range entries {
+		log.Println("\t", e.Title)
 		e.Server = addr
 		if _, err := Save(e); err != nil {
 			log.Fatalf("%v : %v\n", e, err)
 		}
 	}
+	log.Println("registers")
 	for _, r := range registers {
+		log.Println("\t", r.Description)
 		r.Server = addr
 		if _, err := Save(r); err != nil {
 			log.Fatalf("%v : %v\n", r, err)
 		}
 	}
+	log.Println("posts")
 	for _, p := range posts {
+		log.Println("\t", p.Subject)
 		p.Server = addr
 		if _, err := Save(p); err != nil {
 			log.Fatalf("%v : %v\n", p, err)
@@ -133,6 +146,8 @@ var d22 = Server{
 }
 
 func Init() {
+	log.Println("réinitialisation de la base de données")
+
 	Reset()
 
 	InitNetwork(

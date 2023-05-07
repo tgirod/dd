@@ -280,7 +280,7 @@ func (c *Client) CloseModal() tea.Cmd {
 }
 
 func tw(output io.Writer) *tabwriter.Writer {
-	return tabwriter.NewWriter(output, 8, 1, 2, ' ', 0)
+	return tabwriter.NewWriter(output, 0, 0, 2, ' ', 0)
 }
 
 func MsgToCmd(msg tea.Msg) tea.Cmd {

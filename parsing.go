@@ -307,11 +307,12 @@ func (s Select) List(options []Option) string {
 	}
 	fmt.Fprintln(&b, underline.Render(header))
 
+	tw := tw(&b)
 	// afficher les options
 	for _, o := range options {
-		fmt.Fprintf(&b, "%v : %s\n", o.value, o.help)
+		fmt.Fprintf(tw, "%v\t%s\t\n", o.value, o.help)
 	}
-
+	tw.Flush()
 	return b.String()
 }
 

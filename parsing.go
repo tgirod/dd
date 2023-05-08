@@ -129,9 +129,11 @@ func (b Branch) String() string {
 
 func (b Branch) Help() string {
 	s := strings.Builder{}
+	tw := tw(&s)
 	for _, c := range b.cmds {
-		fmt.Fprintf(&s, "%s : %s\n", c.name, c.help)
+		fmt.Fprintf(tw, "%s\t%s\t\n", c.name, c.help)
 	}
+	tw.Flush()
 	return s.String()
 }
 

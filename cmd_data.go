@@ -43,7 +43,7 @@ func DataSearch(ctx Context) any {
 	}
 
 	// construire la réponse à afficher
-	entries := console.Server.DataSearch(keyword, console.Identity.Login)
+	entries := console.Server.DataSearch(keyword, console.Account)
 	b := strings.Builder{}
 	tw := tw(&b)
 	fmt.Fprintf(tw, "ID\tKEYWORDS\tTITLE\t\n")
@@ -64,7 +64,7 @@ func DataView(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("id").(string)
 
-	entry, err := console.FindEntry(id, console.Identity.Login)
+	entry, err := console.FindEntry(id, console.Account)
 	if err != nil {
 		return ctx.Result(err, "")
 	}

@@ -6,33 +6,68 @@ import (
 	"time"
 )
 
-func topicList(ctx Context) []Option {
+func topicList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
-	posts := console.Server.Posts
+	topics := console.Server.Topics(console.Account)
+	opts := make([]Option, 0, len(topics))
+	for _, t := range topics {
+		opts = append(opts, Option{
+			help:  fmt.Sprintf("%s\t%s\t%s\t", t.Date.Format(time.DateTime), t.Author, t.Subject),
+			value: t.ID,
+		})
+	}
+	return opts, nil
+}
+
+func postList(ctx Context) ([]Option, error) {
+	console := ctx.Value("console").(*Console)
+	topic := ctx.Value("topic").(int)
+	posts := console.Server.RecReplies(topic, console.Account)
 	opts := make([]Option, 0, len(posts))
-	for i, p := range posts {
-		// un post est un topic si il est son propre parent
-		if p.Parent == i {
+	for _, p := range posts {
+		if p.Parent == topic {
 			opts = append(opts, Option{
-				help:  fmt.Sprintf("%s -- %s", p.Author, p.Subject),
-				value: i,
+				help:  fmt.Sprintf("%s\t%s\t%s\t", p.Date.Format(time.DateTime), p.Author, p.Subject),
+				value: p.ID,
 			})
 		}
 	}
-	return opts
+	return opts, nil
 }
 
-func postList(ctx Context) []Option {
-	console := ctx.Value("console").(*Console)
+func threadList(ctx Context) ([]Option, error) {
+	console := ctx.Console()
 	topic := ctx.Value("topic").(int)
-	posts := console.Server.Posts
-	opts := make([]Option, 0, len(posts))
-	for i, p := range posts {
-		if p.Parent == topic {
-			opts = append(opts, Option{
-				help:  fmt.Sprintf("%s -- %s", p.Author, p.Subject),
-				value: i,
-			})
+	// récupérer le post racine
+	root, err := console.Server.Post(topic, console.Account)
+	if err != nil {
+		return []Option{}, err
+	}
+	// récupérer le thread
+	thread, err := console.Server.Thread(root, console.Account)
+	return thread.ToOptions(""), nil
+}
+
+var rep = strings.NewReplacer("├", "│", "└", " ", "─", " ")
+
+func (t Thread) ToOptions(prefix string) []Option {
+	// afficher le message à la racine du thread
+	opts := []Option{
+		{
+			value: t.Post.ID,
+			help:  fmt.Sprintf("%s\t%s\t%s%s\t", t.Date.Format(time.DateTime), t.Author, prefix, t.Subject),
+		},
+	}
+
+	// pour les messages qui suivent la racine, le préfixe change pour poursuivre les traits
+	prefix = rep.Replace(prefix)
+
+	// appel récursif sur chaque réponse
+	for i, reply := range t.Replies {
+		if i < len(t.Replies)-1 {
+			opts = append(opts, reply.ToOptions(prefix+"├─ ")...)
+		} else {
+			opts = append(opts, reply.ToOptions(prefix+"└─ ")...)
 		}
 	}
 	return opts
@@ -58,7 +93,7 @@ var forum = Cmd{
 						name:    "post",
 						help:    "message dans la discussion",
 						header:  "liste des messages dans ce sujet de discussion",
-						options: postList,
+						options: threadList,
 						next:    Run(PostRead),
 					},
 				},
@@ -88,7 +123,7 @@ var forum = Cmd{
 						name:    "post",
 						help:    "message dans la discussion",
 						header:  "liste des messages dans ce sujet de discussion",
-						options: postList,
+						options: threadList,
 						next: LongText{
 							name: "content",
 							help: "contenu de la réponse",
@@ -105,7 +140,10 @@ func PostRead(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("post").(int)
 
-	post := console.Server.Posts[id]
+	post, err := console.Server.Post(id, console.Account)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
 	b := strings.Builder{}
 
@@ -126,16 +164,19 @@ func PostWrite(ctx Context) any {
 	content := ctx.Value("content").(string)
 
 	post := Post{
-		Parent:  len(console.Posts),
+		Server:  console.Server.Address,
 		Date:    time.Now(),
 		Author:  console.Account.Login,
 		Subject: subject,
 		Content: content,
 	}
 
-	console.Server.Posts = append(console.Server.Posts, post)
+	post, err := Save(post)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
-	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", len(console.Server.Posts)))
+	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", post.ID))
 }
 
 func PostReply(ctx Context) any {
@@ -143,18 +184,24 @@ func PostReply(ctx Context) any {
 	id := ctx.Value("post").(int)
 	content := ctx.Value("content").(string)
 
-	original := console.Posts[id]
-	parent := console.Posts[original.Parent]
+	original, err := console.Server.Post(id, console.Account)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
 	post := Post{
-		Parent:  original.Parent,
+		Server:  console.Server.Address,
+		Parent:  original.ID,
 		Date:    time.Now(),
 		Author:  console.Account.Login,
-		Subject: fmt.Sprintf("Re: %s", parent.Subject),
+		Subject: fmt.Sprintf("Re: %s", original.Subject),
 		Content: content,
 	}
 
-	console.Server.Posts = append(console.Server.Posts, post)
+	post, err = Save(post)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
-	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", len(console.Server.Posts)))
+	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", post.ID))
 }

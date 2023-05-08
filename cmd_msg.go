@@ -20,15 +20,15 @@ var message = Cmd{
 					name:   "id",
 					help:   "id du message à lire",
 					header: "liste des messages reçus et envoyés",
-					options: func(ctx Context) []Option {
+					options: func(ctx Context) ([]Option, error) {
 						console := ctx.Value("console").(*Console)
-						msgs := console.Identity.Messages
+						msgs := console.Identity.Messages()
 						opts := make([]Option, len(msgs))
 						for i, m := range msgs {
-							opts[i].value = i
-							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
+							opts[i].value = m.ID
+							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.From, m.Subject)
 						}
-						return opts
+						return opts, nil
 					},
 					next: Run(MessageRead),
 				},
@@ -37,7 +37,7 @@ var message = Cmd{
 				name: "write",
 				help: "écrire un message",
 				next: String{
-					name: "recipient",
+					name: "to",
 					help: "destinataire du message",
 					next: Text{
 						name: "subject",
@@ -57,15 +57,15 @@ var message = Cmd{
 					name:   "id",
 					help:   "id du message auquel répondre",
 					header: "liste des messages reçus et envoyés",
-					options: func(ctx Context) []Option {
+					options: func(ctx Context) ([]Option, error) {
 						console := ctx.Value("console").(*Console)
-						msgs := console.Identity.Messages
+						msgs := console.Identity.Messages()
 						opts := make([]Option, len(msgs))
 						for i, m := range msgs {
-							opts[i].value = i
-							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.Sender, m.Subject)
+							opts[i].value = m.ID
+							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.From, m.Subject)
 						}
-						return opts
+						return opts, nil
 					},
 					next: LongText{
 						name: "content",
@@ -82,13 +82,25 @@ func MessageRead(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("id").(int)
 
-	msg := console.Identity.Messages[id]
-	console.Messages[id].Opened = true
+	msg, err := console.Identity.Message(id)
+	if err != nil {
+		return ctx.Error(err)
+	}
+
+	// marquer le message comme lu
+	if !msg.Opened {
+		msg.Opened = true
+		msg, err = Save(msg)
+		if err != nil {
+			return ctx.Error(err)
+		}
+	}
 
 	b := strings.Builder{}
 
 	fmt.Fprintf(&b, "ID : %d\n", id)
-	fmt.Fprintf(&b, "De : %s\n", msg.Recipient)
+	fmt.Fprintf(&b, "De : %s\n", msg.To)
+	fmt.Fprintf(&b, "Date : %s\n", msg.Date)
 	fmt.Fprintf(&b, "Sujet : %s\n", msg.Subject)
 	fmt.Fprintln(&b, msg.Content)
 
@@ -97,44 +109,33 @@ func MessageRead(ctx Context) any {
 
 func MessageWrite(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-	recipient := ctx.Value("recipient").(string)
+	identity := console.Identity
+	to := ctx.Value("to").(string)
 	subject := ctx.Value("subject").(string)
 	content := ctx.Value("content").(string)
 
-	// envoyer le message
-	msg := Message{
-		Recipient: recipient,
-		Sender:    console.Identity.Login,
-		Subject:   subject,
-		Content:   content,
-	}
-
-	if err := console.MessageSend(msg); err != nil {
+	if _, err := identity.Send(to, subject, content); err != nil {
 		return ctx.Result(err, "")
 	}
 
-	return ctx.Result(nil, fmt.Sprintf("message envoyé à %s", recipient))
+	return ctx.Result(nil, fmt.Sprintf("message envoyé à %s", to))
 }
 
 func MessageReply(ctx Context) any {
 	console := ctx.Value("console").(*Console)
+	identity := console.Identity
 	id := ctx.Value("id").(int)
-	subject := ctx.Value("subject").(string)
-	content := ctx.Value("content").(string)
-
-	recipient := console.Identity.Messages[id].Sender
-
-	// envoyer le message
-	msg := Message{
-		Recipient: recipient,
-		Sender:    console.Identity.Login,
-		Subject:   subject,
-		Content:   content,
+	original, err := console.Message(id)
+	if err != nil {
+		return ctx.Error(err)
 	}
 
-	if err := console.MessageSend(msg); err != nil {
+	subject := fmt.Sprintf("Re: %s", original.Subject)
+	content := ctx.Value("content").(string)
+
+	if _, err := identity.Send(original.From, subject, content); err != nil {
 		return ctx.Result(err, "")
 	}
 
-	return ctx.Result(nil, fmt.Sprintf("message envoyé à %s", recipient))
+	return ctx.Result(nil, fmt.Sprintf("message envoyé à %s", original.From))
 }

@@ -28,7 +28,7 @@ type Client struct {
 	*Console // console enregistrée dans le jeu
 }
 
-func NewClient(width, height int, net *Network) *Client {
+func NewClient(width, height int) *Client {
 	// barre de statut
 	status := statusbar.New(
 		statusbar.ColorConfig{
@@ -64,7 +64,7 @@ func NewClient(width, height int, net *Network) *Client {
 		input:   input,
 		output:  output,
 		status:  status,
-		Console: NewConsole(net),
+		Console: NewConsole(),
 	}
 	return c
 }
@@ -191,14 +191,11 @@ var (
 
 func (c *Client) View() string {
 	// mise à jour de la barre de statut
-	login := "anon"
-	if c.Console.Identity != nil {
-		login = fmt.Sprintf("id=%s", c.Console.Identity.Login)
-	}
+	login := c.Console.Identity.Login
 
-	admin := "user"
-	if c.Console.Session != nil && c.Console.Account != nil && c.Console.Account.Admin {
-		admin = "admin"
+	groups := "public"
+	if c.Session != nil && len(c.Groups) > 0 {
+		groups = strings.Join(c.Groups, " ")
 	}
 
 	timer := "--:--"
@@ -214,7 +211,7 @@ func (c *Client) View() string {
 		hist = c.Console.Session.Path()
 	}
 
-	c.status.SetContent(timer, hist, login, admin)
+	c.status.SetContent(timer, hist, login, groups)
 
 	if c.modal != nil {
 		content := modalStyle.Render(c.modal.View())
@@ -283,7 +280,7 @@ func (c *Client) CloseModal() tea.Cmd {
 }
 
 func tw(output io.Writer) *tabwriter.Writer {
-	return tabwriter.NewWriter(output, 8, 1, 2, ' ', 0)
+	return tabwriter.NewWriter(output, 0, 0, 2, ' ', 0)
 }
 
 func MsgToCmd(msg tea.Msg) tea.Cmd {

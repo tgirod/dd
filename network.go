@@ -2,56 +2,82 @@ package main
 
 import (
 	"encoding/base64"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"math/rand"
-	//"github.com/lithammer/fuzzysearch/fuzzy"
+	"time"
+
+	"github.com/asdine/storm/v3"
+	"github.com/asdine/storm/v3/q"
 )
 
-// Network contient l'état du jeu et les méthodes utiles pour en simplifier l'accès
-type Network struct {
-	Servers    []Server
-	Identities []Identity
-}
-
 type Identity struct {
-	Login    string
+	Login    string `storm:"id"`
 	Password string
 	Name     string
 	Yes      int
-	Messages []Message
 }
 
 type Message struct {
-	Recipient string // expéditeur
-	Sender    string // destinataire
-	Subject   string // titre du message
-	Content   string // contenu du message
-	Opened    bool   // pas encore lu
+	ID      int       `storm:"id,increment"`
+	From    string    `storm:"index"` // destinataire
+	To      string    `storm:"index"` // expéditeur
+	Date    time.Time `storm:"index"` // date de transmission
+	Subject string    // titre du message
+	Content string    // contenu du message
+	Opened  bool      `storm:"index"` // pas encore lu
 }
 
-func (n *Network) MessageSend(m Message) error {
+func (i Identity) Messages() []Message {
+	query := Query(
+		q.Or(
+			q.Eq("From", i.Login),
+			q.Eq("To", i.Login),
+		),
+	).OrderBy("Date").Reverse()
+	var messages []Message
+	err := query.Find(&messages)
+	if err != nil && err != storm.ErrNotFound {
+		panic(err)
+	}
+	return messages
+}
+
+func (i Identity) Message(id int) (Message, error) {
+	return First[Message](
+		q.Eq("ID", id),
+		q.Or(
+			q.Eq("From", i.Login),
+			q.Eq("To", i.Login),
+		),
+	)
+}
+
+func (i Identity) Send(to, subject, content string) (Message, error) {
 	// trouver le destinataire
-	recipient, err := n.FindIdentity(m.Recipient)
+	_, err := FindIdentity(to)
 	if err != nil {
+		return Message{}, err
+	}
+
+	return Save(Message{
+		From:    i.Login,
+		To:      to,
+		Date:    time.Now(),
+		Subject: subject,
+		Content: content,
+		Opened:  false,
+	})
+}
+
+func Pay(from, to string, amount int) error {
+	var src, dst Identity
+	var err error
+
+	if src, err = FindIdentity(from); err != nil {
 		return err
 	}
 
-	recipient.Messages = append(recipient.Messages, m)
-	return nil
-}
-
-func (n *Network) Pay(from, to string, amount int) error {
-	var src, dst *Identity
-	var err error
-
-	if src, err = n.FindIdentity(from); err != nil {
-		return errIdentityNotFound
-	}
-
-	if dst, err = n.FindIdentity(to); err != nil {
-		return errIdentityNotFound
+	if dst, err = FindIdentity(to); err != nil {
+		return err
 	}
 
 	if src.Yes < amount {
@@ -74,7 +100,7 @@ func randomString() string {
 	return base64.RawStdEncoding.EncodeToString(data)
 }
 
-func (n *Network) CreateRandomIdentity() Identity {
+func CreateRandomIdentity() (Identity, error) {
 	login := randomString()
 	password := randomString()
 	id := Identity{
@@ -83,64 +109,31 @@ func (n *Network) CreateRandomIdentity() Identity {
 		Name:     "",
 		Yes:      0,
 	}
-	n.Identities = append(n.Identities, id)
-	return id
+
+	return Save(id)
 }
 
-func (n *Network) RemoveIdentity(login string) {
-
+func RemoveIdentity(identity Identity) error {
+	return Delete(identity)
 }
 
-func (n *Network) CheckIdentity(login, password string) (*Identity, error) {
-	for i, id := range n.Identities {
-		if id.Login == login && id.Password == password {
-			return &n.Identities[i], nil
-		}
-	}
-	return nil, errInvalidIdentity
-}
-
-func (n *Network) FindIdentity(login string) (*Identity, error) {
-	for i, identity := range n.Identities {
-		if identity.Login == login {
-			return &n.Identities[i], nil
-		}
-	}
-
-	return nil, fmt.Errorf("%s : %w", login, errIdentityNotFound)
-}
-
-func (n *Network) FindServer(address string) (*Server, error) {
-	for i, server := range n.Servers {
-		if server.Address == address {
-			return &n.Servers[i], nil
-		}
-	}
-	return nil, fmt.Errorf("%s : %w", address, errServerNotFound)
-}
-
-func (n *Network) Serialize() {
-	ret, err := json.MarshalIndent(n, "", " ")
+func CheckIdentity(login, password string) (Identity, error) {
+	identity, err := FindIdentity(login)
 	if err != nil {
-		fmt.Println(err)
-	} else {
-
-		//What you get is a byte array, which needs to be converted into a string
-		//fmt.Println(string(ret))
-
-		// Write byte array to file
-		_ = ioutil.WriteFile("network.json", ret, 0644)
-
+		return identity, err
 	}
+
+	if identity.Password != password {
+		return identity, errInvalidIdentity
+	}
+
+	return identity, nil
 }
 
-func (n *Network) UnSerialize(filename string) {
-	content, err := ioutil.ReadFile(filename)
-	if err != nil {
-		fmt.Println("Cannot open JSON file")
-	}
-	err = json.Unmarshal(content, n)
-	if err != nil {
-		fmt.Println("Can't deserislize", content)
-	}
+func FindIdentity(login string) (Identity, error) {
+	return One[Identity]("Login", login)
+}
+
+func FindServer(address string) (Server, error) {
+	return One[Server]("Address", address)
 }

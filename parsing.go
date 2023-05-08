@@ -47,6 +47,10 @@ func (c Context) Value(key any) any {
 	return nil
 }
 
+func (c Context) Console() *Console {
+	return c.Value("console").(*Console)
+}
+
 func (c Context) Print() string {
 	b := strings.Builder{}
 	ctx := &c
@@ -125,9 +129,11 @@ func (b Branch) String() string {
 
 func (b Branch) Help() string {
 	s := strings.Builder{}
+	tw := tw(&s)
 	for _, c := range b.cmds {
-		fmt.Fprintf(&s, "%s : %s\n", c.name, c.help)
+		fmt.Fprintf(tw, "%s\t%s\t\n", c.name, c.help)
 	}
+	tw.Flush()
 	return s.String()
 }
 
@@ -145,11 +151,11 @@ func (b Branch) Parse(ctx Context, args []string) any {
 		if strings.HasPrefix(cmd.name, args[0]) {
 			// HACK vérifier l'identité et la connectivité
 			console := ctx.Value("console").(*Console)
-			if cmd.connected && console.Server == nil {
+			if cmd.connected && console.Session == nil {
 				return ctx.Error(errNotConnected)
 			}
 
-			if cmd.identified && console.Identity == nil {
+			if cmd.identified && console.Identity.Login == "" {
 				return ctx.Error(errNotIdentified)
 			}
 
@@ -275,7 +281,7 @@ type Select struct {
 	name    string
 	help    string
 	header  string
-	options func(ctx Context) []Option
+	options func(ctx Context) ([]Option, error)
 	next    Node
 }
 
@@ -294,27 +300,38 @@ func (s Select) Help() string {
 
 var underline = lipgloss.NewStyle().Underline(true)
 
-func (s Select) List(ctx Context) string {
+func (s Select) List(options []Option) string {
+	// construire le header
 	b := strings.Builder{}
 	header := s.header
 	if header == "" {
 		header = s.help
 	}
 	fmt.Fprintln(&b, underline.Render(header))
-	for _, o := range s.options(ctx) {
-		fmt.Fprintf(&b, "%v : %s\n", o.value, o.help)
+
+	tw := tw(&b)
+	// afficher les options
+	for _, o := range options {
+		fmt.Fprintf(tw, "%v\t%s\t\n", o.value, o.help)
 	}
+	tw.Flush()
 	return b.String()
 }
 
 func (s Select) Parse(ctx Context, args []string) any {
-	if len(args) == 0 {
-		// afficher la liste des choix possibles
-		return ctx.Output(s.List(ctx))
+	// récupérer la liste des options possibles
+	options, err := s.options(ctx)
+	if err != nil {
+		return ctx.Error(err)
 	}
 
-	// vérifier que la valeur est valide
-	for _, o := range s.options(ctx) {
+	if len(args) == 0 {
+		// afficher la liste des choix possibles
+		return ctx.Output(s.List(options))
+	}
+
+	// vérifier la validité de l'option choisie
+	for _, o := range options {
 		if fmt.Sprintf("%v", o.value) == args[0] {
 			// la valeur est valide, continuer le parsing
 			ctx = ctx.WithContext(s, s.name, o.value)
@@ -323,9 +340,8 @@ func (s Select) Parse(ctx Context, args []string) any {
 	}
 
 	// la valeur saisie est invalide
-	return ctx.Result(
+	return ctx.Error(
 		fmt.Errorf("%s : %w", s.name, errInvalidArgument),
-		s.List(ctx),
 	)
 }
 

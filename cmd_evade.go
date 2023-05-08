@@ -13,7 +13,7 @@ var evade = Cmd{
 		name:   "mem",
 		help:   "zone mémoire vers laquelle se déplacer",
 		header: "liste des zones mémoire disponibles sur ce serveur",
-		options: func(ctx Context) []Option {
+		options: func(ctx Context) ([]Option, error) {
 			console := ctx.Value("console").(*Console)
 			opts := make([]Option, 0, len(console.Mem))
 			for mem, available := range console.Mem {
@@ -27,7 +27,7 @@ var evade = Cmd{
 					help:  status,
 				})
 			}
-			return opts
+			return opts, nil
 		},
 		next: Run(Evade),
 	},

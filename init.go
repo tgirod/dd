@@ -113,7 +113,6 @@ besoin d'aide, demande à ton nerd préféré.`
 
 var dd = Server{
 	Address:     "dd.local",
-	Public:      true,
 	Description: ddDesc,
 	Scan:        SEC1,
 }
@@ -140,7 +139,6 @@ var dd22Desc = `
 
 var d22 = Server{
 	Address:     "d22.eu",
-	Public:      true,
 	Description: dd22Desc,
 	Scan:        SEC2,
 }

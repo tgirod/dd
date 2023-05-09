@@ -241,7 +241,7 @@ func (c *Console) Connect(address string, identity Identity, force bool) error {
 	// compte associé à l'identité active
 	account, err := server.FindAccount(identity.Login)
 
-	if !server.Public && err != nil {
+	if server.Private && err != nil {
 		if force {
 			c.Session = c.Session.WithSession(server, Account{}, identity)
 			return nil

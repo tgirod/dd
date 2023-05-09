@@ -15,7 +15,7 @@ type Server struct {
 	Address string `storm:"id"`
 
 	// ce serveur accepte-t-il des connexions anonymes ?
-	Public bool
+	Private bool
 
 	// informations affichées lors de la connexion
 	Description string

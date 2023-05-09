@@ -5,9 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -74,8 +71,8 @@ func NewApp(init bool) *App {
 // Start démarre le serveur, en attente de connexions
 func (a *App) Start() {
 
-	done := make(chan os.Signal, 1)
-	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	// done := make(chan os.Signal, 1)
+	// signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	log.Printf("Starting SSH server on %s:%d", host, port)
 	go func() {
 		if err := a.s.ListenAndServe(); err != nil {
@@ -83,7 +80,9 @@ func (a *App) Start() {
 		}
 	}()
 
-	<-done
+	AdminStart()
+	// <-done
+
 	log.Println("Stopping SSH server")
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer func() { cancel() }()

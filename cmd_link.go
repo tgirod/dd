@@ -37,8 +37,10 @@ func LinkCmd(ctx Context) any {
 		return ctx.Error(err)
 	}
 
-	if err := console.Connect(link.Address, false); err != nil {
-		return ctx.Error(err)
+	if err := console.Connect(link.Address, console.Identity, false); err != nil {
+		// connexion impossible avec l'identité courante
+		// lancer la saisie du login
+		return ctx.WithContext(idconnect, "address", link.Address)
 	}
 
 	b := strings.Builder{}

@@ -123,6 +123,19 @@ func (c Cmd) String() string {
 	return c.name
 }
 
+func (c Cmd) Help() string {
+	return c.help
+
+}
+
+func (c Cmd) Parse(ctx Context, args []string) any {
+	return c.next.Parse(ctx, args)
+}
+
+func (c Cmd) Resume(ctx Context, args []string) any {
+	return c.next.Parse(ctx, args)
+}
+
 func (b Branch) String() string {
 	return b.name
 }
@@ -151,7 +164,7 @@ func (b Branch) Parse(ctx Context, args []string) any {
 		if strings.HasPrefix(cmd.name, args[0]) {
 			// HACK vérifier l'identité et la connectivité
 			console := ctx.Value("console").(*Console)
-			if cmd.connected && console.Session == nil {
+			if cmd.connected && !console.IsConnected() {
 				return ctx.Error(errNotConnected)
 			}
 

@@ -194,7 +194,7 @@ func (c *Client) View() string {
 	login := c.Console.Identity.Login
 
 	groups := "public"
-	if c.Session != nil && len(c.Groups) > 0 {
+	if len(c.Groups) > 0 {
 		groups = strings.Join(c.Groups, " ")
 	}
 
@@ -207,7 +207,7 @@ func (c *Client) View() string {
 
 	// chemin de connexion
 	hist := "déconnecté"
-	if c.Console.Session != nil {
+	if c.IsConnected() {
 		hist = c.Console.Session.Path()
 	}
 

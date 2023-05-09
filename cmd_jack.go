@@ -42,7 +42,7 @@ func Jack(ctx Context) any {
 		return ctx.Error(err)
 	}
 
-	if err := console.Connect(link.Address, true); err != nil {
+	if err := console.Connect(link.Address, console.Identity, true); err != nil {
 		return ctx.Error(err)
 	}
 

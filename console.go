@@ -19,10 +19,7 @@ type Console struct {
 	Branch
 
 	// informations sur la connexion au réseau
-	*Session
-
-	// identité active
-	Identity
+	Session
 
 	// l'alerte est-elle activée ?
 	Alert bool
@@ -38,10 +35,11 @@ type Console struct {
 }
 
 type Session struct {
-	Server                  // serveur auquel la session se réfère
-	Account                 // compte utilisateur actif dans ce serveur
-	Mem     map[string]bool // zones mémoires disponibles pour une évasion
-	Parent  *Session        // session précédente
+	Server                   // serveur auquel la session se réfère
+	Account                  // compte utilisateur actif dans ce serveur
+	Identity                 // identité active dans la session
+	Mem      map[string]bool // zones mémoires disponibles pour une évasion
+	Parent   *Session        // session précédente
 }
 
 func (s Session) Path() string {
@@ -52,6 +50,17 @@ func (s Session) Path() string {
 		sess = sess.Parent
 	}
 	return strings.Join(path, "/")
+}
+
+func (s Session) WithSession(server Server, account Account, identity Identity) Session {
+	sess := Session{
+		Server:   server,
+		Account:  account,
+		Identity: identity,
+		Parent:   &s,
+	}
+	sess.InitMem()
+	return sess
 }
 
 type Result struct {
@@ -141,7 +150,7 @@ func (s *Session) InitMem() {
 }
 
 func (c *Console) Disconnect() {
-	c.Session = nil
+	c.Session = Session{}
 	c.Identity = Identity{}
 	c.Alert = false
 	// BUG
@@ -196,7 +205,7 @@ func (c *Console) Identify(login, password string) error {
 	c.Identity = identity
 
 	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
-	if c.Session != nil {
+	if c.IsConnected() {
 		account, err := c.FindAccount(identity.Login)
 		if err == nil {
 			c.Account = account
@@ -223,33 +232,34 @@ func (c *Console) Delay() time.Duration {
 	}
 }
 
-func (c *Console) Connect(address string, force bool) error {
+func (c *Console) Connect(address string, identity Identity, force bool) error {
 	server, err := FindServer(address)
 	if err != nil {
 		return err
 	}
 
-	// login de l'identité courante (si elle existe)
-	login := c.Identity.Login
+	// compte associé à l'identité active
+	account, err := server.FindAccount(identity.Login)
 
-	account, err := server.FindAccount(login)
+	if !server.Public && err != nil {
+		if force {
+			c.Session = c.Session.WithSession(server, Account{}, identity)
+			return nil
+		}
 
-	if err != nil && !force && !server.Public {
-		return fmt.Errorf("%s : %w", login, errInvalidAccount)
+		return errInvalidAccount
 	}
 
-	c.Session = &Session{
-		Server:  server,
-		Account: account,
-		Parent:  c.Session,
-	}
+	c.Session = c.Session.WithSession(server, account, identity)
 
 	if c.Account.Backdoor {
 		c.RemoveAccount(account)
 		RemoveIdentity(c.Identity)
 	}
 
-	c.InitMem()
-
 	return nil
+}
+
+func (c *Console) IsConnected() bool {
+	return c.Session.Server.Address != ""
 }

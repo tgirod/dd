@@ -17,13 +17,12 @@ import (
 const DNISpeed = 3
 
 type Client struct {
-	width      int              // largeur de l'affichage
-	height     int              // hauteur de l'affichage
-	input      textinput.Model  // invite de commande
-	output     viewport.Model   // affichage de la sortie des commandes
-	status     statusbar.Bubble // barre de statut
-	prevOutput string           // sortie de la commande précédente
-	modal      tea.Model        // fenêtre modale
+	width  int              // largeur de l'affichage
+	height int              // hauteur de l'affichage
+	input  textinput.Model  // invite de commande
+	output viewport.Model   // affichage de la sortie des commandes
+	status statusbar.Bubble // barre de statut
+	modal  tea.Model        // fenêtre modale
 
 	*Console // console enregistrée dans le jeu
 }

@@ -128,6 +128,7 @@ var baseCmds = Branch{
 // }
 
 func NewConsole() *Console {
+	app.Log("nouvelle console")
 	return &Console{
 		Branch: baseCmds,
 	}

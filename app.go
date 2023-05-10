@@ -96,6 +96,10 @@ func (a *App) Start() {
 	}
 }
 
+func (a *App) Log(msg string) {
+	a.admin.Send(LogMsg(msg))
+}
+
 // Handler prend en charge la connexion entrante et créé les objets nécessaires
 func (a *App) Handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	// si le terminal qui tente de se connecter est invalide

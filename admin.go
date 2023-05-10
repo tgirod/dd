@@ -14,6 +14,8 @@ type Admin struct {
 	prompt textinput.Model
 }
 
+type LogMsg string
+
 func (a Admin) Init() tea.Cmd {
 	return textinput.Blink
 }
@@ -33,6 +35,8 @@ func (a Admin) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			a.prompt, cmd = a.prompt.Update(msg)
 			return a, cmd
 		}
+	case LogMsg:
+		return a, tea.Println(msg)
 	default:
 		a.prompt, cmd = a.prompt.Update(msg)
 		return a, cmd
@@ -70,7 +74,7 @@ func (a Admin) Parse(prompt string) tea.Cmd {
 	case Result:
 		return tea.Println(res.String())
 	default:
-		return tea.Println("bizarre")
+		return tea.Println("erreur de parsing")
 	}
 }
 

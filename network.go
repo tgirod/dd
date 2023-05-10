@@ -130,6 +130,10 @@ func CheckIdentity(login, password string) (Identity, error) {
 	return identity, nil
 }
 
+func Identities() ([]Identity, error) {
+	return Find[Identity]()
+}
+
 func FindIdentity(login string) (Identity, error) {
 	return One[Identity]("Login", login)
 }

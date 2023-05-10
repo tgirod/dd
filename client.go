@@ -135,10 +135,6 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		switch msg.Type {
-		case tea.KeyCtrlC:
-			// quitter l'application client
-			cmds = append(cmds, tea.Quit)
-
 		case tea.KeyEnter:
 			// valider la commande
 			prompt := c.input.Value()          // récupérer le prompt

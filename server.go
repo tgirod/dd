@@ -30,7 +30,8 @@ func (s Server) Match() q.Matcher {
 
 // Account représente un compte utilisateur sur un serveur
 type Account struct {
-	Login    string `storm:"id"`
+	ID       int    `storm:"id,increment"`
+	Login    string `storm:"index"`
 	Server   string `storm:"index"` // le serveur concerné
 	Backdoor bool
 	Groups   []string `storm:"index"`

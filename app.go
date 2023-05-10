@@ -11,7 +11,7 @@ import (
 	"github.com/charmbracelet/ssh"
 	"github.com/charmbracelet/wish"
 	bm "github.com/charmbracelet/wish/bubbletea"
-	lm "github.com/charmbracelet/wish/logging"
+	// lm "github.com/charmbracelet/wish/logging"
 	//"encoding/json"
 )
 
@@ -42,7 +42,8 @@ var (
 )
 
 type App struct {
-	s *ssh.Server
+	s     *ssh.Server
+	admin *tea.Program
 }
 
 // NewApp créé un nouvel objet application
@@ -59,11 +60,13 @@ func NewApp(init bool) *App {
 		wish.WithHostKeyPath(".ssh/term_info_ed25519"),
 		wish.WithMiddleware(
 			bm.Middleware(a.Handler),
-			lm.Middleware(),
+			// lm.Midleware(),
 		),
 	); err != nil {
 		log.Fatal(err)
 	}
+
+	a.admin = tea.NewProgram(NewAdmin())
 
 	return a
 }
@@ -73,17 +76,19 @@ func (a *App) Start() {
 
 	// done := make(chan os.Signal, 1)
 	// signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-	log.Printf("Starting SSH server on %s:%d", host, port)
+	log.Printf("lancement du serveur SSH sur %s:%d", host, port)
 	go func() {
 		if err := a.s.ListenAndServe(); err != nil {
 			log.Fatalln(err)
 		}
 	}()
 
-	AdminStart()
-	// <-done
+	log.Println("lancement de l'interface admin")
+	if _, err := a.admin.Run(); err != nil {
+		log.Fatalln(err)
+	}
 
-	log.Println("Stopping SSH server")
+	log.Println("fermeture du serveur SSH")
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer func() { cancel() }()
 	if err := a.s.Shutdown(ctx); err != nil {

@@ -74,11 +74,12 @@ func (a Admin) Parse(prompt string) tea.Cmd {
 	}
 }
 
-func AdminStart() {
+func AdminStart() *tea.Program {
 	p := tea.NewProgram(NewAdmin())
 	if _, err := p.Run(); err != nil {
 		panic(err)
 	}
+	return p
 }
 
 var adminCmd = Branch{

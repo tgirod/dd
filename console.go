@@ -65,13 +65,11 @@ func (s Session) Trace() time.Duration {
 
 func (s *Session) StartAlert() {
 	s.Alert = true
-	if s.Parent != nil {
-		s.Parent.StartAlert()
-	}
 }
 
 func (s *Session) Security() bool {
 	// décrémenter le temps restant dans cette session
+	s.Alert = true
 	if s.Countdown > 0 {
 		s.Countdown -= time.Second
 		return false

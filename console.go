@@ -69,6 +69,18 @@ type Result struct {
 	Output string
 }
 
+func (r Result) String() string {
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "> %s\n", r.Prompt)
+	if r.Error != nil {
+		fmt.Fprintln(&b, r.Error.Error())
+	}
+	if r.Output != "" {
+		fmt.Fprintln(&b, r.Output)
+	}
+	return b.String()
+}
+
 var Hack = map[string]Cmd{
 	"jack":  jack,
 	"evade": evade,

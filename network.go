@@ -13,7 +13,14 @@ type Identity struct {
 	Login    string `storm:"id"`
 	Password string
 	Name     string
-	Yes      int
+}
+
+type Transaction struct {
+	ID      int    `storm:"id,increment"`
+	From    string `storm:"index"`
+	To      string `storm:"index"`
+	Yes     int
+	Comment string
 }
 
 type Message struct {
@@ -68,36 +75,67 @@ func (i Identity) Send(to, subject, content string) (Message, error) {
 	})
 }
 
+func (i Identity) Transactions() ([]Transaction, error) {
+	return Find[Transaction](
+		q.Or(
+			q.Eq("From", i.Login),
+			q.Eq("To", i.Login),
+		),
+	)
+}
+
+func (i Identity) Balance() (int, error) {
+	transactions, err := i.Transactions()
+	if err != nil {
+		return 0, err
+	}
+
+	bal := 0
+	for _, t := range transactions {
+		if t.From == i.Login {
+			bal -= t.Yes
+		}
+		if t.To == i.Login {
+			bal += t.Yes
+		}
+	}
+
+	return bal, nil
+}
+
 func Pay(from, to string, amount int) error {
-	var src, dst Identity
+	var src Identity
 	var err error
 
 	if src, err = FindIdentity(from); err != nil {
 		return err
 	}
 
-	if dst, err = FindIdentity(to); err != nil {
+	if _, err = FindIdentity(to); err != nil {
 		return err
-	}
-
-	if src.Yes < amount {
-		return errLowCredit
 	}
 
 	if amount < 0 {
 		return errNegativeAmount
 	}
 
-	src.Yes = src.Yes - amount
-	dst.Yes = dst.Yes + amount
-
-	src, err = Save(src)
+	bal, err := src.Balance()
 	if err != nil {
 		return err
 	}
 
-	dst, err = Save(dst)
-	if err != nil {
+	if bal < amount {
+		return errLowCredit
+	}
+
+	tx := Transaction{
+		From:    from,
+		To:      to,
+		Yes:     amount,
+		Comment: "",
+	}
+
+	if tx, err = Save(tx); err != nil {
 		return err
 	}
 
@@ -117,7 +155,6 @@ func CreateRandomIdentity() (Identity, error) {
 		Login:    login,
 		Password: password,
 		Name:     "",
-		Yes:      0,
 	}
 
 	return Save(id)

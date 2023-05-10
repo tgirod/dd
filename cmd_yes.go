@@ -43,13 +43,15 @@ func YesBalance(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := console.Identity
 
-	b := strings.Builder{}
-	tw := tw(&b)
-	fmt.Fprintf(tw, "Compte bancaire associé à l'identité %s\n", id.Login)
-	fmt.Fprintf(tw, "Solde du compte :\t%d Y€S\t\n", id.Yes)
-	tw.Flush()
+	bal, err := id.Balance()
+	if err != nil {
+		return ctx.Error(err)
+	}
 
-	return ctx.Result(nil, b.String())
+	b := strings.Builder{}
+	fmt.Fprintf(&b, "Compte bancaire associé à l'identité %s\n", id.Login)
+	fmt.Fprintf(&b, "Solde du compte :%d Y€S\n", bal)
+	return ctx.Output(b.String())
 }
 
 func YesPay(ctx Context) any {

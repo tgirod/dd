@@ -15,12 +15,21 @@ const (
 
 func InitNetwork(
 	identities []Identity,
+	transactions []Transaction,
 ) {
 	log.Println("identités")
 	for _, i := range identities {
 		log.Println("\t", i.Login)
 		if _, err := Save(i); err != nil {
 			log.Fatalf("%v : %v\n", i, err)
+		}
+	}
+
+	log.Println("transactions")
+	for _, t := range transactions {
+		log.Println("\t", t.From, t.To, t.Yes)
+		if _, err := Save(t); err != nil {
+			log.Fatalf("%v : %v\n", t, err)
 		}
 	}
 }
@@ -94,6 +103,7 @@ func Reset() {
 	db.Drop(Entry{})
 	db.Drop(Register{})
 	db.Drop(Post{})
+	db.Drop(Transaction{})
 }
 
 var ddDesc = `
@@ -154,13 +164,18 @@ func Init() {
 				Login:    "jesus",
 				Password: "roxor",
 				Name:     "Jesus",
-				Yes:      100,
 			},
 			{
 				Login:    "crunch",
 				Password: "hack",
 				Name:     "Crunch",
-				Yes:      0,
+			},
+		},
+		[]Transaction{
+			{
+				To:      "jesus",
+				Yes:     100,
+				Comment: "report du solde",
 			},
 		},
 	)

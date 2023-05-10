@@ -9,6 +9,7 @@ var quit = Cmd{
 
 func Quit(ctx Context) any {
 	console := ctx.Value("console").(*Console)
+	console.DNI = false
 	console.Disconnect()
 
 	return ctx.Result(nil, "déconnexion effectuée")

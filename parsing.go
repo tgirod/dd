@@ -163,13 +163,15 @@ func (b Branch) Parse(ctx Context, args []string) any {
 	for _, cmd := range b.cmds {
 		if strings.HasPrefix(cmd.name, args[0]) {
 			// HACK vérifier l'identité et la connectivité
-			console := ctx.Value("console").(*Console)
-			if cmd.connected && !console.IsConnected() {
-				return ctx.Error(errNotConnected)
-			}
+			if cmd.connected || cmd.identified {
+				console := ctx.Value("console").(*Console)
+				if cmd.connected && !console.IsConnected() {
+					return ctx.Error(errNotConnected)
+				}
 
-			if cmd.identified && console.Identity.Login == "" {
-				return ctx.Error(errNotIdentified)
+				if cmd.identified && console.Identity.Login == "" {
+					return ctx.Error(errNotIdentified)
+				}
 			}
 
 			// une commande correspond, on enregistre dans le contexte et on continue

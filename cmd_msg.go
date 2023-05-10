@@ -96,15 +96,20 @@ func MessageRead(ctx Context) any {
 		}
 	}
 
+	return ctx.Result(nil, msg.String())
+}
+
+func (m Message) String() string {
 	b := strings.Builder{}
 
-	fmt.Fprintf(&b, "ID : %d\n", id)
-	fmt.Fprintf(&b, "De : %s\n", msg.To)
-	fmt.Fprintf(&b, "Date : %s\n", msg.Date)
-	fmt.Fprintf(&b, "Sujet : %s\n", msg.Subject)
-	fmt.Fprintln(&b, msg.Content)
+	fmt.Fprintf(&b, "ID : %d\n", m.ID)
+	fmt.Fprintf(&b, "De : %s\n", m.From)
+	fmt.Fprintf(&b, "À : %s\n", m.To)
+	fmt.Fprintf(&b, "Date : %s\n", m.Date)
+	fmt.Fprintf(&b, "Sujet : %s\n", m.Subject)
+	fmt.Fprintln(&b, m.Content)
 
-	return ctx.Result(nil, b.String())
+	return b.String()
 }
 
 func MessageWrite(ctx Context) any {

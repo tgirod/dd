@@ -91,6 +91,16 @@ func Pay(from, to string, amount int) error {
 	src.Yes = src.Yes - amount
 	dst.Yes = dst.Yes + amount
 
+	src, err = Save(src)
+	if err != nil {
+		return err
+	}
+
+	dst, err = Save(dst)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

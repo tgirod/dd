@@ -61,10 +61,10 @@ func (a Admin) Parse(prompt string) tea.Cmd {
 		parent: &Context{},
 		key:    "console",
 		value:  nil,
-		node:   admin,
+		node:   adminCmd,
 	}
 
-	switch res := admin.Parse(ctx, args).(type) {
+	switch res := adminCmd.Parse(ctx, args).(type) {
 	case tea.Cmd:
 		return res
 	case Result:
@@ -81,7 +81,7 @@ func AdminStart() {
 	}
 }
 
-var admin = Branch{
+var adminCmd = Branch{
 	name: "",
 	cmds: []Cmd{
 		{

@@ -181,6 +181,11 @@ var (
 	errorStyle  = lg.NewStyle().Foreground(lg.Color("9"))
 	promptStyle = lg.NewStyle().Foreground(lg.Color("8"))
 	outputStyle = lg.NewStyle()
+
+	gray   = lg.NewStyle().Foreground(lg.Color("8"))
+	red    = lg.NewStyle().Foreground(lg.Color("9"))
+	green  = lg.NewStyle().Foreground(lg.Color("10"))
+	yellow = lg.NewStyle().Foreground(lg.Color("11"))
 )
 
 func (c *Client) ViewPath() string {
@@ -188,6 +193,13 @@ func (c *Client) ViewPath() string {
 	sess := c.Console.Session
 	for sess.Parent != nil {
 		str := fmt.Sprintf("%s", sess.Server.Address)
+		if sess.Alert {
+			if sess.Countdown > 0 {
+				str = yellow.Render(str)
+			} else {
+				str = red.Render(str)
+			}
+		}
 		path = append([]string{str}, path...)
 		sess = *sess.Parent
 	}

@@ -63,6 +63,13 @@ func (s Session) Trace() time.Duration {
 	return s.Parent.Trace() + s.Countdown
 }
 
+func (s *Session) StartAlert() {
+	s.Alert = true
+	if s.Parent != nil {
+		s.Parent.StartAlert()
+	}
+}
+
 func (s *Session) Security() bool {
 	// décrémenter le temps restant dans cette session
 	if s.Countdown > 0 {
@@ -207,15 +214,6 @@ coupure de la connexion au réseau.`
 	}
 
 	c.AddResult(eval)
-}
-
-func (c *Console) StartAlert() {
-	if !c.Alert {
-		c.Alert = true
-		c.Countdown = c.Server.Security
-	} else if c.Server.Security < c.Countdown {
-		c.Countdown = c.Server.Security
-	}
 }
 
 func (c *Console) Security() {

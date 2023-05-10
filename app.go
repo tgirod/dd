@@ -96,8 +96,8 @@ func (a *App) Start() {
 	}
 }
 
-func (a *App) Log(msg string) {
-	a.admin.Send(LogMsg(msg))
+func (a *App) Log(v any) {
+	a.admin.Send(LogMsg(fmt.Sprintf("%+v", v)))
 }
 
 // Handler prend en charge la connexion entrante et créé les objets nécessaires

@@ -122,7 +122,9 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, cmd)
 
 	case SecurityMsg:
-		c.Console.Security()
+		if c.Console.Security() {
+			c.RenderOutput()
+		}
 		cmds = append(cmds, c.TickSecurity())
 
 	case tea.KeyMsg:

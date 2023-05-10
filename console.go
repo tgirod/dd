@@ -187,7 +187,6 @@ func InitMem() map[string]bool {
 func (c *Console) Disconnect() {
 	c.Session = Session{}
 	c.Identity = Identity{}
-	c.Alert = false
 	// BUG
 	// c.Branch = baseCmds
 
@@ -214,13 +213,15 @@ coupure de la connexion au réseau.`
 	c.AddResult(eval)
 }
 
-func (c *Console) Security() {
+func (c *Console) Security() bool {
 	if c.Alert {
 		if c.Session.Security() {
 			// trace complétée, on déconnecte
 			c.Disconnect()
+			return true
 		}
 	}
+	return false
 }
 
 func (c *Console) Identify(login, password string) error {

@@ -44,6 +44,8 @@ func Evade(ctx Context) any {
 	}
 
 	console.Mem[mem] = false
-	console.Countdown = console.Server.Scan
+
+	console.StartAlert()
+
 	return ctx.Result(nil, fmt.Sprintf("session relocalisée dans la zone mémoire %s", mem))
 }

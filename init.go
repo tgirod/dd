@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	SEC1 = time.Minute * 5
+	SEC1 = time.Second * 5
 	SEC2 = time.Minute * 3
 	SEC3 = time.Minute * 2
 	SEC4 = time.Minute * 1
@@ -140,7 +140,7 @@ var dd22Desc = `
 var d22 = Server{
 	Address:     "d22.eu",
 	Description: dd22Desc,
-	Security:    SEC2,
+	Security:    SEC1,
 }
 
 func Init() {
@@ -187,7 +187,12 @@ func Init() {
 	)
 
 	InitServer(d22,
-		[]Account{},
+		[]Account{
+			{
+				Login:    "jesus",
+				Backdoor: false,
+			},
+		},
 		[]Link{},
 		[]Entry{},
 		[]Register{},

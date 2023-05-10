@@ -33,12 +33,6 @@ func Imp(ctx Context) any {
 	c := ctx.Console()
 	login := ctx.Value("login").(string)
 
-	identity, err := FindIdentity(login)
-	if err != nil {
-		ctx.Error(err)
-	}
-	c.Identity = identity
-
 	account, err := c.FindAccount(login)
 	if err != nil {
 		ctx.Error(err)

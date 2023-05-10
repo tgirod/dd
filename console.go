@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/mattn/go-shellwords"
@@ -31,37 +32,51 @@ type Session struct {
 	Server                    // serveur auquel la session se réfère
 	Account                   // compte utilisateur actif dans ce serveur
 	Identity                  // identité active dans la session
-	Alert     bool            // alerte déclenchée dans ce serveur
+	Alert     bool            // l'alerte est-elle active ?
 	Countdown time.Duration   // temps restant avant déconnexion
 	Mem       map[string]bool // zones mémoires disponibles pour une évasion
 	Parent    *Session        // session précédente
 }
 
 func (s Session) WithSession(server Server, account Account, identity Identity) Session {
-	sess := Session{
-		Server:   server,
-		Account:  account,
-		Identity: identity,
-		Parent:   &s,
+	countdown := server.Security
+	if s.Alert {
+		countdown = 0
 	}
-	sess.InitMem()
+	sess := Session{
+		Server:    server,
+		Account:   account,
+		Identity:  identity,
+		Alert:     s.Alert,
+		Countdown: countdown,
+		Mem:       InitMem(),
+		Parent:    &s,
+	}
 	return sess
 }
 
-func (s Session) Timer() string {
-	min := int(s.Countdown.Minutes())
-	sec := int(s.Countdown.Seconds()) - min*60
-	return fmt.Sprintf("%02d:%02d", min, sec)
+// Trace retourne le temps restant avant que la trace soit terminée
+func (s Session) Trace() time.Duration {
+	if s.Parent == nil {
+		return s.Countdown
+	}
+	return s.Parent.Trace() + s.Countdown
 }
 
-func (s *Session) Security() {
-	if s.Alert {
+func (s *Session) Security() bool {
+	// décrémenter le temps restant dans cette session
+	if s.Countdown > 0 {
 		s.Countdown -= time.Second
+		return false
 	}
 
+	// décrémenter le temps dans les sessions antérieures
 	if s.Parent != nil {
-		s.Parent.Security()
+		return s.Parent.Security()
 	}
+
+	// on est au bout, la trace est complétée
+	return true
 }
 
 type Result struct {
@@ -155,12 +170,13 @@ func (c *Console) Parse(prompt string) any {
 	return c.Branch.Parse(ctx, args)
 }
 
-func (s *Session) InitMem() {
-	s.Mem = make(map[string]bool)
+func InitMem() map[string]bool {
+	mem := make(map[string]bool)
 	for i := 0; i < 5; i++ {
 		addr := fmt.Sprintf("%08x", rand.Uint32())
-		s.Mem[addr] = true
+		mem[addr] = true
 	}
+	return mem
 }
 
 func (c *Console) Disconnect() {
@@ -196,14 +212,19 @@ coupure de la connexion au réseau.`
 func (c *Console) StartAlert() {
 	if !c.Alert {
 		c.Alert = true
-		c.Countdown = c.Server.Scan
-	} else if c.Server.Scan < c.Countdown {
-		c.Countdown = c.Server.Scan
+		c.Countdown = c.Server.Security
+	} else if c.Server.Security < c.Countdown {
+		c.Countdown = c.Server.Security
 	}
 }
 
 func (c *Console) Security() {
-	c.Session.Security()
+	if c.Alert {
+		if c.Session.Security() {
+			// trace complétée, on déconnecte
+			c.Disconnect()
+		}
+	}
 }
 
 func (c *Console) Identify(login, password string) error {

@@ -20,8 +20,8 @@ type Server struct {
 	// informations affichées lors de la connexion
 	Description string
 
-	// durée du scan avant de se faire repérer par le serveur
-	Scan time.Duration
+	// temps que met le serveur à effectuer la trace
+	Security time.Duration
 }
 
 func (s Server) Match() q.Matcher {

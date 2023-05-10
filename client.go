@@ -187,11 +187,18 @@ func (c *Client) ViewPath() string {
 	var path []string
 	sess := c.Console.Session
 	for sess.Parent != nil {
-		str := fmt.Sprintf("%s(%s)", sess.Server.Address, sess.Timer())
+		str := fmt.Sprintf("%s", sess.Server.Address)
 		path = append([]string{str}, path...)
 		sess = *sess.Parent
 	}
 	return strings.Join(path, "/")
+}
+
+func (c *Client) ViewTimer() string {
+	trace := c.Trace()
+	min := int(trace.Minutes())
+	sec := int(trace.Seconds()) - min*60
+	return fmt.Sprintf("%02d:%02d", min, sec)
 }
 
 func (c *Client) View() string {
@@ -205,18 +212,16 @@ func (c *Client) View() string {
 
 	timer := "--:--"
 	if c.Console.Alert {
-		min := int(c.Countdown.Minutes())
-		sec := int(c.Countdown.Seconds()) - min*60
-		timer = fmt.Sprintf("%02d:%02d", min, sec)
+		timer = c.ViewTimer()
 	}
 
 	// chemin de connexion
-	hist := "déconnecté"
+	path := "déconnecté"
 	if c.IsConnected() {
-		hist = c.ViewPath()
+		path = c.ViewPath()
 	}
 
-	c.status.SetContent(timer, hist, login, groups)
+	c.status.SetContent(timer, path, login, groups)
 
 	if c.modal != nil {
 		content := modalStyle.Render(c.modal.View())

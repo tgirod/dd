@@ -114,7 +114,7 @@ besoin d'aide, demande à ton nerd préféré.`
 var dd = Server{
 	Address:     "dd.local",
 	Description: ddDesc,
-	Scan:        SEC1,
+	Security:    SEC1,
 }
 
 var dd22Desc = `
@@ -140,7 +140,7 @@ var dd22Desc = `
 var d22 = Server{
 	Address:     "d22.eu",
 	Description: dd22Desc,
-	Scan:        SEC2,
+	Security:    SEC2,
 }
 
 func Init() {

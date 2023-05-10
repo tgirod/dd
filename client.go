@@ -123,9 +123,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, cmd)
 
 	case SecurityMsg:
-		if c.Console.Alert {
-			c.Console.TickAlert()
-		}
+		c.Console.Security()
 		cmds = append(cmds, c.TickSecurity())
 
 	case tea.KeyMsg:
@@ -189,6 +187,17 @@ var (
 	outputStyle = lg.NewStyle()
 )
 
+func (c *Client) ViewPath() string {
+	var path []string
+	sess := c.Console.Session
+	for sess.Parent != nil {
+		str := fmt.Sprintf("%s(%s)", sess.Server.Address, sess.Timer())
+		path = append([]string{str}, path...)
+		sess = *sess.Parent
+	}
+	return strings.Join(path, "/")
+}
+
 func (c *Client) View() string {
 	// mise à jour de la barre de statut
 	login := c.Console.Identity.Login
@@ -208,7 +217,7 @@ func (c *Client) View() string {
 	// chemin de connexion
 	hist := "déconnecté"
 	if c.IsConnected() {
-		hist = c.Console.Session.Path()
+		hist = c.ViewPath()
 	}
 
 	c.status.SetContent(timer, hist, login, groups)

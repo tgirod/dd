@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"strings"
 	"time"
 
 	"github.com/mattn/go-shellwords"
@@ -21,12 +20,6 @@ type Console struct {
 	// informations sur la connexion au réseau
 	Session
 
-	// l'alerte est-elle activée ?
-	Alert bool
-
-	// durée avant la déconnexion forcée
-	Countdown time.Duration
-
 	// interface neurale directe
 	DNI bool
 
@@ -35,21 +28,13 @@ type Console struct {
 }
 
 type Session struct {
-	Server                   // serveur auquel la session se réfère
-	Account                  // compte utilisateur actif dans ce serveur
-	Identity                 // identité active dans la session
-	Mem      map[string]bool // zones mémoires disponibles pour une évasion
-	Parent   *Session        // session précédente
-}
-
-func (s Session) Path() string {
-	var path []string
-	sess := &s
-	for sess != nil {
-		path = append([]string{sess.Server.Address}, path...)
-		sess = sess.Parent
-	}
-	return strings.Join(path, "/")
+	Server                    // serveur auquel la session se réfère
+	Account                   // compte utilisateur actif dans ce serveur
+	Identity                  // identité active dans la session
+	Alert     bool            // alerte déclenchée dans ce serveur
+	Countdown time.Duration   // temps restant avant déconnexion
+	Mem       map[string]bool // zones mémoires disponibles pour une évasion
+	Parent    *Session        // session précédente
 }
 
 func (s Session) WithSession(server Server, account Account, identity Identity) Session {
@@ -61,6 +46,22 @@ func (s Session) WithSession(server Server, account Account, identity Identity) 
 	}
 	sess.InitMem()
 	return sess
+}
+
+func (s Session) Timer() string {
+	min := int(s.Countdown.Minutes())
+	sec := int(s.Countdown.Seconds()) - min*60
+	return fmt.Sprintf("%02d:%02d", min, sec)
+}
+
+func (s *Session) Security() {
+	if s.Alert {
+		s.Countdown -= time.Second
+	}
+
+	if s.Parent != nil {
+		s.Parent.Security()
+	}
 }
 
 type Result struct {
@@ -188,13 +189,8 @@ func (c *Console) StartAlert() {
 	}
 }
 
-func (c *Console) TickAlert() {
-	// décrémenter d'une seconde
-	c.Countdown -= time.Second
-
-	if c.Countdown <= 0 {
-		c.Disconnect()
-	}
+func (c *Console) Security() {
+	c.Session.Security()
 }
 
 func (c *Console) Identify(login, password string) error {

@@ -35,6 +35,11 @@ var yes = Cmd{
 					},
 				},
 			},
+			{
+				name: "history",
+				help: "historique des transactions",
+				next: Run(YesHistory),
+			},
 		},
 	},
 }
@@ -50,7 +55,32 @@ func YesBalance(ctx Context) any {
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "Compte bancaire associé à l'identité %s\n", id.Login)
-	fmt.Fprintf(&b, "Solde du compte :%d Y€S\n", bal)
+	fmt.Fprintf(&b, "Solde du compte : %d Y€S\n", bal)
+	return ctx.Output(b.String())
+}
+
+func YesHistory(ctx Context) any {
+	console := ctx.Console()
+	transactions, err := console.Identity.Transactions()
+	if err != nil {
+		return ctx.Error(err)
+	}
+
+	b := strings.Builder{}
+	tw := tw(&b)
+
+	fmt.Fprintf(tw, "Débit\tCrédit\tOpération\tCommentaire\t\n")
+	for _, t := range transactions {
+		if t.From == console.Session.Identity.Login {
+			// débit
+			fmt.Fprintf(tw, "%d\t\t%s\t%s\t\n", t.Yes, t.To, t.Comment)
+		} else {
+			// crédit
+			fmt.Fprintf(tw, "\t%d\t%s\t%s\t\n", t.Yes, t.From, t.Comment)
+		}
+	}
+	tw.Flush()
+
 	return ctx.Output(b.String())
 }
 

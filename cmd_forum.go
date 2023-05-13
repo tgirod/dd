@@ -8,7 +8,7 @@ import (
 
 func topicList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
-	topics := console.Server.Topics(console.Account)
+	topics := console.Server.Topics(console.User)
 	opts := make([]Option, 0, len(topics))
 	for _, t := range topics {
 		opts = append(opts, Option{
@@ -22,7 +22,7 @@ func topicList(ctx Context) ([]Option, error) {
 func postList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
 	topic := ctx.Value("topic").(int)
-	posts := console.Server.RecReplies(topic, console.Account)
+	posts := console.Server.RecReplies(topic, console.User)
 	opts := make([]Option, 0, len(posts))
 	for _, p := range posts {
 		if p.Parent == topic {
@@ -39,12 +39,12 @@ func threadList(ctx Context) ([]Option, error) {
 	console := ctx.Console()
 	topic := ctx.Value("topic").(int)
 	// récupérer le post racine
-	root, err := console.Server.Post(topic, console.Account)
+	root, err := console.Server.Post(topic, console.User)
 	if err != nil {
 		return []Option{}, err
 	}
 	// récupérer le thread
-	thread, err := console.Server.Thread(root, console.Account)
+	thread, err := console.Server.Thread(root, console.User)
 	return thread.ToOptions(""), nil
 }
 
@@ -140,7 +140,7 @@ func PostRead(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	id := ctx.Value("post").(int)
 
-	post, err := console.Server.Post(id, console.Account)
+	post, err := console.Server.Post(id, console.User)
 	if err != nil {
 		return ctx.Error(err)
 	}
@@ -166,7 +166,7 @@ func PostWrite(ctx Context) any {
 	post := Post{
 		Server:  console.Server.Address,
 		Date:    time.Now(),
-		Author:  console.Account.Login,
+		Author:  console.User.Login,
 		Subject: subject,
 		Content: content,
 	}
@@ -184,7 +184,7 @@ func PostReply(ctx Context) any {
 	id := ctx.Value("post").(int)
 	content := ctx.Value("content").(string)
 
-	original, err := console.Server.Post(id, console.Account)
+	original, err := console.Server.Post(id, console.User)
 	if err != nil {
 		return ctx.Error(err)
 	}
@@ -193,7 +193,7 @@ func PostReply(ctx Context) any {
 		Server:  console.Server.Address,
 		Parent:  original.ID,
 		Date:    time.Now(),
-		Author:  console.Account.Login,
+		Author:  console.User.Login,
 		Subject: fmt.Sprintf("Re: %s", original.Subject),
 		Content: content,
 	}

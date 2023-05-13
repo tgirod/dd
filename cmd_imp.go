@@ -37,7 +37,7 @@ func Imp(ctx Context) any {
 	if err != nil {
 		ctx.Error(err)
 	}
-	c.Session.Account = account
+	c.Session.User = account
 
 	c.StartAlert()
 

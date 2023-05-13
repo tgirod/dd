@@ -30,7 +30,7 @@ type Console struct {
 
 type Session struct {
 	Server                    // serveur auquel la session se réfère
-	Account                   // compte utilisateur actif dans ce serveur
+	User                      // compte utilisateur actif dans ce serveur
 	Identity                  // identité active dans la session
 	Alert     bool            // l'alerte est-elle active ?
 	Countdown time.Duration   // temps restant avant déconnexion
@@ -38,14 +38,14 @@ type Session struct {
 	Parent    *Session        // session précédente
 }
 
-func (s Session) WithSession(server Server, account Account, identity Identity) Session {
+func (s Session) WithSession(server Server, account User, identity Identity) Session {
 	countdown := server.Security
 	if s.Alert {
 		countdown = 0
 	}
 	sess := Session{
 		Server:    server,
-		Account:   account,
+		User:      account,
 		Identity:  identity,
 		Alert:     s.Alert,
 		Countdown: countdown,
@@ -235,9 +235,9 @@ func (c *Console) Identify(login, password string) error {
 	if c.IsConnected() {
 		account, err := c.FindAccount(identity.Login)
 		if err == nil {
-			c.Account = account
+			c.User = account
 		} else {
-			c.Account = Account{}
+			c.User = User{}
 		}
 	}
 
@@ -270,7 +270,7 @@ func (c *Console) Connect(address string, identity Identity, force bool) error {
 
 	if server.Private && err != nil {
 		if force {
-			c.Session = c.Session.WithSession(server, Account{}, identity)
+			c.Session = c.Session.WithSession(server, User{}, identity)
 			return nil
 		}
 
@@ -279,7 +279,7 @@ func (c *Console) Connect(address string, identity Identity, force bool) error {
 
 	c.Session = c.Session.WithSession(server, account, identity)
 
-	if c.Account.Backdoor {
+	if c.User.Backdoor {
 		c.RemoveAccount(account)
 		RemoveIdentity(c.Identity)
 	}

@@ -36,7 +36,7 @@ func InitNetwork(
 
 func InitServer(
 	s Server,
-	accounts []Account,
+	accounts []User,
 	links []Link,
 	entries []Entry,
 	registers []Register,
@@ -98,7 +98,7 @@ func Reset() {
 	db.Drop(Identity{})
 	db.Drop(Message{})
 	db.Drop(Server{})
-	db.Drop(Account{})
+	db.Drop(User{})
 	db.Drop(Link{})
 	db.Drop(Entry{})
 	db.Drop(Register{})
@@ -181,7 +181,7 @@ func Init() {
 	)
 
 	InitServer(dd,
-		[]Account{
+		[]User{
 			{
 				Login:    "jesus",
 				Server:   "",
@@ -202,7 +202,7 @@ func Init() {
 	)
 
 	InitServer(d22,
-		[]Account{
+		[]User{
 			{
 				Login:    "jesus",
 				Backdoor: false,

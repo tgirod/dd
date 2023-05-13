@@ -22,9 +22,9 @@ func Index(ctx Context) any {
 	s := console.Server
 	b.WriteString(s.Description)
 	b.WriteString("\n")
-	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Links(console.Account)))
-	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries(console.Account)))
-	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers(console.Account)))
+	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Links(console.User)))
+	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries(console.User)))
+	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers(console.User)))
 
 	return ctx.Result(nil, b.String())
 }

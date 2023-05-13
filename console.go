@@ -30,7 +30,7 @@ type Console struct {
 
 type Session struct {
 	Server                    // serveur auquel la session se réfère
-	Account                   // compte utilisateur actif dans ce serveur
+	User                      // compte utilisateur actif dans ce serveur
 	Identity                  // identité active dans la session
 	Alert     bool            // l'alerte est-elle active ?
 	Countdown time.Duration   // temps restant avant déconnexion
@@ -38,14 +38,14 @@ type Session struct {
 	Parent    *Session        // session précédente
 }
 
-func (s Session) WithSession(server Server, account Account, identity Identity) Session {
+func (s Session) WithSession(server Server, user User, identity Identity) Session {
 	countdown := server.Security
 	if s.Alert {
 		countdown = 0
 	}
 	sess := Session{
 		Server:    server,
-		Account:   account,
+		User:      user,
 		Identity:  identity,
 		Alert:     s.Alert,
 		Countdown: countdown,
@@ -233,11 +233,11 @@ func (c *Console) Identify(login, password string) error {
 
 	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
 	if c.IsConnected() {
-		account, err := c.FindAccount(identity.Login)
+		user, err := c.FindUser(identity.Login)
 		if err == nil {
-			c.Account = account
+			c.User = user
 		} else {
-			c.Account = Account{}
+			c.User = User{}
 		}
 	}
 
@@ -266,21 +266,21 @@ func (c *Console) Connect(address string, identity Identity, force bool) error {
 	}
 
 	// compte associé à l'identité active
-	account, err := server.FindAccount(identity.Login)
+	user, err := server.FindUser(identity.Login)
 
 	if server.Private && err != nil {
 		if force {
-			c.Session = c.Session.WithSession(server, Account{}, identity)
+			c.Session = c.Session.WithSession(server, User{}, identity)
 			return nil
 		}
 
-		return errInvalidAccount
+		return errInvalidUser
 	}
 
-	c.Session = c.Session.WithSession(server, account, identity)
+	c.Session = c.Session.WithSession(server, user, identity)
 
-	if c.Account.Backdoor {
-		c.RemoveAccount(account)
+	if c.User.Backdoor {
+		c.RemoveUser(user)
 		RemoveIdentity(c.Identity)
 	}
 

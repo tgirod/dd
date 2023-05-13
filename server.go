@@ -28,8 +28,8 @@ func (s Server) Match() q.Matcher {
 	return q.Eq("Server", s.Address)
 }
 
-// Account représente un compte utilisateur sur un serveur
-type Account struct {
+// User représente un compte utilisateur sur un serveur
+type User struct {
 	ID       int    `storm:"id,increment"`
 	Login    string `storm:"index"`
 	Server   string `storm:"index"` // le serveur concerné
@@ -37,12 +37,12 @@ type Account struct {
 	Groups   []string `storm:"index"`
 }
 
-func (a Account) Match() q.Matcher {
-	return q.NewFieldMatcher("Group", a)
+func (u User) Match() q.Matcher {
+	return q.NewFieldMatcher("Group", u)
 }
 
 // Match permet de vérifier si une donnée est accessible depuis un compte
-func (a Account) MatchField(v any) (bool, error) {
+func (u User) MatchField(v any) (bool, error) {
 	group, ok := v.(string)
 	if !ok {
 		return false, storm.ErrBadType
@@ -53,7 +53,7 @@ func (a Account) MatchField(v any) (bool, error) {
 		return true, nil
 	}
 
-	for _, g := range a.Groups {
+	for _, g := range u.Groups {
 		if group == g {
 			return true, nil
 		}
@@ -61,24 +61,24 @@ func (a Account) MatchField(v any) (bool, error) {
 	return false, nil
 }
 
-func (s Server) Accounts() []Account {
-	accounts, err := Find[Account](s.Match())
+func (s Server) Users() []User {
+	users, err := Find[User](s.Match())
 	if err != nil {
 		panic(err)
 	}
-	return accounts
+	return users
 }
 
-// FindAccount cherche un compte utilisateur correspondant au login
-func (s Server) FindAccount(login string) (Account, error) {
-	return First[Account](
+// FindUser cherche un compte utilisateur correspondant au login
+func (s Server) FindUser(login string) (User, error) {
+	return First[User](
 		s.Match(),
 		q.Eq("Login", login),
 	)
 }
 
-func (s Server) RemoveAccount(account Account) error {
-	return Delete(account)
+func (s Server) RemoveUser(user User) error {
+	return Delete(user)
 }
 
 type Link struct {
@@ -93,7 +93,7 @@ type Link struct {
 	Desc string
 }
 
-func (s Server) Links(a Account) []Link {
+func (s Server) Links(a User) []Link {
 	links, err := Find[Link](
 		s.Match(),
 		a.Match(),
@@ -104,7 +104,7 @@ func (s Server) Links(a Account) []Link {
 	return links
 }
 
-func (s Server) Link(id int, a Account) (Link, error) {
+func (s Server) Link(id int, a User) (Link, error) {
 	return First[Link](
 		s.Match(),
 		a.Match(),
@@ -133,7 +133,7 @@ type Entry struct {
 	Content string
 }
 
-func (s Server) Entries(a Account) []Entry {
+func (s Server) Entries(a User) []Entry {
 	entries, err := Find[Entry](
 		s.Match(),
 		a.Match(),
@@ -154,7 +154,7 @@ func (m KeywordMatcher) Match(v any) (bool, error) {
 	return entry.Match(string(m)), nil
 }
 
-func (s Server) DataSearch(keyword string, a Account) []Entry {
+func (s Server) DataSearch(keyword string, a User) []Entry {
 	entries, err := Find[Entry](
 		s.Match(),
 		a.Match(),
@@ -168,7 +168,7 @@ func (s Server) DataSearch(keyword string, a Account) []Entry {
 	return entries
 }
 
-func (s Server) FindEntry(id string, a Account) (Entry, error) {
+func (s Server) FindEntry(id string, a User) (Entry, error) {
 	return First[Entry](
 		s.Match(),
 		a.Match(),
@@ -192,7 +192,7 @@ type Register struct {
 	Options     []string // valeurs possible
 }
 
-func (s Server) Registers(a Account) []Register {
+func (s Server) Registers(a User) []Register {
 	registers, err := Find[Register](
 		s.Match(),
 		a.Match(),
@@ -203,7 +203,7 @@ func (s Server) Registers(a Account) []Register {
 	return registers
 }
 
-func (s Server) Register(id int, a Account) (Register, error) {
+func (s Server) Register(id int, a User) (Register, error) {
 	return First[Register](
 		s.Match(),
 		a.Match(),
@@ -212,8 +212,8 @@ func (s Server) Register(id int, a Account) (Register, error) {
 }
 
 // CreateBackdoor créé une backdoor dans le serveur
-func (s Server) CreateBackdoor(identity Identity) (Account, error) {
-	acc := Account{
+func (s Server) CreateBackdoor(identity Identity) (User, error) {
+	acc := User{
 		Login:    identity.Login,
 		Server:   s.Address,
 		Backdoor: true,
@@ -232,7 +232,7 @@ type Post struct {
 	Content string
 }
 
-func (s Server) Posts(a Account) []Post {
+func (s Server) Posts(a User) []Post {
 	posts, err := Find[Post](
 		s.Match(),
 		a.Match(),
@@ -243,7 +243,7 @@ func (s Server) Posts(a Account) []Post {
 	return posts
 }
 
-func (s Server) Post(id int, a Account) (Post, error) {
+func (s Server) Post(id int, a User) (Post, error) {
 	return First[Post](
 		s.Match(),
 		a.Match(),
@@ -252,7 +252,7 @@ func (s Server) Post(id int, a Account) (Post, error) {
 }
 
 // Topics liste les posts qui n'ont pas de parent
-func (s Server) Topics(a Account) []Post {
+func (s Server) Topics(a User) []Post {
 	posts, err := Find[Post](
 		s.Match(),
 		a.Match(),
@@ -265,7 +265,7 @@ func (s Server) Topics(a Account) []Post {
 }
 
 // Replies retourne la liste des réponses à un post
-func (s Server) Replies(parent int, a Account) []Post {
+func (s Server) Replies(parent int, a User) []Post {
 	posts, err := Find[Post](
 		s.Match(),
 		a.Match(),
@@ -286,7 +286,7 @@ func concat[T any](slices ...[]T) []T {
 	return res
 }
 
-func (s Server) RecReplies(parent int, a Account) []Post {
+func (s Server) RecReplies(parent int, a User) []Post {
 	thread, err := Find[Post](
 		s.Match(),
 		a.Match(),
@@ -314,7 +314,7 @@ type Thread struct {
 	Replies []Thread
 }
 
-func (s Server) Thread(p Post, a Account) (Thread, error) {
+func (s Server) Thread(p Post, a User) (Thread, error) {
 	replies, err := Find[Post](
 		s.Match(),
 		a.Match(),

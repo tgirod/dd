@@ -2,11 +2,15 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"io/ioutil"
 	"time"
 
 	"github.com/asdine/storm/v3"
 	"github.com/asdine/storm/v3/q"
 	"github.com/lithammer/fuzzysearch/fuzzy"
+
+	"gopkg.in/yaml.v3"
 )
 
 // Server représente un serveur sur le Net
@@ -231,6 +235,17 @@ type Post struct {
 	Subject string
 	Content string
 }
+func (p Post) Dump() {
+	fmt.Printf("--- Dump Post:")
+	fmt.Printf("\n Server: [%s]", p.Server)
+	fmt.Printf("\n Group: [%s]", p.Group)
+	fmt.Printf("\n ID: [%d]", p.ID)
+	fmt.Printf("\n Parent: [%d]", p.Parent)
+	fmt.Printf("\n Date: [%s]", p.Date)
+	fmt.Printf("\n Author: [%s]", p.Author)
+	fmt.Printf("\n Subject: [%s]", p.Subject)
+	fmt.Printf("\n Content: [%v]", p.Content)
+}
 
 func (s Server) Posts(a User) []Post {
 	posts, err := Find[Post](
@@ -241,6 +256,53 @@ func (s Server) Posts(a User) []Post {
 		panic(err)
 	}
 	return posts
+}
+
+// TEST : serialize all Posts to YAML
+func SerializePosts(addr string) {
+	s, err := FindServer(addr)
+	if err != nil {
+		panic(err)
+	}
+
+	posts, err := Find[Post](
+		s.Match(),
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	// all posts
+	d, err := yaml.Marshal(posts)
+		if err != nil {
+		panic(err)
+	}
+	fmt.Printf("--- all posts:\n%s\n\n", d)
+}
+func LoadPosts(path string) {
+	buf, err := ioutil.ReadFile(path)
+		if err != nil {
+		panic(err)
+	}
+
+	p := Post{}
+	p.Dump()
+	fmt.Printf("--- New Post:\n%v\n", p)
+
+	err = yaml.Unmarshal(buf, &p)
+		if err != nil {
+		panic(err)
+	}
+	fmt.Print("** Unmarshal\n")
+	p.Dump()
+
+	post, err := Save(p)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Print("** Saving\n")
+	post.Dump()
 }
 
 func (s Server) Post(id int, a User) (Post, error) {
@@ -265,6 +327,7 @@ func (s Server) Topics(a User) []Post {
 }
 
 // Replies retourne la liste des réponses à un post
+// FIXME On ne peut répondre que à un Topic
 func (s Server) Replies(parent int, a User) []Post {
 	posts, err := Find[Post](
 		s.Match(),

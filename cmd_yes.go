@@ -22,7 +22,7 @@ var yes = Cmd{
 				name: "pay",
 				help: "effectue un transfert de monnaie",
 				next: String{
-					name: "account",
+					name: "identity",
 					help: "compte à créditer",
 					next: Number{
 						name: "amount",
@@ -86,7 +86,7 @@ func YesHistory(ctx Context) any {
 
 func YesPay(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-	to := ctx.Value("account").(string)
+	to := ctx.Value("identity").(string)
 	amount := ctx.Value("amount").(int)
 	password := ctx.Value("password").(string)
 

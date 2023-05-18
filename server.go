@@ -61,24 +61,24 @@ func (u User) MatchField(v any) (bool, error) {
 	return false, nil
 }
 
-func (s Server) Accounts() []User {
-	accounts, err := Find[User](s.Match())
+func (s Server) Users() []User {
+	users, err := Find[User](s.Match())
 	if err != nil {
 		panic(err)
 	}
-	return accounts
+	return users
 }
 
-// FindAccount cherche un compte utilisateur correspondant au login
-func (s Server) FindAccount(login string) (User, error) {
+// FindUser cherche un compte utilisateur correspondant au login
+func (s Server) FindUser(login string) (User, error) {
 	return First[User](
 		s.Match(),
 		q.Eq("Login", login),
 	)
 }
 
-func (s Server) RemoveAccount(account User) error {
-	return Delete(account)
+func (s Server) RemoveUser(user User) error {
+	return Delete(user)
 }
 
 type Link struct {

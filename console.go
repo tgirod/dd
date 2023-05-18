@@ -38,14 +38,14 @@ type Session struct {
 	Parent    *Session        // session précédente
 }
 
-func (s Session) WithSession(server Server, account User, identity Identity) Session {
+func (s Session) WithSession(server Server, user User, identity Identity) Session {
 	countdown := server.Security
 	if s.Alert {
 		countdown = 0
 	}
 	sess := Session{
 		Server:    server,
-		User:      account,
+		User:      user,
 		Identity:  identity,
 		Alert:     s.Alert,
 		Countdown: countdown,
@@ -233,9 +233,9 @@ func (c *Console) Identify(login, password string) error {
 
 	// si on est connecté à un serveur, on tente d'accéder au compte utilisateur
 	if c.IsConnected() {
-		account, err := c.FindAccount(identity.Login)
+		user, err := c.FindUser(identity.Login)
 		if err == nil {
-			c.User = account
+			c.User = user
 		} else {
 			c.User = User{}
 		}
@@ -266,7 +266,7 @@ func (c *Console) Connect(address string, identity Identity, force bool) error {
 	}
 
 	// compte associé à l'identité active
-	account, err := server.FindAccount(identity.Login)
+	user, err := server.FindUser(identity.Login)
 
 	if server.Private && err != nil {
 		if force {
@@ -274,13 +274,13 @@ func (c *Console) Connect(address string, identity Identity, force bool) error {
 			return nil
 		}
 
-		return errInvalidAccount
+		return errInvalidUser
 	}
 
-	c.Session = c.Session.WithSession(server, account, identity)
+	c.Session = c.Session.WithSession(server, user, identity)
 
 	if c.User.Backdoor {
-		c.RemoveAccount(account)
+		c.RemoveUser(user)
 		RemoveIdentity(c.Identity)
 	}
 

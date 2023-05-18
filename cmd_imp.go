@@ -15,9 +15,9 @@ var imp = Cmd{
 		help: "compte utilisateur a usurper",
 		options: func(ctx Context) ([]Option, error) {
 			c := ctx.Console()
-			accounts := c.Accounts()
-			opts := make([]Option, len(accounts))
-			for i, a := range accounts {
+			users := c.Users()
+			opts := make([]Option, len(users))
+			for i, a := range users {
 				opts[i] = Option{
 					value: a.Login,
 					help:  strings.Join(a.Groups, " "),
@@ -33,11 +33,11 @@ func Imp(ctx Context) any {
 	c := ctx.Console()
 	login := ctx.Value("login").(string)
 
-	account, err := c.FindAccount(login)
+	user, err := c.FindUser(login)
 	if err != nil {
 		ctx.Error(err)
 	}
-	c.Session.User = account
+	c.Session.User = user
 
 	c.StartAlert()
 

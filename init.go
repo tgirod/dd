@@ -36,7 +36,7 @@ func InitNetwork(
 
 func InitServer(
 	s Server,
-	accounts []User,
+	users []User,
 	links []Link,
 	entries []Entry,
 	registers []Register,
@@ -52,8 +52,8 @@ func InitServer(
 		log.Fatal(err)
 	}
 
-	log.Println("accounts")
-	for _, a := range accounts {
+	log.Println("users")
+	for _, a := range users {
 		log.Println("\t", a.Login)
 		a.Server = addr
 		if _, err := Save(a); err != nil {

@@ -4,7 +4,16 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	lg "github.com/charmbracelet/lipgloss"
 )
+
+// Nouvelle organisation des Forums => à plat.
+// Les Topics n'ont pas de parent
+//   Un thread par Topic, on ne peut répondre qu'au Topic.
+//   forum read (no #topic) => liste tous les Topics
+//   forum read  #topic => liste tous les Post (avec content) du Topic
+// TODO ajouter nb de réponse quand on liste les Topic ?
 
 func topicList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
@@ -89,13 +98,14 @@ var forum = Cmd{
 					help:    "sujet de discussion",
 					header:  "liste des sujets de discussions sur ce serveur",
 					options: topicList,
-					next: Select{
-						name:    "post",
-						help:    "message dans la discussion",
-						header:  "liste des messages dans ce sujet de discussion",
-						options: threadList,
-						next:    Run(PostRead),
-					},
+					next: Run(TopicRead),
+					// next: Select{
+					// 	name:    "post",
+					// 	help:    "message dans la discussion",
+					// 	header:  "liste des messages dans ce sujet de discussion",
+					// 	options: threadList,
+					// 	next:    Run(PostRead),
+					// },
 				},
 			},
 			{
@@ -112,23 +122,23 @@ var forum = Cmd{
 				},
 			},
 			{
-				name: "reply",
-				help: "répondre à un post",
+				name: "answer",
+				help: "répondre à un topic",
 				next: Select{
 					name:    "topic",
 					help:    "sujet de discussion",
 					header:  "liste des sujets de discussions sur ce serveur",
 					options: topicList,
-					next: Select{
-						name:    "post",
-						help:    "message dans la discussion",
-						header:  "liste des messages dans ce sujet de discussion",
-						options: threadList,
+					// next: Select{
+					// 	name:    "post",
+					// 	help:    "message dans la discussion",
+					// 	header:  "liste des messages dans ce sujet de discussion",
+					// 	options: threadList,
 						next: LongText{
 							name: "content",
 							help: "contenu de la réponse",
-							next: Run(PostReply),
-						},
+							next: Run(TopicAnswer),
+							// },
 					},
 				},
 			},
@@ -136,27 +146,70 @@ var forum = Cmd{
 	},
 }
 
-func PostRead(ctx Context) any {
-	console := ctx.Value("console").(*Console)
-	id := ctx.Value("post").(int)
+// style
+var titleStyle = lg.NewStyle().Reverse(true)
+// var contentStyle = lg.NewStyle().BorderStyle(lg.Border{Left: " | "}).BorderLeft(true)
+var contentStyle = lg.NewStyle().MarginLeft(4)
+func (t Thread) Render(prefix string) string {
+	b := strings.Builder{}
 
-	post, err := console.Server.Post(id, console.User)
+	fmt.Fprintf(&b, "%s\n", titleStyle.Render(fmt.Sprintf("%3d %20s %15s %s %s",
+		t.Post.ID, t.Date.Format(time.DateTime),
+		t.Author, prefix, t.Subject)))
+	fmt.Fprintf(&b, "%s", contentStyle.Render(t.Post.Content))
+
+	return b.String()
+}
+// Tous les Posts (avec content) d'un Topic
+func TopicRead(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+
+	topic := ctx.Value("topic").(int)
+	// récupérer le post racine
+	root, err := console.Server.Post(topic, console.User)
 	if err != nil {
 		return ctx.Error(err)
 	}
+	// récupérer le thread : tous les posts
+	t, err := console.Server.Thread(root, console.User)
 
 	b := strings.Builder{}
+	// D'abord affiche le Topic parent
+	fmt.Fprintf(&b, "%s\n", t.Render(""))
 
-	fmt.Fprintf(&b, "ID : %d\n", id)
-	if post.Parent != 0 {
-		fmt.Fprintf(&b, "Réponse à : %d\n", post.Parent)
+	var prefix = ""
+	for i, r := range t.Replies {
+		if i < len(t.Replies)-1 {
+			prefix = "├─ "
+		} else {
+			prefix = "└─ "
+		}
+		fmt.Fprintf(&b, "%s\n", r.Render(prefix))
 	}
-	fmt.Fprintf(&b, "Auteur : %s\n", post.Author)
-	fmt.Fprintf(&b, "Sujet : %s\n", post.Subject)
-	fmt.Fprintln(&b, post.Content)
 
 	return ctx.Output(b.String())
 }
+// func PostRead(ctx Context) any {
+// 	console := ctx.Value("console").(*Console)
+// 	id := ctx.Value("post").(int)
+
+// 	post, err := console.Server.Post(id, console.User)
+// 	if err != nil {
+// 		return ctx.Error(err)
+// 	}
+
+// 	b := strings.Builder{}
+
+// 	fmt.Fprintf(&b, "ID : %d\n", id)
+// 	if post.Parent != 0 {
+// 		fmt.Fprintf(&b, "Réponse à : %d\n", post.Parent)
+// 	}
+// 	fmt.Fprintf(&b, "Auteur : %s\n", post.Author)
+// 	fmt.Fprintf(&b, "Sujet : %s\n", post.Subject)
+// 	fmt.Fprintln(&b, post.Content)
+
+// 	return ctx.Output(b.String())
+// }
 
 func PostWrite(ctx Context) any {
 	console := ctx.Value("console").(*Console)
@@ -179,12 +232,12 @@ func PostWrite(ctx Context) any {
 	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", post.ID))
 }
 
-func PostReply(ctx Context) any {
+func TopicAnswer(ctx Context) any {
 	console := ctx.Value("console").(*Console)
-	id := ctx.Value("post").(int)
+	topic := ctx.Value("topic").(int)
 	content := ctx.Value("content").(string)
 
-	original, err := console.Server.Post(id, console.User)
+	original, err := console.Server.Post(topic, console.User)
 	if err != nil {
 		return ctx.Error(err)
 	}

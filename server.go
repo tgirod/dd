@@ -279,6 +279,7 @@ func SerializePosts(addr string) {
 	}
 	fmt.Printf("--- all posts:\n%s\n\n", d)
 }
+// TEST Load new post from YAML file
 func LoadPosts(path string) {
 	buf, err := ioutil.ReadFile(path)
 		if err != nil {

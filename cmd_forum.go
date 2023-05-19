@@ -20,10 +20,12 @@ func topicList(ctx Context) ([]Option, error) {
 	topics := console.Server.Topics(console.User)
 	opts := make([]Option, 0, len(topics))
 	for _, t := range topics {
-		opts = append(opts, Option{
-			help:  fmt.Sprintf("%s\t%s\t%s\t", t.Date.Format(time.DateTime), t.Author, t.Subject),
-			value: t.ID,
-		})
+		if allowedGroup(t.Group, console.User.Groups) {
+			opts = append(opts, Option{
+				help:  fmt.Sprintf("%s\t%s\t%s\t", t.Date.Format(time.DateTime), t.Author, t.Subject),
+				value: t.ID,
+			})
+		}
 	}
 	return opts, nil
 }
@@ -57,6 +59,38 @@ func threadList(ctx Context) ([]Option, error) {
 	return thread.ToOptions(""), nil
 }
 
+// liste les différentes options de Groupe d'un User
+func groupList(ctx Context) ([]Option, error) {
+	console := ctx.Console()
+	groups := console.User.Groups
+
+	opts := []Option{
+		{
+			value: "public",
+			help: "(tout le monde peut lire)",
+		},
+	}
+	for _, g := range groups {
+		opts = append(opts, Option{
+			value: g,
+			help: "réservé à ce groupe",
+		})
+	}
+	return opts, nil
+}
+// check that group is either public or "" or in validGroups
+func allowedGroup(group string, authorizedGroups []string) bool {
+	if group == "" || group == "public" {
+		return true
+	}
+	for _, v := range authorizedGroups {
+		if group == v {
+			return true
+		}
+	}
+
+	return false
+}
 var rep = strings.NewReplacer("├", "│", "└", " ", "─", " ")
 
 func (t Thread) ToOptions(prefix string) []Option {
@@ -111,13 +145,19 @@ var forum = Cmd{
 			{
 				name: "write",
 				help: "ouvrir un nouveau sujet",
-				next: Text{
-					name: "subject",
-					help: "sujet du post",
-					next: LongText{
-						name: "content",
-						help: "contenu du post",
-						next: Run(PostWrite),
+				next: Select{
+					name: "group",
+					help:	"groupe propriétaire du sujet",
+					header: "Sujet de discussion restreint au groupe: ",
+					options: groupList,
+					next: Text{
+						name: "subject",
+						help: "sujet du post",
+						next: LongText{
+							name: "content",
+							help: "contenu du post",
+							next: Run(PostWrite),
+						},
 					},
 				},
 			},
@@ -141,6 +181,11 @@ var forum = Cmd{
 							// },
 					},
 				},
+			},
+			{
+				name: "dump",
+				help: "dump all posts",
+				next: Run(DumpForum),
 			},
 		},
 	},
@@ -213,11 +258,16 @@ func TopicRead(ctx Context) any {
 
 func PostWrite(ctx Context) any {
 	console := ctx.Value("console").(*Console)
+	group := ctx.Value("group").(string)
+	if group == "public" {
+		group = ""
+	}
 	subject := ctx.Value("subject").(string)
 	content := ctx.Value("content").(string)
 
 	post := Post{
 		Server:  console.Server.Address,
+		Group:	group,
 		Date:    time.Now(),
 		Author:  console.User.Login,
 		Subject: subject,
@@ -244,6 +294,7 @@ func TopicAnswer(ctx Context) any {
 
 	post := Post{
 		Server:  console.Server.Address,
+		Group:   original.Group,
 		Parent:  original.ID,
 		Date:    time.Now(),
 		Author:  console.User.Login,
@@ -257,4 +308,12 @@ func TopicAnswer(ctx Context) any {
 	}
 
 	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", post.ID))
+}
+
+// DEBUG
+func DumpForum(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	SerializePosts(console.Server.Address)
+
+	return ctx.Output("forum dumped on admin console")
 }

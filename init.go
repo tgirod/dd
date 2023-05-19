@@ -188,6 +188,12 @@ func Init() {
 				Backdoor: false,
 				Groups:   []string{"admin", "h4ck3r"},
 			},
+			{
+				Login:	"crunch",
+				Server:	 "",
+				Backdoor: false,
+				Groups: []string{"h4ck3r",},
+			},
 		},
 		[]Link{
 			{Address: d22.Address, Desc: "serveur public du District 22"},

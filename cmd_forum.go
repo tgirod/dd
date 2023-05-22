@@ -6,6 +6,7 @@ import (
 	"time"
 
 	lg "github.com/charmbracelet/lipgloss"
+	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
 // Nouvelle organisation des Forums => à plat.
@@ -15,9 +16,10 @@ import (
 //   forum read  #topic => liste tous les Post (avec content) du Topic
 // TODO ajouter nb de réponse quand on liste les Topic ?
 
+
 func topicList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
-	topics := console.Server.Topics(console.User)
+	topics := console.Server.Topics()//console.User)
 	opts := make([]Option, 0, len(topics))
 	for _, t := range topics {
 		if allowedGroup(t.Group, console.User.Groups) {
@@ -30,34 +32,35 @@ func topicList(ctx Context) ([]Option, error) {
 	return opts, nil
 }
 
-func postList(ctx Context) ([]Option, error) {
-	console := ctx.Value("console").(*Console)
-	topic := ctx.Value("topic").(int)
-	posts := console.Server.RecReplies(topic, console.User)
-	opts := make([]Option, 0, len(posts))
-	for _, p := range posts {
-		if p.Parent == topic {
-			opts = append(opts, Option{
-				help:  fmt.Sprintf("%s\t%s\t%s\t", p.Date.Format(time.DateTime), p.Author, p.Subject),
-				value: p.ID,
-			})
-		}
-	}
-	return opts, nil
-}
+// func postList(ctx Context) ([]Option, error) {
+// 	console := ctx.Value("console").(*Console)
+// 	topic := ctx.Value("topic").(int)
+// 	//posts := console.Server.RecReplies(topic, console.User)
+// 	posts := console.Server.Replies(topic)
+// 	opts := make([]Option, 0, len(posts))
+// 	for _, p := range posts {
+// 		if p.Parent == topic {
+// 			opts = append(opts, Option{
+// 				help:  fmt.Sprintf("%s\t%s\t%s\t", p.Date.Format(time.DateTime), p.Author, p.Subject),
+// 				value: p.ID,
+// 			})
+// 		}
+// 	}
+// 	return opts, nil
+// }
 
-func threadList(ctx Context) ([]Option, error) {
-	console := ctx.Console()
-	topic := ctx.Value("topic").(int)
-	// récupérer le post racine
-	root, err := console.Server.Post(topic, console.User)
-	if err != nil {
-		return []Option{}, err
-	}
-	// récupérer le thread
-	thread, err := console.Server.Thread(root, console.User)
-	return thread.ToOptions(""), nil
-}
+// func threadList(ctx Context) ([]Option, error) {
+// 	console := ctx.Console()
+// 	topic := ctx.Value("topic").(int)
+// 	// récupérer le post racine
+// 	root, err := console.Server.Post(topic, console.User)
+// 	if err != nil {
+// 		return []Option{}, err
+// 	}
+// 	// récupérer le thread
+// 	thread, err := console.Server.Thread(root, console.User)
+// 	return thread.ToOptions(""), nil
+// }
 
 // liste les différentes options de Groupe d'un User
 func groupList(ctx Context) ([]Option, error) {
@@ -91,30 +94,30 @@ func allowedGroup(group string, authorizedGroups []string) bool {
 
 	return false
 }
-var rep = strings.NewReplacer("├", "│", "└", " ", "─", " ")
+// var rep = strings.NewReplacer("├", "│", "└", " ", "─", " ")
 
-func (t Thread) ToOptions(prefix string) []Option {
-	// afficher le message à la racine du thread
-	opts := []Option{
-		{
-			value: t.Post.ID,
-			help:  fmt.Sprintf("%s\t%s\t%s%s\t", t.Date.Format(time.DateTime), t.Author, prefix, t.Subject),
-		},
-	}
+// func (t Thread) ToOptions(prefix string) []Option {
+// 	// afficher le message à la racine du thread
+// 	opts := []Option{
+// 		{
+// 			value: t.Post.ID,
+// 			help:  fmt.Sprintf("%s\t%s\t%s%s\t", t.Date.Format(time.DateTime), t.Author, prefix, t.Subject),
+// 		},
+// 	}
 
-	// pour les messages qui suivent la racine, le préfixe change pour poursuivre les traits
-	prefix = rep.Replace(prefix)
+// 	// pour les messages qui suivent la racine, le préfixe change pour poursuivre les traits
+// 	prefix = rep.Replace(prefix)
 
-	// appel récursif sur chaque réponse
-	for i, reply := range t.Replies {
-		if i < len(t.Replies)-1 {
-			opts = append(opts, reply.ToOptions(prefix+"├─ ")...)
-		} else {
-			opts = append(opts, reply.ToOptions(prefix+"└─ ")...)
-		}
-	}
-	return opts
-}
+// 	// appel récursif sur chaque réponse
+// 	for i, reply := range t.Replies {
+// 		if i < len(t.Replies)-1 {
+// 			opts = append(opts, reply.ToOptions(prefix+"├─ ")...)
+// 		} else {
+// 			opts = append(opts, reply.ToOptions(prefix+"└─ ")...)
+// 		}
+// 	}
+// 	return opts
+// }
 
 var forum = Cmd{
 	name:       "forum",
@@ -183,6 +186,15 @@ var forum = Cmd{
 				},
 			},
 			{
+				name: "search",
+				help: "rechercher dans les Post",
+				next: String{
+					name: "expression",
+					help: "expression à recherher dans le Forum",
+					next: Run(TopicSearch),
+				},
+			},
+			{
 				name: "dump",
 				help: "dump all posts",
 				next: Run(DumpForum),
@@ -195,13 +207,13 @@ var forum = Cmd{
 var titleStyle = lg.NewStyle().Reverse(true)
 // var contentStyle = lg.NewStyle().BorderStyle(lg.Border{Left: " | "}).BorderLeft(true)
 var contentStyle = lg.NewStyle().MarginLeft(4)
-func (t Thread) Render(prefix string) string {
+func (p Post) Render(prefix string) string {
 	b := strings.Builder{}
 
 	fmt.Fprintf(&b, "%s\n", titleStyle.Render(fmt.Sprintf("%3d %20s %15s %s %s",
-		t.Post.ID, t.Date.Format(time.DateTime),
-		t.Author, prefix, t.Subject)))
-	fmt.Fprintf(&b, "%s", contentStyle.Render(t.Post.Content))
+		p.ID, p.Date.Format(time.DateTime),
+		p.Author, prefix, p.Subject)))
+	fmt.Fprintf(&b, "%s", contentStyle.Render(p.Content))
 
 	return b.String()
 }
@@ -211,16 +223,16 @@ func TopicRead(ctx Context) any {
 
 	topic := ctx.Value("topic").(int)
 	// récupérer le post racine
-	root, err := console.Server.Post(topic, console.User)
+	root, err := console.Server.Post(topic)//, console.User)
 	if err != nil {
 		return ctx.Error(err)
 	}
 	// récupérer le thread : tous les posts
-	t, err := console.Server.Thread(root, console.User)
+	t, err := console.Server.Thread(root)//, console.User)
 
 	b := strings.Builder{}
 	// D'abord affiche le Topic parent
-	fmt.Fprintf(&b, "%s\n", t.Render(""))
+	fmt.Fprintf(&b, "%s\n", t.Post.Render(""))
 
 	var prefix = ""
 	for i, r := range t.Replies {
@@ -287,7 +299,7 @@ func TopicAnswer(ctx Context) any {
 	topic := ctx.Value("topic").(int)
 	content := ctx.Value("content").(string)
 
-	original, err := console.Server.Post(topic, console.User)
+	original, err := console.Server.Post(topic)//, console.User)
 	if err != nil {
 		return ctx.Error(err)
 	}
@@ -310,6 +322,46 @@ func TopicAnswer(ctx Context) any {
 	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", post.ID))
 }
 
+func TopicSearch(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	exp := ctx.Value("expression").(string)
+
+	b := strings.Builder{}
+	var prefix = ""
+	// First, find all Topics, search in every Thread
+	topics := console.Server.Topics()//console.User)
+	for _,t := range topics {
+		if allowedGroup(t.Group, console.User.Groups) {
+			fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
+			if ms := fuzzy.MatchNormalizedFold(exp, t.Subject); ms {
+				fmt.Print("  ok in subject\n")
+				fmt.Fprintf(&b, "%s\n", t.Render(""))
+			} else if mc := fuzzy.MatchNormalizedFold(exp, t.Content); mc {
+				fmt.Print("  ok in content\n")
+				fmt.Fprintf(&b, "%s\n", t.Render(""))
+			}
+
+			replies := console.Server.Replies(t.ID)//, console.User)
+			for i,r := range replies {
+
+				if i < len(replies)-1 {
+					prefix = "├─ "
+				} else {
+					prefix = "└─ "
+				}
+				fmt.Printf("Search |%s| in [%d]%s\n", exp, r.ID, r.Subject)
+				if ms := fuzzy.MatchNormalizedFold(exp, r.Subject); ms {
+					fmt.Print("  ok in subject\n")
+					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
+				} else if mc := fuzzy.MatchNormalizedFold(exp, r.Content); mc {
+					fmt.Print("  ok in content\n")
+					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
+				}
+			}
+		}
+	}
+	return ctx.Output(b.String())
+}
 // DEBUG
 func DumpForum(ctx Context) any {
 	console := ctx.Value("console").(*Console)

@@ -67,6 +67,12 @@ func (c Context) Prompt() string {
 		return ""
 	}
 
+	if _, ok := c.node.(Hidden); ok {
+		// need to convert to string to get length
+		val := fmt.Sprintf("%v", c.value)
+		val = strings.Repeat("*", len(val))
+		return fmt.Sprintf("%v %s", c.parent.Prompt(), val)
+	}
 	return fmt.Sprintf("%v %v", c.parent.Prompt(), c.value)
 }
 

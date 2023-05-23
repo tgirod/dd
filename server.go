@@ -247,17 +247,6 @@ func (p Post) Dump() {
 	fmt.Printf("\n Content: [%v]", p.Content)
 }
 
-// func (s Server) Posts(a User) []Post {
-// 	posts, err := Find[Post](
-// 		s.Match(),
-// 		a.Match(),
-// 	)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return posts
-// }
-
 // TEST : serialize all Posts to YAML
 func SerializePosts(addr string) {
 	s, err := FindServer(addr)
@@ -306,21 +295,17 @@ func LoadPosts(path string) {
 	post.Dump()
 }
 
-//func (s Server) Post(id int, a User) (Post, error) {
 func (s Server) Post(id int) (Post, error) {
 	return First[Post](
 		s.Match(),
-		//a.Match(),
 		q.Eq("ID", id),
 	)
 }
 
 // Topics liste les posts qui n'ont pas de parent
-// func (s Server) Topics(a User) []Post {
 func (s Server) Topics() []Post {
 	posts, err := Find[Post](
 		s.Match(),
-		// a.Match(),
 		q.Eq("Parent", 0),
 	)
 	if err != nil {
@@ -330,11 +315,9 @@ func (s Server) Topics() []Post {
 }
 
 // Replies retourne la liste des réponses à un post
-// func (s Server) Replies(parent int, a User) []Post {
 func (s Server) Replies(parent int) []Post {
 	posts, err := Find[Post](
 		s.Match(),
-		// a.Match(),
 		q.Eq("Parent", parent),
 	)
 	if err != nil {
@@ -352,33 +335,6 @@ func concat[T any](slices ...[]T) []T {
 	return res
 }
 
-// func (s Server) RecReplies(parent int, a User) []Post {
-// 	thread, err := Find[Post](
-// 		s.Match(),
-// 		a.Match(),
-// 		q.Eq("Parent", parent),
-// 	)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	// insérer les réponses
-// 	for i, p := range thread {
-// 		rec := s.RecReplies(p.ID, a)
-// 		thread = concat(
-// 			thread[:i+1],
-// 			rec,
-// 			thread[i+1:],
-// 		)
-// 	}
-
-// 	return thread
-// }
-
-// type Thread struct {
-// 	Post
-// 	Replies []Thread
-// }
 type Thread struct {
 	Post
 	Replies []Post
@@ -399,25 +355,3 @@ func (s Server) Thread(p Post) (Thread, error) {
 	return thread, nil
 }
 
-// func (s Server) Thread(p Post, a User) (Thread, error) {
-// 	replies, err := Find[Post](
-// 		s.Match(),
-// 		a.Match(),
-// 		q.Eq("Parent", p.ID),
-// 	)
-
-// 	thread := Thread{Post: p}
-// 	if err != nil {
-// 		return thread, err
-// 	}
-
-// 	for _, r := range replies {
-// 		sub, err := s.Thread(r, a)
-// 		if err != nil {
-// 			return thread, err
-// 		}
-// 		thread.Replies = append(thread.Replies, sub)
-// 	}
-
-// 	return thread, nil
-// }

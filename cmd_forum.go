@@ -32,36 +32,6 @@ func topicList(ctx Context) ([]Option, error) {
 	return opts, nil
 }
 
-// func postList(ctx Context) ([]Option, error) {
-// 	console := ctx.Value("console").(*Console)
-// 	topic := ctx.Value("topic").(int)
-// 	//posts := console.Server.RecReplies(topic, console.User)
-// 	posts := console.Server.Replies(topic)
-// 	opts := make([]Option, 0, len(posts))
-// 	for _, p := range posts {
-// 		if p.Parent == topic {
-// 			opts = append(opts, Option{
-// 				help:  fmt.Sprintf("%s\t%s\t%s\t", p.Date.Format(time.DateTime), p.Author, p.Subject),
-// 				value: p.ID,
-// 			})
-// 		}
-// 	}
-// 	return opts, nil
-// }
-
-// func threadList(ctx Context) ([]Option, error) {
-// 	console := ctx.Console()
-// 	topic := ctx.Value("topic").(int)
-// 	// récupérer le post racine
-// 	root, err := console.Server.Post(topic, console.User)
-// 	if err != nil {
-// 		return []Option{}, err
-// 	}
-// 	// récupérer le thread
-// 	thread, err := console.Server.Thread(root, console.User)
-// 	return thread.ToOptions(""), nil
-// }
-
 // liste les différentes options de Groupe d'un User
 func groupList(ctx Context) ([]Option, error) {
 	console := ctx.Console()
@@ -94,31 +64,6 @@ func allowedGroup(group string, authorizedGroups []string) bool {
 
 	return false
 }
-// var rep = strings.NewReplacer("├", "│", "└", " ", "─", " ")
-
-// func (t Thread) ToOptions(prefix string) []Option {
-// 	// afficher le message à la racine du thread
-// 	opts := []Option{
-// 		{
-// 			value: t.Post.ID,
-// 			help:  fmt.Sprintf("%s\t%s\t%s%s\t", t.Date.Format(time.DateTime), t.Author, prefix, t.Subject),
-// 		},
-// 	}
-
-// 	// pour les messages qui suivent la racine, le préfixe change pour poursuivre les traits
-// 	prefix = rep.Replace(prefix)
-
-// 	// appel récursif sur chaque réponse
-// 	for i, reply := range t.Replies {
-// 		if i < len(t.Replies)-1 {
-// 			opts = append(opts, reply.ToOptions(prefix+"├─ ")...)
-// 		} else {
-// 			opts = append(opts, reply.ToOptions(prefix+"└─ ")...)
-// 		}
-// 	}
-// 	return opts
-// }
-
 var forum = Cmd{
 	name:       "forum",
 	help:       "participer au forum du serveur",
@@ -136,13 +81,6 @@ var forum = Cmd{
 					header:  "liste des sujets de discussions sur ce serveur",
 					options: topicList,
 					next: Run(TopicRead),
-					// next: Select{
-					// 	name:    "post",
-					// 	help:    "message dans la discussion",
-					// 	header:  "liste des messages dans ce sujet de discussion",
-					// 	options: threadList,
-					// 	next:    Run(PostRead),
-					// },
 				},
 			},
 			{
@@ -172,17 +110,20 @@ var forum = Cmd{
 					help:    "sujet de discussion",
 					header:  "liste des sujets de discussions sur ce serveur",
 					options: topicList,
-					// next: Select{
-					// 	name:    "post",
-					// 	help:    "message dans la discussion",
-					// 	header:  "liste des messages dans ce sujet de discussion",
-					// 	options: threadList,
 						next: LongText{
 							name: "content",
 							help: "contenu de la réponse",
 							next: Run(TopicAnswer),
-							// },
 					},
+				},
+			},
+			{
+				name: "fuzzy",
+				help: "rechercher dans les Post de manière 'intelligente'",
+				next: String{
+					name: "expression",
+					help: "expression à recherher dans le Forum",
+					next: Run(TopicFuzzy),
 				},
 			},
 			{
@@ -205,7 +146,6 @@ var forum = Cmd{
 
 // style
 var titleStyle = lg.NewStyle().Reverse(true)
-// var contentStyle = lg.NewStyle().BorderStyle(lg.Border{Left: " | "}).BorderLeft(true)
 var contentStyle = lg.NewStyle().MarginLeft(4)
 func (p Post) Render(prefix string) string {
 	b := strings.Builder{}
@@ -246,27 +186,6 @@ func TopicRead(ctx Context) any {
 
 	return ctx.Output(b.String())
 }
-// func PostRead(ctx Context) any {
-// 	console := ctx.Value("console").(*Console)
-// 	id := ctx.Value("post").(int)
-
-// 	post, err := console.Server.Post(id, console.User)
-// 	if err != nil {
-// 		return ctx.Error(err)
-// 	}
-
-// 	b := strings.Builder{}
-
-// 	fmt.Fprintf(&b, "ID : %d\n", id)
-// 	if post.Parent != 0 {
-// 		fmt.Fprintf(&b, "Réponse à : %d\n", post.Parent)
-// 	}
-// 	fmt.Fprintf(&b, "Auteur : %s\n", post.Author)
-// 	fmt.Fprintf(&b, "Sujet : %s\n", post.Subject)
-// 	fmt.Fprintln(&b, post.Content)
-
-// 	return ctx.Output(b.String())
-// }
 
 func PostWrite(ctx Context) any {
 	console := ctx.Value("console").(*Console)
@@ -299,7 +218,7 @@ func TopicAnswer(ctx Context) any {
 	topic := ctx.Value("topic").(int)
 	content := ctx.Value("content").(string)
 
-	original, err := console.Server.Post(topic)//, console.User)
+	original, err := console.Server.Post(topic)
 	if err != nil {
 		return ctx.Error(err)
 	}
@@ -322,7 +241,7 @@ func TopicAnswer(ctx Context) any {
 	return ctx.Output(fmt.Sprintf("post %d ajouté au forum", post.ID))
 }
 
-func TopicSearch(ctx Context) any {
+func TopicFuzzy(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	exp := ctx.Value("expression").(string)
 
@@ -341,7 +260,7 @@ func TopicSearch(ctx Context) any {
 				fmt.Fprintf(&b, "%s\n", t.Render(""))
 			}
 
-			replies := console.Server.Replies(t.ID)//, console.User)
+			replies := console.Server.Replies(t.ID)
 			for i,r := range replies {
 
 				if i < len(replies)-1 {
@@ -355,6 +274,46 @@ func TopicSearch(ctx Context) any {
 					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
 				} else if mc := fuzzy.MatchNormalizedFold(exp, r.Content); mc {
 					fmt.Print("  ok in content\n")
+					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
+				}
+			}
+		}
+	}
+	return ctx.Output(b.String())
+}
+func TopicSearch(ctx Context) any {
+	console := ctx.Value("console").(*Console)
+	exp := ctx.Value("expression").(string)
+
+	b := strings.Builder{}
+	var prefix = ""
+	// First, find all Topics, search in every Thread
+	topics := console.Server.Topics()
+	for _,t := range topics {
+		if allowedGroup(t.Group, console.User.Groups) {
+			// fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
+			if ms := strings.Contains(t.Subject, exp); ms {
+				// fmt.Print("  ok in subject\n")
+				fmt.Fprintf(&b, "%s\n", t.Render(""))
+			} else if mc := strings.Contains(t.Content, exp); mc {
+				// fmt.Print("  ok in content\n")
+				fmt.Fprintf(&b, "%s\n", t.Render(""))
+			}
+
+			replies := console.Server.Replies(t.ID)
+			for i,r := range replies {
+
+				if i < len(replies)-1 {
+					prefix = "├─ "
+				} else {
+					prefix = "└─ "
+				}
+				// fmt.Printf("Search |%s| in [%d]%s\n", exp, r.ID, r.Subject)
+				if ms := strings.Contains(r.Subject, exp); ms {
+					// fmt.Print("  ok in subject\n")
+					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
+				} else if mc := strings.Contains(r.Content, exp); mc {
+					// fmt.Print("  ok in content\n")
 					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
 				}
 			}

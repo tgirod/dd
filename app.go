@@ -84,8 +84,8 @@ func (a *App) Start() {
 	}()
 
 	// DEL list posts
-	//SerializePosts("dd.local")
-	LoadPosts("init_post.yaml")
+	// SerializePosts("dd.local")
+	// LoadPosts("init_post.yaml")
 
 
 	log.Println("lancement de l'interface admin")

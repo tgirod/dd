@@ -219,8 +219,8 @@ func (c *Client) View() string {
 	login := c.Console.Identity.Login
 
 	groups := "public"
-	if len(c.Groups) > 0 {
-		groups = strings.Join(c.Groups, " ")
+	if gs := c.Groups(); len(gs) > 0 {
+		groups = strings.Join(gs, " ")
 	}
 
 	timer := "--:--"

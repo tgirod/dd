@@ -20,7 +20,7 @@ var imp = Cmd{
 			for i, a := range users {
 				opts[i] = Option{
 					value: a.Login,
-					help:  strings.Join(a.Groups, " "),
+					help:  strings.Join(a.Groups(), " "),
 				}
 			}
 			return opts, nil

@@ -34,32 +34,46 @@ func InitNetwork(
 	}
 }
 
+type UserAndGroups struct {
+	User
+	Groups []Group
+}
+
 func InitServer(
 	s Server,
-	users []User,
+	users []UserAndGroups,
 	links []Link,
 	entries []Entry,
 	registers []Register,
 	posts []Post,
 ) {
+	var err error
 	addr := s.Address
 	if addr == "" {
 		panic("le serveur n'a pas d'adresse")
 	}
 
 	log.Println("server", s.Address)
-	if _, err := Save(s); err != nil {
+	if _, err = Save(s); err != nil {
 		log.Fatal(err)
 	}
 
 	log.Println("users")
-	for _, a := range users {
-		log.Println("\t", a.Login)
-		a.Server = addr
-		if _, err := Save(a); err != nil {
-			log.Fatalf("%v : %v\n", a, err)
+	for _, u := range users {
+		log.Println("\t", u.Login)
+		u.Server = addr
+		if u.User, err = Save(u.User); err != nil {
+			log.Fatalf("%v : %v\n", u, err)
+		}
+		for _, g := range u.Groups {
+			g.User = u.ID
+			log.Println("\t", g.Group)
+			if _, err = Save(g); err != nil {
+				log.Fatalf("%v : %v\n", g, err)
+			}
 		}
 	}
+
 	log.Println("links")
 	for _, l := range links {
 		log.Println("\t", l.Address)
@@ -99,6 +113,7 @@ func Reset() {
 	db.Drop(Message{})
 	db.Drop(Server{})
 	db.Drop(User{})
+	db.Drop(Group{})
 	db.Drop(Link{})
 	db.Drop(Entry{})
 	db.Drop(Register{})
@@ -181,18 +196,19 @@ func Init() {
 	)
 
 	InitServer(dd,
-		[]User{
+		[]UserAndGroups{
 			{
-				Login:    "jesus",
-				Server:   "",
-				Backdoor: false,
-				Groups:   []string{"admin", "h4ck3r"},
+				User{Login: "jesus"},
+				[]Group{
+					{Group: "admin", Admin: true},
+					{Group: "h4ck3r", Admin: true},
+				},
 			},
 			{
-				Login:	"crunch",
-				Server:	 "",
-				Backdoor: false,
-				Groups: []string{"h4ck3r",},
+				User{Login: "crunch"},
+				[]Group{
+					{Group: "h4ck3r", Admin: false},
+				},
 			},
 		},
 		[]Link{
@@ -208,12 +224,7 @@ func Init() {
 	)
 
 	InitServer(d22,
-		[]User{
-			{
-				Login:    "jesus",
-				Backdoor: false,
-			},
-		},
+		[]UserAndGroups{},
 		[]Link{},
 		[]Entry{},
 		[]Register{},

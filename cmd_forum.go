@@ -16,13 +16,12 @@ import (
 //   forum read  #topic => liste tous les Post (avec content) du Topic
 // TODO ajouter nb de réponse quand on liste les Topic ?
 
-
 func topicList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
-	topics := console.Server.Topics()//console.User)
+	topics := console.Server.Topics() //console.User)
 	opts := make([]Option, 0, len(topics))
 	for _, t := range topics {
-		if allowedGroup(t.Group, console.User.Groups) {
+		if allowedGroup(t.Group, console.User.Groups()) {
 			opts = append(opts, Option{
 				help:  fmt.Sprintf("%s\t%s\t%s\t", t.Date.Format(time.DateTime), t.Author, t.Subject),
 				value: t.ID,
@@ -35,22 +34,23 @@ func topicList(ctx Context) ([]Option, error) {
 // liste les différentes options de Groupe d'un User
 func groupList(ctx Context) ([]Option, error) {
 	console := ctx.Console()
-	groups := console.User.Groups
+	groups := console.User.Groups()
 
 	opts := []Option{
 		{
 			value: "public",
-			help: "(tout le monde peut lire)",
+			help:  "(tout le monde peut lire)",
 		},
 	}
 	for _, g := range groups {
 		opts = append(opts, Option{
 			value: g,
-			help: "réservé à ce groupe",
+			help:  "réservé à ce groupe",
 		})
 	}
 	return opts, nil
 }
+
 // check that group is either public or "" or in validGroups
 func allowedGroup(group string, authorizedGroups []string) bool {
 	if group == "" || group == "public" {
@@ -64,6 +64,7 @@ func allowedGroup(group string, authorizedGroups []string) bool {
 
 	return false
 }
+
 var forum = Cmd{
 	name:       "forum",
 	help:       "participer au forum du serveur",
@@ -80,16 +81,16 @@ var forum = Cmd{
 					help:    "sujet de discussion",
 					header:  "liste des sujets de discussions sur ce serveur",
 					options: topicList,
-					next: Run(TopicRead),
+					next:    Run(TopicRead),
 				},
 			},
 			{
 				name: "write",
 				help: "ouvrir un nouveau sujet",
 				next: Select{
-					name: "group",
-					help:	"groupe propriétaire du sujet",
-					header: "Sujet de discussion restreint au groupe: ",
+					name:    "group",
+					help:    "groupe propriétaire du sujet",
+					header:  "Sujet de discussion restreint au groupe: ",
 					options: groupList,
 					next: Text{
 						name: "subject",
@@ -110,10 +111,10 @@ var forum = Cmd{
 					help:    "sujet de discussion",
 					header:  "liste des sujets de discussions sur ce serveur",
 					options: topicList,
-						next: LongText{
-							name: "content",
-							help: "contenu de la réponse",
-							next: Run(TopicAnswer),
+					next: LongText{
+						name: "content",
+						help: "contenu de la réponse",
+						next: Run(TopicAnswer),
 					},
 				},
 			},
@@ -147,6 +148,7 @@ var forum = Cmd{
 // style
 var titleStyle = lg.NewStyle().Reverse(true)
 var contentStyle = lg.NewStyle().MarginLeft(4)
+
 func (p Post) Render(prefix string) string {
 	b := strings.Builder{}
 
@@ -157,18 +159,19 @@ func (p Post) Render(prefix string) string {
 
 	return b.String()
 }
+
 // Tous les Posts (avec content) d'un Topic
 func TopicRead(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 
 	topic := ctx.Value("topic").(int)
 	// récupérer le post racine
-	root, err := console.Server.Post(topic)//, console.User)
+	root, err := console.Server.Post(topic) //, console.User)
 	if err != nil {
 		return ctx.Error(err)
 	}
 	// récupérer le thread : tous les posts
-	t, err := console.Server.Thread(root)//, console.User)
+	t, err := console.Server.Thread(root) //, console.User)
 
 	b := strings.Builder{}
 	// D'abord affiche le Topic parent
@@ -198,7 +201,7 @@ func PostWrite(ctx Context) any {
 
 	post := Post{
 		Server:  console.Server.Address,
-		Group:	group,
+		Group:   group,
 		Date:    time.Now(),
 		Author:  console.User.Login,
 		Subject: subject,
@@ -248,9 +251,9 @@ func TopicFuzzy(ctx Context) any {
 	b := strings.Builder{}
 	var prefix = ""
 	// First, find all Topics, search in every Thread
-	topics := console.Server.Topics()//console.User)
-	for _,t := range topics {
-		if allowedGroup(t.Group, console.User.Groups) {
+	topics := console.Server.Topics() //console.User)
+	for _, t := range topics {
+		if allowedGroup(t.Group, console.User.Groups()) {
 			fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
 			if ms := fuzzy.MatchNormalizedFold(exp, t.Subject); ms {
 				fmt.Print("  ok in subject\n")
@@ -261,7 +264,7 @@ func TopicFuzzy(ctx Context) any {
 			}
 
 			replies := console.Server.Replies(t.ID)
-			for i,r := range replies {
+			for i, r := range replies {
 
 				if i < len(replies)-1 {
 					prefix = "├─ "
@@ -289,8 +292,8 @@ func TopicSearch(ctx Context) any {
 	var prefix = ""
 	// First, find all Topics, search in every Thread
 	topics := console.Server.Topics()
-	for _,t := range topics {
-		if allowedGroup(t.Group, console.User.Groups) {
+	for _, t := range topics {
+		if allowedGroup(t.Group, console.User.Groups()) {
 			// fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
 			if ms := strings.Contains(t.Subject, exp); ms {
 				// fmt.Print("  ok in subject\n")
@@ -301,7 +304,7 @@ func TopicSearch(ctx Context) any {
 			}
 
 			replies := console.Server.Replies(t.ID)
-			for i,r := range replies {
+			for i, r := range replies {
 
 				if i < len(replies)-1 {
 					prefix = "├─ "
@@ -321,6 +324,7 @@ func TopicSearch(ctx Context) any {
 	}
 	return ctx.Output(b.String())
 }
+
 // DEBUG
 func DumpForum(ctx Context) any {
 	console := ctx.Value("console").(*Console)

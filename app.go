@@ -87,7 +87,6 @@ func (a *App) Start() {
 	// SerializePosts("dd.local")
 	// LoadPosts("init_post.yaml")
 
-
 	log.Println("lancement de l'interface admin")
 	if _, err := a.admin.Run(); err != nil {
 		log.Fatalln(err)

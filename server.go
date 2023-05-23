@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/asdine/storm/v3"
 	"github.com/asdine/storm/v3/q"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 
@@ -36,33 +35,37 @@ func (s Server) Match() q.Matcher {
 type User struct {
 	ID       int    `storm:"id,increment"`
 	Login    string `storm:"index"`
-	Server   string `storm:"index"` // le serveur concerné
+	Server   string `storm:"index"` // Server.Address
 	Backdoor bool
-	Groups   []string `storm:"index"`
+}
+
+// Group représente l'appartenance d'un User à un groupe
+type Group struct {
+	ID    int    `storm:"id,increment"` // identifiant unique interne
+	User  int    `storm:"index"`        // User.ID concerné
+	Group string // nom du groupe d'appartenance
+	Admin bool   // administrateur du groupe
+}
+
+// Member retourne la liste des groupes dont u est membre
+func (u User) Groups() []string {
+	member, err := Find[Group](
+		q.Eq("User", u.ID),
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	groups := make([]string, len(member))
+	for i, m := range member {
+		groups[i] = m.Group
+	}
+	return groups
 }
 
 func (u User) Match() q.Matcher {
-	return q.NewFieldMatcher("Group", u)
-}
-
-// Match permet de vérifier si une donnée est accessible depuis un compte
-func (u User) MatchField(v any) (bool, error) {
-	group, ok := v.(string)
-	if !ok {
-		return false, storm.ErrBadType
-	}
-
-	// aucun groupe == public
-	if group == "" {
-		return true, nil
-	}
-
-	for _, g := range u.Groups {
-		if group == g {
-			return true, nil
-		}
-	}
-	return false, nil
+	groups := u.Groups()
+	return q.In("Group", groups)
 }
 
 func (s Server) Users() []User {
@@ -97,10 +100,10 @@ type Link struct {
 	Desc string
 }
 
-func (s Server) Links(a User) []Link {
+func (s Server) Links(u User) []Link {
 	links, err := Find[Link](
 		s.Match(),
-		a.Match(),
+		u.Match(),
 	)
 	if err != nil {
 		panic(err)
@@ -108,11 +111,10 @@ func (s Server) Links(a User) []Link {
 	return links
 }
 
-func (s Server) Link(id int, a User) (Link, error) {
+func (s Server) Link(id int, u User) (Link, error) {
 	return First[Link](
 		s.Match(),
-		a.Match(),
-		q.Eq("ID", id),
+		u.Match(),
 	)
 }
 
@@ -235,6 +237,7 @@ type Post struct {
 	Subject string
 	Content string
 }
+
 func (p Post) Dump() {
 	fmt.Printf("--- Dump Post:")
 	fmt.Printf("\n Server: [%s]", p.Server)
@@ -263,15 +266,16 @@ func SerializePosts(addr string) {
 
 	// all posts
 	d, err := yaml.Marshal(posts)
-		if err != nil {
+	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("--- all posts:\n%s\n\n", d)
 }
+
 // TEST Load new post from YAML file
 func LoadPosts(path string) {
 	buf, err := ioutil.ReadFile(path)
-		if err != nil {
+	if err != nil {
 		panic(err)
 	}
 
@@ -280,7 +284,7 @@ func LoadPosts(path string) {
 	fmt.Printf("--- New Post:\n%v\n", p)
 
 	err = yaml.Unmarshal(buf, &p)
-		if err != nil {
+	if err != nil {
 		panic(err)
 	}
 	fmt.Print("** Unmarshal\n")
@@ -339,6 +343,7 @@ type Thread struct {
 	Post
 	Replies []Post
 }
+
 func (s Server) Thread(p Post) (Thread, error) {
 
 	replies, err := Find[Post](
@@ -354,4 +359,3 @@ func (s Server) Thread(p Post) (Thread, error) {
 	thread.Replies = append(thread.Replies, replies...)
 	return thread, nil
 }
-

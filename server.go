@@ -65,7 +65,10 @@ func (u User) Groups() []string {
 
 func (u User) Match() q.Matcher {
 	groups := u.Groups()
-	return q.In("Group", groups)
+	return q.Or(
+		q.Eq("Group", ""),
+		q.In("Group", groups),
+	)
 }
 
 func (s Server) Users() []User {

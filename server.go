@@ -41,10 +41,11 @@ type User struct {
 
 // Group représente l'appartenance d'un User à un groupe
 type Group struct {
-	ID    int    `storm:"id,increment"` // identifiant unique interne
-	User  int    `storm:"index"`        // User.ID concerné
-	Group string // nom du groupe d'appartenance
-	Admin bool   // administrateur du groupe
+	ID     int    `storm:"id,increment"` // identifiant unique interne
+	Server string `storm:"index"`        // Server.Address
+	User   int    `storm:"index"`        // User.ID concerné
+	Name   string // nom du groupe d'appartenance
+	Admin  bool   // administrateur du groupe
 }
 
 // Member retourne la liste des groupes dont u est membre
@@ -58,7 +59,18 @@ func (u User) Groups() []string {
 
 	groups := make([]string, len(member))
 	for i, m := range member {
-		groups[i] = m.Group
+		groups[i] = m.Name
+	}
+	return groups
+}
+
+func (u User) GroupAdmin() []Group {
+	groups, err := Find[Group](
+		q.Eq("User", u.ID),
+		q.Eq("Admin", true),
+	)
+	if err != nil {
+		panic(err)
 	}
 	return groups
 }
@@ -66,8 +78,8 @@ func (u User) Groups() []string {
 func (u User) Match() q.Matcher {
 	groups := u.Groups()
 	return q.Or(
-		q.Eq("Group", ""),
-		q.In("Group", groups),
+		q.Eq("Name", ""),
+		q.In("Name", groups),
 	)
 }
 
@@ -77,6 +89,19 @@ func (s Server) Users() []User {
 		panic(err)
 	}
 	return users
+}
+
+func (s Server) Members(group string) []Group {
+	members, err := Find[Group](
+		s.Match(),
+		q.Eq("Name", group),
+	)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return members
 }
 
 // FindUser cherche un compte utilisateur correspondant au login

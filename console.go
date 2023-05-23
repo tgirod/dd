@@ -125,6 +125,7 @@ var baseCmds = Branch{
 		registry,
 		message,
 		forum,
+		group,
 	},
 }
 

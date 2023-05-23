@@ -67,7 +67,8 @@ func InitServer(
 		}
 		for _, g := range u.Groups {
 			g.User = u.ID
-			log.Println("\t", g.Group)
+			g.Server = s.Address
+			log.Println("\t", g.Name)
 			if _, err = Save(g); err != nil {
 				log.Fatalf("%v : %v\n", g, err)
 			}
@@ -200,14 +201,14 @@ func Init() {
 			{
 				User{Login: "jesus"},
 				[]Group{
-					{Group: "admin", Admin: true},
-					{Group: "h4ck3r", Admin: true},
+					{Name: "admin", Admin: true},
+					{Name: "h4ck3r", Admin: true},
 				},
 			},
 			{
 				User{Login: "crunch"},
 				[]Group{
-					{Group: "h4ck3r", Admin: false},
+					{Name: "h4ck3r", Admin: false},
 				},
 			},
 		},

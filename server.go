@@ -38,15 +38,17 @@ type User struct {
 	Login    string `storm:"index"`
 	Server   string `storm:"index"` // le serveur concerné
 	Backdoor bool
-	Groups   []string `storm:"index"`
+	Groups   Groups
 }
 
-func (u User) Match() q.Matcher {
-	return q.NewFieldMatcher("Group", u)
+type Groups []string
+
+func (u User) HasAccess() q.Matcher {
+	return q.NewFieldMatcher("Group", u.Groups)
 }
 
 // Match permet de vérifier si une donnée est accessible depuis un compte
-func (u User) MatchField(v any) (bool, error) {
+func (gs Groups) MatchField(v any) (bool, error) {
 	group, ok := v.(string)
 	if !ok {
 		return false, storm.ErrBadType
@@ -57,7 +59,7 @@ func (u User) MatchField(v any) (bool, error) {
 		return true, nil
 	}
 
-	for _, g := range u.Groups {
+	for _, g := range gs {
 		if group == g {
 			return true, nil
 		}
@@ -100,7 +102,7 @@ type Link struct {
 func (s Server) Links(u User) []Link {
 	links, err := Find[Link](
 		s.Match(),
-		u.Match(),
+		u.HasAccess(),
 	)
 	if err != nil {
 		panic(err)
@@ -111,7 +113,7 @@ func (s Server) Links(u User) []Link {
 func (s Server) Link(id int, u User) (Link, error) {
 	return First[Link](
 		s.Match(),
-		u.Match(),
+		u.HasAccess(),
 		q.Eq("ID", id),
 	)
 }
@@ -140,7 +142,7 @@ type Entry struct {
 func (s Server) Entries(u User) []Entry {
 	entries, err := Find[Entry](
 		s.Match(),
-		u.Match(),
+		u.HasAccess(),
 	)
 	if err != nil {
 		panic(err)
@@ -161,7 +163,7 @@ func (m KeywordMatcher) Match(v any) (bool, error) {
 func (s Server) DataSearch(keyword string, u User) []Entry {
 	entries, err := Find[Entry](
 		s.Match(),
-		u.Match(),
+		u.HasAccess(),
 		KeywordMatcher(keyword),
 	)
 
@@ -175,7 +177,7 @@ func (s Server) DataSearch(keyword string, u User) []Entry {
 func (s Server) FindEntry(id string, u User) (Entry, error) {
 	return First[Entry](
 		s.Match(),
-		u.Match(),
+		u.HasAccess(),
 		q.Eq("ID", id),
 	)
 }
@@ -199,7 +201,7 @@ type Register struct {
 func (s Server) Registers(u User) []Register {
 	registers, err := Find[Register](
 		s.Match(),
-		u.Match(),
+		u.HasAccess(),
 	)
 	if err != nil {
 		panic(err)
@@ -210,7 +212,7 @@ func (s Server) Registers(u User) []Register {
 func (s Server) Register(id int, u User) (Register, error) {
 	return First[Register](
 		s.Match(),
-		u.Match(),
+		u.HasAccess(),
 		q.Eq("ID", id),
 	)
 }

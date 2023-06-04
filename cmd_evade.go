@@ -15,19 +15,7 @@ var evade = Cmd{
 		header: "liste des zones mémoire disponibles sur ce serveur",
 		options: func(ctx Context) ([]Option, error) {
 			console := ctx.Value("console").(*Console)
-			opts := make([]Option, 0, len(console.Mem))
-			for mem, available := range console.Mem {
-				status := "OK"
-				if !available {
-					status = "INDISPONIBLE"
-				}
-
-				opts = append(opts, Option{
-					value: mem,
-					help:  status,
-				})
-			}
-			return opts, nil
+			return ToOptions(console.Mem), nil
 		},
 		next: Run(Evade),
 	},
@@ -36,16 +24,21 @@ var evade = Cmd{
 func Evade(ctx Context) any {
 	console := ctx.Value("console").(*Console)
 	mem := ctx.Value("mem").(string)
+	sess := console.Session
 
-	available, _ := console.Mem[mem]
+	for i, m := range sess.Mem {
+		if m.Address == mem {
+			if m.Used {
+				return ctx.Error(fmt.Errorf("%s : %w", mem, errMemUnavailable))
+			}
+			// trouvé une zone mémoire
+			sess.Mem[i].Used = false
+			sess.Countdown = sess.Server.Security
+			console.StartAlert()
 
-	if !available {
-		return ctx.Error(fmt.Errorf("%s : %w", mem, errMemUnavailable))
+			return ctx.Output(fmt.Sprintf("session relocalisée dans la zone mémoire %s", mem))
+		}
 	}
 
-	console.Mem[mem] = false
-
-	console.StartAlert()
-
-	return ctx.Result(nil, fmt.Sprintf("session relocalisée dans la zone mémoire %s", mem))
+	return ctx.Error(fmt.Errorf("%s : %w", mem, errMemNotFound))
 }

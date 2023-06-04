@@ -121,14 +121,7 @@ var adminCmd = Branch{
 								if err != nil {
 									return []Option{}, err
 								}
-								opts := make([]Option, len(identities))
-								for i, identity := range identities {
-									opts[i] = Option{
-										value: identity.Login,
-										help:  identity.Name,
-									}
-								}
-								return opts, nil
+								return ToOptions(identities), nil
 							},
 							next: Run(MsgFrom),
 						},
@@ -145,14 +138,7 @@ var adminCmd = Branch{
 								if err != nil {
 									return []Option{}, err
 								}
-								opts := make([]Option, len(identities))
-								for i, identity := range identities {
-									opts[i] = Option{
-										value: identity.Login,
-										help:  identity.Name,
-									}
-								}
-								return opts, nil
+								return ToOptions(identities), nil
 							},
 							next: Run(MsgTo),
 						},

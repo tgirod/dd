@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/base64"
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -13,6 +14,14 @@ type Identity struct {
 	Login    string `storm:"id"`
 	Password string
 	Name     string
+}
+
+func (i Identity) Value() any {
+	return i.Login
+}
+
+func (i Identity) Desc() string {
+	return i.Login
 }
 
 type Transaction struct {
@@ -31,6 +40,14 @@ type Message struct {
 	Subject string    // titre du message
 	Content string    // contenu du message
 	Opened  bool      `storm:"index"` // pas encore lu
+}
+
+func (m Message) Value() any {
+	return m.ID
+}
+
+func (m Message) Desc() string {
+	return fmt.Sprintf("%s -- %s", m.From, m.Subject)
 }
 
 func (i Identity) Messages() []Message {

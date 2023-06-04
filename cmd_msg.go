@@ -23,12 +23,7 @@ var message = Cmd{
 					options: func(ctx Context) ([]Option, error) {
 						console := ctx.Value("console").(*Console)
 						msgs := console.Identity.Messages()
-						opts := make([]Option, len(msgs))
-						for i, m := range msgs {
-							opts[i].value = m.ID
-							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.From, m.Subject)
-						}
-						return opts, nil
+						return ToOptions(msgs), nil
 					},
 					next: Run(MessageRead),
 				},
@@ -60,12 +55,7 @@ var message = Cmd{
 					options: func(ctx Context) ([]Option, error) {
 						console := ctx.Value("console").(*Console)
 						msgs := console.Identity.Messages()
-						opts := make([]Option, len(msgs))
-						for i, m := range msgs {
-							opts[i].value = m.ID
-							opts[i].help = fmt.Sprintf("%d -- %s -- %s", i, m.From, m.Subject)
-						}
-						return opts, nil
+						return ToOptions(msgs), nil
 					},
 					next: LongText{
 						name: "content",

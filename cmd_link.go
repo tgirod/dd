@@ -17,12 +17,7 @@ var link = Cmd{
 		options: func(ctx Context) ([]Option, error) {
 			console := ctx.Value("console").(*Console)
 			links := console.Server.Links(console.User)
-			opts := make([]Option, len(links))
-			for i, l := range links {
-				opts[i].help = l.Description
-				opts[i].value = l.ID
-			}
-			return opts, nil
+			return ToOptions(links), nil
 		},
 		next: Run(LinkCmd),
 	},

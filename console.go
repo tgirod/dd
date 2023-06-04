@@ -29,13 +29,30 @@ type Console struct {
 }
 
 type Session struct {
-	Server                    // serveur auquel la session se réfère
-	User                      // compte utilisateur actif dans ce serveur
-	Identity                  // identité active dans la session
-	Alert     bool            // l'alerte est-elle active ?
-	Countdown time.Duration   // temps restant avant déconnexion
-	Mem       map[string]bool // zones mémoires disponibles pour une évasion
-	Parent    *Session        // session précédente
+	Server                  // serveur auquel la session se réfère
+	User                    // compte utilisateur actif dans ce serveur
+	Identity                // identité active dans la session
+	Alert     bool          // l'alerte est-elle active ?
+	Countdown time.Duration // temps restant avant déconnexion
+	Mem       []MemoryZone  // zones mémoires disponibles pour une évasion
+	Parent    *Session      // session précédente
+}
+
+type MemoryZone struct {
+	Address string
+	Used    bool
+}
+
+func (z MemoryZone) Value() any {
+	return z.Address
+}
+
+func (z MemoryZone) Desc() string {
+	if z.Used {
+		return "disponible"
+	} else {
+		return "occupée"
+	}
 }
 
 func (s Session) WithSession(server Server, user User, identity Identity) Session {
@@ -175,13 +192,13 @@ func (c *Console) Parse(prompt string) any {
 	return c.Branch.Parse(ctx, args)
 }
 
-func InitMem() map[string]bool {
-	mem := make(map[string]bool)
+func InitMem() []MemoryZone {
+	mz := make([]MemoryZone, 5)
 	for i := 0; i < 5; i++ {
 		addr := fmt.Sprintf("%08x", rand.Uint32())
-		mem[addr] = true
+		mz[i] = MemoryZone{Address: addr}
 	}
-	return mem
+	return mz
 }
 
 func (c *Console) Disconnect() {

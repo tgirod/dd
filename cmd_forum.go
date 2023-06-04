@@ -18,17 +18,23 @@ import (
 
 func topicList(ctx Context) ([]Option, error) {
 	console := ctx.Value("console").(*Console)
-	topics := console.Server.Topics() //console.User)
-	opts := make([]Option, 0, len(topics))
-	for _, t := range topics {
-		if allowedGroup(t.Group, console.User.Groups) {
-			opts = append(opts, Option{
-				help:  fmt.Sprintf("%s\t%s\t%s\t", t.Date.Format(time.DateTime), t.Author, t.Subject),
-				value: t.ID,
-			})
-		}
+	user := console.Session.User
+	topics := console.Server.Topics(user)
+	return ToOptions(topics), nil
+}
+
+type GroupName string
+
+func (g GroupName) Value() any {
+	return string(g)
+}
+
+func (g GroupName) Desc() string {
+	if g == "public" {
+		return "tout le monde peut lire"
+	} else {
+		return ""
 	}
-	return opts, nil
 }
 
 // liste les différentes options de Groupe d'un User
@@ -37,32 +43,14 @@ func groupList(ctx Context) ([]Option, error) {
 	groups := console.User.Groups
 
 	opts := []Option{
-		{
-			value: "public",
-			help:  "(tout le monde peut lire)",
-		},
+		GroupName("public"),
 	}
+
 	for _, g := range groups {
-		opts = append(opts, Option{
-			value: g,
-			help:  "réservé à ce groupe",
-		})
+		opts = append(opts, GroupName(g))
 	}
+
 	return opts, nil
-}
-
-// check that group is either public or "" or in validGroups
-func allowedGroup(group string, authorizedGroups []string) bool {
-	if group == "" || group == "public" {
-		return true
-	}
-	for _, v := range authorizedGroups {
-		if group == v {
-			return true
-		}
-	}
-
-	return false
 }
 
 var forum = Cmd{
@@ -251,34 +239,32 @@ func TopicFuzzy(ctx Context) any {
 	b := strings.Builder{}
 	var prefix = ""
 	// First, find all Topics, search in every Thread
-	topics := console.Server.Topics() //console.User)
+	topics := console.Server.Topics(console.User)
 	for _, t := range topics {
-		if allowedGroup(t.Group, console.User.Groups) {
-			fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
-			if ms := fuzzy.MatchNormalizedFold(exp, t.Subject); ms {
-				fmt.Print("  ok in subject\n")
-				fmt.Fprintf(&b, "%s\n", t.Render(""))
-			} else if mc := fuzzy.MatchNormalizedFold(exp, t.Content); mc {
-				fmt.Print("  ok in content\n")
-				fmt.Fprintf(&b, "%s\n", t.Render(""))
+		fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
+		if ms := fuzzy.MatchNormalizedFold(exp, t.Subject); ms {
+			fmt.Print("  ok in subject\n")
+			fmt.Fprintf(&b, "%s\n", t.Render(""))
+		} else if mc := fuzzy.MatchNormalizedFold(exp, t.Content); mc {
+			fmt.Print("  ok in content\n")
+			fmt.Fprintf(&b, "%s\n", t.Render(""))
+		}
+
+		replies := console.Server.Replies(t.ID)
+		for i, r := range replies {
+
+			if i < len(replies)-1 {
+				prefix = "├─ "
+			} else {
+				prefix = "└─ "
 			}
-
-			replies := console.Server.Replies(t.ID)
-			for i, r := range replies {
-
-				if i < len(replies)-1 {
-					prefix = "├─ "
-				} else {
-					prefix = "└─ "
-				}
-				fmt.Printf("Search |%s| in [%d]%s\n", exp, r.ID, r.Subject)
-				if ms := fuzzy.MatchNormalizedFold(exp, r.Subject); ms {
-					fmt.Print("  ok in subject\n")
-					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
-				} else if mc := fuzzy.MatchNormalizedFold(exp, r.Content); mc {
-					fmt.Print("  ok in content\n")
-					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
-				}
+			fmt.Printf("Search |%s| in [%d]%s\n", exp, r.ID, r.Subject)
+			if ms := fuzzy.MatchNormalizedFold(exp, r.Subject); ms {
+				fmt.Print("  ok in subject\n")
+				fmt.Fprintf(&b, "%s\n", r.Render(prefix))
+			} else if mc := fuzzy.MatchNormalizedFold(exp, r.Content); mc {
+				fmt.Print("  ok in content\n")
+				fmt.Fprintf(&b, "%s\n", r.Render(prefix))
 			}
 		}
 	}
@@ -291,34 +277,32 @@ func TopicSearch(ctx Context) any {
 	b := strings.Builder{}
 	var prefix = ""
 	// First, find all Topics, search in every Thread
-	topics := console.Server.Topics()
+	topics := console.Server.Topics(console.User)
 	for _, t := range topics {
-		if allowedGroup(t.Group, console.User.Groups) {
-			// fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
-			if ms := strings.Contains(t.Subject, exp); ms {
-				// fmt.Print("  ok in subject\n")
-				fmt.Fprintf(&b, "%s\n", t.Render(""))
-			} else if mc := strings.Contains(t.Content, exp); mc {
-				// fmt.Print("  ok in content\n")
-				fmt.Fprintf(&b, "%s\n", t.Render(""))
+		// fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
+		if ms := strings.Contains(t.Subject, exp); ms {
+			// fmt.Print("  ok in subject\n")
+			fmt.Fprintf(&b, "%s\n", t.Render(""))
+		} else if mc := strings.Contains(t.Content, exp); mc {
+			// fmt.Print("  ok in content\n")
+			fmt.Fprintf(&b, "%s\n", t.Render(""))
+		}
+
+		replies := console.Server.Replies(t.ID)
+		for i, r := range replies {
+
+			if i < len(replies)-1 {
+				prefix = "├─ "
+			} else {
+				prefix = "└─ "
 			}
-
-			replies := console.Server.Replies(t.ID)
-			for i, r := range replies {
-
-				if i < len(replies)-1 {
-					prefix = "├─ "
-				} else {
-					prefix = "└─ "
-				}
-				// fmt.Printf("Search |%s| in [%d]%s\n", exp, r.ID, r.Subject)
-				if ms := strings.Contains(r.Subject, exp); ms {
-					// fmt.Print("  ok in subject\n")
-					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
-				} else if mc := strings.Contains(r.Content, exp); mc {
-					// fmt.Print("  ok in content\n")
-					fmt.Fprintf(&b, "%s\n", r.Render(prefix))
-				}
+			// fmt.Printf("Search |%s| in [%d]%s\n", exp, r.ID, r.Subject)
+			if ms := strings.Contains(r.Subject, exp); ms {
+				// fmt.Print("  ok in subject\n")
+				fmt.Fprintf(&b, "%s\n", r.Render(prefix))
+			} else if mc := strings.Contains(r.Content, exp); mc {
+				// fmt.Print("  ok in content\n")
+				fmt.Fprintf(&b, "%s\n", r.Render(prefix))
 			}
 		}
 	}

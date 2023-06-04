@@ -202,7 +202,7 @@ func Init() {
 			{ID: "bluemars", Keywords: []string{"boisson"}, Title: "blue mars", Content: "cocktail"},
 		},
 		[]Register{
-			{Description: "machine à café", State: "on", Options: []string{"on", "off", "overdrive"}},
+			{Description: "machine à café", State: "on", Options: []RegisterState{"on", "off", "overdrive"}},
 		},
 		[]Post{},
 	)

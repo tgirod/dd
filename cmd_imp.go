@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 var imp = Cmd{
@@ -16,14 +15,7 @@ var imp = Cmd{
 		options: func(ctx Context) ([]Option, error) {
 			c := ctx.Console()
 			users := c.Users()
-			opts := make([]Option, len(users))
-			for i, a := range users {
-				opts[i] = Option{
-					value: a.Login,
-					help:  strings.Join(a.Groups, " "),
-				}
-			}
-			return opts, nil
+			return ToOptions(users), nil
 		},
 		next: Run(Imp),
 	},

@@ -14,14 +14,7 @@ var registry = Cmd{
 		header: "liste des registres disponibles dans ce serveur",
 		options: func(ctx Context) ([]Option, error) {
 			console := ctx.Value("console").(*Console)
-			opts := make([]Option, len(console.Registers(console.User)))
-			for i, r := range console.Registers(console.User) {
-				opts[i] = Option{
-					value: r.ID,
-					help:  fmt.Sprintf("%s : %s", r.Description, r.State),
-				}
-			}
-			return opts, nil
+			return ToOptions(console.Registers(console.User)), nil
 		},
 		next: Select{
 			name:   "state",
@@ -34,14 +27,7 @@ var registry = Cmd{
 				if err != nil {
 					return []Option{}, err
 				}
-				opts := make([]Option, len(reg.Options))
-				for i, o := range reg.Options {
-					opts[i] = Option{
-						value: i,
-						help:  o,
-					}
-				}
-				return opts, nil
+				return ToOptions(reg.Options), nil
 			},
 			next: Run(RegistryEdit),
 		},

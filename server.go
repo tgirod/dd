@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"strings"
 	"time"
 
 	"github.com/asdine/storm/v3"
@@ -39,6 +40,14 @@ type User struct {
 	Server   string `storm:"index"` // le serveur concerné
 	Backdoor bool
 	Groups   Groups
+}
+
+func (u User) Value() any {
+	return u.Login
+}
+
+func (u User) Desc() string {
+	return strings.Join(u.Groups, " ")
 }
 
 type Groups []string
@@ -97,6 +106,14 @@ type Link struct {
 
 	// description du lien
 	Description string
+}
+
+func (l Link) Value() any {
+	return l.ID
+}
+
+func (l Link) Desc() string {
+	return l.Description
 }
 
 func (s Server) Links(u User) []Link {
@@ -194,8 +211,26 @@ type Register struct {
 	Group       string `storm:"index"`
 	ID          int    `storm:"id,increment"`
 	Description string
-	State       string   // état actuel
-	Options     []string // valeurs possible
+	State       RegisterState   // état actuel
+	Options     []RegisterState // valeurs possible
+}
+
+type RegisterState string
+
+func (s RegisterState) Value() any {
+	return s
+}
+
+func (s RegisterState) Desc() string {
+	return string(s)
+}
+
+func (r Register) Value() any {
+	return r.ID
+}
+
+func (r Register) Desc() string {
+	return fmt.Sprintf("%s : %s", r.Description, r.State)
 }
 
 func (s Server) Registers(u User) []Register {
@@ -236,6 +271,14 @@ type Post struct {
 	Author  string
 	Subject string
 	Content string
+}
+
+func (p Post) Value() any {
+	return p.ID
+}
+
+func (p Post) Desc() string {
+	return fmt.Sprintf("%s\t%s\t%s\t", p.Date.Format(time.DateTime), p.Author, p.Subject)
 }
 
 func (p Post) Dump() {
@@ -307,10 +350,11 @@ func (s Server) Post(id int) (Post, error) {
 }
 
 // Topics liste les posts qui n'ont pas de parent
-func (s Server) Topics() []Post {
+func (s Server) Topics(u User) []Post {
 	posts, err := Find[Post](
 		s.Match(),
 		q.Eq("Parent", 0),
+		u.HasAccess(),
 	)
 	if err != nil {
 		panic(err)

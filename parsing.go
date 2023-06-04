@@ -306,9 +306,10 @@ type Select struct {
 	next    Node
 }
 
-type Option struct {
-	value any
-	help  string
+// Option représente un choix possible dans une sélection
+type Option interface {
+	Value() any
+	Desc() string
 }
 
 func (s Select) String() string {
@@ -333,7 +334,7 @@ func (s Select) List(options []Option) string {
 	tw := tw(&b)
 	// afficher les options
 	for _, o := range options {
-		fmt.Fprintf(tw, "%v\t%s\t\n", o.value, o.help)
+		fmt.Fprintf(tw, "%v\t%s\t\n", o.Value(), o.Desc())
 	}
 	tw.Flush()
 	return b.String()
@@ -353,9 +354,9 @@ func (s Select) Parse(ctx Context, args []string) any {
 
 	// vérifier la validité de l'option choisie
 	for _, o := range options {
-		if fmt.Sprintf("%v", o.value) == args[0] {
+		if fmt.Sprintf("%v", o.Value()) == args[0] {
 			// la valeur est valide, continuer le parsing
-			ctx = ctx.WithContext(s, s.name, o.value)
+			ctx = ctx.WithContext(s, s.name, o.Value())
 			return s.next.Parse(ctx, args[1:])
 		}
 	}
@@ -455,4 +456,12 @@ func (t LongText) Parse(ctx Context, args []string) any {
 
 func (t LongText) Resume(ctx Context, args []string) any {
 	return t.next.Parse(ctx, args)
+}
+
+func ToOptions[T Option](values []T) []Option {
+	opts := make([]Option, len(values))
+	for i, v := range values {
+		opts[i] = v
+	}
+	return opts
 }

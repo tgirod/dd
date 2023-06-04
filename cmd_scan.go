@@ -15,16 +15,41 @@ var scan = Cmd{
 }
 
 func Scan(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
+	s := console.Server
 
 	b := strings.Builder{}
+	tw := tw(&b)
 
-	s := console.Server
-	b.WriteString(s.Description)
-	b.WriteString("\n")
-	fmt.Fprintf(&b, "LIENS     : %d\n", len(s.Links(console.User)))
-	fmt.Fprintf(&b, "DONNEES   : %d\n", len(s.Entries(console.User)))
-	fmt.Fprintf(&b, "REGISTRES : %d\n", len(s.Registers(console.User)))
+	// récupérer les liens
+	links, err := Find[Link](
+		s.Match(),
+	)
+	if err != nil {
+		return ctx.Error(err)
+	}
 
-	return ctx.Result(nil, b.String())
+	// récupérer les registres
+	registers, err := Find[Register](
+		s.Match(),
+	)
+	if err != nil {
+		return ctx.Error(err)
+	}
+
+	fmt.Fprintf(tw, "LINKS\n")
+	fmt.Fprintf(tw, "ID\tGroup\tAddress\tDescription\t\n")
+	for _, l := range links {
+		fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t\n", l.ID, l.Group, l.Address, l.Desc)
+	}
+	fmt.Fprintln(tw)
+
+	fmt.Fprintf(tw, "REGISTERS\n")
+	fmt.Fprintf(tw, "ID\tGroup\tDescription\tState\t\n")
+	for _, r := range registers {
+		fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t\n", r.ID, r.Group, r.Description, r.State)
+	}
+
+	tw.Flush()
+	return ctx.Output(b.String())
 }

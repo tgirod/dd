@@ -51,5 +51,8 @@ func Scan(ctx Context) any {
 	}
 
 	tw.Flush()
+
+	console.StartAlert()
+
 	return ctx.Output(b.String())
 }

@@ -189,10 +189,10 @@ func Init() {
 				Groups:   []string{"admin", "h4ck3r"},
 			},
 			{
-				Login:	"crunch",
-				Server:	 "",
+				Login:    "crunch",
+				Server:   "",
 				Backdoor: false,
-				Groups: []string{"h4ck3r",},
+				Groups:   []string{"h4ck3r"},
 			},
 		},
 		[]Link{

@@ -97,10 +97,10 @@ type Link struct {
 	Desc string
 }
 
-func (s Server) Links(a User) []Link {
+func (s Server) Links(u User) []Link {
 	links, err := Find[Link](
 		s.Match(),
-		a.Match(),
+		u.Match(),
 	)
 	if err != nil {
 		panic(err)
@@ -108,10 +108,10 @@ func (s Server) Links(a User) []Link {
 	return links
 }
 
-func (s Server) Link(id int, a User) (Link, error) {
+func (s Server) Link(id int, u User) (Link, error) {
 	return First[Link](
 		s.Match(),
-		a.Match(),
+		u.Match(),
 		q.Eq("ID", id),
 	)
 }
@@ -137,10 +137,10 @@ type Entry struct {
 	Content string
 }
 
-func (s Server) Entries(a User) []Entry {
+func (s Server) Entries(u User) []Entry {
 	entries, err := Find[Entry](
 		s.Match(),
-		a.Match(),
+		u.Match(),
 	)
 	if err != nil {
 		panic(err)
@@ -158,10 +158,10 @@ func (m KeywordMatcher) Match(v any) (bool, error) {
 	return entry.Match(string(m)), nil
 }
 
-func (s Server) DataSearch(keyword string, a User) []Entry {
+func (s Server) DataSearch(keyword string, u User) []Entry {
 	entries, err := Find[Entry](
 		s.Match(),
-		a.Match(),
+		u.Match(),
 		KeywordMatcher(keyword),
 	)
 
@@ -172,10 +172,10 @@ func (s Server) DataSearch(keyword string, a User) []Entry {
 	return entries
 }
 
-func (s Server) FindEntry(id string, a User) (Entry, error) {
+func (s Server) FindEntry(id string, u User) (Entry, error) {
 	return First[Entry](
 		s.Match(),
-		a.Match(),
+		u.Match(),
 		q.Eq("ID", id),
 	)
 }
@@ -196,10 +196,10 @@ type Register struct {
 	Options     []string // valeurs possible
 }
 
-func (s Server) Registers(a User) []Register {
+func (s Server) Registers(u User) []Register {
 	registers, err := Find[Register](
 		s.Match(),
-		a.Match(),
+		u.Match(),
 	)
 	if err != nil {
 		panic(err)
@@ -207,10 +207,10 @@ func (s Server) Registers(a User) []Register {
 	return registers
 }
 
-func (s Server) Register(id int, a User) (Register, error) {
+func (s Server) Register(id int, u User) (Register, error) {
 	return First[Register](
 		s.Match(),
-		a.Match(),
+		u.Match(),
 		q.Eq("ID", id),
 	)
 }
@@ -235,6 +235,7 @@ type Post struct {
 	Subject string
 	Content string
 }
+
 func (p Post) Dump() {
 	fmt.Printf("--- Dump Post:")
 	fmt.Printf("\n Server: [%s]", p.Server)
@@ -263,15 +264,16 @@ func SerializePosts(addr string) {
 
 	// all posts
 	d, err := yaml.Marshal(posts)
-		if err != nil {
+	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("--- all posts:\n%s\n\n", d)
 }
+
 // TEST Load new post from YAML file
 func LoadPosts(path string) {
 	buf, err := ioutil.ReadFile(path)
-		if err != nil {
+	if err != nil {
 		panic(err)
 	}
 
@@ -280,7 +282,7 @@ func LoadPosts(path string) {
 	fmt.Printf("--- New Post:\n%v\n", p)
 
 	err = yaml.Unmarshal(buf, &p)
-		if err != nil {
+	if err != nil {
 		panic(err)
 	}
 	fmt.Print("** Unmarshal\n")
@@ -339,6 +341,7 @@ type Thread struct {
 	Post
 	Replies []Post
 }
+
 func (s Server) Thread(p Post) (Thread, error) {
 
 	replies, err := Find[Post](
@@ -354,4 +357,3 @@ func (s Server) Thread(p Post) (Thread, error) {
 	thread.Replies = append(thread.Replies, replies...)
 	return thread, nil
 }
-

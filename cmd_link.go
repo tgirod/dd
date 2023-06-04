@@ -19,7 +19,7 @@ var link = Cmd{
 			links := console.Server.Links(console.User)
 			opts := make([]Option, len(links))
 			for i, l := range links {
-				opts[i].help = l.Desc
+				opts[i].help = l.Description
 				opts[i].value = l.ID
 			}
 			return opts, nil

@@ -96,7 +96,7 @@ type Link struct {
 	Address string
 
 	// description du lien
-	Desc string
+	Description string
 }
 
 func (s Server) Links(u User) []Link {

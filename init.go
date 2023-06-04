@@ -196,7 +196,7 @@ func Init() {
 			},
 		},
 		[]Link{
-			{Address: d22.Address, Desc: "serveur public du District 22"},
+			{Address: d22.Address, Description: "serveur public du District 22"},
 		},
 		[]Entry{
 			{ID: "bluemars", Keywords: []string{"boisson"}, Title: "blue mars", Content: "cocktail"},

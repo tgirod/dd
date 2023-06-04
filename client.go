@@ -19,6 +19,7 @@ const DNISpeed = 3
 type Client struct {
 	width  int              // largeur de l'affichage
 	height int              // hauteur de l'affichage
+	hist   int              // choisir une commande dans l'historique
 	input  textinput.Model  // invite de commande
 	output viewport.Model   // affichage de la sortie des commandes
 	status statusbar.Bubble // barre de statut
@@ -112,6 +113,7 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case Result:
 		// afficher le résultat d'une commande
 		c.Console.AddResult(msg)
+		c.hist = len(c.Console.Results)
 		c.RenderOutput()
 
 	case Context:
@@ -140,6 +142,24 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			c.input.Reset()                    // effacer le champ
 			msg := c.Parse(prompt)             // exécuter et récupérer le résultat
 			cmds = append(cmds, MsgToCmd(msg)) // injecter le résultat dans la boucle
+
+		case tea.KeyUp:
+			if c.hist == 0 {
+				break // on est déjà en haut de l'historique
+			}
+			c.hist--
+			c.input.SetValue(c.Results[c.hist].Prompt)
+
+		case tea.KeyDown:
+			if c.hist == len(c.Results) {
+				break // on est déjà en bas de l'historique
+			}
+			c.hist++
+			if c.hist == len(c.Results) {
+				c.input.SetValue("")
+			} else {
+				c.input.SetValue(c.Results[c.hist].Prompt)
+			}
 
 		case tea.KeyPgUp, tea.KeyPgDown:
 			// scroll de la sortie

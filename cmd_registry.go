@@ -10,7 +10,7 @@ var registry = Cmd{
 	connected: true,
 	next: Select{
 		name:   "id",
-		help:   "nom du registre",
+		help:   "identifiant du registre",
 		header: "liste des registres disponibles dans ce serveur",
 		options: func(ctx Context) ([]Option, error) {
 			console := ctx.Console()
@@ -37,13 +37,13 @@ var registry = Cmd{
 func RegistryEdit(ctx Context) any {
 	console := ctx.Console()
 	id := ctx.Value("id").(int)
-	state := ctx.Value("state").(int)
+	state := ctx.Value("state").(RegisterState)
 
 	reg, err := console.Register(id, console.User)
 	if err != nil {
 		return ctx.Error(err)
 	}
-	reg.State = reg.Options[state]
+	reg.State = state
 	reg, err = Save(reg)
 	if err != nil {
 		return ctx.Error(err)

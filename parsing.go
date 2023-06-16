@@ -148,6 +148,7 @@ func (b Branch) String() string {
 func (b Branch) Help() string {
 	s := strings.Builder{}
 	tw := tw(&s)
+	fmt.Fprintln(tw, underline.Render("liste des commandes disponibles"))
 	for _, c := range b.cmds {
 		fmt.Fprintf(tw, "%s\t%s\t\n", c.name, c.help)
 	}

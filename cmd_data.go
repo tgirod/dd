@@ -35,7 +35,7 @@ var data = Cmd{
 }
 
 func DataSearch(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	keyword := ctx.Value("keyword").(string)
 
 	if len([]rune(keyword)) < 3 {
@@ -61,7 +61,7 @@ func DataSearch(ctx Context) any {
 }
 
 func DataView(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	id := ctx.Value("id").(string)
 
 	entry, err := console.FindEntry(id, console.User)

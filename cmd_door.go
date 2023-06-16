@@ -15,7 +15,7 @@ var door = Cmd{
 }
 
 func Door(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 
 	// créer une nouvelle identité aléatoire
 	id, err := CreateRandomIdentity()

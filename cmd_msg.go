@@ -21,7 +21,7 @@ var message = Cmd{
 					help:   "id du message à lire",
 					header: "liste des messages reçus et envoyés",
 					options: func(ctx Context) ([]Option, error) {
-						console := ctx.Value("console").(*Console)
+						console := ctx.Console()
 						msgs := console.Identity.Messages()
 						return ToOptions(msgs), nil
 					},
@@ -53,7 +53,7 @@ var message = Cmd{
 					help:   "id du message auquel répondre",
 					header: "liste des messages reçus et envoyés",
 					options: func(ctx Context) ([]Option, error) {
-						console := ctx.Value("console").(*Console)
+						console := ctx.Console()
 						msgs := console.Identity.Messages()
 						return ToOptions(msgs), nil
 					},
@@ -69,7 +69,7 @@ var message = Cmd{
 }
 
 func MessageRead(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	id := ctx.Value("id").(int)
 
 	msg, err := console.Identity.Message(id)
@@ -103,7 +103,7 @@ func (m Message) String() string {
 }
 
 func MessageWrite(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	identity := console.Identity
 	to := ctx.Value("to").(string)
 	subject := ctx.Value("subject").(string)
@@ -117,7 +117,7 @@ func MessageWrite(ctx Context) any {
 }
 
 func MessageReply(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	identity := console.Identity
 	id := ctx.Value("id").(int)
 	original, err := console.Message(id)

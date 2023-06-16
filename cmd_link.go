@@ -15,7 +15,7 @@ var link = Cmd{
 		help:   "identifiant du lien",
 		header: "liste des liens disponibles dans ce serveur",
 		options: func(ctx Context) ([]Option, error) {
-			console := ctx.Value("console").(*Console)
+			console := ctx.Console()
 			links := console.Server.Links(console.User)
 			return ToOptions(links), nil
 		},
@@ -24,7 +24,7 @@ var link = Cmd{
 }
 
 func LinkCmd(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	id := ctx.Value("id").(int)
 
 	link, err := console.Server.Link(id, console.User)

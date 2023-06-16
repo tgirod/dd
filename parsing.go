@@ -131,7 +131,6 @@ func (c Cmd) String() string {
 
 func (c Cmd) Help() string {
 	return c.help
-
 }
 
 func (c Cmd) Parse(ctx Context, args []string) any {
@@ -170,7 +169,7 @@ func (b Branch) Parse(ctx Context, args []string) any {
 		if strings.HasPrefix(cmd.name, args[0]) {
 			// HACK vérifier l'identité et la connectivité
 			if cmd.connected || cmd.identified {
-				console := ctx.Value("console").(*Console)
+				console := ctx.Console()
 				if cmd.connected && !console.IsConnected() {
 					return ctx.Error(errNotConnected)
 				}

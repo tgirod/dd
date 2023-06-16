@@ -9,7 +9,7 @@ var plug = Cmd{
 }
 
 func Plug(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	console.DNI = true
 	return ctx.Result(nil, "interface neuronale directe activée")
 }

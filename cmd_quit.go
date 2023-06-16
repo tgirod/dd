@@ -8,7 +8,7 @@ var quit = Cmd{
 }
 
 func Quit(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	console.DNI = false
 	console.Disconnect()
 

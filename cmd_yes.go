@@ -45,7 +45,7 @@ var yes = Cmd{
 }
 
 func YesBalance(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	id := console.Identity
 
 	bal, err := id.Balance()
@@ -85,7 +85,7 @@ func YesHistory(ctx Context) any {
 }
 
 func YesPay(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	to := ctx.Value("identity").(string)
 	amount := ctx.Value("amount").(int)
 	password := ctx.Value("password").(string)

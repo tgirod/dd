@@ -17,8 +17,7 @@ var back = Cmd{
 var errCannotBack = errors.New("vous êtes déjà sur le premier serveur")
 
 func Back(ctx Context) any {
-	console := ctx.Value("console").(*Console)
-
+	console := ctx.Console()
 	// on ne peux pas reculer plus loin que le premier serveur
 	parent := *console.Session.Parent
 	if parent.Parent == nil {

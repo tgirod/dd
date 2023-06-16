@@ -17,7 +17,7 @@ var load = Cmd{
 }
 
 func Load(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	code := ctx.Value("code").(string)
 
 	command, ok := Hack[code]

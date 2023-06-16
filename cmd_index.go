@@ -15,8 +15,7 @@ var index = Cmd{
 }
 
 func Index(ctx Context) any {
-	console := ctx.Value("console").(*Console)
-
+	console := ctx.Console()
 	b := strings.Builder{}
 
 	s := console.Server

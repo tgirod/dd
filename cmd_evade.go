@@ -14,7 +14,7 @@ var evade = Cmd{
 		help:   "zone mémoire vers laquelle se déplacer",
 		header: "liste des zones mémoire disponibles sur ce serveur",
 		options: func(ctx Context) ([]Option, error) {
-			console := ctx.Value("console").(*Console)
+			console := ctx.Console()
 			return ToOptions(console.Mem), nil
 		},
 		next: Run(Evade),
@@ -22,7 +22,7 @@ var evade = Cmd{
 }
 
 func Evade(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	mem := ctx.Value("mem").(string)
 	sess := console.Session
 

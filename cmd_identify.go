@@ -19,7 +19,7 @@ var identify = Cmd{
 }
 
 func Identify(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	login := ctx.Value("login").(string)
 	password := ctx.Value("password").(string)
 

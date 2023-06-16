@@ -17,7 +17,7 @@ import (
 // TODO ajouter nb de réponse quand on liste les Topic ?
 
 func topicList(ctx Context) ([]Option, error) {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	user := console.Session.User
 	topics := console.Server.Topics(user)
 	return ToOptions(topics), nil
@@ -150,7 +150,7 @@ func (p Post) Render(prefix string) string {
 
 // Tous les Posts (avec content) d'un Topic
 func TopicRead(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 
 	topic := ctx.Value("topic").(int)
 	// récupérer le post racine
@@ -179,7 +179,7 @@ func TopicRead(ctx Context) any {
 }
 
 func PostWrite(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	group := ctx.Value("group").(string)
 	if group == "public" {
 		group = ""
@@ -205,7 +205,7 @@ func PostWrite(ctx Context) any {
 }
 
 func TopicAnswer(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	topic := ctx.Value("topic").(int)
 	content := ctx.Value("content").(string)
 
@@ -233,7 +233,7 @@ func TopicAnswer(ctx Context) any {
 }
 
 func TopicFuzzy(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	exp := ctx.Value("expression").(string)
 
 	b := strings.Builder{}
@@ -271,7 +271,7 @@ func TopicFuzzy(ctx Context) any {
 	return ctx.Output(b.String())
 }
 func TopicSearch(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	exp := ctx.Value("expression").(string)
 
 	b := strings.Builder{}
@@ -311,7 +311,7 @@ func TopicSearch(ctx Context) any {
 
 // DEBUG
 func DumpForum(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	SerializePosts(console.Server.Address)
 
 	return ctx.Output("forum dumped on admin console")

@@ -22,7 +22,7 @@ var connect = Cmd{
 }
 
 func Connect(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	address := ctx.Value("address").(string)
 
 	if err := console.Connect(address, console.Identity, false); err != nil {

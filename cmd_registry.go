@@ -13,7 +13,7 @@ var registry = Cmd{
 		help:   "nom du registre",
 		header: "liste des registres disponibles dans ce serveur",
 		options: func(ctx Context) ([]Option, error) {
-			console := ctx.Value("console").(*Console)
+			console := ctx.Console()
 			return ToOptions(console.Registers(console.User)), nil
 		},
 		next: Select{
@@ -21,7 +21,7 @@ var registry = Cmd{
 			help:   "état à écrire dans le registre",
 			header: "liste des états possibles pour ce registre",
 			options: func(ctx Context) ([]Option, error) {
-				console := ctx.Value("console").(*Console)
+				console := ctx.Console()
 				id := ctx.Value("id").(int)
 				reg, err := console.Register(id, console.User)
 				if err != nil {
@@ -35,7 +35,7 @@ var registry = Cmd{
 }
 
 func RegistryEdit(ctx Context) any {
-	console := ctx.Value("console").(*Console)
+	console := ctx.Console()
 	id := ctx.Value("id").(int)
 	state := ctx.Value("state").(int)
 

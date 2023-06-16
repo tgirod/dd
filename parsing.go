@@ -24,6 +24,31 @@ type Context struct {
 	node   Node
 }
 
+func (c Context) Help() string {
+	if c.node == nil {
+		return ""
+	}
+
+	switch node := c.node.(type) {
+	case Cmd:
+		return node.Help()
+	case String:
+		return fmt.Sprintf("%s : %v", node.help, c.value)
+	case Number:
+		return fmt.Sprintf("%s : %v", node.help, c.value)
+	case Select:
+		return fmt.Sprintf("%s : %v", node.help, c.value)
+	case Hidden:
+		return node.Help()
+	case Text:
+		return node.Help()
+	case LongText:
+		return node.Help()
+	default:
+		return "NO HELP"
+	}
+}
+
 // WithContext retourne un nouveau contexte ajoutant une étape de parsing
 func (c Context) WithContext(node Node, key string, value any) Context {
 	return Context{
@@ -130,7 +155,7 @@ func (c Cmd) String() string {
 }
 
 func (c Cmd) Help() string {
-	return c.help
+	return fmt.Sprintf("%s : %s", c.name, c.help)
 }
 
 func (c Cmd) Parse(ctx Context, args []string) any {
@@ -161,7 +186,7 @@ func (b Branch) Parse(ctx Context, args []string) any {
 	if len(args) == 0 {
 		return ctx.Result(
 			fmt.Errorf("%s : %w", b.name, errMissingCommand),
-			b.Help(),
+			ctx.Help()+"\n\n"+b.Help(),
 		)
 	}
 
@@ -180,8 +205,8 @@ func (b Branch) Parse(ctx Context, args []string) any {
 				}
 			}
 
-			// une commande correspond, on enregistre dans le contexte et on continue
-			ctx = ctx.WithContext(b, b.name, cmd)
+			// on enregistre la commande correspondante dans le contexte et on poursuit
+			ctx = ctx.WithContext(cmd, "", cmd.name)
 
 			return cmd.next.Parse(ctx, args[1:])
 		}
@@ -190,7 +215,7 @@ func (b Branch) Parse(ctx Context, args []string) any {
 	// aucune commande ne correspond
 	return ctx.Result(
 		fmt.Errorf("%s : %w", b.name, errInvalidCommand),
-		b.Help(),
+		ctx.Help()+"\n\n"+b.Help(),
 	)
 }
 
@@ -235,14 +260,14 @@ func (s String) String() string {
 }
 
 func (s String) Help() string {
-	return s.help
+	return fmt.Sprintf("%s : %s", s.name, s.help)
 }
 
 func (s String) Parse(ctx Context, args []string) any {
 	if len(args) == 0 {
 		return ctx.Result(
 			fmt.Errorf("%s : %w", s.name, errMissingArgument),
-			s.Help(),
+			ctx.Help()+"\n\n"+s.Help(),
 		)
 	}
 
@@ -266,7 +291,7 @@ func (n Number) String() string {
 }
 
 func (n Number) Help() string {
-	return n.help
+	return fmt.Sprintf("%s : %s", n.name, n.help)
 }
 
 func (n Number) Parse(ctx Context, args []string) any {
@@ -278,7 +303,7 @@ func (n Number) Parse(ctx Context, args []string) any {
 	if len(args) == 0 {
 		return ctx.Result(
 			fmt.Errorf("%s : %w", n.name, errMissingArgument),
-			n.Help(),
+			ctx.Help()+"\n\n"+n.Help(),
 		)
 	}
 
@@ -317,7 +342,7 @@ func (s Select) String() string {
 }
 
 func (s Select) Help() string {
-	return s.help
+	return fmt.Sprintf("%s : %s", s.name, s.help)
 }
 
 var underline = lipgloss.NewStyle().Underline(true)
@@ -349,7 +374,7 @@ func (s Select) Parse(ctx Context, args []string) any {
 
 	if len(args) == 0 {
 		// afficher la liste des choix possibles
-		return ctx.Output(s.List(options))
+		return ctx.Output(ctx.Help() + "\n\n" + s.List(options))
 	}
 
 	// vérifier la validité de l'option choisie
@@ -382,7 +407,7 @@ func (h Hidden) String() string {
 }
 
 func (h Hidden) Help() string {
-	return h.help
+	return fmt.Sprintf("%s : %s", h.name, h.help)
 }
 
 func (h Hidden) Parse(ctx Context, args []string) any {
@@ -411,7 +436,7 @@ func (t Text) String() string {
 }
 
 func (t Text) Help() string {
-	return t.help
+	return fmt.Sprintf("%s : %s", t.name, t.help)
 }
 
 func (t Text) Parse(ctx Context, args []string) any {
@@ -440,7 +465,7 @@ func (t LongText) String() string {
 }
 
 func (t LongText) Help() string {
-	return t.help
+	return fmt.Sprintf("%s : %s", t.name, t.help)
 }
 
 func (t LongText) Parse(ctx Context, args []string) any {

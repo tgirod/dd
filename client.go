@@ -280,14 +280,14 @@ func (c *Client) RenderOutput() {
 				promptStyle.MaxWidth(c.width).Render(e.Prompt))
 		}
 
-		if e.Error != nil {
-			fmt.Fprintf(&b, "%s\n\n",
-				errorStyle.MaxWidth(c.width).Render(e.Error.Error()))
-		}
-
 		if e.Output != "" {
 			fmt.Fprintf(&b, "%s\n\n",
 				outputStyle.MaxWidth(c.width).Render(e.Output))
+		}
+
+		if e.Error != nil {
+			fmt.Fprintf(&b, "%s\n\n",
+				errorStyle.MaxWidth(c.width).Render(e.Error.Error()))
 		}
 	}
 

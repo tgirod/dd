@@ -29,7 +29,7 @@ type Server struct {
 	Security time.Duration
 }
 
-func (s Server) Match() q.Matcher {
+func (s Server) HasResource() q.Matcher {
 	return q.Eq("Server", s.Address)
 }
 
@@ -77,7 +77,7 @@ func (gs Groups) MatchField(v any) (bool, error) {
 }
 
 func (s Server) Users() []User {
-	users, err := Find[User](s.Match())
+	users, err := Find[User](s.HasResource())
 	if err != nil {
 		panic(err)
 	}
@@ -87,7 +87,7 @@ func (s Server) Users() []User {
 // FindUser cherche un compte utilisateur correspondant au login
 func (s Server) FindUser(login string) (User, error) {
 	return First[User](
-		s.Match(),
+		s.HasResource(),
 		q.Eq("Login", login),
 	)
 }
@@ -118,7 +118,7 @@ func (l Link) Desc() string {
 
 func (s Server) Links(u User) []Link {
 	links, err := Find[Link](
-		s.Match(),
+		s.HasResource(),
 		u.HasAccess(),
 	)
 	if err != nil {
@@ -129,7 +129,7 @@ func (s Server) Links(u User) []Link {
 
 func (s Server) Link(id int, u User) (Link, error) {
 	return First[Link](
-		s.Match(),
+		s.HasResource(),
 		u.HasAccess(),
 		q.Eq("ID", id),
 	)
@@ -158,7 +158,7 @@ type Entry struct {
 
 func (s Server) Entries(u User) []Entry {
 	entries, err := Find[Entry](
-		s.Match(),
+		s.HasResource(),
 		u.HasAccess(),
 	)
 	if err != nil {
@@ -179,7 +179,7 @@ func (m KeywordMatcher) Match(v any) (bool, error) {
 
 func (s Server) DataSearch(keyword string, u User) []Entry {
 	entries, err := Find[Entry](
-		s.Match(),
+		s.HasResource(),
 		u.HasAccess(),
 		KeywordMatcher(keyword),
 	)
@@ -193,7 +193,7 @@ func (s Server) DataSearch(keyword string, u User) []Entry {
 
 func (s Server) FindEntry(id string, u User) (Entry, error) {
 	return First[Entry](
-		s.Match(),
+		s.HasResource(),
 		u.HasAccess(),
 		q.Eq("ID", id),
 	)
@@ -235,7 +235,7 @@ func (r Register) Desc() string {
 
 func (s Server) Registers(u User) []Register {
 	registers, err := Find[Register](
-		s.Match(),
+		s.HasResource(),
 		u.HasAccess(),
 	)
 	if err != nil {
@@ -246,7 +246,7 @@ func (s Server) Registers(u User) []Register {
 
 func (s Server) Register(id int, u User) (Register, error) {
 	return First[Register](
-		s.Match(),
+		s.HasResource(),
 		u.HasAccess(),
 		q.Eq("ID", id),
 	)
@@ -301,7 +301,7 @@ func SerializePosts(addr string) {
 	}
 
 	posts, err := Find[Post](
-		s.Match(),
+		s.HasResource(),
 	)
 	if err != nil {
 		panic(err)
@@ -344,7 +344,7 @@ func LoadPosts(path string) {
 
 func (s Server) Post(id int) (Post, error) {
 	return First[Post](
-		s.Match(),
+		s.HasResource(),
 		q.Eq("ID", id),
 	)
 }
@@ -352,7 +352,7 @@ func (s Server) Post(id int) (Post, error) {
 // Topics liste les posts qui n'ont pas de parent
 func (s Server) Topics(u User) []Post {
 	posts, err := Find[Post](
-		s.Match(),
+		s.HasResource(),
 		q.Eq("Parent", 0),
 		u.HasAccess(),
 	)
@@ -365,7 +365,7 @@ func (s Server) Topics(u User) []Post {
 // Replies retourne la liste des réponses à un post
 func (s Server) Replies(parent int) []Post {
 	posts, err := Find[Post](
-		s.Match(),
+		s.HasResource(),
 		q.Eq("Parent", parent),
 	)
 	if err != nil {
@@ -391,7 +391,7 @@ type Thread struct {
 func (s Server) Thread(p Post) (Thread, error) {
 
 	replies, err := Find[Post](
-		s.Match(),
+		s.HasResource(),
 		q.Eq("Parent", p.ID),
 	)
 

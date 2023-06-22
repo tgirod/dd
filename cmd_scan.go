@@ -25,7 +25,7 @@ func Scan(ctx Context) any {
 
 	// récupérer les liens
 	links, err := Find[Link](
-		s.Match(),
+		s.HasResource(),
 	)
 	if err != nil {
 		return ctx.Error(err)
@@ -33,7 +33,7 @@ func Scan(ctx Context) any {
 
 	// récupérer les registres
 	registers, err := Find[Register](
-		s.Match(),
+		s.HasResource(),
 	)
 	if err != nil {
 		return ctx.Error(err)
@@ -41,7 +41,7 @@ func Scan(ctx Context) any {
 
 	// récupérer les posts
 	topics, err := Find[Post](
-		s.Match(),
+		s.HasResource(),
 		q.Eq("Parent", 0),
 	)
 	if err != nil {

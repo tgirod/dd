@@ -38,7 +38,6 @@ func InitServer(
 	s Server,
 	users []User,
 	links []Link,
-	entries []Entry,
 	registers []Register,
 	posts []Post,
 ) {
@@ -68,14 +67,6 @@ func InitServer(
 			log.Fatalf("%v : %v\n", l, err)
 		}
 	}
-	log.Println("entries")
-	for _, e := range entries {
-		log.Println("\t", e.Title)
-		e.Server = addr
-		if _, err := Save(e); err != nil {
-			log.Fatalf("%v : %v\n", e, err)
-		}
-	}
 	log.Println("registers")
 	for _, r := range registers {
 		log.Println("\t", r.Description)
@@ -100,7 +91,6 @@ func Reset() {
 	db.Drop(Server{})
 	db.Drop(User{})
 	db.Drop(Link{})
-	db.Drop(Entry{})
 	db.Drop(Register{})
 	db.Drop(Post{})
 	db.Drop(Transaction{})
@@ -198,9 +188,6 @@ func Init() {
 		[]Link{
 			{Address: d22.Address, Description: "serveur public du District 22"},
 		},
-		[]Entry{
-			{ID: "bluemars", Keywords: []string{"boisson"}, Title: "blue mars", Content: "cocktail"},
-		},
 		[]Register{
 			{Description: "machine à café", State: "on", Options: []RegisterState{"on", "off", "overdrive"}},
 		},
@@ -215,7 +202,6 @@ func Init() {
 			},
 		},
 		[]Link{},
-		[]Entry{},
 		[]Register{},
 		[]Post{},
 	)

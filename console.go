@@ -133,7 +133,6 @@ var baseCmds = Branch{
 		back,
 		yes,
 		connect,
-		data,
 		identify,
 		index,
 		link,

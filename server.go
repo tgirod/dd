@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -9,7 +8,6 @@ import (
 
 	"github.com/asdine/storm/v3"
 	"github.com/asdine/storm/v3/q"
-	"github.com/lithammer/fuzzysearch/fuzzy"
 
 	"gopkg.in/yaml.v3"
 )
@@ -133,76 +131,6 @@ func (s Server) Link(id int, u User) (Link, error) {
 		u.HasAccess(),
 		q.Eq("ID", id),
 	)
-}
-
-// Entry est une entrée dans une base de données
-type Entry struct {
-	Server string `storm:"index"`
-	Group  string `storm:"index"`
-
-	// identifiant unique
-	ID string `storm:"id"`
-
-	// mots-clefs utilisés pour la recherche
-	Keywords []string `storm:"index"`
-
-	// accessible uniquement au propriétaire
-	Owner string `storm:"index"`
-
-	// titre de l'entrée
-	Title string
-
-	// contenu de l'entrée
-	Content string
-}
-
-func (s Server) Entries(u User) []Entry {
-	entries, err := Find[Entry](
-		s.HasResource(),
-		u.HasAccess(),
-	)
-	if err != nil {
-		panic(err)
-	}
-	return entries
-}
-
-type KeywordMatcher string
-
-func (m KeywordMatcher) Match(v any) (bool, error) {
-	entry, ok := v.(Entry)
-	if !ok {
-		return false, errors.New("type incompatible")
-	}
-	return entry.Match(string(m)), nil
-}
-
-func (s Server) DataSearch(keyword string, u User) []Entry {
-	entries, err := Find[Entry](
-		s.HasResource(),
-		u.HasAccess(),
-		KeywordMatcher(keyword),
-	)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return entries
-}
-
-func (s Server) FindEntry(id string, u User) (Entry, error) {
-	return First[Entry](
-		s.HasResource(),
-		u.HasAccess(),
-		q.Eq("ID", id),
-	)
-}
-
-// Match détermine si l'entrée contient le mot-clef
-func (e Entry) Match(keyword string) bool {
-	match := fuzzy.FindNormalizedFold(keyword, e.Keywords)
-	return len(match) > 0
 }
 
 // Register représente registre mémoire qui peut être modifié pour contrôler quelque chose

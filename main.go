@@ -5,7 +5,8 @@ import (
 )
 
 const host = "0.0.0.0"
-const port = 1337
+const portPlayer = 1337
+const portMonitor = 7331
 
 var app *App
 

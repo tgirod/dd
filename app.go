@@ -42,7 +42,10 @@ var (
 )
 
 type App struct {
-	s     *ssh.Server
+	sPlayer     *ssh.Server
+	startTime   time.Time
+	sMonitor    *ssh.Server
+	sessions    map[ssh.Session]*Console
 	admin *tea.Program
 }
 
@@ -54,12 +57,28 @@ func NewApp(init bool) *App {
 
 	var err error
 	a := new(App)
+	// MON
+	a.startTime = time.Now()
+	a.sessions = make(map[ssh.Session]*Console)
 
-	if a.s, err = wish.NewServer(
-		wish.WithAddress(fmt.Sprintf("%s:%d", host, port)),
+	// SSH server for the players
+	if a.sPlayer, err = wish.NewServer(
+		wish.WithAddress(fmt.Sprintf("%s:%d", host, portPlayer)),
 		wish.WithHostKeyPath(".ssh/term_info_ed25519"),
 		wish.WithMiddleware(
-			bm.Middleware(a.Handler),
+			bm.Middleware(a.HandlerPlayer),
+			// lm.Midleware(),
+		),
+	); err != nil {
+		log.Fatal(err)
+	}
+
+	// SSH server for monitoring
+	if a.sMonitor, err = wish.NewServer(
+		wish.WithAddress(fmt.Sprintf("%s:%d", host, portMonitor)),
+		wish.WithHostKeyPath(".ssh/term_info_ed25519"),
+		wish.WithMiddleware(
+			bm.Middleware(a.HandlerMonitor),
 			// lm.Midleware(),
 		),
 	); err != nil {
@@ -76,9 +95,15 @@ func (a *App) Start() {
 
 	// done := make(chan os.Signal, 1)
 	// signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-	log.Printf("lancement du serveur SSH sur %s:%d", host, port)
+	log.Printf("lancement du serveur SSH sur %s:%d", host, portPlayer)
 	go func() {
-		if err := a.s.ListenAndServe(); err != nil {
+		if err := a.sPlayer.ListenAndServe(); err != nil {
+			log.Fatalln(err)
+		}
+	}()
+	// Lancement du serveur SSH de monitoring
+	go func() {
+		if err := a.sMonitor.ListenAndServe(); err != nil {
 			log.Fatalln(err)
 		}
 	}()
@@ -95,7 +120,7 @@ func (a *App) Start() {
 	log.Println("fermeture du serveur SSH")
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer func() { cancel() }()
-	if err := a.s.Shutdown(ctx); err != nil {
+	if err := a.sPlayer.Shutdown(ctx); err != nil {
 		log.Fatalln(err)
 	}
 }
@@ -104,8 +129,16 @@ func (a *App) Log(v any) {
 	a.admin.Send(LogMsg(fmt.Sprintf("%+v", v)))
 }
 
+// MON afficher les sessions ouvertes
+func (a App) PrintSessions() {
+	for _, e := range a.sessions {
+		fmt.Println("Session with Console ID ", e.ID)
+	}
+}
+
 // Handler prend en charge la connexion entrante et créé les objets nécessaires
-func (a *App) Handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
+// MON Ajoute une session
+func (a *App) HandlerPlayer(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	// si le terminal qui tente de se connecter est invalide
 	pty, _, active := s.Pty()
 	if !active {
@@ -119,5 +152,45 @@ func (a *App) Handler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 		pty.Window.Height,
 	)
 
+	// MON ajout session
+	a.sessions[s] = client.Console
+	a.PrintSessions()
+
 	return client, []tea.ProgramOption{tea.WithAltScreen()}
+}
+
+// MON On a besoin d'un Middleware pour deleter en cas de déconnexion
+func MiddlewareMonitor(conn map[ssh.Session]*Console) wish.Middleware {
+	return func(sh ssh.Handler) ssh.Handler {
+		return func(s ssh.Session) {
+			fmt.Printf("Begin of adventure for %s (%d conn)\n", s.User(), len(conn))
+			sh(s)
+			fmt.Printf("End of adventure for %s (%d conn)\n", s.User(), len(conn))
+			delete(conn, s)
+		}
+	}
+}
+
+// MON Handler prend en charge la connexion Monitor entrante
+// et créé les objets nécessaires
+func (a *App) HandlerMonitor(s ssh.Session) (tea.Model, []tea.ProgramOption) {
+	// si le terminal qui tente de se connecter est invalide
+	pty, _, active := s.Pty()
+	if !active {
+		fmt.Println("no active terminal, skipping")
+		return nil, nil
+	}
+
+	// création de l'interface utilisateur
+	monitor := NewMonitor(
+		a.startTime,
+		pty.Window.Width,
+		pty.Window.Height,
+		//a.Game,
+		a.sessions,
+	)
+	// superuser
+	//monitor.Console.MakeMatrix()
+
+	return monitor, []tea.ProgramOption{tea.WithAltScreen()}
 }

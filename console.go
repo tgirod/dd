@@ -72,6 +72,18 @@ func (s Session) WithSession(server Server, user User, identity Identity) Sessio
 	return sess
 }
 
+func (c *Console) NewSession(server Server, user User, identity Identity) Session {
+	return Session{
+		Server:    server,
+		User:      user,
+		Identity:  identity,
+		Alert:     false,
+		Countdown: server.Security,
+		Mem:       InitMem(),
+		Parent:    nil,
+	}
+}
+
 // Trace retourne le temps restant avant que la trace soit terminée
 func (s Session) Trace() time.Duration {
 	if s.Parent == nil {
@@ -276,7 +288,7 @@ func (c *Console) Delay() time.Duration {
 	}
 }
 
-func (c *Console) Connect(address string, identity Identity, force bool) error {
+func (c *Console) Connect(address string, identity Identity, force bool, reset bool) error {
 	server, err := FindServer(address)
 	if err != nil {
 		return err
@@ -287,14 +299,22 @@ func (c *Console) Connect(address string, identity Identity, force bool) error {
 
 	if server.Private && err != nil {
 		if force {
-			c.Session = c.Session.WithSession(server, User{}, identity)
+			if reset {
+				c.Session = c.NewSession(server, user, identity)
+			} else {
+				c.Session = c.Session.WithSession(server, user, identity)
+			}
 			return nil
 		}
 
 		return errInvalidUser
 	}
 
-	c.Session = c.Session.WithSession(server, user, identity)
+	if reset {
+		c.Session = c.NewSession(server, user, identity)
+	} else {
+		c.Session = c.Session.WithSession(server, user, identity)
+	}
 
 	if c.User.Backdoor {
 		c.RemoveUser(user)

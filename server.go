@@ -23,8 +23,8 @@ type Server struct {
 	// informations affichées lors de la connexion
 	Description string
 
-	// temps que met le serveur à effectuer la trace
-	Security time.Duration
+	// niveau de sécurité : plus le chiffre est élevé, plus rapide est la trace
+	Security int
 }
 
 func (s Server) HasResource() q.Matcher {

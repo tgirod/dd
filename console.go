@@ -30,9 +30,6 @@ type Console struct {
 
 	// trace en cours
 	Alert bool
-
-	// vitesse de la trace
-	Trace time.Duration
 }
 
 type Session struct {
@@ -71,7 +68,6 @@ func (c *Console) WithSession(server Server, user User, identity Identity, reset
 	if reset {
 		parent = nil
 		c.Alert = false
-		c.Trace = time.Second
 	}
 
 	c.Session = &Session{
@@ -81,10 +77,6 @@ func (c *Console) WithSession(server Server, user User, identity Identity, reset
 		Countdown: countdown,
 		Mem:       InitMem(),
 		Parent:    parent,
-	}
-
-	if c.Alert {
-		c.Trace = server.Security
 	}
 }
 
@@ -103,7 +95,6 @@ func (c *Console) TimeLeft() time.Duration {
 func (c *Console) StartAlert() {
 	if !c.Alert {
 		c.Alert = true
-		c.Trace = c.Session.Server.Security
 	}
 }
 
@@ -195,7 +186,6 @@ func NewConsole() *Console {
 		DNI:     false,
 		Results: []Result{},
 		Alert:   false,
-		Trace:   time.Second,
 	}
 }
 
@@ -232,7 +222,6 @@ func (c *Console) Disconnect() {
 	c.Session = &Session{}
 	c.Identity = Identity{}
 	c.Alert = false
-	c.Trace = time.Second
 	c.DNI = false
 
 	// BUG
@@ -300,10 +289,13 @@ func (c *Console) AddResult(o Result) {
 }
 
 func (c *Console) Delay() time.Duration {
+	security := 1 << c.Session.Server.Security
+	speed := time.Second / time.Duration(security)
+
 	if c.DNI {
-		return c.Trace * DNISpeed
+		return speed * DNISpeed
 	} else {
-		return c.Trace
+		return speed
 	}
 }
 

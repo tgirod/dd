@@ -33,7 +33,7 @@ func Evade(ctx Context) any {
 			}
 			// trouvé une zone mémoire
 			sess.Mem[i].Used = false
-			sess.Countdown = sess.Server.Security
+			sess.Countdown = COUNTDOWN
 			console.StartAlert()
 
 			return ctx.Output(fmt.Sprintf("session relocalisée dans la zone mémoire %s", mem))

@@ -6,11 +6,11 @@ import (
 )
 
 const (
-	SEC1 = time.Second * 5
-	SEC2 = time.Minute * 3
-	SEC3 = time.Minute * 2
-	SEC4 = time.Minute * 1
-	SEC5 = time.Second * 30
+	SEC1 = time.Second
+	SEC2 = time.Second / 2
+	SEC3 = time.Second / 4
+	SEC4 = time.Second / 8
+	SEC5 = time.Second / 16
 )
 
 func InitNetwork(
@@ -140,7 +140,7 @@ var dd22Desc = `
 var d22 = Server{
 	Address:     "d22.eu",
 	Description: dd22Desc,
-	Security:    SEC1,
+	Security:    SEC3,
 }
 
 func Init() {

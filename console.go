@@ -10,6 +10,7 @@ import (
 )
 
 const MAX_RESULTS int = 10
+const COUNTDOWN time.Duration = time.Minute
 
 // Console représente le terminal depuis lequel le joueur accède au net
 type Console struct {
@@ -26,13 +27,18 @@ type Console struct {
 
 	// liste des dernières commandes évaluées
 	Results []Result
+
+	// trace en cours
+	Alert bool
+
+	// vitesse de la trace
+	Trace time.Duration
 }
 
 type Session struct {
 	Server                  // serveur auquel la session se réfère
 	User                    // compte utilisateur actif dans ce serveur
 	Identity                // identité active dans la session
-	Alert     bool          // l'alerte est-elle active ?
 	Countdown time.Duration // temps restant avant déconnexion
 	Mem       []MemoryZone  // zones mémoires disponibles pour une évasion
 	Parent    *Session      // session précédente
@@ -55,50 +61,63 @@ func (z MemoryZone) Desc() string {
 	}
 }
 
-func (s Session) WithSession(server Server, user User, identity Identity) Session {
-	countdown := server.Security
-	if s.Alert {
+func (c *Console) NewSession(server Server, user User, identity Identity) {
+	countdown := COUNTDOWN
+	if c.Alert {
 		countdown = 0
 	}
-	sess := Session{
-		Server:    server,
-		User:      user,
-		Identity:  identity,
-		Alert:     s.Alert,
-		Countdown: countdown,
-		Mem:       InitMem(),
-		Parent:    &s,
-	}
-	return sess
-}
 
-func (c *Console) NewSession(server Server, user User, identity Identity) Session {
-	return Session{
+	c.Session = Session{
 		Server:    server,
 		User:      user,
 		Identity:  identity,
-		Alert:     false,
-		Countdown: server.Security,
+		Countdown: countdown,
 		Mem:       InitMem(),
 		Parent:    nil,
 	}
 }
 
-// Trace retourne le temps restant avant que la trace soit terminée
-func (s Session) Trace() time.Duration {
-	if s.Parent == nil {
-		return s.Countdown
+func (c *Console) AddSession(server Server, user User, identity Identity) {
+	countdown := COUNTDOWN
+	if c.Alert {
+		countdown = 0
 	}
-	return s.Parent.Trace() + s.Countdown
+
+	sess := Session{
+		Server:    server,
+		User:      user,
+		Identity:  identity,
+		Countdown: countdown,
+		Mem:       InitMem(),
+		Parent:    &c.Session,
+	}
+
+	fmt.Println(sess)
+
+	c.Session = sess
 }
 
-func (s *Session) StartAlert() {
-	s.Alert = true
+// TimeLeft retourne le temps restant avant la finalisation de la trace
+func (c *Console) TimeLeft() time.Duration {
+	var left time.Duration
+	sess := &c.Session
+	for sess != nil {
+		left += sess.Countdown
+		sess = sess.Parent
+	}
+	return left
 }
 
+// StartAlert démarre l'alerte si elle ne l'est pas déjà
+func (c *Console) StartAlert() {
+	if !c.Alert {
+		c.Alert = true
+		c.Trace = c.Session.Server.Security
+	}
+}
+
+// Security décrémente le countdown dans la session
 func (s *Session) Security() bool {
-	// décrémenter le temps restant dans cette session
-	s.Alert = true
 	if s.Countdown > 0 {
 		s.Countdown -= time.Second
 		return false
@@ -180,7 +199,12 @@ var baseCmds = Branch{
 func NewConsole() *Console {
 	app.Log("nouvelle console")
 	return &Console{
-		Branch: baseCmds,
+		Branch:  baseCmds,
+		Session: Session{},
+		DNI:     false,
+		Results: []Result{},
+		Alert:   false,
+		Trace:   time.Second,
 	}
 }
 
@@ -216,6 +240,10 @@ func InitMem() []MemoryZone {
 func (c *Console) Disconnect() {
 	c.Session = Session{}
 	c.Identity = Identity{}
+	c.Alert = false
+	c.Trace = time.Second
+	c.DNI = false
+
 	// BUG
 	// c.Branch = baseCmds
 
@@ -282,9 +310,9 @@ func (c *Console) AddResult(o Result) {
 
 func (c *Console) Delay() time.Duration {
 	if c.DNI {
-		return time.Second * DNISpeed
+		return c.Trace * DNISpeed
 	} else {
-		return time.Second
+		return c.Trace
 	}
 }
 
@@ -300,9 +328,9 @@ func (c *Console) Connect(address string, identity Identity, force bool, reset b
 	if server.Private && err != nil {
 		if force {
 			if reset {
-				c.Session = c.NewSession(server, user, identity)
+				c.NewSession(server, user, identity)
 			} else {
-				c.Session = c.Session.WithSession(server, user, identity)
+				c.AddSession(server, user, identity)
 			}
 			return nil
 		}
@@ -311,9 +339,9 @@ func (c *Console) Connect(address string, identity Identity, force bool, reset b
 	}
 
 	if reset {
-		c.Session = c.NewSession(server, user, identity)
+		c.NewSession(server, user, identity)
 	} else {
-		c.Session = c.Session.WithSession(server, user, identity)
+		c.AddSession(server, user, identity)
 	}
 
 	if c.User.Backdoor {

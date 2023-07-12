@@ -160,11 +160,21 @@ func Init() {
 				Password: "hack",
 				Name:     "Crunch",
 			},
+			{
+				Login:    "admin",
+				Password: "beurk",
+				Name:     "Admin",
+			},
 		},
 		[]Transaction{
 			{
 				To:      "jesus",
 				Yes:     100,
+				Comment: "report du solde",
+			},
+			{
+				To:      "admin",
+				Yes:     1337,
 				Comment: "report du solde",
 			},
 		},

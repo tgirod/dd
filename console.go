@@ -145,6 +145,27 @@ var baseCmds = Branch{
 	},
 }
 
+var MonCmds = Branch{
+	name: "root",
+	cmds: []Cmd{
+		sudo_id,
+		sudo_msg,
+		sudo_yes,
+		back,
+		yes,
+		connect,
+		identify,
+		index,
+		link,
+		load,
+		plug,
+		quit,
+		registry,
+		message,
+		forum,
+	},
+}
+
 // var baseCmds = Cmd{
 // 	Name: "root",
 // 	SubCmds: []Cmd{
@@ -165,8 +186,13 @@ var baseCmds = Branch{
 // 	},
 // }
 
-func NewConsole() *Console {
+func NewConsole(monitoring bool) *Console {
 	app.Log("nouvelle console")
+	if (monitoring) {
+		return &Console{
+			Branch: MonCmds,
+		}
+	}
 	return &Console{
 		Branch: baseCmds,
 	}

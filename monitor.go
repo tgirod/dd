@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	//"io"
-	"strings"
+	//"strings"
 	//"text/tabwriter"
 	"time"
 
@@ -14,6 +14,17 @@ import (
 	//"github.com/muesli/reflow/wordwrap"
 
 )
+const sizeConnexionMonitor = 5
+const sizeRegisterMonitor = 4
+
+// to list the register to monitor
+type DescRegisterMonitor struct {
+	server string
+	id     int
+}
+var regMonitored = []DescRegisterMonitor {
+	{"dd.local", 1},
+}
 
 type Monitor struct {
 	Client
@@ -25,8 +36,9 @@ type Monitor struct {
 func NewMonitor(startT time.Time,
 	width, height int,
 	sessions map[ssh.Session]*Console) *Monitor {
+
 	m := &Monitor{
-		Client:    *NewClient(width, height),
+		Client:    *NewClient(width, height, true),
 		startTime: startT,
 		// width:     width,
 		// height:    height,
@@ -34,12 +46,14 @@ func NewMonitor(startT time.Time,
 		// 	Focus:       true,
 		// 	Placeholder		: "help",
 		// },
-		// output:     viewport.New(width, height-2-5),
+		// output:     viewport.New(width, height-2-sizeConnexionMonitor),
 		// Game:       game,
 		// Console:    NewConsole(),
 		connexions: sessions,
 	}
-	m.Client.output = viewport.New(width, height-2-5)
+
+	m.Client.output = viewport.New(width,
+		height-2-sizeConnexionMonitor-sizeRegisterMonitor)
 	m.Client.output.Style = outputStyle
 	return m
 }
@@ -92,7 +106,7 @@ func (m *Monitor) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.height = msg.Height
 		m.width = msg.Width
-		m.output.Height = msg.Height - 2 - 5
+		m.output.Height = msg.Height - 2 - sizeConnexionMonitor - sizeRegisterMonitor
 		return m, nil
 
 	default:
@@ -192,7 +206,7 @@ func (m *Monitor) View() string {
 // 	hist := c.Console.History.AsString()
 
 // 	width := c.width - statusStyle.GetHorizontalFrameSize()
-// 	height := 5
+// 	height := sizeConnexionMonitor
 
 // 	content := hist
 // 	// wrap au cas ou certaines lignes seraient trop longues
@@ -211,16 +225,37 @@ func (m Monitor) connectionsView() string {
 	// fmt.Println("CONN width", width)
 	// fmt.Println("CONN heigh", height)
 	content := ""
+	content += invertTextStyle.Width(m.width).Render(conHeader) + "\n"
 	// liste les connexions
 	for _, e := range m.connexions {
 		content += fmtConnexion(e) + "\n"
+	}
+
+	// As Register is build at each query, must loop each time
+	content += invertTextStyle.Width(m.width).Render(regHeader) + "\n"
+	for _, desc := range regMonitored {
+		serv, err := FindServer( desc.server )
+		if err != nil {
+			app.Log( "WARN register monitor : cannot find "+desc.server )
+		} else {
+			var reg Register
+			reg, err = serv.Register(desc.id, m.Client.Console.User)
+			if err != nil {
+				msg := fmt.Sprintf("WARN register %d not found on %s",
+					desc.id, desc.server)
+				app.Log( msg )
+			} else {
+				content += fmtRegister(reg) + "\n"
+			}
+		}
 	}
 
 	// wrap au cas ou certaines lignes seraient trop longues
 	//content = wordwrap.String(content, width)
 
 	// disposer le texte dans un espace qui remplit l'écran
-	content = lg.Place(width, 5, lg.Left, lg.Top, content)
+	content = lg.Place(width, sizeConnexionMonitor+sizeRegisterMonitor,
+		lg.Left, lg.Top, content)
 
 	return outputStyle.Render(content)
 }
@@ -300,17 +335,17 @@ func (m Monitor) connectionsView() string {
 // 	}
 // }
 
-func (m Monitor) Disconnect() {
-	m.Console.Server = nil
-	m.Console.Login = ""
-	m.Console.Privilege = 0
-	m.Console.Alert = false
-	m.Console.History.Clear()
-	if len(m.Console.Sub) > 11 {
-		m.Console.Sub = m.Console.Sub[0:11]
-	}
-	m.Console.MakeMatrix()
-}
+// func (m Monitor) Disconnect() {
+// 	m.Console.Server = nil
+// 	m.Console.Login = ""
+// 	m.Console.Privilege = 0
+// 	m.Console.Alert = false
+// 	m.Console.History.Clear()
+// 	if len(m.Console.Sub) > 11 {
+// 		m.Console.Sub = m.Console.Sub[0:11]
+// 	}
+// 	m.Console.MakeMatrix()
+// }
 
 // func tw(output io.Writer) *tabwriter.Writer {
 // 	return tabwriter.NewWriter(output, 8, 1, 2, ' ', 0)

@@ -67,6 +67,7 @@ func NewApp(init bool) *App {
 		wish.WithHostKeyPath(".ssh/term_info_ed25519"),
 		wish.WithMiddleware(
 			bm.Middleware(a.HandlerPlayer),
+			MiddlewareMonitor(a.sessions),
 			// lm.Midleware(),
 		),
 	); err != nil {
@@ -150,6 +151,7 @@ func (a *App) HandlerPlayer(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	client := NewClient(
 		pty.Window.Width,
 		pty.Window.Height,
+		false,
 	)
 
 	// MON ajout session

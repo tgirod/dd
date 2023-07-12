@@ -24,7 +24,7 @@ func Back(ctx Context) any {
 	}
 
 	// enlever le serveur actuel
-	console.Session = *console.Session.Parent
+	console.Session = console.Session.Parent
 
 	b := strings.Builder{}
 	fmt.Fprintf(&b, "connexion établie à l'adresse %s\n\n", console.Address)

@@ -211,7 +211,7 @@ var (
 
 func (c *Client) ViewPath() string {
 	var path []string
-	sess := &c.Console.Session
+	sess := c.Console.Session
 	for sess != nil {
 		str := fmt.Sprintf("%s", sess.Server.Address)
 		if c.Alert {

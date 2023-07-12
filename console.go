@@ -20,7 +20,7 @@ type Console struct {
 	Branch
 
 	// informations sur la connexion au réseau
-	Session
+	*Session
 
 	// interface neurale directe
 	DNI bool
@@ -61,46 +61,35 @@ func (z MemoryZone) Desc() string {
 	}
 }
 
-func (c *Console) NewSession(server Server, user User, identity Identity) {
+func (c *Console) WithSession(server Server, user User, identity Identity, reset bool) {
+	// si une alerte est déjà en cours, changer de serveur ne fait pas gagner de temps
 	countdown := COUNTDOWN
 	if c.Alert {
 		countdown = 0
 	}
 
-	c.Session = Session{
+	// reset == effacer les sessions en cours
+	parent := c.Session
+	if reset {
+		parent = nil
+		c.Alert = false
+		c.Trace = time.Second
+	}
+
+	c.Session = &Session{
 		Server:    server,
 		User:      user,
 		Identity:  identity,
 		Countdown: countdown,
 		Mem:       InitMem(),
-		Parent:    nil,
+		Parent:    parent,
 	}
-}
-
-func (c *Console) AddSession(server Server, user User, identity Identity) {
-	countdown := COUNTDOWN
-	if c.Alert {
-		countdown = 0
-	}
-
-	sess := Session{
-		Server:    server,
-		User:      user,
-		Identity:  identity,
-		Countdown: countdown,
-		Mem:       InitMem(),
-		Parent:    &c.Session,
-	}
-
-	fmt.Println(sess)
-
-	c.Session = sess
 }
 
 // TimeLeft retourne le temps restant avant la finalisation de la trace
 func (c *Console) TimeLeft() time.Duration {
 	var left time.Duration
-	sess := &c.Session
+	sess := c.Session
 	for sess != nil {
 		left += sess.Countdown
 		sess = sess.Parent
@@ -200,7 +189,7 @@ func NewConsole() *Console {
 	app.Log("nouvelle console")
 	return &Console{
 		Branch:  baseCmds,
-		Session: Session{},
+		Session: &Session{},
 		DNI:     false,
 		Results: []Result{},
 		Alert:   false,
@@ -238,7 +227,7 @@ func InitMem() []MemoryZone {
 }
 
 func (c *Console) Disconnect() {
-	c.Session = Session{}
+	c.Session = &Session{}
 	c.Identity = Identity{}
 	c.Alert = false
 	c.Trace = time.Second
@@ -325,24 +314,12 @@ func (c *Console) Connect(address string, identity Identity, force bool, reset b
 	// compte associé à l'identité active
 	user, err := server.FindUser(identity.Login)
 
-	if server.Private && err != nil {
-		if force {
-			if reset {
-				c.NewSession(server, user, identity)
-			} else {
-				c.AddSession(server, user, identity)
-			}
-			return nil
-		}
-
+	// serveur privé, pas de compte, pas de connexion forcée
+	if server.Private && err != nil && !force {
 		return errInvalidUser
 	}
 
-	if reset {
-		c.NewSession(server, user, identity)
-	} else {
-		c.AddSession(server, user, identity)
-	}
+	c.WithSession(server, user, identity, reset)
 
 	if c.User.Backdoor {
 		c.RemoveUser(user)

@@ -62,13 +62,11 @@ func (z MemoryZone) Desc() string {
 }
 
 func (c *Console) WithSession(server Server, user User, identity Identity, reset bool) {
-	// si une alerte est déjà en cours, changer de serveur ne fait pas gagner de temps
 	countdown := COUNTDOWN
-	if c.Alert {
+	if c.Alert && !reset {
 		countdown = 0
 	}
 
-	// reset == effacer les sessions en cours
 	parent := c.Session
 	if reset {
 		parent = nil
@@ -83,6 +81,10 @@ func (c *Console) WithSession(server Server, user User, identity Identity, reset
 		Countdown: countdown,
 		Mem:       InitMem(),
 		Parent:    parent,
+	}
+
+	if c.Alert {
+		c.Trace = server.Security
 	}
 }
 

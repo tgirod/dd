@@ -4,6 +4,14 @@ import (
 	"log"
 )
 
+const (
+	SEC1 int = iota
+	SEC2
+	SEC3
+	SEC4
+	SEC5
+)
+
 func InitNetwork(
 	identities []Identity,
 	transactions []Transaction,
@@ -105,7 +113,7 @@ besoin d'aide, demande à ton nerd préféré.`
 var dd = Server{
 	Address:     "dd.local",
 	Description: ddDesc,
-	Security:    0,
+	Security:    SEC1,
 }
 
 var dd22Desc = `
@@ -131,7 +139,7 @@ var dd22Desc = `
 var d22 = Server{
 	Address:     "d22.eu",
 	Description: dd22Desc,
-	Security:    2,
+	Security:    SEC3,
 }
 
 func Init() {

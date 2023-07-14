@@ -226,6 +226,19 @@ func (c *Console) Disconnect() {
 
 	// BUG
 	// c.Branch = baseCmds
+	// instead remove Hackers Cmds from Branch, they should be at the end
+	id := len(c.Branch.cmds) - 1
+	clean := false
+	for (id >= 0 && !clean) {
+		_, ok := Hack[c.Branch.cmds[id].name]
+		if ok { // it is a Hack Cmd
+			// remove last element
+			c.Branch.cmds = c.Branch.cmds[:id]
+			id = id -1
+		} else {
+			clean = true
+		}
+	}
 
 	// affichage par défaut
 	eval := Result{

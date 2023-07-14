@@ -3,7 +3,8 @@ package main
 var quit = Cmd{
 	name:      "quit",
 	help:      "ferme la connexion au serveur courant",
-	connected: true,
+	// connected: true,
+	connected: false,
 	next:      Run(Quit),
 }
 

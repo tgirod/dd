@@ -10,6 +10,7 @@ import (
 )
 
 const MAX_RESULTS int = 10
+const COUNTDOWN time.Duration = time.Minute
 
 // Console représente le terminal depuis lequel le joueur accède au net
 type Console struct {
@@ -19,20 +20,22 @@ type Console struct {
 	Branch
 
 	// informations sur la connexion au réseau
-	Session
+	*Session
 
 	// interface neurale directe
 	DNI bool
 
 	// liste des dernières commandes évaluées
 	Results []Result
+
+	// trace en cours
+	Alert bool
 }
 
 type Session struct {
 	Server                  // serveur auquel la session se réfère
 	User                    // compte utilisateur actif dans ce serveur
 	Identity                // identité active dans la session
-	Alert     bool          // l'alerte est-elle active ?
 	Countdown time.Duration // temps restant avant déconnexion
 	Mem       []MemoryZone  // zones mémoires disponibles pour une évasion
 	Parent    *Session      // session précédente
@@ -55,38 +58,48 @@ func (z MemoryZone) Desc() string {
 	}
 }
 
-func (s Session) WithSession(server Server, user User, identity Identity) Session {
-	countdown := server.Security
-	if s.Alert {
+func (c *Console) WithSession(server Server, user User, identity Identity, reset bool) {
+	countdown := COUNTDOWN
+	if c.Alert && !reset {
 		countdown = 0
 	}
-	sess := Session{
+
+	parent := c.Session
+	if reset {
+		parent = nil
+		c.Alert = false
+	}
+
+	c.Session = &Session{
 		Server:    server,
 		User:      user,
 		Identity:  identity,
-		Alert:     s.Alert,
 		Countdown: countdown,
 		Mem:       InitMem(),
-		Parent:    &s,
+		Parent:    parent,
 	}
-	return sess
 }
 
-// Trace retourne le temps restant avant que la trace soit terminée
-func (s Session) Trace() time.Duration {
-	if s.Parent == nil {
-		return s.Countdown
+// TimeLeft retourne le temps restant avant la finalisation de la trace
+func (c *Console) TimeLeft() time.Duration {
+	var left time.Duration
+	sess := c.Session
+	for sess != nil {
+		left += sess.Countdown
+		sess = sess.Parent
 	}
-	return s.Parent.Trace() + s.Countdown
+	return left
 }
 
-func (s *Session) StartAlert() {
-	s.Alert = true
+// StartAlert démarre l'alerte si elle ne l'est pas déjà
+func (c *Console) StartAlert() {
+	if !c.Alert {
+		c.Alert = true
+	}
 }
 
+// Security décrémente le countdown dans la session
 func (s *Session) Security() bool {
-	// décrémenter le temps restant dans cette session
-	s.Alert = true
 	if s.Countdown > 0 {
 		s.Countdown -= time.Second
 		return false
@@ -194,7 +207,11 @@ func NewConsole(monitoring bool) *Console {
 		}
 	}
 	return &Console{
-		Branch: baseCmds,
+		Branch:  baseCmds,
+		Session: &Session{},
+		DNI:     false,
+		Results: []Result{},
+		Alert:   false,
 	}
 }
 
@@ -228,10 +245,26 @@ func InitMem() []MemoryZone {
 }
 
 func (c *Console) Disconnect() {
-	c.Session = Session{}
+	c.Session = &Session{}
 	c.Identity = Identity{}
+	c.Alert = false
+	c.DNI = false
+
 	// BUG
 	// c.Branch = baseCmds
+	// instead remove Hackers Cmds from Branch, they should be at the end
+	id := len(c.Branch.cmds) - 1
+	clean := false
+	for (id >= 0 && !clean) {
+		_, ok := Hack[c.Branch.cmds[id].name]
+		if ok { // it is a Hack Cmd
+			// remove last element
+			c.Branch.cmds = c.Branch.cmds[:id]
+			id = id -1
+		} else {
+			clean = true
+		}
+	}
 
 	// affichage par défaut
 	eval := Result{
@@ -295,14 +328,17 @@ func (c *Console) AddResult(o Result) {
 }
 
 func (c *Console) Delay() time.Duration {
+	security := 1 << c.Session.Server.Security
+	speed := time.Second / time.Duration(security)
+
 	if c.DNI {
-		return time.Second * DNISpeed
+		return speed * DNISpeed
 	} else {
-		return time.Second
+		return speed
 	}
 }
 
-func (c *Console) Connect(address string, identity Identity, force bool) error {
+func (c *Console) Connect(address string, identity Identity, force bool, reset bool) error {
 	server, err := FindServer(address)
 	if err != nil {
 		return err
@@ -311,16 +347,12 @@ func (c *Console) Connect(address string, identity Identity, force bool) error {
 	// compte associé à l'identité active
 	user, err := server.FindUser(identity.Login)
 
-	if server.Private && err != nil {
-		if force {
-			c.Session = c.Session.WithSession(server, User{}, identity)
-			return nil
-		}
-
+	// serveur privé, pas de compte, pas de connexion forcée
+	if server.Private && err != nil && !force {
 		return errInvalidUser
 	}
 
-	c.Session = c.Session.WithSession(server, user, identity)
+	c.WithSession(server, user, identity, reset)
 
 	if c.User.Backdoor {
 		c.RemoveUser(user)

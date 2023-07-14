@@ -2,15 +2,14 @@ package main
 
 import (
 	"log"
-	"time"
 )
 
 const (
-	SEC1 = time.Second * 5
-	SEC2 = time.Minute * 3
-	SEC3 = time.Minute * 2
-	SEC4 = time.Minute * 1
-	SEC5 = time.Second * 30
+	SEC1 int = iota
+	SEC2
+	SEC3
+	SEC4
+	SEC5
 )
 
 func InitNetwork(
@@ -140,7 +139,7 @@ var dd22Desc = `
 var d22 = Server{
 	Address:     "d22.eu",
 	Description: dd22Desc,
-	Security:    SEC1,
+	Security:    SEC3,
 }
 
 func Init() {

@@ -212,9 +212,9 @@ var (
 func (c *Client) ViewPath() string {
 	var path []string
 	sess := c.Console.Session
-	for sess.Parent != nil {
+	for sess != nil {
 		str := fmt.Sprintf("%s", sess.Server.Address)
-		if sess.Alert {
+		if c.Alert {
 			if sess.Countdown > 0 {
 				str = yellow.Render(str)
 			} else {
@@ -222,13 +222,13 @@ func (c *Client) ViewPath() string {
 			}
 		}
 		path = append([]string{str}, path...)
-		sess = *sess.Parent
+		sess = sess.Parent
 	}
 	return strings.Join(path, "/")
 }
 
 func (c *Client) ViewTimer() string {
-	trace := c.Trace()
+	trace := c.TimeLeft()
 	min := int(trace.Minutes())
 	sec := int(trace.Seconds()) - min*60
 	return fmt.Sprintf("%02d:%02d", min, sec)

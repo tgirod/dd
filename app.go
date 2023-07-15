@@ -42,11 +42,11 @@ var (
 )
 
 type App struct {
-	sPlayer     *ssh.Server
-	startTime   time.Time
-	sMonitor    *ssh.Server
-	sessions    map[ssh.Session]*Console
-	admin *tea.Program
+	sPlayer   *ssh.Server
+	startTime time.Time
+	sMonitor  *ssh.Server
+	sessions  map[ssh.Session]*Console
+	admin     *tea.Program
 }
 
 // NewApp créé un nouvel objet application

@@ -68,12 +68,12 @@ var (
 var (
 	conHeader = "ID: ____user/___login@server_________ w DNI [alert] LastCmd_______________________"
 	// valeurs par défaut
-	defUser   = "U--"
-	defLogin  = "L--"
-	defServer = "---"
-	defDNINo  = ""
-	defDNIYes = "DNI"
-	defAlert  = " [--:--]"
+	defUser    = "U--"
+	defLogin   = "L--"
+	defServer  = "---"
+	defDNINo   = ""
+	defDNIYes  = "DNI"
+	defAlert   = " [--:--]"
 	defLastCmd = "---"
 
 	// formatter Login@Serveur
@@ -84,14 +84,14 @@ var (
 
 	// formatter Privilege/DNI
 	sPrivDNI = " w %d/%3s"
-	sDNI = " w %3s"
+	sDNI     = " w %3s"
 
 	// formatter Alerte
 	sAlert = " [%02d:%02d]"
 
 	// formatter LastCmd
 	cLenLastCmd = 30
-	sLastCmd   = " %-30s"
+	sLastCmd    = " %-30s"
 )
 
 func fmtConnexion(c *Console) string {
@@ -118,9 +118,9 @@ func fmtConnexion(c *Console) string {
 	}
 
 	if c.DNI {
-		conn += fmt.Sprintf(sDNI, /*c.Privilege,*/ defDNIYes)
+		conn += fmt.Sprintf(sDNI /*c.Privilege,*/, defDNIYes)
 	} else {
-		conn += fmt.Sprintf(sDNI, /*c.Privilege,*/ defDNINo)
+		conn += fmt.Sprintf(sDNI /*c.Privilege,*/, defDNINo)
 	}
 	if c.Alert {
 		conn += fmt.Sprintf(sAlert,
@@ -142,7 +142,6 @@ func fmtConnexion(c *Console) string {
 	}
 	conn += fmt.Sprintf(sLastCmd, lastCmd)
 
-
 	return conn
 }
 
@@ -153,10 +152,11 @@ var (
 	// formatter
 	rLenServer = 10
 	rLenDesc   = 25
-	rLenValue  =  8
+	rLenValue  = 8
 
 	sReg = "%-10s %-25s %8s"
 )
+
 func fmtRegister(r Register) string {
 
 	server := r.Server

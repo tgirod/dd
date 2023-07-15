@@ -9,11 +9,11 @@ import (
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/ssh"
 	lg "github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/ssh"
 	//"github.com/muesli/reflow/wordwrap"
-
 )
+
 const sizeConnexionMonitor = 5
 const sizeRegisterMonitor = 4
 
@@ -22,7 +22,8 @@ type DescRegisterMonitor struct {
 	server string
 	id     int
 }
-var regMonitored = []DescRegisterMonitor {
+
+var regMonitored = []DescRegisterMonitor{
 	{"dd.local", 1},
 }
 
@@ -40,10 +41,10 @@ func NewMonitor(startT time.Time,
 
 	m := &Monitor{
 		fakeUser: User{
-			Login: "fake",
-			Server: "",
+			Login:    "fake",
+			Server:   "",
 			Backdoor: false,
-			Groups: []string{""},
+			Groups:   []string{""},
 		},
 		Client:    *NewClient(width, height, true),
 		startTime: startT,
@@ -121,60 +122,60 @@ func (m *Monitor) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		_, cmdClient := m.Client.Update(msg)
 		cmds = append(cmds, cmdClient)
 
-	// case ResultMsg:
-	// 	// mettre à jour la sortie
-	// 	b := strings.Builder{}
-	// 	if msg.Error != nil {
-	// 		fmt.Fprintf(&b, "%s\n\n", errorTextStyle.Render(msg.Error.Error()))
-	// 	}
-	// 	fmt.Fprintf(&b, "> %s\n\n", msg.Cmd)
-	// 	fmt.Fprintf(&b, "%s\n", msg.Output)
-	// 	// curOutput := m.Wrap(b.String())
-	// 	curOutput := b.String()
-	// 	if m.prevOutput == "" {
-	// 		m.output.SetContent(curOutput)
-	// 	} else {
-	// 		m.output.SetContent(m.prevOutput + "\n" + curOutput)
-	// 	}
-	// 	m.output.GotoBottom()
-	// 	m.prevOutput = curOutput
+		// case ResultMsg:
+		// 	// mettre à jour la sortie
+		// 	b := strings.Builder{}
+		// 	if msg.Error != nil {
+		// 		fmt.Fprintf(&b, "%s\n\n", errorTextStyle.Render(msg.Error.Error()))
+		// 	}
+		// 	fmt.Fprintf(&b, "> %s\n\n", msg.Cmd)
+		// 	fmt.Fprintf(&b, "%s\n", msg.Output)
+		// 	// curOutput := m.Wrap(b.String())
+		// 	curOutput := b.String()
+		// 	if m.prevOutput == "" {
+		// 		m.output.SetContent(curOutput)
+		// 	} else {
+		// 		m.output.SetContent(m.prevOutput + "\n" + curOutput)
+		// 	}
+		// 	m.output.GotoBottom()
+		// 	m.prevOutput = curOutput
 
-	// 	// // déclencher le scan si la commande est illégale
-	// 	// if msg.Illegal {
-	// 	// 	return c, m.StartSecurity
-	// 	// }
+		// 	// // déclencher le scan si la commande est illégale
+		// 	// if msg.Illegal {
+		// 	// 	return c, m.StartSecurity
+		// 	// }
 
-	// 	return m, nil
+		// 	return m, nil
 
-	// 	// case SecurityMsg:
-	// 	// 	if m.Console.Alert {
-	// 	// 		// l'alerte est toujours là, on relance la routine de sécurité pour un tour
-	// 	// 		return c, tea.Every(msg.Wait, m.Security)
-	// 	// 	}
+		// 	// case SecurityMsg:
+		// 	// 	if m.Console.Alert {
+		// 	// 		// l'alerte est toujours là, on relance la routine de sécurité pour un tour
+		// 	// 		return c, tea.Every(msg.Wait, m.Security)
+		// 	// 	}
 
-	// case tea.KeyMsg:
-	// 	if msg.Type == tea.KeyCtrlC {
-	// 		// quitter l'application client
-	// 		return m, tea.Quit
-	// 	}
+		// case tea.KeyMsg:
+		// 	if msg.Type == tea.KeyCtrlC {
+		// 		// quitter l'application client
+		// 		return m, tea.Quit
+		// 	}
 
-	// 	if msg.Type == tea.KeyEnter {
-	// 		// valider la commande
+		// 	if msg.Type == tea.KeyEnter {
+		// 		// valider la commande
 
-	// 		cmd = m.Run()
-	// 		m.input.Value = ""
-	// 		return m, cmd
-	// 	}
+		// 		cmd = m.Run()
+		// 		m.input.Value = ""
+		// 		return m, cmd
+		// 	}
 
-	// 	// viewport
-	// 	output, cmdOutput := m.output.Update(msg)
-	// 	m.output = output
+		// 	// viewport
+		// 	output, cmdOutput := m.output.Update(msg)
+		// 	m.output = output
 
-	// 	// laisser le prompt gérer
-	// 	input, cmdInput := m.input.Update(msg)
-	// 	m.input = input.(Input)
-	// 	return m, tea.Batch(cmdOutput, cmdInput
-	//	)
+		// 	// laisser le prompt gérer
+		// 	input, cmdInput := m.input.Update(msg)
+		// 	m.input = input.(Input)
+		// 	return m, tea.Batch(cmdOutput, cmdInput
+		//	)
 	}
 
 	return m, tea.Batch(cmds...)
@@ -241,9 +242,9 @@ func (m Monitor) connectionsView() string {
 	// As Register is build at each query, must loop each time
 	content += invertTextStyle.Width(m.width).Render(regHeader) + "\n"
 	for _, desc := range regMonitored {
-		serv, err := FindServer( desc.server )
+		serv, err := FindServer(desc.server)
 		if err != nil {
-			app.Log( "WARN register monitor : cannot find "+desc.server )
+			app.Log("WARN register monitor : cannot find " + desc.server)
 		} else {
 			var reg Register
 			//reg, err = serv.Register(desc.id, m.fakeUser)
@@ -251,7 +252,7 @@ func (m Monitor) connectionsView() string {
 			if err != nil {
 				msg := fmt.Sprintf("WARN register %d not found on %s",
 					desc.id, desc.server)
-				app.Log( msg )
+				app.Log(msg)
 			} else {
 				content += fmtRegister(reg) + "\n"
 			}

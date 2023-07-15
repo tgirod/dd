@@ -187,6 +187,7 @@ func PostWrite(ctx Context) any {
 	subject := ctx.Value("subject").(string)
 	content := ctx.Value("content").(string)
 
+	// FIXME TODO Somehow change the date so that we are in 2020
 	post := Post{
 		Server:  console.Server.Address,
 		Group:   group,

@@ -7,8 +7,9 @@
 * TODO formatter la lecture des Poste pour les lignes très longues ?
 * [/] interdire Forum sur certains serveur ?
 ** bool allowForum dans server ?
-* [0/3] ajouter Contenu depuis monitoring
-** TODO forum depuis fichier
+* [1/4] ajouter Contenu depuis monitoring
+** TODO mode cli, avec préservation de la DB temporaire ?
+** DONE forum depuis fichier
 ** TODO ajouter New registry
 ** TODO Messages
 * [/] Contenu Forum

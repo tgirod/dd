@@ -221,6 +221,21 @@ func (p Post) Dump() {
 	fmt.Printf("\n Content: [%v]", p.Content)
 }
 
+type YAMLAnswer struct {
+	Date    string
+	Author  string
+	Content string
+}
+type YAMLPost struct {
+	Server  string
+	Group   string
+	Date    string
+	Author  string
+	Subject string
+	Content string
+	Answers []YAMLAnswer
+}
+
 // TEST : serialize all Posts to YAML
 func SerializePosts(addr string) {
 	s, err := FindServer(addr)
@@ -240,6 +255,8 @@ func SerializePosts(addr string) {
 	if err != nil {
 		panic(err)
 	}
+	nowStr := time.Now().Format("2006-01-02T15:04:05")
+	fmt.Printf("--- Date %s\n", nowStr)
 	fmt.Printf("--- all posts:\n%s\n\n", d)
 }
 
@@ -250,24 +267,66 @@ func LoadPosts(path string) {
 		panic(err)
 	}
 
-	p := Post{}
-	p.Dump()
-	fmt.Printf("--- New Post:\n%v\n", p)
-
-	err = yaml.Unmarshal(buf, &p)
+	// FIXME TODO make sure we can add post in the server (Forum allowed)
+	var yamlPosts []YAMLPost
+	err = yaml.Unmarshal(buf, &yamlPosts)
 	if err != nil {
+		fmt.Printf("FATAL cannot unmarshal: %v\n", err)
 		panic(err)
 	}
-	fmt.Print("** Unmarshal\n")
-	p.Dump()
+	fmt.Printf("__READ Posts\n")
+	fmt.Printf("  read %d posts\n", len(yamlPosts))
 
-	post, err := Save(p)
-	if err != nil {
-		panic(err)
+	for _, yamlp := range yamlPosts {
+		fmt.Printf("__Post to %s:<%s> from [%s]\n", yamlp.Server, yamlp.Subject, yamlp.Author)
+		date, err := time.Parse("2006-01-02T15:04:05", yamlp.Date)
+		if err != nil {
+			fmt.Printf("FATAL cannot parse time: %v\n", err)
+			panic(err)
+		}
+		fmt.Printf("Date %v\n", date)
+
+		post := Post{
+			Server:  yamlp.Server,
+			Group:   yamlp.Group,
+			Date:    date,
+			Author:  yamlp.Author,
+			Subject: yamlp.Subject,
+			Content: yamlp.Content,
+		}
+		post, err = Save(post)
+		if err != nil {
+			fmt.Printf("FATAL cannot save post: %v\n", err)
+		}
+		fmt.Printf(" post saved\n")
+
+		fmt.Printf("Post has %d answers\n", len(yamlp.Answers))
+		// Answers
+		for _, yamla := range yamlp.Answers {
+			fmt.Printf("__Answer from [%s]\n", yamla.Author)
+			adate, err := time.Parse("2006-01-02T15:04:05", yamla.Date)
+			if err != nil {
+				fmt.Printf("FATAL cannot parse time: %v\n", err)
+				panic(err)
+			}
+			fmt.Printf("Date %v\n", adate)
+
+			answer := Post{
+				Server:  post.Server,
+				Group:   post.Group,
+				Parent:  post.ID,
+				Date:    adate,
+				Author:  yamla.Author,
+				Subject: fmt.Sprintf("Re: %s", post.Subject),
+				Content: yamla.Content,
+			}
+			answer, err = Save(answer)
+			if err != nil {
+				fmt.Printf("FATAL cannot save answer: %v\n", err)
+			}
+			fmt.Printf(" answer saved\n")
+		}
 	}
-
-	fmt.Print("** Saving\n")
-	post.Dump()
 }
 
 func (s Server) Post(id int) (Post, error) {

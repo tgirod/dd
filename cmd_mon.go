@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/asdine/storm/v3/q"
+	//"github.com/golang/protobuf/ptypes/any"
 )
 
 // Commands for Monitoring. Should only be available in Monitor
@@ -33,6 +34,7 @@ var sudo_id = Cmd{
 		},
 	},
 }
+
 func SudoListIdentity(ctx Context) any {
 	identities, err := Identities()
 	if err != nil {
@@ -51,7 +53,7 @@ func SudoTakeIdentity(ctx Context) any {
 	// Look for the corresponding password
 	identity, err := FindIdentity(wantedLogin)
 	if err != nil {
-		return ctx.Error(err )
+		return ctx.Error(err)
 	}
 	if err = ctx.Console().Identify(wantedLogin, identity.Password); err != nil {
 		return ctx.Error(err)
@@ -105,6 +107,7 @@ var sudo_msg = Cmd{
 		},
 	},
 }
+
 func SudoMsgFrom(ctx Context) any {
 	from := ctx.Value("from").(string)
 	messages, err := Find[Message](
@@ -175,6 +178,7 @@ var sudo_yes = Cmd{
 		},
 	},
 }
+
 func SudoYesList(ctx Context) any {
 	identities, err := Identities()
 	if err != nil {
@@ -227,6 +231,7 @@ func SudoYesHistory(ctx Context) any {
 	return ctx.Output(b.String())
 
 }
+
 // _forum manipuler les forum **************************************************
 var sudo_forum = Cmd{
 	name: "_forum",
@@ -239,12 +244,28 @@ var sudo_forum = Cmd{
 				help: "sauver les forum dans 'forum.yml'",
 				next: Run(SudoForumSave),
 			},
+			{
+				name: "load",
+				help: "load post from 'forum_new_post.yaml'",
+				next: String{
+					name: "file",
+					help: "fichier à charger",
+					next: Run(SudoForumLoad),
+				},
+			},
 		},
 	},
 }
+
 func SudoForumSave(ctx Context) any {
 	// TODO pour tous les serveurs
 	SerializePosts("dd.local")
 
 	return ctx.Output("Forum de dd.local sur stdout")
+}
+func SudoForumLoad(ctx Context) any {
+	// TODO
+	LoadPosts("forum_new_post.yaml")
+
+	return ctx.Output("Forum lut sur 'forum_new_post.yaml'")
 }

@@ -27,6 +27,7 @@ var regMonitored = []DescRegisterMonitor {
 }
 
 type Monitor struct {
+	fakeUser User
 	Client
 	startTime time.Time
 
@@ -38,6 +39,12 @@ func NewMonitor(startT time.Time,
 	sessions map[ssh.Session]*Console) *Monitor {
 
 	m := &Monitor{
+		fakeUser: User{
+			Login: "fake",
+			Server: "",
+			Backdoor: false,
+			Groups: []string{""},
+		},
 		Client:    *NewClient(width, height, true),
 		startTime: startT,
 		// width:     width,
@@ -239,6 +246,7 @@ func (m Monitor) connectionsView() string {
 			app.Log( "WARN register monitor : cannot find "+desc.server )
 		} else {
 			var reg Register
+			//reg, err = serv.Register(desc.id, m.fakeUser)
 			reg, err = serv.Register(desc.id, m.Client.Console.User)
 			if err != nil {
 				msg := fmt.Sprintf("WARN register %d not found on %s",

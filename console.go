@@ -204,6 +204,10 @@ func NewConsole(monitoring bool) *Console {
 	if (monitoring) {
 		return &Console{
 			Branch: MonCmds,
+			Session: &Session{},
+			DNI:     false,
+			Results: []Result{},
+			Alert:   false,
 		}
 	}
 	return &Console{

@@ -235,6 +235,149 @@ type YAMLPost struct {
 	Content string
 	Answers []YAMLAnswer
 }
+type YAMLMessage struct {
+	Date    string
+	From    string
+	To      string
+	Subject string
+	Content string
+}
+type YAMLTransaction struct {
+	From    string
+	To      string
+	Yes     int
+	Comment string
+}
+
+// *****************************************************************************
+// Load/Save Transactions **********************************************************
+// *****************************************************************************
+func SerializeTransactions() {
+
+	transactions, err := Find[Transaction]()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, t := range transactions {
+		fmt.Printf("--- Dump Transaction:")
+		fmt.Printf("\n ID: [%d]", t.ID)
+		fmt.Printf("\n From: [%s]", t.From)
+		fmt.Printf("\n To: [%s]", t.To)
+		fmt.Printf("\n YES: [%d]", t.Yes)
+		fmt.Printf("\n Comment: [%v]", t.Comment)
+	}
+
+	// all transactiouns
+	d, err := yaml.Marshal(transactions)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("--- all transactions:\n%s\n\n", d)
+}
+
+func LoadTransactions(path string) {
+	buf, err := ioutil.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	var yamlTransactions []YAMLTransaction
+	err = yaml.Unmarshal(buf, &yamlTransactions)
+	if err != nil {
+		fmt.Printf("FATAL cannot unmarshal: %v\n", err)
+		panic(err)
+	}
+	fmt.Printf("__READ Transactions\n")
+	fmt.Printf("  read %d trans\n", len(yamlTransactions))
+
+	for _, yamlt := range yamlTransactions {
+		fmt.Printf("__Trans from [%s] to %s: <%d\n", yamlt.From, yamlt.To, yamlt.Yes)
+
+		trans := Transaction{
+			From:    yamlt.From,
+			To:      yamlt.To,
+			Yes:     yamlt.Yes,
+			Comment: yamlt.Comment,
+		}
+		_, err = Save(trans)
+		if err != nil {
+			fmt.Printf("FATAL cannot save trans: %v\n", err)
+		}
+		fmt.Printf(" trans saved\n")
+	}
+}
+
+// *****************************************************************************
+// Load/Save Messages **********************************************************
+// *****************************************************************************
+func SerializeMessages() {
+
+	msges, err := Find[Message]()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, m := range msges {
+		fmt.Printf("--- Dump Message:")
+		fmt.Printf("\n ID: [%d]", m.ID)
+		fmt.Printf("\n From: [%d]", m.From)
+		fmt.Printf("\n To: [%s]", m.To)
+		fmt.Printf("\n Date: [%s]", m.Date)
+		fmt.Printf("\n Subject: [%s]", m.Subject)
+		fmt.Printf("\n Content: [%v]", m.Content)
+	}
+
+	// all messages
+	d, err := yaml.Marshal(msges)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("--- all messages:\n%s\n\n", d)
+}
+func LoadMessages(path string) {
+	buf, err := ioutil.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	var yamlMessages []YAMLMessage
+	err = yaml.Unmarshal(buf, &yamlMessages)
+	if err != nil {
+		fmt.Printf("FATAL cannot unmarshal: %v\n", err)
+		panic(err)
+	}
+	fmt.Printf("__READ Messages\n")
+	fmt.Printf("  read %d msg\n", len(yamlMessages))
+
+	for _, yamlm := range yamlMessages {
+		fmt.Printf("__Msg from [%s] to %s: <ùs>from [%s]\n", yamlm.From, yamlm.To, yamlm.Subject)
+		date, err := time.Parse("2006-01-02T15:04:05", yamlm.Date)
+		if err != nil {
+			fmt.Printf("FATAL cannot parse time: %v\n", err)
+			panic(err)
+		}
+		fmt.Printf("Date %v\n", date)
+
+		msg := Message{
+			Date:    date,
+			From:    yamlm.From,
+			To:      yamlm.To,
+			Subject: yamlm.Subject,
+			Content: yamlm.Content,
+			Opened:  false,
+		}
+		_, err = Save(msg)
+		if err != nil {
+			fmt.Printf("FATAL cannot save msg: %v\n", err)
+		}
+		fmt.Printf(" msg saved\n")
+	}
+}
+
+// *****************************************************************************
+// Load/Save Forum *************************************************************
+// *****************************************************************************
 
 // TEST : serialize all Posts to YAML
 func SerializePosts(addr string) {

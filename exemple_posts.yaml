@@ -1,0 +1,45 @@
+# Exemple de fichier permettant d'ajouter des posts dans les différents forum de la "toile"
+# toute ligne qui commence par # est un commentaire.
+# *** ATTENTION *** les ordis sont bête alors il faut respecter la syntaxe,
+#                   sinon ça va nous faire du taf à Tomtom et moi :o)
+#
+# une liste de post où chaque post commence par un '-'
+# et le reste des champs à remplir sont indentés avec 2 espaces
+# un post peut avoir plusieurs 'answer' qui seront alors indentée avec 4 espace.
+#
+# server: un nom de serveur, souvent dd.local
+# group: est-ce que le post est dans un group particulier? Dans le doute mettez ""
+# les Dates DOIVENT respecter le format, et pensez qu'on joue en **2020**
+# author est un login de personnage.
+# subject est le titre du post
+# content est le contenu du post.
+# si votre message fait plusieurs lignes, mettez un '|' et commencez tout le texte qui suit,
+# avec les passage à la ligne, après **4** espaces. Comme sur les exemples.
+- server: dd.local
+  group: ""
+  date: 2019-07-20T12:12:30
+  author: crunch
+  subject: Test ajout yaml
+  content: avec une seule ligne, plein de réponses sont attendues
+# les réponses sont une liste de 'answers', comme suit
+# ca ressemble à des posts mais avec moins de choses à remplir.
+  answers:
+  - date: 2023-07-21T12:12:30
+    author: jesus
+    content: On la ramène moins
+  - date: 2023-07-21T15:03:30
+    author: crunch
+    content: |
+      Je m'en fiche pas mal de votre truc, du moment qu'il y a une longue, looooooooooooooooonnnnnnnnngueeee, ligne
+      Non mais
+# un autre post, sans 'answers' => les [] sont nécessaires
+- server: dd.local
+  group: ""
+  date: 2023-07-20T12:37:33
+  author: jesus
+  subject: Test ajout yaml longue lignes
+  content: |
+    Une ligne courte, n° 1
+    Et une ligne longue, longue, longue, longue, longue, longue, longue, longue, longue, longue, longue,
+    Et la fin
+  answers: []

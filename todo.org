@@ -7,11 +7,13 @@
 * TODO formatter la lecture des Poste pour les lignes très longues ?
 * [/] interdire Forum sur certains serveur ?
 ** bool allowForum dans server ?
-* [1/4] ajouter Contenu depuis monitoring
-** TODO mode cli, avec préservation de la DB temporaire ?
+* [3/6] ajouter Contenu depuis monitoring
+** DONE mode cli, avec préservation de la DB temporaire ?
 ** DONE forum depuis fichier
 ** TODO ajouter New registry
-** TODO Messages
+** TODO editer Msg/Post/Transaction
+** TODO kill Msg/Post/Transaction
+** DONE Messages
 * [/] Contenu Forum
 ** Kramps
 ** Green glass

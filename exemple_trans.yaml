@@ -1,0 +1,23 @@
+# Exemple de fichier permettant d'ajouter des transaction bancaire sur la "toile"
+# toute ligne qui commence par # est un commentaire.
+# *** ATTENTION *** les ordis sont bête alors il faut respecter la syntaxe,
+#                   sinon ça va nous faire du taf à Tomtom et moi :o)
+#
+# une liste de paiement où chaque paiment commence par un '-'
+# et le reste des champs à remplir sont indentés avec 2 espaces
+# 'from' et 'to' sont des login de personnages.
+- from: admin
+  to: jesus
+  "yes": 66
+  comment: Cadeau
+# on peut aussi avoir de l'argent de nulle part (dépot à la banque, mise de départ, etc)
+# les "" dans le 'from:' sont indispensables
+- from: ""
+  to: crunch
+  "yes": 88
+  comment: report du solde
+# et ne pas faire de commentaire: les "" sont indispensable alors
+- from: ""
+  to: crunch
+  "yes": 88
+  comment: ""

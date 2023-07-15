@@ -1,0 +1,25 @@
+# Exemple de fichier permettant d'ajouter des messages entre joueurs sur la "toile"
+# toute ligne qui commence par # est un commentaire.
+# *** ATTENTION *** les ordis sont bête alors il faut respecter la syntaxe,
+#                   sinon ça va nous faire du taf à Tomtom et moi :o)
+#
+# une liste de messages où chaque message commence par un '-'
+# et le reste des champs à remplir sont indentés avec 2 espaces
+# 'from' et 'to' sont des login de personnages.
+# les Dates DOIVENT respecter le format, et pensez qu'on joue en **2020**
+# si votre message fait plusieurs lignes, mettez un '|' et commencez tout le texte qui suit,
+# avec les passage à la ligne, après **4** espaces. Comme sur les exemples.
+- from: jesus
+  to: crunch
+  date: 2020-03-15T15:03:47
+  subject: New Msg
+  content: |
+    Pour voir ce que ça donne.
+    Faudrait aussi des loooooonnnnnnggggguuuuuuuueeeeeeesssss lignes, non ? Pour être sur que ça marche vraiment.
+    Hop
+- from: crunch
+  to: jesus
+  date: 2020-04-05T15:05:15
+  subject: 'Re: New Msg'
+  content: |
+    Une réponse comme une autre.

@@ -164,6 +164,7 @@ var MonCmds = Branch{
 		sudo_id,
 		sudo_msg,
 		sudo_yes,
+		sudo_forum,
 		back,
 		yes,
 		connect,

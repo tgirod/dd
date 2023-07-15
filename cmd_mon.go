@@ -227,3 +227,24 @@ func SudoYesHistory(ctx Context) any {
 	return ctx.Output(b.String())
 
 }
+// _forum manipuler les forum **************************************************
+var sudo_forum = Cmd{
+	name: "_forum",
+	help: "manipuler les forum (save, load)",
+	next: Branch{
+		name: "action",
+		cmds: []Cmd{
+			{
+				name: "save",
+				help: "sauver les forum dans 'forum.yml'",
+				next: Run(SudoForumSave),
+			},
+		},
+	},
+}
+func SudoForumSave(ctx Context) any {
+	// TODO pour tous les serveurs
+	SerializePosts("dd.local")
+
+	return ctx.Output("Forum de dd.local sur stdout")
+}

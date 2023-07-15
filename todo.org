@@ -1,0 +1,17 @@
+#+title:Todo
+* DONE quit : perd pas login si pas connecté
+* DONE imp reste même quand déconnecté
+* DONE affiche pas toujours les droits de jesus ou crunch
+* DONE crunch, souvent pas les droits
+* DONE version admin : liens indiquent pas les serveur
+* TODO formatter la lecture des Poste pour les lignes très longues ?
+* [/] interdire Forum sur certains serveur ?
+** bool allowForum dans server ?
+* [0/3] ajouter Contenu depuis monitoring
+** TODO forum depuis fichier
+** TODO ajouter New registry
+** TODO Messages
+* [/] Contenu Forum
+** Kramps
+** Green glass
+**

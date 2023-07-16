@@ -1,0 +1,31 @@
+# Exemple de fichier permettant d'ajouter des registres dans différents serveurs
+# toute ligne qui commence par # est un commentaire.
+# *** ATTENTION *** les ordis sont bête alors il faut respecter la syntaxe,
+#                   sinon ça va nous faire du taf à Tomtom et moi :o)
+#
+# une liste de registry où chaque registry commence par un '-'
+# et le reste des champs à remplir sont indentés avec 2 espaces
+# un registry **DOIT**peut avoir plusieurs 'options' qui seront alors
+# indentée avec 4 espace.
+#
+# server: un nom de serveur, souvent dd.local
+# group: est-ce que le post est dans un group particulier? Dans le doute mettez ""
+# description: sur une ligne
+# state: ça doit être une des options
+# options : les différentes options possibles pour ce registre
+- server: dd.local
+  group: ""
+  description: ondulateur de secours N°1
+  state: off
+  options:
+  - off
+  - on
+  - kaput
+- server: dd.local
+  group: ""
+  description: Proxy tampon endurcis
+  state: neutral
+  options:
+  - off
+  - on
+  - neutral

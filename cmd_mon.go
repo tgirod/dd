@@ -1,12 +1,15 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/asdine/storm/v3/q"
 	//"github.com/golang/protobuf/ptypes/any"
 )
+
+var errWatchIDNotFound = errors.New("No watched Registry with such ID")
 
 // Commands for Monitoring. Should only be available in Monitor
 
@@ -268,4 +271,78 @@ func SudoForumLoad(ctx Context) any {
 	LoadPosts("forum_new_post.yaml")
 
 	return ctx.Output("Forum lut sur 'forum_new_post.yaml'")
+}
+
+// _reg manipuler les forum **************************************************
+var sudo_reg = Cmd{
+	name: "_reg",
+	help: "manipuler les reg (watch, unwatch)",
+	next: Branch{
+		name: "action",
+		cmds: []Cmd{
+			{
+				name: "watch",
+				help: "ajouter un registre à surveiller",
+				next: Number{
+					name: "id",
+					help: "id du registre",
+					next: Run(SudoRegWatch),
+				},
+			},
+			{
+				name: "unwatch",
+				help: "ajouter un registre à surveiller",
+				next: Number{
+					name: "id",
+					help: "id du registre",
+					next: Run(SudoRegUnwatch),
+				},
+			},
+		},
+	},
+}
+
+func SudoRegWatch(ctx Context) any {
+	wantedId := ctx.Value("id").(int)
+	reg, err := First[Register](q.Eq("ID", wantedId))
+	if err != nil {
+		return ctx.Error(err)
+	}
+
+	// add to watch list if not already in
+	_, err = FindWatchPos(wantedId)
+	if err != nil {
+		regMonitoredID = append(regMonitoredID, wantedId)
+	} else {
+		return ctx.Output("This Registry is already WATCHED")
+	}
+	fmt.Printf("WATCH reg %v\n", reg)
+
+	return ctx.Output("WATCH reg")
+}
+func SudoRegUnwatch(ctx Context) any {
+	wantedId := ctx.Value("id").(int)
+	reg, err := First[Register](q.Eq("ID", wantedId))
+	if err != nil {
+		return ctx.Error(err)
+	}
+
+	// remove if already watched
+	pos, err := FindWatchPos(wantedId)
+	if err != nil {
+		return ctx.Output("This Registry IS NOT WATCHED")
+	} else {
+		regMonitoredID = append(regMonitoredID[:pos], regMonitoredID[pos+1:]...)
+	}
+	fmt.Printf("UNWATCH reg %v\n", reg)
+
+	return ctx.Output("UNWATCH reg")
+}
+func FindWatchPos(regID int) (int, error) {
+	for pos, id := range regMonitoredID {
+		if id == regID {
+			return pos, nil
+		}
+	}
+	return -1, errWatchIDNotFound
 }

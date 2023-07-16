@@ -248,9 +248,57 @@ type YAMLTransaction struct {
 	Yes     int
 	Comment string
 }
+type YAMLRegister struct {
+	Server      string
+	Group       string
+	Description string
+	State       string
+	Options     []string
+}
 
 // *****************************************************************************
-// Load/Save Transactions **********************************************************
+// Load/Save Registry **********************************************************
+// *****************************************************************************
+func LoadRegistries(path string) {
+	buf, err := ioutil.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	var yamlRegs []YAMLRegister
+	err = yaml.Unmarshal(buf, &yamlRegs)
+	if err != nil {
+		fmt.Printf("FATAL cannot unmarshal: %v\n", err)
+		panic(err)
+	}
+	fmt.Printf("__READ Registres\n")
+	fmt.Printf("  read %d regs\n", len(yamlRegs))
+
+	for _, yamlr := range yamlRegs {
+		fmt.Printf("__Registry in [%s], desc: %s => <%s>\n", yamlr.Server, yamlr.Description, yamlr.State)
+
+		var options []RegisterState
+		for _, rs := range yamlr.Options {
+			options = append(options, RegisterState(rs))
+		}
+		reg := Register{
+			Server:      yamlr.Server,
+			Group:       yamlr.Group,
+			Description: yamlr.Description,
+			State:       RegisterState(yamlr.State),
+			Options:     options,
+		}
+		//fmt.Printf("REG %v\n", reg)
+		_, err = Save(reg)
+		if err != nil {
+			fmt.Printf("FATAL cannot save reg: %v\n", err)
+		}
+		fmt.Printf(" reg saved\n")
+	}
+}
+
+// *****************************************************************************
+// Load/Save Transactions ******************************************************
 // *****************************************************************************
 func SerializeTransactions() {
 

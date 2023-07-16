@@ -33,7 +33,7 @@ type Console struct {
 }
 
 type Session struct {
-	Server                  // serveur auquel la session se réfère
+	Server                  // serveur auquel la session seréfère
 	User                    // compte utilisateur actif dans ce serveur
 	Identity                // identité active dans la session
 	Countdown time.Duration // temps restant avant déconnexion
@@ -165,6 +165,7 @@ var MonCmds = Branch{
 		sudo_msg,
 		sudo_yes,
 		sudo_forum,
+		sudo_reg,
 		back,
 		yes,
 		connect,

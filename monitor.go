@@ -12,6 +12,7 @@ import (
 	lg "github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/ssh"
 	//"github.com/muesli/reflow/wordwrap"
+	"github.com/asdine/storm/v3/q"
 )
 
 const sizeConnexionMonitor = 5
@@ -23,9 +24,8 @@ type DescRegisterMonitor struct {
 	id     int
 }
 
-var regMonitored = []DescRegisterMonitor{
-	{"dd.local", 1},
-}
+// list IDs of monitor watched
+var regMonitoredID = []int{1}
 
 type Monitor struct {
 	fakeUser User
@@ -241,21 +241,13 @@ func (m Monitor) connectionsView() string {
 
 	// As Register is build at each query, must loop each time
 	content += invertTextStyle.Width(m.width).Render(regHeader) + "\n"
-	for _, desc := range regMonitored {
-		serv, err := FindServer(desc.server)
+	for _, regID := range regMonitoredID {
+		reg, err := First[Register](q.Eq("ID", regID))
 		if err != nil {
-			app.Log("WARN register monitor : cannot find " + desc.server)
+			msg := fmt.Sprintf("WARN register %d not found", regID)
+			app.Log(msg)
 		} else {
-			var reg Register
-			//reg, err = serv.Register(desc.id, m.fakeUser)
-			reg, err = serv.Register(desc.id, m.Client.Console.User)
-			if err != nil {
-				msg := fmt.Sprintf("WARN register %d not found on %s",
-					desc.id, desc.server)
-				app.Log(msg)
-			} else {
-				content += fmtRegister(reg) + "\n"
-			}
+			content += fmtRegister(reg) + "\n"
 		}
 	}
 

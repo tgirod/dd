@@ -147,14 +147,15 @@ func fmtConnexion(c *Console) string {
 
 // Formate info registers sur une ligne
 var (
-	regHeader = "Serveur___ Description______________ ___Value"
+	regHeader = "ID__ Serveur___ Description________________________ __________Value"
 
 	// formatter
+	rLenID     = 4
 	rLenServer = 10
-	rLenDesc   = 25
-	rLenValue  = 8
+	rLenDesc   = 35
+	rLenValue  = 15
 
-	sReg = "%-10s %-25s %8s"
+	sReg = "%4d %-10s %-35s %15s"
 )
 
 func fmtRegister(r Register) string {
@@ -172,6 +173,6 @@ func fmtRegister(r Register) string {
 		value = value[:rLenValue-2] + ".."
 	}
 
-	reg := fmt.Sprintf(sReg, server, desc, value)
+	reg := fmt.Sprintf(sReg, r.ID, server, desc, value)
 	return reg
 }

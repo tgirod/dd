@@ -282,7 +282,7 @@ func (c *Client) RenderOutput() {
 
 		if e.Output != "" {
 			fmt.Fprintf(&b, "%s\n\n",
-				outputStyle.MaxWidth(c.width).Render(e.Output))
+				outputStyle.MaxWidth(c.width).Render(wrapLines(e.Output, c.width)))
 		}
 
 		if e.Error != nil {
@@ -330,4 +330,17 @@ func MsgToCmd(msg tea.Msg) tea.Cmd {
 	return func() tea.Msg {
 		return msg
 	}
+}
+func wrapLines(longLine string, maxLength int) string {
+	lines := strings.Split(longLine, "\n")
+
+	b := strings.Builder{}
+	for _, l := range lines {
+		for lg.Width(l) > maxLength {
+			fmt.Fprintf(&b, "%s\n", l[:maxLength])
+			l = l[maxLength:]
+		}
+		fmt.Fprintf(&b, "%s\n", l)
+	}
+	return b.String()
 }

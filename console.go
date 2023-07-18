@@ -132,6 +132,7 @@ func (r Result) String() string {
 	return b.String()
 }
 
+// FIXME codes hexa pour le chargement des commandes spéciales ?
 var Hack = map[string]Cmd{
 	"jack":  jack,
 	"evade": evade,

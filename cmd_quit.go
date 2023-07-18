@@ -2,8 +2,7 @@ package main
 
 var quit = Cmd{
 	name:      "quit",
-	help:      "ferme la connexion au serveur courant",
-	// connected: true,
+	help:      "ferme la connexion et efface les programmes chargés",
 	connected: false,
 	next:      Run(Quit),
 }

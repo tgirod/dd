@@ -4,7 +4,7 @@
 * DONE affiche pas toujours les droits de jesus ou crunch
 * DONE crunch, souvent pas les droits
 * DONE version admin : liens indiquent pas les serveur
-* TODO formatter la lecture des Poste pour les lignes très longues ?
+* DONE formatter la lecture des Poste pour les lignes très longues ?
 * [/] interdire Forum sur certains serveur ?
 ** bool allowForum dans server ?
 * [3/6] ajouter Contenu depuis monitoring
@@ -14,7 +14,18 @@
 ** TODO editer Msg/Post/Transaction
 ** TODO kill Msg/Post/Transaction
 ** DONE Messages
-* [/] Contenu Forum
+* [0/0] Contenu Forum
 ** Kramps
+- liste de gardiens : Code - Nom Prénom / Date Naiss / ref bizarre
+- liste de prisonniers : Code - Nom Prénom / Date Nass / ref bizarre
+- liste de lieux : AC1/AC2/AC4/DZ/RR/CE
+- horaires : 10/14/16/20
+=> registry : code x heure = AC1 | AC2 | AC3 | DZ | RR | CE
+** Casier Judiciaire
 ** Green glass
 **
+** dd.local => peut dire qu'il y a un crash qui a éradiqué certaines infos
+** bon district => antenne récente, et donc peu d'annonces
+** id externes, pour payer/acheter/communiquer
+- contacts de La Fouine
+** Architecture du réseau

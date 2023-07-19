@@ -369,7 +369,7 @@ func SerializeMessages() {
 	for _, m := range msges {
 		fmt.Printf("--- Dump Message:")
 		fmt.Printf("\n ID: [%d]", m.ID)
-		fmt.Printf("\n From: [%d]", m.From)
+		fmt.Printf("\n From: [%s]", m.From)
 		fmt.Printf("\n To: [%s]", m.To)
 		fmt.Printf("\n Date: [%s]", m.Date)
 		fmt.Printf("\n Subject: [%s]", m.Subject)

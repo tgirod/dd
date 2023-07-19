@@ -132,6 +132,7 @@ func (r Result) String() string {
 	return b.String()
 }
 
+// FIXME codes hexa pour le chargement des commandes spéciales ?
 var Hack = map[string]Cmd{
 	"jack":  jack,
 	"evade": evade,
@@ -256,21 +257,9 @@ func (c *Console) Disconnect() {
 	c.Alert = false
 	c.DNI = false
 
-	// BUG
-	// c.Branch = baseCmds
-	// instead remove Hackers Cmds from Branch, they should be at the end
-	id := len(c.Branch.cmds) - 1
-	clean := false
-	for id >= 0 && !clean {
-		_, ok := Hack[c.Branch.cmds[id].name]
-		if ok { // it is a Hack Cmd
-			// remove last element
-			c.Branch.cmds = c.Branch.cmds[:id]
-			id = id - 1
-		} else {
-			clean = true
-		}
-	}
+	// maintenant qu'on a fixé le nombre de commandes de base à 12, on peut retirer
+	// les commandes de hack en raccourcissant la liste.
+	c.Branch.cmds = c.Branch.cmds[0:12]
 
 	// affichage par défaut
 	eval := Result{

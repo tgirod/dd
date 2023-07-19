@@ -15,7 +15,7 @@
 ** TODO kill Msg/Post/Transaction
 ** DONE Messages
 * [0/0] Contenu Forum
-** Kramps
+** Kramps => en cours dans contenu
 - liste de gardiens : Code - Nom Prénom / Date Naiss / ref bizarre
 - liste de prisonniers : Code - Nom Prénom / Date Nass / ref bizarre
 - liste de lieux : AC1/AC2/AC4/DZ/RR/CE

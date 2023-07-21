@@ -121,7 +121,7 @@ func SudoAddIdentity(ctx Context) any {
 		return ctx.Error(errLoginExists)
 	}
 
-	newId := Identity{wantedLogin, wantedPass, wantedName}
+	newId := Identity{wantedLogin, wantedPass, wantedName, true}
 	_, err = Save(newId)
 	if err != nil {
 		return ctx.Error(err)

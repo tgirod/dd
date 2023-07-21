@@ -39,6 +39,7 @@ var (
 	errForumUnreachable   = errors.New("Forum inatteignable")
 	errTopicExists        = errors.New("TOPIC existe déjà")
 	errPostNotFound       = errors.New("Post introuvable")
+	errNoBankAccount      = errors.New("pas de compte en banque associé à cette identité")
 )
 
 type App struct {

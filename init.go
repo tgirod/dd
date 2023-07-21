@@ -187,6 +187,8 @@ var (
 
 	// PNJs
 	afrieman = Identity{"afrieman", "far3ik", "Anton Frieman"} // PNJ fan blackwave
+	// TODO quelques employé•e•s de la kramps
+	// TODO quelques employé•e•s de legba voodoocom
 )
 
 // identités virtuelles fournies par Jésus et le FLR

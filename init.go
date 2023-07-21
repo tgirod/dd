@@ -142,6 +142,54 @@ var d22 = Server{
 	Security:    SEC3,
 }
 
+// identités corpo recopiées depuis l'ancienne version
+// TODO remplacer les mdp
+var (
+	amathison   = Identity{"amathison", "GGCGGTAGCCCCTCTCGAGC", "Alan Mathison"}
+	mmathison   = Identity{"mmathison", "GGCCAAAGCTCCTTCGGAGC", "Mélody Mathison"}
+	jdoe7624    = Identity{"jdoe7624", "CCGCGCAGAATCATAGCTGT", "John Doe 7624"}
+	mbellamy    = Identity{"mbellamy", "CAAAGTTCTAGGCATAGGGA", "Margherita Bellamy"}
+	sbronner    = Identity{"sbronner", "TTAGCTCGATATCCTAACCC", "Sebastian Bronner"}
+	cbellamy    = Identity{"cbellamy", "GAACTGCTTTAGTTGACGGA", "Camélia Bellamy"}
+	jvillanova  = Identity{"jvillanova", "TGAAAGAGACATGATGCCTT", "Julius Villanova"}
+	ecanto      = Identity{"ecanto", "TCTGAGGTTTATTGATTTCG", "Eddy Canto"}
+	ejohannesen = Identity{"ejohannesen", "TTCGGGATTACTGCGTGCTG", "Edwin Johannesen"}
+	jbranson    = Identity{"jbranson", "GGAGGACACCCCAAACGCAT", "Jonathan Branson"}
+	jmfright    = Identity{"jmfright", "GCCCTTGTCATGTACTTAGT", "John Mac Fright"}
+	skmihalec   = Identity{"skmihalec", "CTGTCACCCAATCTACAGCG", "Sylvia Kemija Mihalec"}
+	emartin     = Identity{"emartin", "CTGTTGTAGTGACATGTTTC", "Eva Martin"}
+	mdubian     = Identity{"mdubian", "AACCTTGGGCACGGTCGGTA", "Michael Dubian"}
+	cmihalec    = Identity{"cmihalec", "CCCGCGGGCAAAGCTGACAG", "Carlotta Mihalec"}
+	jdoe        = Identity{"jdoe", "GGGTCTATAGGTCAAACGGT", "Jane Doe 2645"}
+	rmichu      = Identity{"rmichu", "GTCACAAGGTTGTTTAATGG", "Raoul Michu"}
+	rglass      = Identity{"rglass", "ATGCCTACCTCCAATGATTA", "Rupert Glass"}
+	sglass      = Identity{"sglass", "ATCGCTACGTCCATAGACTA", "Steffie Glass"}
+	djohannesen = Identity{"djohannesen", "CGGGAGACACGTTCAGTCTT", "Daisy Johannesen"}
+	dbonenfant  = Identity{"dbonenfant", "GCATGGCCGAATTCCTCATT", "Désiré Bonenfant"}
+	hproskychev = Identity{"hproskychev", "CGATTTGTATTGGATACGGA", "Harald Proskychev"}
+	njasinski   = Identity{"njasinski", "ACGAACCTAGAGCCGCACGC", "Nikole Jasinski"}
+	sjasinski   = Identity{"sjasinski", "ACGAGTAGAGATGTACACGC", "Stefan Jasinski"}
+	ffceline    = Identity{"ffceline", "CGCTCCCATTTCATGTCAGC", "Franz-Ferdinand Celine"}
+	cmills      = Identity{"cmills", "TTTGGGAGAAGCTTATGCAC", "Camélia Mills"}
+	lseptembre  = Identity{"lseptembre", "ATATGTTGAGCGTAAAGGCG", "Lilas Septembre"}
+	edubian     = Identity{"edubian", "CCATCCGGCGGACCTTATGC", "Eloïse Dubian"}
+	zabasolo    = Identity{"zabasolo", "GACGGGATACCTACTCTCGA", "Zilmir Abasolo"}
+	ebranson    = Identity{"ebranson", "ATTCCGACTCAGGGTACCGG", "Elisabeth Branson"}
+	jkievain    = Identity{"jkievain", "TGGCGTCTCTAATTCTTGCC", "Jordan Kievain"}
+	fmanson     = Identity{"fmanson", "TTCAAGCTGAATATGAAAGG", "Frédéric Manson"}
+	rkievain    = Identity{"rkievain", "GTCAAATCTGAGACTCTTGC", "Rodolph Kievain"}
+	pdoberty    = Identity{"pdoberty", "TGAAAGAGACAGTATGCCGT", "Pete Doberty"}
+	ajolivet    = Identity{"ajolivet", "TTCGACTGAATGTTTGATGT", "Adrien Jolivet"}
+	jvazzanna   = Identity{"jvazzanna", "TATCGACGCACGGGACTTGG", "Joseph Vazzanna"}
+	mklebert    = Identity{"mklebert", "CGAGAAATGACAGAGTTGTA", "Mickael Klebert"}
+	pjolivet    = Identity{"pjolivet", "GGGTGATCTGTTGCCCCCTG", "Paula Jolivet"}
+	rjolivet    = Identity{"rjolivet", "AACTGACGGATTCGATCATG", "Ringo Jolivet"}
+	gchang      = Identity{"gchang", "GTTTGCACGGAACATGCAAC", "Georges Chang"}
+	jkolinsky   = Identity{"jkolinsky", "GACCCGTATTTCGCTGATTG", "Jeanne Kolinsky"}
+	rwhite      = Identity{"rwhite", "TCAGCTTCTAACGTTCGGGA", "Richard White"}
+	afrieman    = Identity{"afrieman", "ACGTTGCAAACCTGGTACGT", "Anton Frieman"}
+)
+
 func Init() {
 	log.Println("réinitialisation de la base de données")
 

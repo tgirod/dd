@@ -6,17 +6,19 @@ import (
 	"strings"
 
 	"github.com/asdine/storm/v3/q"
+	"github.com/lithammer/fuzzysearch/fuzzy"
 	//"github.com/golang/protobuf/ptypes/any"
 )
 
 var errWatchIDNotFound = errors.New("No watched Registry with such ID")
+var errLoginExists = errors.New("Login existe déjà")
 
 // Commands for Monitoring. Should only be available in Monitor
 
 // _id manipuler identités *****************************************************
 var sudo_id = Cmd{
 	name: "_id",
-	help: "manipuler les identités (list, take)",
+	help: "manipuler les identités (list, search <exp>, take, add <Login Pass Name>)",
 	next: Branch{
 		name: "_id_action",
 		cmds: []Cmd{
@@ -32,6 +34,32 @@ var sudo_id = Cmd{
 					name: "login",
 					help: "login de l'identité",
 					next: Run(SudoTakeIdentity),
+				},
+			},
+			{
+				name: "search",
+				help: "rechercher dans les Login et Name de manière 'intelligente'",
+				next: String{
+					name: "expression",
+					help: "expression à rechercher dans les Identity",
+					next: Run(SudoSearchIdentity),
+				},
+			},
+			{
+				name: "add",
+				help: "ajoute une Id (Login, Password, Name)",
+				next: String{
+					name: "login",
+					help: "new Login",
+					next: String{
+						name: "password",
+						help: "new password",
+						next: Text{
+							name: "name",
+							help: "Name of the Identity",
+							next: Run(SudoAddIdentity),
+						},
+					},
 				},
 			},
 		},
@@ -64,6 +92,42 @@ func SudoTakeIdentity(ctx Context) any {
 
 	return ctx.Result(nil,
 		fmt.Sprintf("vous êtes identifié en tant que %s", wantedLogin))
+}
+func SudoSearchIdentity(ctx Context) any {
+	exp := ctx.Value("expression").(string)
+
+	identities, err := Identities()
+	if err != nil {
+		return ctx.Error(err)
+	}
+
+	b := strings.Builder{}
+	for _, id := range identities {
+		msLogin := fuzzy.MatchNormalizedFold(exp, id.Login)
+		msName := fuzzy.MatchNormalizedFold(exp, id.Name)
+		if msLogin || msName {
+			fmt.Fprintf(&b, "%+v\n", id)
+		}
+	}
+	return ctx.Output(b.String())
+}
+func SudoAddIdentity(ctx Context) any {
+	wantedLogin := ctx.Value("login").(string)
+	wantedPass := ctx.Value("password").(string)
+	wantedName := ctx.Value("name").(string)
+
+	_, err := FindIdentity(wantedLogin)
+	if err == nil {
+		return ctx.Error(errLoginExists)
+	}
+
+	newId := Identity{wantedLogin, wantedPass, wantedName}
+	_, err = Save(newId)
+	if err != nil {
+		return ctx.Error(err)
+	}
+	return ctx.Result(nil,
+		fmt.Sprintf("Ajout de Login %s for %s\n", wantedLogin, wantedName))
 }
 
 // _msg manipuler les messages *************************************************

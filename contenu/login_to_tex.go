@@ -1,145 +1,17 @@
 package main
 
 import (
-	"log"
+	"fmt"
 )
 
-const (
-	SEC1 int = iota
-	SEC2
-	SEC3
-	SEC4
-	SEC5
-)
+// Utilisation pour générer login_card.pdf
+// go run login_to_tex.go > login_list.tex
+// latexmk -pdf login_card.tex
 
-func InitNetwork(
-	identities []Identity,
-	transactions []Transaction,
-) {
-	log.Println("identités")
-	for _, i := range identities {
-		log.Println("\t", i.Login)
-		if _, err := Save(i); err != nil {
-			log.Fatalf("%v : %v\n", i, err)
-		}
-	}
-
-	log.Println("transactions")
-	for _, t := range transactions {
-		log.Println("\t", t.From, t.To, t.Yes)
-		if _, err := Save(t); err != nil {
-			log.Fatalf("%v : %v\n", t, err)
-		}
-	}
-}
-
-func InitServer(
-	s Server,
-	users []User,
-	links []Link,
-	registers []Register,
-	posts []Post,
-) {
-	addr := s.Address
-	if addr == "" {
-		panic("le serveur n'a pas d'adresse")
-	}
-
-	log.Println("server", s.Address)
-	if _, err := Save(s); err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("users")
-	for _, a := range users {
-		log.Println("\t", a.Login)
-		a.Server = addr
-		if _, err := Save(a); err != nil {
-			log.Fatalf("%v : %v\n", a, err)
-		}
-	}
-	log.Println("links")
-	for _, l := range links {
-		log.Println("\t", l.Address)
-		l.Server = addr
-		if _, err := Save(l); err != nil {
-			log.Fatalf("%v : %v\n", l, err)
-		}
-	}
-	log.Println("registers")
-	for _, r := range registers {
-		log.Println("\t", r.Description)
-		r.Server = addr
-		if _, err := Save(r); err != nil {
-			log.Fatalf("%v : %v\n", r, err)
-		}
-	}
-	log.Println("posts")
-	for _, p := range posts {
-		log.Println("\t", p.Subject)
-		p.Server = addr
-		if _, err := Save(p); err != nil {
-			log.Fatalf("%v : %v\n", p, err)
-		}
-	}
-}
-
-func Reset() {
-	db.Drop(Identity{})
-	db.Drop(Message{})
-	db.Drop(Server{})
-	db.Drop(User{})
-	db.Drop(Link{})
-	db.Drop(Register{})
-	db.Drop(Post{})
-	db.Drop(Transaction{})
-}
-
-var ddDesc = `
- ____  _      _           ____  _     _        _      _
-|  _ \(_)_ __| |_ _   _  |  _ \(_)___| |_ _ __(_) ___| |_
-| | | | | '__| __| | | | | | | | / __| __| '__| |/ __| __|
-| |_| | | |  | |_| |_| | | |_| | \__ \ |_| |  | | (__| |_
-|____/|_|_|   \__|\__, | |____/|_|___/\__|_|  |_|\___|\__|
-                  |___/
-Bienvenue sur le serveur communautaire du Dirty District.
-
-Ce serveur est connecté au Net par le biais d'un accès illégal. Merci de ne pas
-faire n'importe quoi.
-
-Tape "index" pour avoir la liste des services fournis par le serveur. Si tu as
-besoin d'aide, demande à ton nerd préféré.`
-
-var dd = Server{
-	Address:     "dd.local",
-	Description: ddDesc,
-	Security:    SEC1,
-}
-
-var dd22Desc = `
-                    _____                            _                       
-                   |  ___|                          | |                      
-                   | |__ _   _ _ __ ___  _ __   ___ | | ___                  
-                   |  __| | | | '__/ _ \| '_ \ / _ \| |/ _ \                 
-                   | |__| |_| | | | (_) | |_) | (_) | |  __/                 
-                   \____/\__,_|_|  \___/| .__/ \___/|_|\___|                 
-                                        | |                                  
-                                        |_|                                  
-               ______ _     _        _      _     _____  _____               
-               |  _  (_)   | |      (_)    | |   / __  \/ __  \              
-  ______ ___   | | | |_ ___| |_ _ __ _  ___| |_   ' / /' ' / /'   ___ ______ 
- |______/ _ \  | | | | / __| __| '__| |/ __| __|   / /    / /    / _ \______|
-       | (_) | | |/ /| \__ \ |_| |  | | (__| |_  ./ /___./ /___ | (_) |      
-        \___/  |___/ |_|___/\__|_|  |_|\___|\__| \_____/\_____/  \___/       
-                                                                             
-
-           Bienvenue sur le serveur public du District 22 d'Europole.
-           Un noeud du plus grand fournisseur d'accès de Méga-Europe.`
-
-var d22 = Server{
-	Address:     "d22.eu",
-	Description: dd22Desc,
-	Security:    SEC3,
+type Identity struct {
+	Login    string
+	Password string
+	Name     string
 }
 
 // identités corpo recopiées depuis l'ancienne version
@@ -246,117 +118,69 @@ type InfoPlayer struct {
 var allPlayers = []InfoPlayer{
 	{"Hope", nil, hope, false, false},
 	{"Mel", &mmathison, mel, false, true},
-	{"Rocky", nil, rocky, false, false},
+	{"Rocky", nil, rocky, true, false},
 	{"Rita", &mbellamy, rita, false, true},
 	{"Styx", &sbronner, styx, false, true},
 	{"Kapo", &cbellamy, kapo, false, true},
-	{"Scalpel", &jvillanova, scalpel, false, true},
+	{"Scalpel", &jvillanova, scalpel, true, true},
 	{"Greko", &ecanto, greko, false, true},
 	{"jesus", &ejohannesen, jesus, false, true},
 	{"Escobar", &jbranson, escobar, false, true},
-	{"Cageot", &jmfright, cageot, false, true},
+	{"Cageot", &jmfright, cageot, true, true},
 	{"La Fouine", &skmihalec, lafouine, false, true},
-	{"Eva", &emartin, eva, false, true},
-	{"Fat Mike", &mdubian, fatmike, false, true},
-	{"Kenndy", &cmihalec, kennedy, false, true},
+	{"Eva", &emartin, eva, true, true},
+	{"Fat Mike", &mdubian, fatmike, true, true},
+	{"Kenndy", &cmihalec, kennedy, true, true},
 	{"Savage Girl", &sjohannesen, savagegirl, false, true},
 	{"Raoul Cool", &rmichu, raoulcool, false, true},
 	{"Green Glass", &rglass, greenglass, false, true},
 	{"Chilly Daisy", &djohannesen, chillydaisy, false, true},
 	{"Frère Ping", &dbonenfant, ping, false, true},
-	{"Papa Proxy", &hproskychev, papaproxy, false, true},
+	{"Papa Proxy", &hproskychev, papaproxy, true, true},
 	{"Nikki", &njasinski, nikki, false, true},
-	{"Céline", &ffceline, celine, false, true},
-	{"Cramille", &cmills, cramille, false, true},
+	{"Céline", &ffceline, celine, true, true},
+	{"Cramille", &cmills, cramille, true, true},
 	{"Tiger Doll", &lseptembre, tigerdoll, false, true},
-	{"Sister Morphine", &edubian, sistermorphine, false, true},
+	{"Sister Morphine", &edubian, sistermorphine, true, true},
 	{"Zilmir", &zabasolo, zilmir, false, true},
 	{"Betty B", &ebranson, bettyb, false, true},
 	{"Abraham", &jkievain, abraham, false, true},
 	{"Crunch", &fmanson, crunch, false, true},
 	{"One Kick", &rkievain, onekick, false, true},
 	{"Jacob", &pdoberty, jacob, false, true},
-	{"Oggy", &rwhite, oggy, false, true},
+	{"Oggy", &rwhite, oggy, true, true},
 	{"Iron Mike", &mklebert, ironmike, false, true},
 	{"Joe-Rez", &jbatista, joerez, false, true},
 	{"Cyrano", &ajolivet, cyrano, false, true},
 	{"Small Bob", &jvazzanna, smallbob, false, true},
-	{"Jeanne", nil, jeanne, false, true},
-	{"Ringo", nil, ringo, false, true},
+	{"Jeanne", nil, jeanne, false, false},
+	{"Ringo", nil, ringo, false, false},
 	{"Georges", &gsuleymanoglu, georges, false, false},
-	{"Paula", nil, paula, false, true},
+	{"Paula", nil, paula, false, false},
+	// Only for printing
+	{"Oggy YES", &gsuleymanoglu, oggy, false, true},
 }
 
-func Init() {
-	log.Println("réinitialisation de la base de données")
+func main() {
+	// list Ids
+	for _, perso := range allPlayers {
+		wanted := ""
+		if perso.Wanted {
+			wanted = "\\color{red} - Recherché·e"
+		}
+		idc := "??? "
+		idclog := "--"
+		idcmdp := "--"
+		if perso.Known {
+			idc = perso.IdCorp.Name
+			idclog = perso.IdCorp.Login
+			idcmdp = perso.IdCorp.Password
+		}
 
-	Reset()
-
-	InitNetwork(
-		[]Identity{
-			{
-				Login:    "jesus",
-				Password: "roxor",
-				Name:     "Jesus",
-			},
-			{
-				Login:    "crunch",
-				Password: "hack",
-				Name:     "Crunch",
-			},
-			{
-				Login:    "admin",
-				Password: "beurk",
-				Name:     "Admin",
-			},
-		},
-		[]Transaction{
-			{
-				To:      "jesus",
-				Yes:     100,
-				Comment: "report du solde",
-			},
-			{
-				To:      "admin",
-				Yes:     1337,
-				Comment: "report du solde",
-			},
-		},
-	)
-
-	InitServer(dd,
-		[]User{
-			{
-				Login:    "jesus",
-				Server:   "",
-				Backdoor: false,
-				Groups:   []string{"admin", "h4ck3r"},
-			},
-			{
-				Login:    "crunch",
-				Server:   "",
-				Backdoor: false,
-				Groups:   []string{"h4ck3r"},
-			},
-		},
-		[]Link{
-			{Address: d22.Address, Description: "serveur public du District 22"},
-		},
-		[]Register{
-			{Description: "machine à café", State: "on", Options: []RegisterState{"on", "off", "overdrive"}},
-		},
-		[]Post{},
-	)
-
-	InitServer(d22,
-		[]User{
-			{
-				Login:    "jesus",
-				Backdoor: false,
-			},
-		},
-		[]Link{},
-		[]Register{},
-		[]Post{},
-	)
+		fmt.Printf("\\confpin{%s}{%s}{%s}{%s}{%s}{%s}\n",
+			perso.Perso,
+			idc+wanted,
+			idclog, idcmdp,
+			perso.IdVirt.Login, perso.IdVirt.Password)
+	}
 }

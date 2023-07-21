@@ -1,0 +1,11 @@
+%%
+%% ticket for "Badges"
+%% pre-cutted label for wide files
+%%
+\unitlength=1mm
+%% tested for an HP5SiMX, adjust it for your printer
+\hoffset=-12.0mm
+\voffset=-22.0mm
+\ticketNumbers{2}{5}   % hor, vert
+\ticketSize{84}{52} % in unitlength
+\ticketDistance{16}{5} % in unitlength

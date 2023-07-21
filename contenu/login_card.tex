@@ -1,0 +1,78 @@
+%%%%
+%
+% ticket.sty example file for a pin for conferences
+%
+%%%%
+% use the corresponding paper size for your ticket definition
+\documentclass[a4paper,10pt]{letter}
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[OT1]{fontenc}
+\usepackage{xcolor}
+
+% load ticket.sty with the appropriate ticket definition
+%%\usepackage[rebadges,freepin,crossmark]{ticket}
+\usepackage[badges,crossmark]{ticket}
+\usepackage{minibox}
+%%\usepackage{csvsimple}
+
+% load misc stuff
+\usepackage{graphicx}
+
+% make your default ticket. \ticketdefault is somewhat like a background
+\renewcommand{\ticketdefault}{%
+  %%\put(60,  3){\includegraphics[width=15mm]{affiche2023_small.png}}
+  %\put( 5, 13){\line(1,0){60}}
+  \put( 7, 47){\minibox[c]{{AE Cyberpunk : \textbf{\color{red}{DOCUMENT HORS-JEU}}}}}
+  %\put( 7,  7){\scriptsize In the gardens}
+  %\put( 7,  4){\scriptsize April 1, 2000}
+}
+
+% now what do you like to put in your ticket
+\newcommand{\confpin}[6]{\ticket{%
+    % Perso
+    \put(7,40){\minibox[l,t]{\textbf{\Large #1}}}
+    % ID Corpo
+    \put(7,32){\minibox[l,t]{\textbf{ID Corpo: #2}}}
+    \put(15,27){\minibox[l,t]{\textbf{Login : }#3}}
+    \put(15,22){\minibox[l,t]{\textbf{MDP : }#4}}%
+    % ID Virtuelle
+    \put(7,15){\minibox[l,t]{\textbf{ID Virtuelle:}}}
+    \put(15,10){\minibox[l,t]{\textbf{Login : }#5}}
+    \put(15,5){\minibox[l,t]{\textbf{MDP : }#6}}%
+}}
+
+%\DeclareUnicodeCharacter{00E9}{é}
+
+%% the pins for the partipiciants ... ;-)
+%% you can generate this part from a database!
+\begin{document}
+\sffamily
+%%\confpin{admin}{r@gnar0k!!}{Identité Corpo}
+%% \confpin{Urocyon cinereoargenteus}{America}
+%% \confpin{Galago moholi}{South Africa}
+%% \confpin{Dasypus novemcintus}{South America}
+%% \confpin{Rhinocerus sondaicus}{Java}
+%% \confpin{Canis lupus}{Northern sphere}
+%% \confpin{Ramphastus spec.}{South Amerika}
+%% \confpin{Panthera tigris sondaica}{Java}
+%% \confpin{Hippocampus spec.}{the ocean}
+%% \confpin{Anthonomus grandis}{Mexico}
+%% \confpin{Petrogale penicillata}{Australia}
+%% \confpin{Tarsius spec.}{Sumatra}
+
+%%\confpin{}{}{}
+%%\confpin{}{}{}
+%%\confpin{}{}{}
+\input{login_list.tex}
+%% importing from file
+%% \csvreader{{{liste_badges.csv}}}{1=\firstname,2=\name,3=\labo,4=\orga}%
+%%           {\confpin{
+%%               \ifcsvstrcmp{\orga}{0}{\color{red}}{\color{black}}
+%%                           {\firstname\:\MakeUppercase{\name}}}
+%%                           {\labo}
+%%           }
+
+
+\end{document}

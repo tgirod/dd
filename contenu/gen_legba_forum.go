@@ -9,11 +9,11 @@ import (
 )
 
 type Article struct {
-	Title string
-	Authors string
-	DatePost string
+	Title      string
+	Authors    string
+	DatePost   string
 	AuthorPost string
-	Abstract string
+	Abstract   string
 }
 type Post struct {
 	Server  string
@@ -29,20 +29,23 @@ type Post struct {
 var loginMath = "amath"
 var loginKuip = "jkuip"
 var loginHers = "ehers"
+
 // pour les articles ou AuhtorPost est ""
 var logDivers = []string{"dyuon", "nroug", "vpoco", "uandr"}
 var addrServer = "archive.legba.d22.eu"
 var groupMathison = ""
+
 // les autre articles de artMaahison devront être postés avant
 var lastDateMathison = "2000-06-30T14:24:01"
+
 // les articles divers sont postés avant
 var lastDateOther = "2000-07-15T18:00:00"
 
 var artMathison = []Article{
 	{"Transcendance sous co-routines.",
 		"D. Yuong, E. Herswing et A. Mathison.",
-        "",
-        loginMath,
+		"",
+		loginMath,
 		`Des expériences préliminaires sur la Transcendance Numérique (TN) permettent
 la formulation d'une nouvelle conjoncture. Lors des phases terminales
 d'auto-corections des caractéristiques de personnalité, il paraît
@@ -55,8 +58,8 @@ calcul SaberSapience v 3.0.23.`},
 	{"Transcendance et effondrement neuro-psychologique.",
 
 		"A. Mathison.",
-        "",
-        loginMath,
+		"",
+		loginMath,
 
 		`Nous présentons une review de la littérature récentes sur la
 «dégénérescence accélérée» issues de la théorie formulée par le laboratoire
@@ -72,8 +75,8 @@ computationnel certain.`},
 	{"Deux encodages mémoriels pour les aires thalamiques intérmédiaires.",
 
 		"Y. Levain, A.P. Revertin, et J.O. Galakievicz.",
-        "",
-        loginMath,
+		"",
+		loginMath,
 
 		`Nous présentons deux algorithmes en O( n2+log(g) ), probablement
 epsilon-corrects, pour l'encodage numérique in vivo des activités mémorielles
@@ -85,8 +88,8 @@ nouveau, et libre de droit de propriété.`},
 	{"Un bootstrap efficace de l'ontologie phénoménologique.",
 
 		"J. Kuipers et A. Trebinsky.",
-        "",
-        loginKuip,
+		"",
+		loginKuip,
 
 		`L'un des écueils dans la Transcendance Numérique Forte est en passe
 d'être levé. Nos premiers résultats expérimentaux, en simulation, montrent en
@@ -100,8 +103,8 @@ le moins délicate.`},
 	{"Une voie nouvelle pour la Conscience Numérique : la trans-fusion.",
 
 		"L. Saint-Janvier, D.L. Yu, C. Wu, O. Wellit-Ashley et L. Modina.",
-        "",
-        loginKuip,
+		"",
+		loginKuip,
 
 		`A rebours des recherches "mainstream" dans le domaine de la Transcendance
 Numérique (TN), nous présentons un cadre formel pour une voie originale et sobre
@@ -114,8 +117,8 @@ de Lashley et tous donnent une probabilité de réussite dépassant les 60%.`},
 	{"Du déficit phénoménologique inéluctable des IA de classe A.",
 
 		"R.D. San-Jorgeu, J. Kuipers et A. Trebinsky.",
-        "",
-        loginKuip,
+		"",
+		loginKuip,
 
 		`Nos travaux sur le déficit phénoménologique des IA de classe A montrent
 la faiblesse des approches trans-humain et handi-humaines. Nous argumentons
@@ -127,8 +130,8 @@ quanta-qbits transitionnels, qui démontre l'imfaisabilité des travaux de
 	{"Symposium Inter-Coprporatiste sur la Transcendance Numérique.",
 
 		"A. Pernu, C.H. Itchinson et P. Kanakuna.",
-        "",
-        loginMath,
+		"",
+		loginMath,
 
 		`Ces deux journées de dialogues sur les dernières avancées en matie de
 Transcendance Numériques furent profitables et porteuses de nouvelles voies de
@@ -139,21 +142,21 @@ phénoménologiques de [Juipers et. al.], la trans-fusion IA/handihumanité
 Ce symposiuma eu lieu sous le patronnage de Legba Voodoocom et de SiliconSpirit.`},
 	{"Fermeture du Projet Mandrake.",
 		"J. Kuipers.",
-        lastDateMathison,
-        loginKuip,
+		lastDateMathison,
+		loginKuip,
 
-`Après une analyse des travaux du Projet «Mandrake», j'ai décidé de le
+		`Après une analyse des travaux du Projet «Mandrake», j'ai décidé de le
 clore et de transferer son budget au Projet «Phénomos». Le Dr. Alan Mathison
 est relevé de son poste de directeur et ses accès révoqués. A toutes fin utiles,
 j'ai demandé l'archivages du Projet «Mandrake».`},
-	}
+}
 
 var artDivers = []Article{
 	{"Identification automatique des sources des notices zoologiques du Speculum naturale de Vincent de Beauvais ",
 		"Étienne Cuvelier ; Sébastien de Valeriola ; Céline Engelbeen",
-        "",
-        "",
-	`Avec son encyclopédie intitulée Speculum maius, le dominicain du xiiie
+		"",
+		"",
+		`Avec son encyclopédie intitulée Speculum maius, le dominicain du xiiie
 siècle Vincent de Beauvais tente de constituer une synthèse générale
  du savoir. Pour ce faire, il rassemble des renseignements provenant
  d’une multitude de sources différentes, chrétiennes et païennes,
@@ -170,9 +173,9 @@ leurs sources. Dans cet article, nous nous livrons à cet exercice pour les
  pas leurs sources.`},
 	{"Modéliser ce qui résiste à la modélisation",
 		"A. Bénel",
-        "",
-        "",
-	`Pour traiter de l’intelligence artificielle appliquée aux humanités numériques,
+		"",
+		"",
+		`Pour traiter de l’intelligence artificielle appliquée aux humanités numériques,
  cet article prend le pari risqué de concentrer son état de l’art sur
  les années 1970. Nous découvrons que ces premiers travaux de modélisation
  des objets archéologiques à l’aide de « langages d’analyse » et de
@@ -204,21 +207,21 @@ chercheurs en Sciences humaines ainsi que pour la médiation scientifique.
  plus grand encore dans la foule de questions de conception qu’elle suscite,
  questions anecdotiques à première vue, mais liées finalement à ce qu’est
  le sens et à ses modes de construction.`},
-{"Conscience sans Cortex",
-"Michel Dojat,Manik Bhattacharjee,Christian Graff",
-        "",
-        "",
-`Avec l'avancée des connaissances en neurosciences, en éthologie et
+	{"Conscience sans Cortex",
+		"Michel Dojat,Manik Bhattacharjee,Christian Graff",
+		"",
+		"",
+		`Avec l'avancée des connaissances en neurosciences, en éthologie et
 le développement de l'intelligence artificielle, le conscience est-elle
 toujours une spécificité humaine comme elle l'a été considérée par dans
 les siècles passés ? A quel type de conscience les entités sans cortex
 pourraient-elles prétendre ?`},
 
-{"Des intelligences Très artificielles",
-"Jean-Louis Dessalles",
-        "",
-        "",
-`Si vous marchez à reculons, les traces de pas que vous voyez devant
+	{"Des intelligences Très artificielles",
+		"Jean-Louis Dessalles",
+		"",
+		"",
+		`Si vous marchez à reculons, les traces de pas que vous voyez devant
 vous sont les vôtres. Aucun robot, aucune intelligence artificielle
 (IA) ne sait ce genre de choses, sauf si l'on a pensé à les lui dire.
 Les IA sont-elles si intelligentes que cela ? À bien y regarder, elles
@@ -229,11 +232,11 @@ Chaque lecteur trouvera dans ce livre de quoi le surprendre. Il nous
 parle du passé, du présent et du futur des IA. Il évoque même ce qui,
 selon lui, leur manque pour devenir... intelligentes.`},
 
-{"Un calcul cortical pour les systèmes situés",
-"Hervé Frezza-Buet",
-        "",
-        "",
-`Depuis les années 50 sont apparues, comme domaine d'étude, ce que l'on
+	{"Un calcul cortical pour les systèmes situés",
+		"Hervé Frezza-Buet",
+		"",
+		"",
+		`Depuis les années 50 sont apparues, comme domaine d'étude, ce que l'on
 appelle les sciences cognitives, qui ont fédéré des disciplines telles que
 , entre autres, la neurobiologie, la psychologie, la philosophie,
 la linguistique... et bien entendu l'informatique. Sans revenir sur
@@ -278,11 +281,11 @@ programmes. Là encore, l'hypothèse d'IA forte joue un rôle central. Si on
 admet que l'intelligence dont l'Homme fait preuve n'est que le résultat de
 la mécanique de ses neurones, il devient pertinent de s'inspirer des neurones.`},
 
-{"Hanter la machine : reconquêtes de la conscience humaine",
-"Simon Bréan",
-        "",
-        "",
-`Le mouvement cyberpunk a fourni de multiples angles d’approche pour envisager
+	{"Hanter la machine : reconquêtes de la conscience humaine",
+		"Simon Bréan",
+		"",
+		"",
+		`Le mouvement cyberpunk a fourni de multiples angles d’approche pour envisager
 les rapports entre l’individu et des technologies informatiques modifiant en
 profondeur son corps et ses modes d’être en société. Il n’a pas existé de
 courant cyberpunk français à proprement parler, même si plusieurs œuvres
@@ -292,11 +295,11 @@ persistante dans le traitement du rapport humain-machine informatique au sein
 du cyberpunk « à la française » : l’importance de la conscience humaine pour
 la conception de l’intelligence artificielle.`},
 
-{"Le droit sous le règne de l’Intelligence Artificielle.",
-"Hervé Causse",
-        "",
-        "",
-`L'étude d'une trentaine de réalités sociales et juridiques fait penser que
+	{"Le droit sous le règne de l’Intelligence Artificielle.",
+		"Hervé Causse",
+		"",
+		"",
+		`L'étude d'une trentaine de réalités sociales et juridiques fait penser que
 les systèmes d'intelligence artificielle modifieront la façon de voir le droit
 et d'en faire. Les problématiques utiles à l'analyse dépassent le domaine
 juridique. Le droit de l'intelligence artificielle, à venir, exige en
@@ -318,11 +321,11 @@ civilisation. Dans sa quête de renouvellement, il se pourrait que le
 juriste doive pousser jusqu'à la poésie, comme on y recourt parfois en
 sciences exactes, pour dominer les énoncés des systèmes d'IA à partir
 desquels, demain, on fera du droit.`},
-{"Intelligences artificielles, consciences réelles",
-"Gérard Dastugue",
-        "",
-        "",
-`Particularité du cinéma, l’écran « est un miroir où le spectateur
+	{"Intelligences artificielles, consciences réelles",
+		"Gérard Dastugue",
+		"",
+		"",
+		`Particularité du cinéma, l’écran « est un miroir où le spectateur
 peut trouver d'autres identifications que son propre corps » (Christian
 Metz). Il est à la fois un objet et un sujet, pouvant recevoir toutes
 les projections sauf celle du corps même du spectateur. De cette absence
@@ -337,11 +340,11 @@ cinéma semble donc préférer présenter l'intelligence artificielle
 comme un danger et non une solution. Ces choix artistiques interrogent
 finalement le cinéma sur sa propre nature, une malice de l'autre côté
 du miroir.`},
-{"Nouvelles approches en Robotique Cognitive",
-"Mehdi Khamassi, Stéphane Doncieux",
-        "",
-        "",
-`Ce volume présente un ensemble de contributions montrant les évolutions
+	{"Nouvelles approches en Robotique Cognitive",
+		"Mehdi Khamassi, Stéphane Doncieux",
+		"",
+		"",
+		`Ce volume présente un ensemble de contributions montrant les évolutions
 récentes des recherches du domaine dit de « Robotique Cognitive ».
 Cette dénomination vaut dès lors que l’on cherche à faire réaliser
 au robot des tâches qui semblent nécessiter chez l’homme la mise en
@@ -358,11 +361,11 @@ mutuellement. En particulier, un des objectifs de ce volume est
 d’illustrer en quoi l’expérimentation robotique peut servir de
 plateforme de test d’hypothèses d’autres disciplines des Sciences
 Cognitives, et ainsi contribuer à l’étude de la cognition biologique.`},
-{"Vers une robotique du traduire",
-"Anne Baillot, Ellen Carter, Thierry Grass, Pablo Ruiz",
-        "",
-        "",
-`L’apparition sur la toile en 2017 de nouveaux services de traduction
+	{"Vers une robotique du traduire",
+		"Anne Baillot, Ellen Carter, Thierry Grass, Pablo Ruiz",
+		"",
+		"",
+		`L’apparition sur la toile en 2017 de nouveaux services de traduction
 automatique neuronale reposant sur des algorithmes d’intelligence
 artificielle comme DeepL et Google Translate correspond à un nouveau
 bond en avant en matière de traduction automatique. Ces systèmes récents,
@@ -382,11 +385,11 @@ gains de productivité de l’ordre de 150 à 200% (certains traducteur
 atteignent des rendements de 6000 à 8000 mots par jour), la technique
 de la post-édition tend à s’imposer de plus en plus dans les industrie
 de la langue.`},
-{"Contribution des Sciences Sociales dans le domaine de l'Intelligence Artificielle Distribuée : ALONE, un modèle hybride d'agent apprenant.",
-"Isabelle Jars",
-        "",
-        "",
-`L'apprentissage fait partie des expériences qui stimulent et
+	{"Contribution des Sciences Sociales dans le domaine de l'Intelligence Artificielle Distribuée : ALONE, un modèle hybride d'agent apprenant.",
+		"Isabelle Jars",
+		"",
+		"",
+		`L'apprentissage fait partie des expériences qui stimulent et
 structurent le savoir-faire individuel de tout être humain depui
 sa naissance. Sa complexité et ses mystères suscitent l'intérêt de
 nombreuses recherches dans des disciplines aussi variées que les
@@ -401,11 +404,11 @@ théoriques des agents à la richesse des travaux socio-constructivistes
 sur l'importance du langage et des interactions lors du processus
 d'apprentissage humain. Notre contribution dans ce domaine est à
 la fois méthodologique et applicative.`},
-{"L'homme, l'animal et la machine - Perpétuelles redéfinitions",
-"Georges Chapouthier, Frédéric Kaplan",
-        "",
-        "",
-`Les animaux ont-ils une conscience ? Les machines peuvent-elles se
+	{"L'homme, l'animal et la machine - Perpétuelles redéfinitions",
+		"Georges Chapouthier, Frédéric Kaplan",
+		"",
+		"",
+		`Les animaux ont-ils une conscience ? Les machines peuvent-elles se
 montrer intelligentes ? Chaque nouvelle découverte des biologistes,
 chaque progrès technologique nous invite à reconsidérer le propre de
 l'homme. Ce livre, fruit de la collaboration entre Georges Chapouthier,
@@ -422,11 +425,11 @@ spécifiquement humains - l'imaginaire, l'âme ou le sens du temps -
 mais pour combien de temps encore... Une exploration stimulante au
 coeur des mystères de la nature humaine, qui propose une redéfinition
 de l'homme dans son rapport à l'animal et à la machine`},
-{"Transition between cooperative and collaborative interaction modes for human-AI teaming",
-"Adrien Metge, Nicolas Maille, Benoît Le Blanc",
-        "",
-        "",
-`Avec l'introduction de l IA dans le pilotage des véhicules terrestres
+	{"Transition between cooperative and collaborative interaction modes for human-AI teaming",
+		"Adrien Metge, Nicolas Maille, Benoît Le Blanc",
+		"",
+		"",
+		`Avec l'introduction de l IA dans le pilotage des véhicules terrestres
 ou aériens, la répartition des rôles entre opérateur et système devra
 évoluer de manière dynamique. A travers une expérimentation en micro-monde
 sur la supervision d'un drone intelligent, nous étudions comment
@@ -435,11 +438,11 @@ collaboratives peut affecter l'expérience et le choix de l'opérateur.
 Nous observons des variables comme le sentiment de responsabilité ou
 la confiance et constatons que les opérateurs ont faiblement conscience
 de l'influence de l'IA sr leur propre prise de décision.`},
-{"Un système Ingénieux de perception bio-inspiré basé sur les capacités auditives cognitives humaines",
-"Yu Su",
-        "",
-        "",
-`Développer une machine capable d’une perception consciente de
+	{"Un système Ingénieux de perception bio-inspiré basé sur les capacités auditives cognitives humaines",
+		"Yu Su",
+		"",
+		"",
+		`Développer une machine capable d’une perception consciente de
 l’environnement dans lequel elle évolue, aux côtés et avec des
 humains, est l’un des objectifs de l'intelligence artificielle
 bio-inspirée (IAB). Les communautés des chercheurs en IA et en
@@ -488,11 +491,11 @@ Finalement, les travaux ont conduit à la mise au point d’un modèle
 puissant de détection et caractérisation des sons environnementaux,
 issu d’une fusion de deux CNN à 4 couches.`},
 
-{"Construction et conceptualisation de connaissances en robotique autonome",
-"Cristiano Russo",
-        "",
-        "",
-`L'emploi de robots personnels, ou de robots de service, a suscité
+	{"Construction et conceptualisation de connaissances en robotique autonome",
+		"Cristiano Russo",
+		"",
+		"",
+		`L'emploi de robots personnels, ou de robots de service, a suscité
 beaucoup d'intérêt ces dernières années avec une croissance étonnante
 de la robotique dans différents domaines. Concevoir des robots compagnons
 capables d'assister, de partager et d'accompagner des personnes à autonomie
@@ -550,11 +553,11 @@ caractéristiques sémantiques et visuelles, d'où la possibilité pour
 un agent robotique d'élargir ses compétences de généralisation des
 connaissances dans des environnements encore inconnus (voire partiellemen
 connus), ce qui a permis d'atteindre les objectifs fixés.`},
-{"Comportements et Mémoires",
-"Nicolas P. Rougier",
-        "",
-        "",
-`La survie, pour la majeure partie du règne animal, dépend directement
+	{"Comportements et Mémoires",
+		"Nicolas P. Rougier",
+		"",
+		"",
+		`La survie, pour la majeure partie du règne animal, dépend directement
 de la capacité à se mouvoir dans un environnement (connu ou inconnu)
 afin d'être en mesure de rallier, de façon précise et sûre, des lieux
 spécifiques tels que l'habitat, un point d'eau ou bien encore un
@@ -590,11 +593,11 @@ Nous souhaitons notamment souligner comment le connexionnsime peut
 promouvoir une coopération entre ces deux systèmes de mémoires en évitant
 l'écueil de l'approche ""boîte noire"" et nous présenterons à cet
 effet quelques modèles de mémoire procédurale et déclarative.`},
-{"La cognition : du neurone a la societé",
-"Daniel Andler, Thérèse Collins, Catherine Tallon-Baudry",
-	"",
-	"",
-`La cognition désigne l'ensemble des phénomènes qui se rapportent à
+	{"La cognition : du neurone a la societé",
+		"Daniel Andler, Thérèse Collins, Catherine Tallon-Baudry",
+		"",
+		"",
+		`La cognition désigne l'ensemble des phénomènes qui se rapportent à
 l'esprit humain, son fonctionnement, ses effets sur le comportement,
 son émergence au cours de l'évolution, et son développement, typique
 ou non. Elle inclut les grandes facultés identifiées par la tradition
@@ -605,11 +608,11 @@ le but des sciences cognitives, fédération de disciplines allant d
 la biologie à la linguistique, de la psychologie à l'intelligence
 artificielle, de la philosophie à l'anthropologie.`},
 
-{"Délibérer avec l'intelligence artificielle au service de l'intelligence naturelle.",
-"Frédéric Alexandre, Thierry Viéville, Marie-Hélène Comte",
-        "",
-        "",
-`La numérisation de la société et le traitement automatique de
+	{"Délibérer avec l'intelligence artificielle au service de l'intelligence naturelle.",
+		"Frédéric Alexandre, Thierry Viéville, Marie-Hélène Comte",
+		"",
+		"",
+		`La numérisation de la société et le traitement automatique de
 l’information, y compris avec des techniques dites d’intelligence
 artificielle, induisent des ruptures dans notre façon de penser,
 calculer et délibérer. Mais comment fonctionnent ces fonctions cognitives
@@ -624,11 +627,11 @@ et du calcul est essentiel pour se donner les moyens de délibérer en
 toute conscience avec les outils intellectuels et numériques qui nous
 sont donnés.`},
 
-{"Psychologie des êtres artificiels",
-"Pierre Crescenzo",
-        "",
-        "",
-`L'émergence de l'Intelligence Artificielle comme thème de recherche
+	{"Psychologie des êtres artificiels",
+		"Pierre Crescenzo",
+		"",
+		"",
+		`L'émergence de l'Intelligence Artificielle comme thème de recherche
 il y a quelques dizaines d'années a déjà mené à de nombreuses réflexions
 complexes et parfois dérangeantes. Plus récemment, des réalisations
 concrètes que l'on peut dire intelligentes s'insèrent de plus en plus
@@ -646,11 +649,11 @@ d'avoir conscience que ces questions sont importantes, pour pouvoir
 artificielle éclairés et ouverts aux futurs possibles. Cette ouverture
 est l'objectif immense de ce modeste article.`},
 
-{"L'intelligence artificielle : entre opportunités et risques légitimes",
-"Marie Noeline Sinapin",
-        "",
-        "",
-`Cet article s’intéresse à l'intelligence artificielle, perçu comme un
+	{"L'intelligence artificielle : entre opportunités et risques légitimes",
+		"Marie Noeline Sinapin",
+		"",
+		"",
+		`Cet article s’intéresse à l'intelligence artificielle, perçu comme un
 progrès majeur depuis le début 2016 et permet de concevoir des systèmes
 de plus en plus sophistiqués, au point de rêver aux voitures sans
 conducteur, une vision imaginée par Volvo et d'autres constructeurs
@@ -660,11 +663,11 @@ dans tous les domaines de nos activités terrestres. Si les entreprises ont
 pris conscience de l'intérêt de l'I.A, très peu connaissent ses techniques
 d'apprentissage, ses répercussions et ses risques.`},
 
-{"L’avocat et l’algorithme : quelles transformations des compétences pour la profession ?",
-"Philip Milburn",
-        "",
-        "",
-`L'article s'interroge dans un premier temps sur le travail et les compétences
+	{"L’avocat et l’algorithme : quelles transformations des compétences pour la profession ?",
+		"Philip Milburn",
+		"",
+		"",
+		`L'article s'interroge dans un premier temps sur le travail et les compétences
 réels des avocats, au-delà des discours et de la rhétorique de la profession.
 Cet examen en détail de la nature de cette activité concrète permet de pose
 quelques linéaments quant à la manière dont les services juridiques offert
@@ -672,11 +675,11 @@ par l'intelligence artificielle sont susceptibles de venir l'impacter, d'après
 les publications de Richard Susskind. Afin d'éviter une disqualification
 économique de leur expertise, les avocats doivent prendre conscience et
 mettre en valeur la part non juridique de leur compétence.`},
-{"Reconnaissance des formes et vision par ordinateur",
-"Peter Sturm, Serge Garlatti",
-        "",
-        "",
-`Face à l'essor grandissant des sciences du traitement de l'information e
+	{"Reconnaissance des formes et vision par ordinateur",
+		"Peter Sturm, Serge Garlatti",
+		"",
+		"",
+		`Face à l'essor grandissant des sciences du traitement de l'information e
 la prise de conscience de l'importance de l'interdisciplinarité, il est plus
 que jamais nécessaire de mettre en avant les spécificités et les
 complémentarités des deux domaines RF et IA, reconnaissance des formes et
@@ -690,11 +693,11 @@ su valoriser les recherches des chercheurs de renommée internationale mais auss
 repérer les travaux prometteurs des jeunes chercheurs, offrant un panorama très
 représentatif de l'état de l'art comme des perspectives les plus stimulantes.`},
 
-{"Le Numérique et la vie",
-"Arthur Guezengar",
-        "",
-        "",
-`Que peut-on attendre de la philosophie face aux réalités technologiques ?
+	{"Le Numérique et la vie",
+		"Arthur Guezengar",
+		"",
+		"",
+		`Que peut-on attendre de la philosophie face aux réalités technologiques ?
 Si elle n'a jamais été insensible à l'agir technique, plus que jamais la
 pensée philosophique se trouve requise du fait de la puissance de transformation
 du monde manifestée aujourd'hui par la technologie. Ce volume se donne pour
@@ -726,11 +729,11 @@ autrices et les auteurs de ce dossier s'emploient à déterminer les modalités
 de l'éthique et de la politique appliquée à l'activité humaine telle qu'elle
 est indissociablement assistée et régie par la technologie.`},
 
-{"L’intelligence naturelle : la science des données de l’IA",
-"Arnaud Martin",
-        "",
-        "",
-`L'intelligence artificielle est devenue aujourd'hui un enjeu économique
+	{"L’intelligence naturelle : la science des données de l’IA",
+		"Arnaud Martin",
+		"",
+		"",
+		`L'intelligence artificielle est devenue aujourd'hui un enjeu économique
 et se retrouve au cœur de nombreuses actualités. En effet les applications
 d'un grand nombre d'algorithmes regroupés sous le terme d'intelligence
 artificielle se retrouvent dans plusieurs domaines. Citons par exemple
@@ -748,11 +751,11 @@ dans ce cadre que nous menons des recherches dans l'équipe DRUID
 Interlinked Data) de l'IRISA (Institut de recherche en Informatique
 et Systèmes Aléatoires).`},
 
-{"Peut-on modéliser la conscience à l'aide d'un système informatique ?",
-"Bernard Victorri",
-        "",
-        "",
-`Pour répondre à cette question, on s'attache d'abord à préciser non
+	{"Peut-on modéliser la conscience à l'aide d'un système informatique ?",
+		"Bernard Victorri",
+		"",
+		"",
+		`Pour répondre à cette question, on s'attache d'abord à préciser non
 seulement ce que l'on entend par conscience, mais aussi le sens précis
 que l'on donne à modéliser. Certains modèles sont conçus avec une finalité
 propre, qui ne doit rien au système modélisé, sinon une inspiration
@@ -768,11 +771,11 @@ explicatifs de la conscience humaine, le problème peut se poser de savoir
 si une machine « intelligente » est susceptible d'être le siège de véritables
 phénomènes conscients : bien que cette question fasse l'objet de vifs débats,
 on peut douter de leur intérêt en l'état actuel de nos connaissances.`},
-{"Intelligence artificielle: l'apport des paradigmes incarnés",
-"Pierre de Loor, Alain Mille, Mehdi Khamassi",
-        "",
-        "",
-`Cet article a un double objectif : Le premier est de présenter les
+	{"Intelligence artificielle: l'apport des paradigmes incarnés",
+		"Pierre de Loor, Alain Mille, Mehdi Khamassi",
+		"",
+		"",
+		`Cet article a un double objectif : Le premier est de présenter les
 différentes propositions relatives à l'approche incarnée de la cognition
 faites par la communauté informatique et robotique. Le deuxième es
 de mener un débat sur leurs apports et leurs limites, relativement
@@ -817,7 +820,7 @@ func main() {
 
 	// articles de Mandrake, commence par le dernier
 	var lastDate time.Time
-	for ida := len(artMathison)-1; ida >= 0; ida = ida -1 {
+	for ida := len(artMathison) - 1; ida >= 0; ida = ida - 1 {
 		art := artMathison[ida]
 
 		var date time.Time
@@ -833,10 +836,10 @@ func main() {
 		}
 
 		post := Post{
-			Server: addrServer,
-			Group: groupMathison,
-			Date: date,
-			Author: art.AuthorPost,
+			Server:  addrServer,
+			Group:   groupMathison,
+			Date:    date,
+			Author:  art.AuthorPost,
 			Subject: art.Title,
 			Content: fmt.Sprintf("Authors: %s\n\nRésumé: %s\n", art.Authors, art.Abstract),
 		}
@@ -864,10 +867,10 @@ func main() {
 			art.AuthorPost = genChoice(logDivers)
 		}
 		post := Post{
-			Server: addrServer,
-			Group: groupMathison,
-			Date: date,
-			Author: art.AuthorPost,
+			Server:  addrServer,
+			Group:   groupMathison,
+			Date:    date,
+			Author:  art.AuthorPost,
 			Subject: art.Title,
 			Content: fmt.Sprintf("Authors: %s\n\nRésumé: %s\n", art.Authors, art.Abstract),
 		}

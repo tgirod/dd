@@ -114,8 +114,14 @@ func (m *Monitor) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.height = msg.Height
 		m.width = msg.Width
-		m.output.Height = msg.Height - 2 - sizeConnexionMonitor - sizeRegisterMonitor
-		return m, nil
+		//m.output.Height = msg.Height - 2 - sizeConnexionMonitor - sizeRegisterMonitor
+
+		// Must pass on to Client
+		msg.Height = msg.Height - 1 - sizeConnexionMonitor - sizeRegisterMonitor
+		_, cmdClient := m.Client.Update(msg)
+		cmds = append(cmds, cmdClient)
+
+		//return m, nil
 
 	default:
 		// Pass on to Client

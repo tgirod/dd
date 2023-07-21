@@ -14,6 +14,7 @@ type Identity struct {
 	Login    string `storm:"id"`
 	Password string
 	Name     string
+	Bank     bool
 }
 
 func (i Identity) Value() any {
@@ -93,6 +94,10 @@ func (i Identity) Send(to, subject, content string) (Message, error) {
 }
 
 func (i Identity) Transactions() ([]Transaction, error) {
+	if !i.Bank {
+		return []Transaction{}, fmt.Errorf("%s : %w", i.Login, errNoBankAccount)
+	}
+
 	return Find[Transaction](
 		q.Or(
 			q.Eq("From", i.Login),
@@ -102,6 +107,10 @@ func (i Identity) Transactions() ([]Transaction, error) {
 }
 
 func (i Identity) Balance() (int, error) {
+	if !i.Bank {
+		return 0, fmt.Errorf("%s : %w", i.Login, errNoBankAccount)
+	}
+
 	transactions, err := i.Transactions()
 	if err != nil {
 		return 0, err
@@ -121,15 +130,23 @@ func (i Identity) Balance() (int, error) {
 }
 
 func Pay(from, to string, amount int) error {
-	var src Identity
+	var src, dest Identity
 	var err error
 
 	if src, err = FindIdentity(from); err != nil {
 		return err
 	}
 
-	if _, err = FindIdentity(to); err != nil {
+	if !src.Bank {
+		return fmt.Errorf("%s : %w", src.Login, errNoBankAccount)
+	}
+
+	if dest, err = FindIdentity(to); err != nil {
 		return err
+	}
+
+	if !dest.Bank {
+		return fmt.Errorf("%s : %w", dest.Login, errNoBankAccount)
 	}
 
 	if amount < 0 {
@@ -146,8 +163,8 @@ func Pay(from, to string, amount int) error {
 	}
 
 	tx := Transaction{
-		From:    from,
-		To:      to,
+		From:    src.Login,
+		To:      dest.Login,
 		Yes:     amount,
 		Comment: "",
 	}

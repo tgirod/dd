@@ -146,7 +146,7 @@ var d22 = Server{
 var (
 	amathison   = Identity{"amathison", "hai3ja", "Alan Mathison"}         // alan
 	mmathison   = Identity{"mmathison", "mie6oo", "Mélody Mathison"}       // mel
-	jdoe7624    = Identity{"jdoe7624", "ayuu2e", "John Doe 7624"}          // rocky ???
+	jdoe        = Identity{"jdoe", "ayuu2e", "John Doe"}                   // FIXME rocky
 	mbellamy    = Identity{"mbellamy", "ahng7e", "Margherita Bellamy"}     // rita
 	sbronner    = Identity{"sbronner", "rahk0u", "Sebastian Bronner"}      // styx
 	cbellamy    = Identity{"cbellamy", "xoh7sh", "Camélia Bellamy"}        // kapo
@@ -159,7 +159,7 @@ var (
 	emartin     = Identity{"emartin", "thooy1", "Eva Martin"}              // eva
 	mdubian     = Identity{"mdubian", "iup1ie", "Michael Dubian"}          // fat mike
 	cmihalec    = Identity{"cmihalec", "uequ8u", "Carlotta Mihalec"}       // kennedy
-	jdoe        = Identity{"jdoe", "aiphu4", "Jane Doe 2645"}              // savage girl ???
+	sjohannesen = Identity{"sjohannesen", "aiphu4", "Sabrina Johannesen"}  // savage girl
 	rmichu      = Identity{"rmichu", "ool7ch", "Raoul Michu"}              // raoul cool
 	rglass      = Identity{"rglass", "ahzae2", "Rupert Glass"}             // green glass
 	sglass      = Identity{"sglass", "si6aeb", "Stefie Glass"}             // stefie

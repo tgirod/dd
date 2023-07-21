@@ -146,7 +146,6 @@ var d22 = Server{
 var (
 	amathison   = Identity{"amathison", "hai3ja", "Alan Mathison"}         // alan
 	mmathison   = Identity{"mmathison", "mie6oo", "Mélody Mathison"}       // mel
-	jdoe        = Identity{"jdoe", "ayuu2e", "John Doe"}                   // FIXME rocky
 	mbellamy    = Identity{"mbellamy", "ahng7e", "Margherita Bellamy"}     // rita
 	sbronner    = Identity{"sbronner", "rahk0u", "Sebastian Bronner"}      // styx
 	cbellamy    = Identity{"cbellamy", "xoh7sh", "Camélia Bellamy"}        // kapo

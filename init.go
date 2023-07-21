@@ -286,6 +286,50 @@ var allPlayers = []InfoPlayer{
 	{"Georges", &gsuleymanoglu, georges, false, false},
 	{"Paula", nil, paula, false, true},
 }
+var otherIds = []Identity{
+	amathison, sjasinski, afrieman,
+}
+
+// All the IDs, Corpo and Virtuelles
+func AllIds() []Identity {
+	var allIds []Identity
+
+	for _, perso := range allPlayers {
+		if perso.IdCorp != nil {
+			allIds = append(allIds, *perso.IdCorp)
+		}
+		allIds = append(allIds, perso.IdVirt)
+	}
+	allIds = append(allIds, otherIds...)
+
+	return allIds
+}
+
+// Add all the otherIds (group=public, backdoor=false) that are not 'alreadyOnServer'
+// PAS SUR QUE UTILE
+// func AllOtherUser( otherIds []Identity, alreadyOnServer []User) []User {
+// 	var allUsers []User
+
+// 	for _, id := range otherIds {
+// 		// Check not alreadyIn
+// 		already := false
+// 		for _, u := range alreadyOnServer {
+// 			if u.Login == id.Login {
+// 				already = true
+// 				break
+// 			}
+// 		}
+// 		if !already {
+// 			user := User{
+// 				Login: id.Login,
+// 				Server: "",
+// 				Backdoor: false,
+// 			}
+// 			allUsers = append(allUsers, user)
+// 		}
+// 	}
+// 	return allUsers
+// }
 
 func Init() {
 	log.Println("réinitialisation de la base de données")
@@ -293,23 +337,7 @@ func Init() {
 	Reset()
 
 	InitNetwork(
-		[]Identity{
-			{
-				Login:    "jesus",
-				Password: "roxor",
-				Name:     "Jesus",
-			},
-			{
-				Login:    "crunch",
-				Password: "hack",
-				Name:     "Crunch",
-			},
-			{
-				Login:    "admin",
-				Password: "beurk",
-				Name:     "Admin",
-			},
-		},
+		AllIds(),
 		[]Transaction{
 			{
 				To:      "jesus",

@@ -146,6 +146,7 @@ var d22 = Server{
 // *****************************************************************************
 // Server pour les Hacker, acyclic graph
 // *****************************************************************************
+// TODO FIXME allow some connected node to Nikki and Celine
 // connected nodes can lead to d22
 var connectedA = Server{
 	Address:     "kommunishky.eu",
@@ -157,7 +158,7 @@ var connectedB = Server{
 	Address:     "kashik1842.eu",
 	Private:     true,
 	Description: "Вычислительный кластер - стойка 18 - банк 42",
-	Security:    SEC4,
+	Security:    SEC3,
 }
 var connectedC = Server{
 	Address:     "watchers.free.eu",
@@ -169,7 +170,99 @@ var connectedD = Server{
 	Address:     "kashik1851.eu",
 	Private:     true,
 	Description: "Вычислительный кластер - стойка 18 - банк 51",
+	Security:    SEC3,
+}
+var connectedE = Server{
+	Address:     "trace.net.eu",
+	Private:     true,
+	Description: "Backbone node for traffic surveillance. Keep out !",
 	Security:    SEC4,
+}
+var connectedF = Server{
+	Address:     "kashik1874.eu",
+	Private:     true,
+	Description: "Вычислительный кластер - стойка 18 - банк 74",
+	Security:    SEC3,
+}
+var connectedG = Server{
+	Address:     "pb5-34b.eu",
+	Private:     true,
+	Description: "Политбюро. Узел, занимающийся верификацией и валидацией. ФСБ, департамент 5, район 34Б.",
+	Security:    SEC5,
+}
+var connectedH = Server{
+	Address:     "route.global.ko",
+	Private:     true,
+	Description: "라우팅 인프라. 패킷 확인.",
+	Security:    SEC1,
+}
+var connectedI = Server{
+	Address:     "backup22.main.eu",
+	Private:     true,
+	Description: "Infrastructure de backup, district 22",
+	Security:    SEC3,
+}
+var connectedJ = Server{
+	Address:     "route.global.eu",
+	Private:     true,
+	Description: "Noeud de routage. Infrastructure de controle.",
+	Security:    SEC1,
+}
+var connectedK = Server{
+	Address:     "backup64.main.eu",
+	Private:     true,
+	Description: "Infrastructure de backup, district 64",
+	Security:    SEC3,
+}
+
+// unconnected node have no toute to d22, and allow cycles :o)
+var unconA = Server{
+	Address:     "backup31.main.eu",
+	Private:     true,
+	Description: "Infrastructure de backup, district 31",
+	Security:    SEC3,
+}
+var unconB = Server{
+	Address:     "pb5-11b.eu",
+	Private:     true,
+	Description: "Политбюро. Узел, занимающийся верификацией и валидацией. ФСБ, департамент 5, район 11Б.",
+	Security:    SEC5,
+}
+var unconC = Server{
+	Address:     "kashik1953.eu",
+	Private:     true,
+	Description: "Вычислительный кластер - стойка 19 - банк 53",
+	Security:    SEC3,
+}
+var unconD = Server{
+	Address:     "cl52.cern.eu",
+	Private:     true,
+	Description: "Cluster de calcul, dédié muon-gamma. Réservation par OAR. oar-schedule@cern.eu.",
+	Security:    SEC2,
+}
+var unconE = Server{
+	Address:     "reservior12.eu",
+	Private:     true,
+	Description: "Резервное копирование и архивирование.",
+	Security:    SEC2,
+}
+var unconF = Server{
+	Address:     "backup02.main.eu",
+	Private:     true,
+	Description: "Infrastructure de backup, district 02",
+	Security:    SEC3,
+}
+var unconG = Server{
+	Address:     "cl53.cern.eu",
+	Private:     true,
+	Description: "Cluster de calcul, dédié muon-gamma. Réservation par OAR. oar-schedule@cern.eu.",
+	Security:    SEC2,
+}
+var unconH = Server{
+	Address:     "cl54.cern.eu",
+	Private:     true,
+	Description: "Cluster de calcul, dédié muon-gamma. Réservation par OAR. oar-schedule@cern.eu.",
+	Security:    SEC2,
 }
 
 type Graph struct {
@@ -183,17 +276,62 @@ var allFLR = []*Identity{&crunch, &celine, &nikki}
 
 var dag = []Graph{
 	{&connectedA, "ссылка на ",
-		[]*Server{&d22},
+		[]*Server{&d22, &unconE},
 		[]*Identity{}},
 	{&connectedB, "ссылка на ",
-		[]*Server{&connectedA},
+		[]*Server{&unconG, &connectedA},
 		[]*Identity{&crunch}},
 	{&connectedC, "I got an eye on ",
-		[]*Server{&d22, &connectedB, &connectedD},
+		[]*Server{&d22, &connectedB, &unconH, &connectedD, &connectedE, &connectedH, &unconD},
 		[]*Identity{&crunch}},
 	{&connectedD, "ссылка на ",
-		[]*Server{&connectedA, &connectedB},
+		[]*Server{&unconB, &connectedA, &unconC, &connectedB, &connectedE},
 		[]*Identity{&crunch}},
+	{&connectedE, "Monitoring ",
+		[]*Server{&d22, &unconA},
+		[]*Identity{}},
+	{&connectedF, "ссылка на ",
+		[]*Server{&connectedA, &connectedB, &unconC, &connectedG},
+		[]*Identity{}},
+	{&connectedG, "ссылка на ",
+		[]*Server{&connectedD, &unconB},
+		[]*Identity{&crunch}},
+	{&connectedH, "경로 ",
+		[]*Server{&connectedF, &unconG, &connectedJ, &unconA},
+		[]*Identity{}},
+	{&connectedI, "Backup de ",
+		[]*Server{&d22, &connectedK},
+		[]*Identity{}},
+	{&connectedJ, "Backup de ",
+		[]*Server{&unconE, &connectedE, &connectedI},
+		[]*Identity{}},
+	{&connectedK, "Backup de ",
+		[]*Server{&unconF, &connectedE},
+		[]*Identity{}},
+	{&unconA, "Backup de ",
+		[]*Server{&unconB, &unconF},
+		allFLR},
+	{&unconB, "ссылка на ",
+		[]*Server{&unconD},
+		allFLR},
+	{&unconC, "ссылка на ",
+		[]*Server{&unconB, &connectedG},
+		allFLR},
+	{&unconD, "Liens vers ",
+		[]*Server{&unconC},
+		allFLR},
+	{&unconE, "ссылка на ",
+		[]*Server{&unconA, &unconF},
+		allFLR},
+	{&unconF, "Backup de ",
+		[]*Server{&unconA, &unconD},
+		allFLR},
+	{&unconG, "Liens vers ",
+		[]*Server{&unconD, &unconH},
+		allFLR},
+	{&unconH, "Liens vers ",
+		[]*Server{&unconF, &unconA, &unconG},
+		allFLR},
 }
 
 // unconnected nodes can make cycle because not connected

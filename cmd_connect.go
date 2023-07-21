@@ -25,11 +25,13 @@ func Connect(ctx Context) any {
 	console := ctx.Console()
 	address := ctx.Value("address").(string)
 
-	fmt.Printf("LOG try connecting\n")
+	// BUG CONNECT
+	// fmt.Printf("LOG try connecting\n")
 	if err := console.Connect(address, console.Identity, false, true); err != nil {
 		// connexion impossible avec l'identité courante
 		// lancer la saisie du login
-		fmt.Printf("LOG Connect bad identity\n")
+		// BUG CONNECT
+		// fmt.Printf("LOG Connect bad identity\n")
 		return ctx.WithContext(idconnect, "address", address)
 	}
 
@@ -39,13 +41,17 @@ func Connect(ctx Context) any {
 	return ctx.Result(nil, b.String())
 }
 
-var idconnect = Text{
-	name: "login",
-	help: "identifiant utilisateur",
-	next: Hidden{
-		name: "password",
-		help: "mot de passe utilisateur",
-		next: Run(IdConnect),
+var idconnect = String{
+	name: "address",
+	help: "addresse du serveur",
+	next: Text{
+		name: "login",
+		help: "identifiant utilisateur",
+		next: Hidden{
+			name: "password",
+			help: "mot de passe utilisateur",
+			next: Run(IdConnect),
+		},
 	},
 }
 

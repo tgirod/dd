@@ -51,6 +51,8 @@ func (c Context) Help() string {
 
 // WithContext retourne un nouveau contexte ajoutant une étape de parsing
 func (c Context) WithContext(node Node, key string, value any) Context {
+	// BUG CONNECT
+	// fmt.Printf("LOG WithContext key %s, new key %s arg %v\n", c.key, key, value)
 	return Context{
 		parent: &c,
 		key:    key,
@@ -125,7 +127,11 @@ func (c Context) Error(err error) Result {
 }
 
 func (c Context) Resume(args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG ctx.Resume key %s args %v\n", c.key, args)
+	// fmt.Printf("LOG c.node is %v\n", c.Help())
 	return c.node.Resume(c, args)
+	//return c.node.Parse(c, args)
 }
 
 // Node est un noeud dans l'arbre de parsing
@@ -159,10 +165,14 @@ func (c Cmd) Help() string {
 }
 
 func (c Cmd) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Cmd.Parse name %s key %s arg %v\n", c.name, ctx.key, args)
 	return c.next.Parse(ctx, args)
 }
 
 func (c Cmd) Resume(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Cmd.Resume name %s key %s args %v\n", c.name, ctx.key, args)
 	return c.next.Parse(ctx, args)
 }
 
@@ -182,6 +192,8 @@ func (b Branch) Help() string {
 }
 
 func (b Branch) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Branch.Parse name %s key %s arg %v\n", b.name, ctx.key, args)
 	// aucun argument à parser, l'exécution s'arrête là
 	if len(args) == 0 {
 		return ctx.Result(
@@ -211,7 +223,6 @@ func (b Branch) Parse(ctx Context, args []string) any {
 			return cmd.next.Parse(ctx, args[1:])
 		}
 	}
-
 	// aucune commande ne correspond
 	return ctx.Result(
 		fmt.Errorf("%s : %w", b.name, errInvalidCommand),
@@ -220,6 +231,8 @@ func (b Branch) Parse(ctx Context, args []string) any {
 }
 
 func (b Branch) Resume(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Branch.Resume name %s key %s args %v\n", b.name, ctx.key, args)
 	// on vérifie si le noeud est déjà parsé (resume)
 	if cmd, ok := ctx.Value(b.name).(Cmd); ok {
 		return cmd.next.Parse(ctx, args)
@@ -241,10 +254,14 @@ func (r Run) Help() string {
 }
 
 func (r Run) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Run.Parse key %s arg %v\n", ctx.key, args)
 	return r(ctx)
 }
 
 func (r Run) Resume(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Run.Resume key %s args %v\n", ctx.key, args)
 	return nil
 }
 
@@ -264,6 +281,8 @@ func (s String) Help() string {
 }
 
 func (s String) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG String.Parse name %s key %s arg %v\n", s.name, ctx.key, args)
 	if len(args) == 0 {
 		return ctx.Result(
 			fmt.Errorf("%s : %w", s.name, errMissingArgument),
@@ -276,6 +295,8 @@ func (s String) Parse(ctx Context, args []string) any {
 }
 
 func (s String) Resume(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG String.Resume name %s key %s arg %v\n", s.name, ctx.key, args)
 	return s.next.Parse(ctx, args)
 }
 
@@ -295,6 +316,8 @@ func (n Number) Help() string {
 }
 
 func (n Number) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Number.Parse name %s key %s arg %v\n", n.name, ctx.key, args)
 	// on vérifie si le noeud est déjà parsé (resume)
 	if _, ok := ctx.Value(n.name).(int); ok {
 		return n.next.Parse(ctx, args)
@@ -320,6 +343,8 @@ func (n Number) Parse(ctx Context, args []string) any {
 }
 
 func (n Number) Resume(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Number.Resume name %s key %s arg %v\n", n.name, ctx.key, args)
 	return n.next.Parse(ctx, args)
 }
 
@@ -366,6 +391,8 @@ func (s Select) List(options []Option) string {
 }
 
 func (s Select) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Select.Parse name %s key %s arg %v\n", s.name, ctx.key, args)
 	// récupérer la liste des options possibles
 	options, err := s.options(ctx)
 	if err != nil {
@@ -393,6 +420,8 @@ func (s Select) Parse(ctx Context, args []string) any {
 }
 
 func (s Select) Resume(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Select.Resume name %s key %s arg %v\n", s.name, ctx.key, args)
 	return s.next.Parse(ctx, args)
 }
 
@@ -411,6 +440,8 @@ func (h Hidden) Help() string {
 }
 
 func (h Hidden) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Hidden.Parse name %s key %s arg %v\n", h.name, ctx.key, args)
 	if len(args) == 0 {
 		// ouvrir une fenêtre modale
 		modal := NewShort(ctx, h, true)
@@ -422,6 +453,8 @@ func (h Hidden) Parse(ctx Context, args []string) any {
 }
 
 func (h Hidden) Resume(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Hidden.Resume name %s key %s arg %v\n", h.name, ctx.key, args)
 	return h.next.Parse(ctx, args)
 }
 
@@ -440,17 +473,23 @@ func (t Text) Help() string {
 }
 
 func (t Text) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Text.Parse name %s key %s arg %v\n", t.name, ctx.key, args)
 	if len(args) == 0 {
 		// ouvrir une fenêtre modale
 		modal := NewShort(ctx, t, false)
 		return OpenModalMsg(modal)
 	}
 
+	// BUG CONNECT
+	// fmt.Printf("LOG Text.Parse after modal name %s key %s arg %v\n", t.name, ctx.key, args)
 	ctx = ctx.WithContext(t, t.name, args[0])
 	return t.next.Parse(ctx, args[1:])
 }
 
 func (t Text) Resume(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG Text.Resume name %s key %s arg %v\n", t.name, ctx.key, args)
 	return t.next.Parse(ctx, args)
 }
 
@@ -469,6 +508,8 @@ func (t LongText) Help() string {
 }
 
 func (t LongText) Parse(ctx Context, args []string) any {
+	// BUG CONNECT
+	// fmt.Printf("LOG LongText.Parse name %s key %s arg %v\n", t.name, ctx.key, args)
 	if len(args) == 0 {
 		// ouvrir une fenêtre modale
 		modal := NewLong(ctx, t)

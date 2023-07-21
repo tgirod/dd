@@ -25,9 +25,11 @@ func Connect(ctx Context) any {
 	console := ctx.Console()
 	address := ctx.Value("address").(string)
 
+	fmt.Printf("LOG try connecting\n")
 	if err := console.Connect(address, console.Identity, false, true); err != nil {
 		// connexion impossible avec l'identité courante
 		// lancer la saisie du login
+		fmt.Printf("LOG Connect bad identity\n")
 		return ctx.WithContext(idconnect, "address", address)
 	}
 

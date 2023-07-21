@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 )
 
@@ -141,6 +142,61 @@ var d22 = Server{
 	Description: dd22Desc,
 	Security:    SEC3,
 }
+
+// *****************************************************************************
+// Server pour les Hacker, acyclic graph
+// *****************************************************************************
+// connected nodes can lead to d22
+var connectedA = Server{
+	Address:     "kommunishky.eu",
+	Private:     false,
+	Description: "Главный узел связи",
+	Security:    SEC2,
+}
+var connectedB = Server{
+	Address:     "kashik1842.eu",
+	Private:     true,
+	Description: "Вычислительный кластер - стойка 18 - банк 42",
+	Security:    SEC4,
+}
+var connectedC = Server{
+	Address:     "watchers.free.eu",
+	Private:     true,
+	Description: "Big Brother is watching them.....",
+	Security:    SEC5,
+}
+var connectedD = Server{
+	Address:     "kashik1851.eu",
+	Private:     true,
+	Description: "Вычислительный кластер - стойка 18 - банк 51",
+	Security:    SEC4,
+}
+
+type Graph struct {
+	Node     *Server
+	LinkDesc string
+	Links    []*Server
+	Hackers  []*Identity
+}
+
+var allFLR = []*Identity{&crunch, &celine, &nikki}
+
+var dag = []Graph{
+	{&connectedA, "ссылка на ",
+		[]*Server{&d22},
+		[]*Identity{}},
+	{&connectedB, "ссылка на ",
+		[]*Server{&connectedA},
+		[]*Identity{&crunch}},
+	{&connectedC, "I got an eye on ",
+		[]*Server{&d22, &connectedB, &connectedD},
+		[]*Identity{&crunch}},
+	{&connectedD, "ссылка на ",
+		[]*Server{&connectedA, &connectedB},
+		[]*Identity{&crunch}},
+}
+
+// unconnected nodes can make cycle because not connected
 
 // identités corpo recopiées depuis l'ancienne version
 var (
@@ -387,4 +443,26 @@ func Init() {
 		[]Register{},
 		[]Post{},
 	)
+	// acyclic graph for hackers
+	for _, g := range dag {
+		var links []Link
+		for _, l := range g.Links {
+			links = append(links, Link{
+				Address:     l.Address,
+				Description: fmt.Sprintf("%s %s", g.LinkDesc, l.Address),
+			})
+		}
+
+		var users []User
+		for _, u := range g.Hackers {
+			users = append(users, User{
+				Login:    u.Login,
+				Server:   "",
+				Backdoor: false,
+				Groups:   []string{"flr"},
+			})
+		}
+
+		InitServer(*(g.Node), users, links, []Register{}, []Post{})
+	}
 }

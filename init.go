@@ -108,6 +108,10 @@ Bienvenue sur le serveur communautaire du Dirty District.
 Ce serveur est connecté au Net par le biais d'un accès illégal. Merci de ne pas
 faire n'importe quoi.
 
+******************************************************************************
+**** DÉSOLÉ : suite au crash de la semaine, on n'a pas réussi à tout récuperer
+************************************************************* (fuck) *********
+
 Tape "index" pour avoir la liste des services fournis par le serveur. Si tu as
 besoin d'aide, demande à ton nerd préféré.`
 
@@ -161,9 +165,136 @@ var dd22Desc = `
 
 var d22 = Server{
 	Address:     "d22.eu",
+	Private:     false,
 	Description: dd22Desc,
 	Security:    SEC3,
 }
+
+// serveur public de la kramps
+var kramps = Server{
+	Address:     "kramps.d22.eu",
+	Private:     false,
+	Description: kpubDesc,
+	Security:    SEC2,
+}
+
+var kpubDesc = `
+      ___           ___           ___           ___           ___         ___
+     /__/|         /  /\         /  /\         /__/\         /  /\       /  /\
+    |  |:|        /  /::\       /  /::\       |  |::\       /  /::\     /  /:/_
+    |  |:|       /  /:/\:\     /  /:/\:\      |  |:|:\     /  /:/\:\   /  /:/ /\
+  __|  |:|      /  /:/~/:/    /  /:/~/::\   __|__|:|\:\   /  /:/~/:/  /  /:/ /::\
+ /__/\_|:|____ /__/:/ /:/___ /__/:/ /:/\:\ /__/::::| \:\ /__/:/ /:/  /__/:/ /:/\:\
+ \  \:\/:::::/ \  \:\/:::::/ \  \:\/:/__\/ \  \:\~~\__\/ \  \:\/:/   \  \:\/:/~/:/
+  \  \::/~~~~   \  \::/~~~~   \  \::/       \  \:\        \  \::/     \  \::/ /:/
+   \  \:\        \  \:\        \  \:\        \  \:\        \  \:\      \__\/ /:/
+    \  \:\        \  \:\        \  \:\        \  \:\        \  \:\       /__/:/
+     \__\/         \__\/         \__\/         \__\/         \__\/       \__\/
+
+                                                                +-+-+-+-+-+-+-+-+
+                                                                |S|e|c|u|r|i|t|y|
+   _|_  | | _   |\/| _  _  _| _    _ |    _  (~ ∧  _  _|_       +-+-+-+-+-+-+-+-+
+    !   |_|| |  |  |(_)| |(_|(/_  |_)||_|_\  _)|_||    !        | | | | | | | | |
+                                  |                             | | | | | | | | |
+                                                                | | | | | | | | |
+                                                                | | | | | | | | |
+                                                                | | | | | | | | |
+                    Plus de 4.000.000.000 ¥€$ de capital        | | | | | | | | |
+`
+
+var kperDesc = `
+      ___           ___           ___           ___           ___         ___
+     /__/|         /  /\         /  /\         /__/\         /  /\       /  /\
+    |  |:|        /  /::\       /  /::\       |  |::\       /  /::\     /  /:/_
+    |  |:|       /  /:/\:\     /  /:/\:\      |  |:|:\     /  /:/\:\   /  /:/ /\
+  __|  |:|      /  /:/~/:/    /  /:/~/::\   __|__|:|\:\   /  /:/~/:/  /  /:/ /::\
+ /__/\_|:|____ /__/:/ /:/___ /__/:/ /:/\:\ /__/::::| \:\ /__/:/ /:/  /__/:/ /:/\:\
+ \  \:\/:::::/ \  \:\/:::::/ \  \:\/:/__\/ \  \:\~~\__\/ \  \:\/:/   \  \:\/:/~/:/
+  \  \::/~~~~   \  \::/~~~~   \  \::/       \  \:\        \  \::/     \  \::/ /:/
+   \  \:\        \  \:\        \  \:\        \  \:\        \  \:\      \__\/ /:/
+    \  \:\        \  \:\        \  \:\        \  \:\        \  \:\       /__/:/
+     \__\/         \__\/         \__\/         \__\/         \__\/       \__\/
+
+  [-> Serveur du personnel <-]++ toutes les transaction sont loguées (SecLvl 4)
+
+  20/07: Rappel ! Les EdT sont calculés chaque nuit pour le lendemain.
+         Aucune réclamation n'est recevable.
+
+  18/07: StuKa est la 3° organisation du personnel (spécialisée Tech niv 1-3) à
+         déposer le bilan cette année.
+
+  02/07: Rappel ! Les dossiers de promotions pour SecAgent, tout niveau, sont à
+         renvoyer avant le 31/07. Tarif habituel, voir agence comptable.
+`
+
+// serveur privé de la kramps
+var persKramps = Server{
+	Address:     "priv.kramps.d22.eu",
+	Private:     true,
+	Description: kperDesc,
+	Security:    SEC3,
+}
+
+// Accounts: []Account{
+// 	{Login: "akremmer"},
+// 	{Login: "haxxor", Backdoor: true},
+// },
+// Links: []Link{
+// 	{kramps_inmates.Address, "Gestion des prisonniers"},
+// 	{kramps_sec.Address, "Sécurité des installations"},
+// },
+
+var ksecDesc = `
+      ___           ___           ___           ___           ___         ___
+     /__/|         /  /\         /  /\         /__/\         /  /\       /  /\
+    |  |:|        /  /::\       /  /::\       |  |::\       /  /::\     /  /:/_
+    |  |:|       /  /:/\:\     /  /:/\:\      |  |:|:\     /  /:/\:\   /  /:/ /\
+  __|  |:|      /  /:/~/:/    /  /:/~/::\   __|__|:|\:\   /  /:/~/:/  /  /:/ /::\
+ /__/\_|:|____ /__/:/ /:/___ /__/:/ /:/\:\ /__/::::| \:\ /__/:/ /:/  /__/:/ /:/\:\
+ \  \:\/:::::/ \  \:\/:::::/ \  \:\/:/__\/ \  \:\~~\__\/ \  \:\/:/   \  \:\/:/~/:/
+  \  \::/~~~~   \  \::/~~~~   \  \::/       \  \:\        \  \::/     \  \::/ /:/
+   \  \:\        \  \:\        \  \:\        \  \:\        \  \:\      \__\/ /:/
+    \  \:\        \  \:\        \  \:\        \  \:\        \  \:\       /__/:/
+     \__\/         \__\/         \__\/         \__\/         \__\/       \__\/
+
+  [-> Serveur Sécurité <-]        ++ toutes les transaction sont loguées (SecLvl 4)
+
+  Vous avez suivi la formation <sécurité> obligatoire, mais nous vous rappelons les
+  règles essentielles :
+       #1) Respectez la vie privée des autres.
+       #2) Réfléchissez avant de taper.
+       #3) De grands pouvoirs impliquent de grandes responsabilités.
+`
+var secKramps = Server{
+	Address:     "sec.kramps.d22.eu",
+	Private:     true,
+	Description: ksecDesc,
+	Security:    SEC4,
+}
+
+// serveur des services corporatistes D22
+var corp = Server{
+	Address:     "corp.d22.eu",
+	Private:     false,
+	Description: cd22Desc,
+	Security:    SEC3,
+}
+var cd22Desc = `
+
+   ((ervices  ((orporatistes
+   ''
+    _
+   [|)istrict  22
+
+   Ce service **public** vous est proposé **gratuitement** par la Cour Corporatiste.
+
+   Ce service est livré en l'état, et la Cours Corporatiste décline toute responsabilité
+   en ce qui concerne les données présentes et l'usage qui en est fait.
+
+   Ce site existe gràce à la généreuse participation de Weyland-Yutani Corp,
+   Tyrel Corp, Tessier-Ashpool SA, Disney Dassault, Arasaka, Renraku, Ubik,
+   Legba Voodoocom, Avalon, Association des Banques Unifiées Suisses (ABUS).
+`
 
 // *****************************************************************************
 // Server pour les Hacker, acyclic graph
@@ -403,6 +534,8 @@ var (
 	// PNJs
 	afrieman = Identity{"afrieman", "far3ik", "Anton Frieman", true} // PNJ fan blackwave
 	// TODO quelques employé•e•s de la kramps
+	akremmer = Identity{"akremmer", "sexgod22", "Alexandre Kremmer", true}   // security Kramps
+	vredmint = Identity{"vredmint", "lily-dorian", "Virginia Redmint", true} // assistante Kramps
 	// TODO quelques employé•e•s de legba voodoocom
 )
 
@@ -503,7 +636,9 @@ var allPlayers = []InfoPlayer{
 	{"Paula", nil, paula, false, true},
 }
 var otherIds = []Identity{
-	amathison, sjasinski, afrieman,
+	amathison, afrieman, sjasinski,
+	// Kramps
+	akremmer, vredmint,
 }
 
 // All the IDs, Corpo and Virtuelles
@@ -601,16 +736,58 @@ func Init() {
 	)
 
 	InitServer(d22,
-		[]User{
-			{
-				Login:    "jesus",
-				Backdoor: false,
-			},
+		[]User{},
+		[]Link{
+			//{Address: legba.Address, Description: "Legba Voodoocom"},
+			{Address: kramps.Address, Description: "Kramps Security"},
+			{Address: corp.Address, Description: "Central Services"},
+			//{Address: abus.Address, Description: "Association des Banques Unifiées Suisses"},
+			//{Address: greendata.Address, Description: "Green Data, solution environementale"},
 		},
-		[]Link{},
 		[]Register{},
 		[]Post{},
 	)
+	InitServer(kramps,
+		[]User{},
+		[]Link{
+			{Address: persKramps.Address, Description: "Serveur réservé au personnel"},
+		},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(persKramps,
+		[]User{
+			{Login: "akremmer", Groups: []string{"pers", "sec"}},
+			{Login: "rkievain", Groups: []string{"pers"}},
+			{Login: "vredmint", Groups: []string{"pers"}},
+		},
+		[]Link{
+			{Address: kramps.Address, Description: "Accueil"},
+			{Address: secKramps.Address, Description: "Sécurité des installations", Group: "sec"},
+		},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(secKramps,
+		[]User{
+			{Login: "akremmer", Groups: []string{"pers", "sec"}},
+		},
+		[]Link{
+			{Address: kramps.Address, Description: "Accueil"},
+		},
+		[]Register{},
+		[]Post{},
+	)
+
+	InitServer(corp,
+		[]User{},
+		[]Link{
+			//{Address: justice.Address, Description: "Services judiciairesé"},
+		},
+		[]Register{},
+		[]Post{},
+	)
+
 	// acyclic graph for hackers
 	for _, g := range dag {
 		var links []Link

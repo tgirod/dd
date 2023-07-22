@@ -43,13 +43,17 @@ func LinkCmd(ctx Context) any {
 	return ctx.Output(b.String())
 }
 
-var idlink = Text{
-	name: "login",
-	help: "identifiant utilisateur",
-	next: Hidden{
-		name: "password",
-		help: "mot de passe utilisateur",
-		next: Run(IdLink),
+var idlink = String{
+	name: "address",
+	help: "addresse du serveur",
+	next: Text{
+		name: "login",
+		help: "identifiant utilisateur",
+		next: Hidden{
+			name: "password",
+			help: "mot de passe utilisateur",
+			next: Run(IdLink),
+		},
 	},
 }
 

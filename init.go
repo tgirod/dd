@@ -117,6 +117,28 @@ var dd = Server{
 	Security:    SEC1,
 }
 
+var frozDesc = `
+  █████▒██▀███   ▒█████  ▒███████▒ ██▓███   █    ██  ███▄    █  ██ ▄█▀
+▓██   ▒▓██ ▒ ██▒▒██▒  ██▒▒ ▒ ▒ ▄▀░▓██░  ██▒ ██  ▓██▒ ██ ▀█   █  ██▄█▒
+▒████ ░▓██ ░▄█ ▒▒██░  ██▒░ ▒ ▄▀▒░ ▓██░ ██▓▒▓██  ▒██░▓██  ▀█ ██▒▓███▄░
+░▓█▒  ░▒██▀▀█▄  ▒██   ██░  ▄▀▒   ░▒██▄█▓▒ ▒▓▓█  ░██░▓██▒  ▐▌██▒▓██ █▄
+░▒█░   ░██▓ ▒██▒░ ████▓▒░▒███████▒▒██▒ ░  ░▒▒█████▓ ▒██░   ▓██░▒██▒ █▄
+ ▒ ░   ░ ▒▓ ░▒▓░░ ▒░▒░▒░ ░▒▒ ▓░▒░▒▒▓▒░ ░  ░░▒▓▒ ▒ ▒ ░ ▒░   ▒ ▒ ▒ ▒▒ ▓▒
+ ░       ░▒ ░ ▒░  ░ ▒ ▒░ ░░▒ ▒ ░ ▒░▒ ░     ░░▒░ ░ ░ ░ ░░   ░ ▒░░ ░▒ ▒░
+ ░ ░     ░░   ░ ░ ░ ░ ▒  ░ ░ ░ ░ ░░░        ░░░ ░ ░    ░   ░ ░ ░ ░░ ░
+          ░         ░ ░    ░ ░                ░              ░ ░  ░
+                         ░
+Ici ça cause FrozPunk, et de rien d'autre !
+
+                             Sauf si vous voulez.....
+`
+var frozdd = Server{
+	Address:     "froz.dd.local",
+	Private:     false,
+	Description: frozDesc,
+	Security:    SEC1,
+}
+
 var dd22Desc = `
                     _____                            _                       
                    |  ___|                          | |                      
@@ -552,21 +574,29 @@ func Init() {
 				Login:    "jesus",
 				Server:   "",
 				Backdoor: false,
-				Groups:   []string{"admin", "h4ck3r"},
+				Groups:   []string{"elec", "admin"},
 			},
 			{
-				Login:    "crunch",
+				Login:    "ping",
 				Server:   "",
 				Backdoor: false,
-				Groups:   []string{"h4ck3r"},
+				Groups:   []string{"elec"},
 			},
 		},
 		[]Link{
 			{Address: d22.Address, Description: "serveur public du District 22"},
+			{Address: frozdd.Address, Description: "pour les fans de Frozpunk"},
 		},
 		[]Register{
+			// FIXME TODO registres elec
 			{Description: "machine à café", State: "on", Options: []RegisterState{"on", "off", "overdrive"}},
 		},
+		[]Post{},
+	)
+	InitServer(frozdd,
+		[]User{},
+		[]Link{},
+		[]Register{},
 		[]Post{},
 	)
 

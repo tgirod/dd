@@ -296,6 +296,278 @@ var cd22Desc = `
    Legba Voodoocom, Avalon, Association des Banques Unifiées Suisses (ABUS).
 `
 
+// serveur judiciaire
+var justice = Server{
+	Address:     "justice.corp.d22.eu",
+	Private:     false,
+	Description: cd22justDesc,
+	Security:    SEC5,
+}
+
+var cd22justDesc = `
+   ((ervices  ((orporatistes
+   ''
+    _
+   [|)istrict  22   === Département JUDICIAIRE ===
+
+   Ce service **public** vous est proposé **gratuitement** par la Cours Corporatiste.
+
+   Ce service est livré en l'état, et la Cours Corporatiste décline toute responsabilité
+   en ce qui concerne les données présentes et l'usage qui en est fait.
+
+   Ce site existe gràce à la généreuse participation de Weyland-Yutani Corp,
+   Tyrel Corp, Tessier-Ashpool SA, Disney Dassault, Arasaka, Renraku, Ubik,
+   Legba Voodoocom, Avalon, Association des Banques Unifiées Suisses (ABUS).
+`
+
+// serveur bancaire du D22
+var abus = Server{
+	Address:     "abus.d22.eu",
+	Private:     false,
+	Security:    SEC5,
+	Description: cd22bankDesc,
+}
+
+var cd22bankDesc = `
+   ((ervices  ((orporatistes
+   ''
+    _
+   [|)istrict  22   === Département BANCAIRE ===
+
+   Ce service **public** est assuré par
+                                          _______     ______                 _______
+                       Association       (  ___  )   (  ___ \   |\     /|   (  ____ \
+                                         | (   ) |   | (   ) )  | )   ( |   | (    \/
+                       des Banques       | (___) |   | (__/ /   | |   | |   | (_____
+                                         |  ___  |   |  __ (    | |   | |   (_____  )
+                          Unifiées       | (   ) |   | (  \ \   | |   | |         ) |
+                                         | )   ( | _ | )___) )_ | (___) | _ /\____) |
+                           Suisses       |/     \|(¥)|/ \___/(€)(_______)($)\_______)
+`
+
+var (
+	lbDesc = `
+                 ......
+           .',,,,,,,,,,,,,,,.
+        .;;,'.            .',;;'
+      ':;.   ...  ,odooodkxxdc;;:,
+    .::..;:oOKXXOOXWWWWNXNWN0xd:';c'     Entrez dans une nouvelle réalité
+   .c,  :XMWWWWWKkKK0KKdck0Okdol. .c,
+  .c'   'dxkKNWWO,...;kklxdOWWWXl  .c,       Soyez l'acteur du changement
+  :;        .:ollc,cxOOooxkXMWO;.   'l.
+ 'c.         'dc.';ox0O,lWWWWKl''.   :;            Matérialisez vos rêves
+ ;c         .;l:'..;coOxdKNXKc,kXd.  ;:
+ ;c         .,:od:.   'kKOdl:'cdc.   ;:              Obtenez l'impossible
+ 'c.           .';c;',l0Oolc:c,.     :;
+  :;              .xXN0c',;,'.      'c.                    Et plus encore
+  .c,            'xKKd.            .c,
+   .c,     .',;:lKMKxo:;,'..      .c,
+    .::. 'xKNWWMMMWMMMMWWNXk:   .;c. .____                ___.
+      .:;;,,:clloooooollc:;'. .;:,   |    |    ____   ____\_ |__ _____
+        .,;;,.            .',;;'     |    |  _/ __ \ / ___\| __ \\__  \
+           .',,,,,,,,,,,',,'.        |    |__\  ___// /_/  > \_\ \/ __ \_
+                 .......             |_______ \___  >___  /|___  (____  /
+          ____   ___                         \/   \/_____/     \/     \/
+          \   \ /   /___   ____   __| _/____   ____   ____  ____   _____
+           \   Y   /  _ \ /  _ \ / __ |/  _ \ /  _ \_/ ___\/  _ \ /     \
+            \     (  <_> |  <_> ) /_/ (  <_> |  <_> )  \__(  <_> )  Y Y  \
+             \___/ \____/ \____/\____ |\____/ \____/ \___  >____/|__|_|  /
+                                     \/                  \/            \/
+`
+	satDesc = `
+SATCOM, une division externalisée de
+ ____                ___
+|    |    ____   ____\_ |__ _____
+|    |  _/ __ \ / ___\| __ \\__  \
+|    |__\  ___// /_/  > \_\ \/ __ \_
+|_______ \___  >___  /|___  (____  /
+ ____   \/_  \/_____/     \/___  \/
+ \   \ /   /___   ____   __| _/____   ____   ____  ____   _____
+  \   Y   /  _ \ /  _ \ / __ |/  _ \ /  _ \_/ ___\/  _ \ /     \
+   \     (  <_> |  <_> ) /_/ (  <_> |  <_> )  \__(  <_> )  Y Y  \
+    \___/ \____/ \____/\____ |\____/ \____/ \___  >____/|__|_|  /
+                            \/                  \/            \/
+
+[Accès Restreint]         >>>>>>> entrez vos identifiants <<<<<<<
+`
+	arcDesc = `
+
+*********************************************************************************
+Legba Voodoocom ne peut être tenu responsable de l'usage et des données stockées.
+**** WARNING **** : ce service n'est plus maintenu.
+*********************************************************************************
+━━━╮╭╮╱╱╱╱╱╱╱╱╱╱╱╭━━━╮╱╱╱╱╱╱╭╮
+┃╭━╮┃┃┃╱╱╱╱╱╱╱╱╱╱╱┃╭━╮┃╱╱╱╱╱╭╯╰╮     Division: R&D, Unité 2772
+┃╰━━┳┫┃╭┳━━┳━━┳━╮╱┃╰━━┳━━┳┳━╋╮╭╯               Projets spéciaux
+╰━━╮┣┫┃┣┫╭━┫╭╮┃╭╮╮╰━━╮┃╭╮┣┫╭╋┫┃                (dir: A.M)
+┃╰━╯┃┃╰┫┃╰━┫╰╯┃┃┃┃┃╰━╯┃╰╯┃┃┃┃┃╰╮
+╰━━━┻┻━┻┻━━┻━━┻╯╰╯╰━━━┫╭━┻┻╯╰┻━╯
+╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃
+╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰╯
+*********************************************************************************
+**** WARNING **** : ce service n'est plus maintenu.
+Legba Voodoocom ne peut être tenu responsable de l'usage et des données stockées.
+*********************************************************************************
+[Beware MalvolentKiIA, hack@45EBG56#EACD M@dJ0k3r;3/4/206]
+`
+)
+
+// serveur public de Legba Voodoocom
+var legba = Server{
+	Address:     "legba.d22.eu",
+	Private:     false,
+	Security:    SEC4,
+	Description: lbDesc,
+}
+
+// serveur privé de la communication satellite
+var legba_satcom = Server{
+	Address:     "satcom.legba.d22.eu",
+	Private:     true,
+	Description: satDesc,
+	Security:    SEC4,
+}
+
+// serveur archive de Silicon Spirit
+var legba_archive = Server{
+	Address:     "archive.legba.d22.eu",
+	Private:     true,
+	Description: arcDesc,
+	Security:    SEC4,
+}
+
+var gdDesc = `
+ _                _____                    _____   _        _          _         _
+(_)      ____    (_____)         _        (_____) (_) ____ (_)_  _    (_)       (_)_
+(_)     (____)   (_)__(_)  ___  (_)__     (_)  (_) _ (____)(___)(_)__  _    ___ (___)
+(_)    (_)_(_)   (_____)  (___) (____)    (_)  (_)(_)(_)__ (_)  (____)(_) _(___)(_)
+(_)____(__)__    (_)__(_)(_)_(_)(_) (_)   (_)__(_)(_) _(__)(_)_ (_)   (_)(_)___ (_)_
+(______)(____)   (_____)  (___) (_) (_)   (_____) (_)(____) (__)(_)   (_) (____) (__)
+
+   ** On vend de tout - tous s'achète..... **
+`
+
+// serveur le bon district
+var lbd = Server{
+	Address:     "lebondistrict.d22.eu",
+	Private:     false,
+	Description: gdDesc,
+	Security:    SEC2,
+}
+
+// green data
+var greendata = Server{
+	Address:     "greendata.d22.eu",
+	Private:     false,
+	Description: greenDesc,
+	Security:    SEC3,
+}
+
+var greenDesc = `
+                             %      ____                        __  __
+                         %%%%%%    /\  _ \                     /\ \/\ \
+                %%%%%%%%%%%%%%%%   \ \ \L\_\  _ __    __     __\ \  \\ \
+            %%%%%%%%%%%%%% %%%%%    \ \ \L_L /\  __\/ __ \ / __ \ \ ,   \
+          %%%%%%%%%%%%% *%%%%%%%     \ \ \/, \ \ \//\  __//\  __/\ \ \ \ \
+         %%%%%%%%%   %%%%%%%%%%       \ \____/\ \_\\ \____\ \____\\ \_\ \_\
+         %%%%   %%%%%%%%%%%%%%         \/___/  \/_/ \/____/\/____/ \/_/\/_/
+            .%%%%%%%%%%%%%%%
+          %%%%%%%%%%%%%%%               ____              __    ______
+        %%%                            /\  _ \           /\ \__/\  _  \
+        %%                             \ \ \/\ \     __  \ \ ,_\ \ \L\ \
+                                        \ \ \ \ \  / __ \ \ \ \/\ \  __ \
+       Analyses / Diagnostics            \ \ \_\ \/\ \L\ \_\ \ \_\ \ \/\ \
+                                          \ \____/\ \__/ \_\\ \__\\ \_\ \_\
+       Certifié ISO-56-52-100              \/___/  \/__/\/_/ \/__/ \/_/\/_/
+`
+
+var invertedLeaf = `
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@.@@@@@
+@@@@@@@@@@@@@@@@@@@@......@@@@
+@@@@@@@@@@@................@@@
+@@@@@@@..............@.....@@@
+@@@@@.............@&.......@@@
+@@@@.........@@@..........@@@@
+@@@@....@@@..............@@@@@
+@@@@@@@@...............@@@@@@@
+@@@@@...............@@@@@@@@@@
+@@@...@@@@@@@@@@@@@@@@@@@@@@@@
+@@@..@@@@@@@@@@@@@@@@@@@@@@@@@
+`
+
+// serveur privé de Crunch
+var leet = Server{
+	Address:     "leet.darknet",
+	Private:     true,
+	Description: cruDesc,
+	Security:    SEC3,
+}
+
+var cruDesc = `
+         _/_/_/  _/_/_/    _/    _/  _/      _/    _/_/_/  _/    _/
+      _/        _/    _/  _/    _/  _/_/    _/  _/        _/    _/
+     _/        _/_/_/    _/    _/  _/  _/  _/  _/        _/_/_/_/
+    _/        _/    _/  _/    _/  _/    _/_/  _/        _/    _/
+     _/_/_/  _/    _/    _/_/    _/      _/    _/_/_/  _/    _/
+
+    is NOT watching you... No need for that.... :o)
+`
+
+// serveur privé de Céline
+var lair = Server{
+	Address:     "celine.darknet",
+	Private:     true,
+	Description: celDesc,
+	Security:    SEC3,
+}
+
+var celDesc = `
+  ******               *******                    **
+  **////**   **    **  /**////**                  /**
+ **    //  ************/**    /**  ******   ******/**  **
+/**       ///**////**/ /**    /** //////** //**//*/** **
+/**         /**   /**  /**    /**  *******  /** / /****
+//**    ** ************/**    **  **////**  /**   /**/**
+ //****** ///**////**/ /*******  //********/***   /**//**
+  //////    //    //   ///////    //////// ///    //  //
+
+...... Dernier avertissement ............................
+`
+
+// serveur de Hope
+var hopeServ = Server{
+	Address:     "hope.local",
+	Private:     true,
+	Description: hopDesc,
+	Security:    SEC5,
+}
+
+// Project "Hope"
+// Dépot mémoriel
+// - fenêtre temporelle glissante v12.5
+// - compression McVaugh-Korba-Yang
+// - contenu infix normalisé
+// - (c) A.M
+var hopDesc = `
+01010000 01110010 01101111 01101010 01100101 01100011
+01110100  00100010 01001000 01101111 01110000 01100101 00100010
+01000100 11101001 01110000 01101111 01110100  01101101
+11101001 01101101 01101111 01110010 01101001 01100101 01101100
+00101101  01100110 01100101 01101110 11101010 01110100 01110010
+01100101  01110100 01100101 01101101 01110000 01101111 01110010 01100101
+01101100 01101100 01100101  01100111 01101100 01101001 01110011 01110011
+01100001 01101110 01110100 01100101  01110110 00110001 00110010 00101110
+00110101  00101101  01100011 01101111 01101101 01110000 01110010
+01100101 01110011 01110011 01101001 01101111 01101110  01001101 01100011
+01010110 01100001 01110101 01100111 01101000 00101101 01001011 01101111
+01110010 01100010 01100001 00101101 01011001 01100001 01101110 01100111
+00101101  01100011 01101111 01101110 01110100 01100101 01101110 01110101
+01101001 01101110 01100110 01101001 01111000  01101110 01101111 01110010
+01101101 01100001 01101100 01101001 01110011 11101001
+00101101  00101000 01100011 00101001  01000001 00101110 01001101
+`
+
 // *****************************************************************************
 // Server pour les Hacker, acyclic graph
 // *****************************************************************************
@@ -738,11 +1010,11 @@ func Init() {
 	InitServer(d22,
 		[]User{},
 		[]Link{
-			//{Address: legba.Address, Description: "Legba Voodoocom"},
+			{Address: legba.Address, Description: "Legba Voodoocom"},
 			{Address: kramps.Address, Description: "Kramps Security"},
 			{Address: corp.Address, Description: "Central Services"},
-			//{Address: abus.Address, Description: "Association des Banques Unifiées Suisses"},
-			//{Address: greendata.Address, Description: "Green Data, solution environementale"},
+			{Address: abus.Address, Description: "Association des Banques Unifiées Suisses"},
+			{Address: greendata.Address, Description: "Green Data, solution environementale"},
 		},
 		[]Register{},
 		[]Post{},
@@ -782,8 +1054,87 @@ func Init() {
 	InitServer(corp,
 		[]User{},
 		[]Link{
-			//{Address: justice.Address, Description: "Services judiciairesé"},
+			{Address: justice.Address, Description: "Services judiciairesé"},
 		},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(justice,
+		[]User{},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(abus,
+		[]User{},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+
+	InitServer(legba,
+		[]User{},
+		[]Link{
+			{Address: legba_satcom.Address, Description: "Division Sat-Com"},
+			{Address: legba_archive.Address, Description: "Archives", Group: "admin"},
+		},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(legba_satcom,
+		[]User{},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(legba_archive,
+		[]User{},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+
+	InitServer(lbd,
+		[]User{},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+
+	InitServer(greendata,
+		[]User{},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+
+	InitServer(leet,
+		[]User{
+			{Login: "crunch", Backdoor: false, Groups: []string{"admin"}},
+			{Login: "celine", Backdoor: false},
+			{Login: "nikki", Backdoor: false},
+			{Login: "greenglass", Backdoor: false},
+		},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(lair,
+		[]User{
+			{Login: "celine", Backdoor: false, Groups: []string{"admin"}},
+		},
+		// TODO FIXME un Link vers leet.darknet ??
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(hopeServ,
+		[]User{
+			// TODO FIXME ajouter alan ??
+			{Login: "hope", Backdoor: false, Groups: []string{"admin"}},
+			{Login: "mel", Backdoor: false},
+		},
+		[]Link{},
 		[]Register{},
 		[]Post{},
 	)

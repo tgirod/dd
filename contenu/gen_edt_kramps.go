@@ -96,14 +96,43 @@ var prisoners = []Entry{
 	{"PW-12", []string{"Lisa", "Steele"}, "", "Lisa Steele", "Lisa Steele - 7/12/1952 - a7580a18-00ed-42ee-90d6-192bed734e86"},
 }
 
-var places = []string{"AC1", "AC2", "AC3", "DZ", "RR", "CE"}
+var places = []string{"AC1", "AC2", "AC3", "RR", "CE", "DZ"}
 
 var timeSlots = []string{"10", "14", "16", "20"}
 
 var days = []string{"2507", "2607", "2707", "2807", "2907", "3007"}
 
+// Security devices
+type Device struct {
+	Place string
+	Nb    int
+}
+
+var camDev = []Device{
+	{"AC1", 3}, {"AC2", 3}, {"AC3", 3},
+	{"RR", 5},
+	{"CE", 5},
+	{"DIV", 1},
+}
+var camState = []RegisterState{"On", "Off", "Disconnected"}
+
+var doorDev = []Device{
+	{"AC1", 1}, {"AC2", 1}, {"AC3", 1},
+	{"RR", 3},
+	{"CE", 5},
+}
+var doorState = []RegisterState{"Locked", "Unlocked"}
+
+var alarmDev = []Device{
+	{"AC1", 1}, {"AC2", 1}, {"AC3", 1},
+	{"RR", 1},
+	{"CE", 5},
+}
+var alarmState = []RegisterState{"ok", "Warning", "ALARM"}
+
 var regGuards []Register
 var regPriso []Register
+var regDevice []Register
 
 var rnd *rand.Rand
 
@@ -126,7 +155,7 @@ func gen_registries(peoples []string) []Register {
 				}
 				reg := Register{
 					Server:      "priv.kramps.d22.eu",
-					Group:       "",
+					Group:       "pers",
 					Description: key,
 					State:       RegisterState(val),
 					Options:     options,
@@ -134,6 +163,30 @@ func gen_registries(peoples []string) []Register {
 				//fmt.Printf("REG %v\n", reg)
 				res = append(res, reg)
 			}
+		}
+	}
+	return res
+}
+
+// "sec.kramps.d22.eu"
+// Device is in state=states[0]
+func genDevices(name string, dev []Device, states []RegisterState) []Register {
+	var res []Register
+
+	for _, d := range dev {
+		for n := 1; n <= d.Nb; n = n + 1 {
+			key := fmt.Sprintf("%s_%s_%02d", name, d.Place, n)
+			val := states[0]
+
+			reg := Register{
+				Server:      "sec.kramps.d22.eu",
+				Group:       "sec",
+				Description: key,
+				State:       val,
+				Options:     states,
+			}
+			//fmt.Printf("REG %v\n", reg)
+			res = append(res, reg)
 		}
 	}
 	return res
@@ -166,9 +219,19 @@ func main() {
 		prisoKeys = append(prisoKeys, p.Code)
 	}
 	regPriso = append(regPriso, gen_registries(prisoKeys)...)
-	yamlPriso, err := yaml.Marshal(regGuards)
+	yamlPriso, err := yaml.Marshal(regPriso)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("## Priso *****\n%s\n", yamlPriso)
+
+	regDevice = append(regDevice, genDevices("CAM", camDev, camState)...)
+	regDevice = append(regDevice, genDevices("DOOR", doorDev, doorState)...)
+	regDevice = append(regDevice, genDevices("ALM", alarmDev, alarmState)...)
+
+	yamlDevice, err := yaml.Marshal(regDevice)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("## Devices *****\n%s\n", yamlDevice)
 }

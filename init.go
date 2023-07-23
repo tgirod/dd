@@ -1052,7 +1052,7 @@ func Init() {
 			{Login: "vredmint", Groups: []string{"pers"}},
 		},
 		[]Link{
-			{Address: kramps.Address, Description: "Accueil"},
+			//{Address: kramps.Address, Description: "Accueil"},
 			{Address: secKramps.Address, Description: "Sécurité des installations", Group: "sec"},
 		},
 		[]Register{},
@@ -1064,7 +1064,7 @@ func Init() {
 			{Login: "mdavidson", Groups: []string{"pers", "sec", "diradj"}},
 		},
 		[]Link{
-			{Address: kramps.Address, Description: "Accueil"},
+			//{Address: kramps.Address, Description: "Accueil"},
 		},
 		[]Register{},
 		[]Post{},

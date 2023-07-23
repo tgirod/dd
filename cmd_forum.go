@@ -242,9 +242,9 @@ func TopicFuzzy(ctx Context) any {
 	// First, find all Topics, search in every Thread
 	topics := console.Server.Topics(console.User)
 	for _, t := range topics {
-		fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
+		//fmt.Printf("Search |%s| in [%d]%s\n", exp, t.ID, t.Subject)
 		if ms := fuzzy.MatchNormalizedFold(exp, t.Subject); ms {
-			fmt.Print("  ok in subject\n")
+			//fmt.Print("  ok in subject\n")
 			fmt.Fprintf(&b, "%s\n", t.Render(""))
 		} else if mc := fuzzy.MatchNormalizedFold(exp, t.Content); mc {
 			fmt.Print("  ok in content\n")
@@ -259,7 +259,7 @@ func TopicFuzzy(ctx Context) any {
 			} else {
 				prefix = "└─ "
 			}
-			fmt.Printf("Search |%s| in [%d]%s\n", exp, r.ID, r.Subject)
+			//fmt.Printf("Search |%s| in [%d]%s\n", exp, r.ID, r.Subject)
 			if ms := fuzzy.MatchNormalizedFold(exp, r.Subject); ms {
 				fmt.Print("  ok in subject\n")
 				fmt.Fprintf(&b, "%s\n", r.Render(prefix))

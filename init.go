@@ -809,6 +809,14 @@ var (
 	akremmer = Identity{"akremmer", "sexgod22", "Alexandre Kremmer", true}   // security Kramps
 	vredmint = Identity{"vredmint", "lily-dorian", "Virginia Redmint", true} // assistante Kramps
 	// TODO quelques employé•e•s de legba voodoocom
+	atrebinsky = Identity{"atrebinsky", "56raz8", "Anthon Trebinsky", true}  // proj. Mandrake
+	dyuong     = Identity{"dyuong", "gd86rw", "Dyop Yuong", true}            // proj. Mandrake
+	eherswing  = Identity{"eherswing", "oh7fd4", "Emmet Herswing", true}     // proj. Mandrake
+	jkuipers   = Identity{"jkuipers", "azgh4d", "Jordan Kuipers", true}      // proj. Mandrake
+	jmfusion   = Identity{"jmfusion", "sg7vf4", "John-Mickael Fusion", true} // Manager LegbaV
+	yblansein  = Identity{"yblansein", "tyg45g", "Youri Blansein", true}     // satcom
+	// Employé de GreenData
+	cyolinaro = Identity{"cyolinaro", "rtd98y", "Consuella Yolinaro", true} // gère contrats chez Green Data
 )
 
 // identités virtuelles fournies par Jésus et le FLR
@@ -908,9 +916,16 @@ var allPlayers = []InfoPlayer{
 	{"Paula", nil, paula, false, true},
 }
 var otherIds = []Identity{
-	amathison, afrieman, sjasinski,
+	// fan blackwave
+	afrieman,
+	// sasquatch
+	sjasinski,
 	// Kramps
 	akremmer, vredmint,
+	// Mandrake, Legba, SatCom
+	amathison, atrebinsky, dyuong, eherswing, jkuipers, jmfusion, yblansein,
+	// Green Data
+	cyolinaro,
 }
 
 // All the IDs, Corpo and Virtuelles
@@ -1074,7 +1089,10 @@ func Init() {
 	)
 
 	InitServer(legba,
-		[]User{},
+		[]User{
+			{Login: "jkuipers", Groups: []string{"pers", "admin"}},
+			{Login: "jmfusion", Groups: []string{"pers", "admin"}},
+		},
 		[]Link{
 			{Address: legba_satcom.Address, Description: "Division Sat-Com"},
 			{Address: legba_archive.Address, Description: "Archives", Group: "admin"},
@@ -1083,13 +1101,21 @@ func Init() {
 		[]Post{},
 	)
 	InitServer(legba_satcom,
-		[]User{},
+		[]User{
+			{Login: "yblansein", Groups: []string{"sat"}},
+		},
 		[]Link{},
 		[]Register{},
 		[]Post{},
 	)
 	InitServer(legba_archive,
-		[]User{},
+		[]User{
+			{Login: "jkuipers", Groups: []string{"pers", "admin"}},
+			{Login: "jmfusion", Groups: []string{"pers", "admin"}},
+			{Login: "atrebinsky", Groups: []string{"pers"}},
+			{Login: "dyuong", Groups: []string{"pers"}},
+			{Login: "eherswing", Groups: []string{"pers"}},
+		},
 		[]Link{},
 		[]Register{},
 		[]Post{},
@@ -1103,7 +1129,14 @@ func Init() {
 	)
 
 	InitServer(greendata,
-		[]User{},
+		[]User{
+			{
+				Login:    "cyolinaro",
+				Server:   "",
+				Backdoor: false,
+				Groups:   []string{"contract"},
+			},
+		},
 		[]Link{},
 		[]Register{},
 		[]Post{},

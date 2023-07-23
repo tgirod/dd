@@ -66,3 +66,31 @@
     par notre profond besoin de surpasser nos contemporains, quel qu’en soit
     le coût. Et dire que ces abrutis de Legba ont mis Kuipers à la tête de leur
     version de MON Projet Mandrake !
+# ******************************************************************************
+# Server Green Data ************************************************************
+# ******************************************************************************
+- server: greendata.d22.eu
+  group: "contract"
+  date: 2020-07-28T12:00:00
+  author: cyolinaro
+  subject: Offre Publique Achat DZ - D22
+  content: |
+    Autorisation définitive de réhabilitation assurée par décision judiciaire.
+    Les propriétaires seront notifié dès réception de la décision.
+    Liste des offres.
+  answers:
+  - date: 2020-0728T12:03:18
+    author: cyolinaro
+    content: |
+      Offre déposée par Castle Corp: 1000 YES/m2
+      Surface: 97% (sauf Lot 550-566)
+  - date: 2020-0728T14:30:31
+    author: cyolinaro
+    content: |
+      Offre déposée par Leisure United: 980 YES/m2
+      Surface: 100%
+  - date: 2020-0728T16:15:00
+    author: cyolinaro
+    content: |
+      Offre déposée par Kramps: 500 YES/m2
+      Surface: 33% (Lots 400-600)

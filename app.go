@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"context"
 	"errors"
 	"fmt"
@@ -42,12 +43,22 @@ var (
 	errNoBankAccount      = errors.New("pas de compte en banque associé à cette identité")
 )
 
+// Sessions will be stored in list of (ssh.Session, ID, *Console)
+type SessionHandle struct {
+	ID      int
+	Session ssh.Session
+	Console *Console
+}
+
+var idSession = 0
+
 type App struct {
 	sPlayer   *ssh.Server
 	startTime time.Time
 	sMonitor  *ssh.Server
-	sessions  map[ssh.Session]*Console
-	admin     *tea.Program
+	//sessions  map[ssh.Session]*Console
+	sessions *list.List
+	admin    *tea.Program
 }
 
 // NewApp créé un nouvel objet application
@@ -60,7 +71,8 @@ func NewApp(init bool) *App {
 	a := new(App)
 	// MON
 	a.startTime = time.Now()
-	a.sessions = make(map[ssh.Session]*Console)
+	//a.sessions = make(map[ssh.Session]*Console)
+	a.sessions = list.New()
 
 	// SSH server for the players
 	if a.sPlayer, err = wish.NewServer(
@@ -133,8 +145,9 @@ func (a *App) Log(v any) {
 
 // MON afficher les sessions ouvertes
 func (a App) PrintSessions() {
-	for _, e := range a.sessions {
-		fmt.Println("Session with Console ID ", e.ID)
+	//for _, e := range a.sessions {
+	for e := a.sessions.Front(); e != nil; e = e.Next() {
+		fmt.Println("Session with Console ID ", e.Value.(SessionHandle).ID)
 	}
 }
 
@@ -156,20 +169,35 @@ func (a *App) HandlerPlayer(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	)
 
 	// MON ajout session
-	a.sessions[s] = client.Console
+	a.sessions.PushBack(SessionHandle{
+		ID:      idSession,
+		Session: s,
+		Console: client.Console,
+	})
+	idSession = idSession + 1
+	//a.sessions[s] = client.Console
 	a.PrintSessions()
 
 	return client, []tea.ProgramOption{tea.WithAltScreen()}
 }
 
 // MON On a besoin d'un Middleware pour deleter en cas de déconnexion
-func MiddlewareMonitor(conn map[ssh.Session]*Console) wish.Middleware {
+// ffunc MiddlewareMonitor(conn map[ssh.Session]*Console) wish.Middleware {
+func MiddlewareMonitor(conn *list.List) wish.Middleware {
 	return func(sh ssh.Handler) ssh.Handler {
 		return func(s ssh.Session) {
-			fmt.Printf("Begin of adventure for %s (%d conn)\n", s.User(), len(conn))
+			fmt.Printf("Begin of adventure for %s (%d conn)\n", s.User(), conn.Len()) //len(conn))
 			sh(s)
-			fmt.Printf("End of adventure for %s (%d conn)\n", s.User(), len(conn))
-			delete(conn, s)
+			fmt.Printf("End of adventure for %s (%d conn)\n", s.User(), conn.Len()) //len(conn))
+			//delete(conn, s)
+			// Find element to remove
+			var elem *list.Element
+			for e := conn.Front(); e != nil; e = e.Next() {
+				if e.Value.(SessionHandle).Session == s {
+					elem = e
+				}
+			}
+			conn.Remove(elem)
 		}
 	}
 }

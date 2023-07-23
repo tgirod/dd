@@ -94,9 +94,11 @@ var (
 	sLastCmd    = " %-30s"
 )
 
-func fmtConnexion(c *Console) string {
+// func fmtConnexion(c *Console) string {
+func fmtConnexion(sh SessionHandle) string {
+	c := sh.Console
 	conn := ""
-	conn += fmt.Sprintf("%02d", c.ID)
+	conn += fmt.Sprintf("%02d", sh.ID)
 	if c.IsConnected() {
 		user := c.Session.User.Login
 		if len(user) > cLenUser {

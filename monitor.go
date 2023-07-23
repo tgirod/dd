@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"fmt"
 	//"io"
 	//"strings"
@@ -10,7 +11,7 @@ import (
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
-	"github.com/charmbracelet/ssh"
+	//"github.com/charmbracelet/ssh"
 	//"github.com/muesli/reflow/wordwrap"
 	"github.com/asdine/storm/v3/q"
 )
@@ -32,12 +33,14 @@ type Monitor struct {
 	Client
 	startTime time.Time
 
-	connexions map[ssh.Session]*Console // connexions actives
+	//connexions map[ssh.Session]*Console // connexions actives
+	connexions *list.List
 }
 
 func NewMonitor(startT time.Time,
 	width, height int,
-	sessions map[ssh.Session]*Console) *Monitor {
+	//sessions map[ssh.Session]*Console) *Monitor {
+	sessions *list.List) *Monitor {
 
 	m := &Monitor{
 		fakeUser: User{
@@ -241,8 +244,11 @@ func (m Monitor) connectionsView() string {
 	content := ""
 	content += invertTextStyle.Width(m.width).Render(conHeader) + "\n"
 	// liste les connexions
-	for _, e := range m.connexions {
-		content += fmtConnexion(e) + "\n"
+	// for _, e := range m.connexions {
+	// 	content += fmtConnexion(e) + "\n"
+	// }
+	for e := m.connexions.Front(); e != nil; e = e.Next() {
+		content += fmtConnexion(e.Value.(SessionHandle)) + "\n"
 	}
 
 	// As Register is build at each query, must loop each time

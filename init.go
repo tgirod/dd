@@ -1015,6 +1015,7 @@ func Init() {
 			{Address: corp.Address, Description: "Central Services"},
 			{Address: abus.Address, Description: "Association des Banques Unifiées Suisses"},
 			{Address: greendata.Address, Description: "Green Data, solution environementale"},
+			{Address: lbd.Address, Description: "Le Bon District, affaires à faire !"},
 		},
 		[]Register{},
 		[]Post{},

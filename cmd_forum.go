@@ -247,7 +247,7 @@ func TopicFuzzy(ctx Context) any {
 			//fmt.Print("  ok in subject\n")
 			fmt.Fprintf(&b, "%s\n", t.Render(""))
 		} else if mc := fuzzy.MatchNormalizedFold(exp, t.Content); mc {
-			fmt.Print("  ok in content\n")
+			//fmt.Print("  ok in content\n")
 			fmt.Fprintf(&b, "%s\n", t.Render(""))
 		}
 

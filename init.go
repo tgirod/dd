@@ -806,8 +806,9 @@ var (
 	// PNJs
 	afrieman = Identity{"afrieman", "far3ik", "Anton Frieman", true} // PNJ fan blackwave
 	// TODO quelques employé•e•s de la kramps
-	akremmer = Identity{"akremmer", "sexgod22", "Alexandre Kremmer", true}   // security Kramps
-	vredmint = Identity{"vredmint", "lily-dorian", "Virginia Redmint", true} // assistante Kramps
+	akremmer  = Identity{"akremmer", "sexgod22", "Alexandre Kremmer", true}   // security Kramps
+	mdavidson = Identity{"mdavidson", "allbitches", "Milton Davidson", true}  // dir adjoint Kramps
+	vredmint  = Identity{"vredmint", "lily-dorian", "Virginia Redmint", true} // assistante Kramps
 	// TODO quelques employé•e•s de legba voodoocom
 	atrebinsky = Identity{"atrebinsky", "56raz8", "Anthon Trebinsky", true}  // proj. Mandrake
 	dyuong     = Identity{"dyuong", "gd86rw", "Dyop Yuong", true}            // proj. Mandrake
@@ -921,7 +922,7 @@ var otherIds = []Identity{
 	// sasquatch
 	sjasinski,
 	// Kramps
-	akremmer, vredmint,
+	akremmer, mdavidson, vredmint,
 	// Mandrake, Legba, SatCom
 	amathison, atrebinsky, dyuong, eherswing, jkuipers, jmfusion, yblansein,
 	// Green Data
@@ -1046,6 +1047,7 @@ func Init() {
 	InitServer(persKramps,
 		[]User{
 			{Login: "akremmer", Groups: []string{"pers", "sec"}},
+			{Login: "mdavidson", Groups: []string{"pers", "sec", "diradj"}},
 			{Login: "rkievain", Groups: []string{"pers"}},
 			{Login: "vredmint", Groups: []string{"pers"}},
 		},
@@ -1059,6 +1061,7 @@ func Init() {
 	InitServer(secKramps,
 		[]User{
 			{Login: "akremmer", Groups: []string{"pers", "sec"}},
+			{Login: "mdavidson", Groups: []string{"pers", "sec", "diradj"}},
 		},
 		[]Link{
 			{Address: kramps.Address, Description: "Accueil"},

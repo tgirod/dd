@@ -1,0 +1,747 @@
+- server: priv.kramps.d22.eu
+  group: pers
+  date: 2020-02-01T19:23:00
+  author: vredmint
+  subject: Liste du Personnel
+  content: "-- m-à-j 2020 -- "
+  answers:
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-F5 : Raffaellino Bombieri - 25/5/1963 - 1084dd5a-25ac-43c1-90f4-1bd3d7769680"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-H292 : Humberto Plana-Chacón - 2/5/1999 - 2e285752-3a57-4a6c-b4cc-556d3a9c873d"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-A37 : Jonathan Swift  - 11/4/1984 - 383de3ff-56eb-4745-b472-e046ff8e552e"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-F254 : Éric Huet - 14/7/1968 - 4ec26008-158e-433d-9fd0-7937a5ea4e13"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-J74 : Angelina Deledda - 21/12/1965 - d764f740-fca3-436e-b36f-8f4c63e923f1"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-C50 : Romana Tutino - 1/5/1986 - 199c14a3-ff9b-4dbe-9e27-1083c890d5d3"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-L35 : Azahar Marcos Piñol - 5/12/1990 - f68c0dd9-0a85-41f4-8a23-91dc30efd7b1"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-C17 : Rodolph Kievain - 11/3/1992 - 6e43fdc5-6518-247d-b927-6atfhu7be5c"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-C3 : Harvey Zimmermann  - 15/11/1961 - a37dd901-6526-4913-8900-daf9af5f8fab"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-F196 : Mary Flynn - 5/9/1983 - 18518deb-c136-4045-8f58-32ed11621e25"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-N19 : Constantin Briemer - 30/10/2000 - ed3f45c9-4396-4675-b2e3-545ce188bbe5"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-C279 : Cecilia Passalacqua - 7/2/1969 - e3eca928-532f-4281-ab6d-c3c8539bfff4"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "G-S20 : Alfredo Vendetti - 15/5/1958 - 5f945848-4682-4282-b8d7-65aebb52be5c"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "S-01 : Alexandre Kremmer - 02/9/1977 - 8def9643-e69b-46e4-3fdc5-b096-1b78ba7e71bb"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "D-4B : Milton Davidson - 29/10/1966 - aa6eb7d5be6b6-e43f-bd52-247d-b927-6bb753acde5c"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "P-G42 : Virginia Redmint - 1/6/1990 - 1f2275db-890f-465e-79d3-cd51-5a43dfe79c5d"
+- server: priv.kramps.d22.eu
+  group: pers
+  date: 2020-02-01T19:23:00
+  author: vredmint
+  subject: Liste des Résidents
+  content: "-- m-à-j 2020 -- "
+  answers:
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PR-289 : Josué Cobos - 1/3/1989 - 1e80def0-56e2-4334-a5e9-3900c68e924a"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PX-149 : Iker Diaz-Figuerola - 19/1/1960 - ecf774b2-d824-4e39-83a6-71a3ea504d48"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PO-235 : Shannon Ward - 19/9/1965 - 5b5e9a8f-7059-41fa-abc1-834fad65dcae"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PS-161 : Rebecca Briemer - 26/3/1992 - a62cc240-954f-4731-a2d9-fcf1428a6deb"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PB-32 : Rembrandt Gatto-Togliatti - 2/3/1955 - 5b073a69-cf82-41f4-a69b-766aa8dabb71"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PR-58 : Gustavo Soto Blanca - 19/11/1965 - 9a5947a2-b306-4927-987f-41d0171fd21b"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PK-224 : Sabatino Zecchini - 29/9/1980 - ca15d1f5-d2b5-471e-b7ed-bf374a65fe9f"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PF-47 : Stefan Jasinski - 15/3/1988 - c54dd982-6526-cd42-8900-cbe27f5f8fab"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PC-261 : Eusebia Pozo-Botella - 21/7/1967 - 715c2159-72ea-4738-a401-b5a58506e694"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PN-94 : Nieves Vázquez Franco - 30/9/1961 - 8def9643-e69b-45ba-81fe-41ffbfddb4ef"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PR-1 : Grégoire Menard - 24/3/1955 - 44a26bdf-0210-4607-abd7-aa9cadbbdf1c"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PO-114 : Sébastien Albert - 3/3/2002 - 868b22aa-370e-4d7e-ae0f-26c22eb0ec1c"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PX-280 : Eveline Buchholz - 9/2/1979 - 39de7fda-a12d-4da7-ac74-4d8802095f69"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PS-197 : Bruce Hoffman - 28/4/1978 - a1e241a4-6b8d-4e2e-bb77-3f93242fa942"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PV-144 : Stefania Cagnin - 22/8/1994 - 1e6d16c6-2f9c-4d07-804a-1b44d042cc1d"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PR-25 : Adelgunde Krebs B.Eng. - 30/10/1974 - fe435f6a-84ae-41c5-80ae-e4239a270b00"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PN-173 : Cesare Mazzi - 24/6/1956 - ad980090-d686-4637-a204-90a0b956a68b"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PD-256 : Wolf-Rüdiger Cichorius - 23/6/1950 - fe2944cf-bfa1-404f-8d72-4bfcf1129376"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PA-186 : Isidora del Olivera - 30/9/1952 - e713a1d1-fbdc-4048-a12e-6f1f4961537a"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PK-222 : Jolanda Guinizzelli-Panicucci - 21/4/1953 - 9363dd30-7e40-4d91-8ea3-db67ea58c45b"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PV-28 : Swen Ullrich - 23/12/1990 - 6f2287cf-036e-4372-bc3e-ad5d408283d2"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PZ-176 : Galo Santamaria Carro - 8/6/1959 - 2b19228c-3c84-4031-a3b6-ff4be465e1b5"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PS-58 : Philippe Guillaume de Pinto - 23/9/2000 - 167b7a42-4fd6-4d12-aaf1-4f32c3704705"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PH-270 : André de la Ribeiro - 14/2/2002 - 4000c990-9824-49e3-b53e-30d4b9c5bf6c"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PT-19 : Saverio Trotta-Pontecorvo - 16/12/1953 - b40ca3bc-6f1b-480e-81b7-f6b744ab6d32"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PI-135 : Erin Kelly - 10/8/1978 - 13496acb-9112-4b34-9890-413f9f6d3343"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PP-250 : Renata Tomasetti-Camicione - 25/11/1953 - 4c0f783a-59fd-46bf-be87-e97b97db9460"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PE-15 : Isidro Cabezas Dalmau - 7/12/2000 - 8ec8657f-23e0-4114-b096-1b78ba7e71bb"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PN-44 : Gregory Thomas - 2/5/1969 - fd62a7e7-6a87-4ca8-a629-b03e1cbe3ecf"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PL-187 : Rocío Carbajo - 3/3/1983 - f23845bc-2952-4898-a165-99dd7dcfcb87"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PV-240 : Amanda Pinamonte - 14/9/2000 - 1bd20f1a-9eea-47a3-a0b8-c46e39c762fe"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PO-270 : Adelia de Marquez - 10/8/1961 - ed4529cc-118e-41b1-b8d5-d8b8f5e824b1"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PM-58 : Jochem Scheibe-Köhler - 24/11/1959 - fa641ac5-2b4b-42b4-9ec7-0fe1a6241221"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PE-66 : Fabrizia Agostini - 7/2/1981 - b8fa7024-2342-49f1-a94c-aa6eb7d5be6b"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PW-168 : Jennifer Martin - 19/1/1959 - 0471c610-34c5-49cf-aaa1-a9e06584eb88"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PC-263 : Gülsen Trapp - 9/10/1968 - 7554027a-4841-42d6-9ee3-222f16518ef8"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PX-217 : Elizabeth Wilson - 18/11/1987 - 1f2275db-890f-465e-8a66-9ba5e59358c5"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PI-40 : Che Rozas Montesinos - 12/12/2000 - 5ac440eb-c586-4051-9abd-736ee40c9ada"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PK-4 : Gilles Pereira - 26/5/2002 - c378d251-d729-4a88-9187-70570b2ddb89"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PC-52 : Marcial Rodrigo - 19/11/1953 - 3f5fe026-7da2-40b1-a799-159a0c2322d5"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PA-21 : Pedro Ramirez - 8/7/1991 - 383ca3ff-58eb-4745-efff-e046ff8e552e"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PL-25 : Valentine Clerc - 30/5/1970 - 0d4dfc82-e8f7-47e2-9c48-3726d2f8c064"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PG-11 : Miguel Williams - 1/2/1970 - 937859bc-9d1d-4b8d-98ae-08e541df9159"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PN-144 : Vera Pont Avilés - 12/7/1987 - 03c9b13c-f632-4fb6-b0cb-8aefb17e7c74"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PH-148 : Robert Ellis - 5/3/1971 - 007862ec-20c8-48bf-aeef-43c4ba76b8c6"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PR-8 : David Stewart - 1/2/1964 - acc87482-6c76-4212-a9e1-ab5060d4a6be"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PV-35 : Marino Torre Canet - 28/6/1956 - d1648b3a-51a5-4239-9da9-edf3c3e8539e"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PH-169 : Jeanne Pages de la Grondin - 29/6/1994 - 25494162-e01b-4b15-b7de-990648ca8d76"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PO-276 : Sophia Nunez - 5/8/1991 - 0f84aada-680f-4450-b21b-07ae9f16f047"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PO-297 : Gabriela Águila-Viana - 26/10/1957 - ec29fc1b-c977-4fce-bfba-b07e441aa5e9"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PJ-1 : Rosa María Noguera Sastre - 25/12/1956 - 7284cbfb-39a8-4511-a4f9-0f52dc834fe1"
+  - date: 2020-02-02T10:00:00
+    author: vredmint
+    content: "PW-12 : Lisa Steele - 7/12/1952 - a7580a18-00ed-42ee-90d6-192bed734e86"
+- server: priv.kramps.d22.eu
+  group: diradj
+  date: 2017-01-27T09:00:00
+  author: mdavidson
+  subject: Toujours utile
+  content: allez, c'est parti...
+  answers:
+  - date: 2019-03-31T14:02:13
+    author: mdavidson
+    content: G-C50 a fait passer à PH-270 une lettre non officielle.
+  - date: 2019-01-11T18:18:38
+    author: mdavidson
+    content: Insulte envers G-C50, PL-25 se retrouve au trou.
+  - date: 2018-12-23T17:24:29
+    author: mdavidson
+    content: D-4B pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2017-10-06T12:29:16
+    author: mdavidson
+    content: G-C17 a détourné une partie de la nourriture des résidents
+  - date: 2017-05-25T12:21:01
+    author: mdavidson
+    content: G-N19 isolé par PI-135 et PL-25. Séjour à l'infirmerie.
+  - date: 2017-11-27T16:57:24
+    author: mdavidson
+    content: G-J74 a encore oublié de fermer correctement derrière lui.
+  - date: 2018-03-29T13:38:44
+    author: mdavidson
+    content: G-L35 a mal supervisé le résident PV-28 pendant sa sortie, qui s'est battu avec PO-297.
+  - date: 2018-04-18T14:04:01
+    author: mdavidson
+    content: Insulte envers D-4B, PB-32 se retrouve au trou.
+  - date: 2017-12-28T10:53:38
+    author: mdavidson
+    content: Lors de la pause, G-C3 a laissé PL-25 et PO-114 seuls trop longtemps.
+  - date: 2019-03-19T11:05:20
+    author: mdavidson
+    content: S-01 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2018-06-21T16:19:13
+    author: mdavidson
+    content: G-C17 a donné au prisonnier PW-168 un livre.
+  - date: 2018-10-02T22:35:34
+    author: mdavidson
+    content: G-S20 isolé par PT-19 et PX-217. Séjour à l'infirmerie.
+  - date: 2019-06-13T16:01:52
+    author: mdavidson
+    content: G-N19 isolé par PK-4 et PH-148. Séjour à l'infirmerie.
+  - date: 2018-08-05T11:50:53
+    author: mdavidson
+    content: G-C17 a fait passer à PV-35 une lettre non officielle.
+  - date: 2017-05-02T11:50:29
+    author: mdavidson
+    content: Insulte envers G-A37, PG-11 se retrouve au trou.
+  - date: 2018-01-02T10:21:01
+    author: mdavidson
+    content: G-C3 a fait passer à PH-169 une lettre non officielle.
+  - date: 2017-05-07T14:19:48
+    author: mdavidson
+    content: G-C279 a mal supervisé le résident PK-222 pendant sa sortie, qui s'est battu avec PD-256.
+  - date: 2018-02-01T20:23:27
+    author: mdavidson
+    content: G-H292 faut être plus flexible, s'adapter au changement.
+  - date: 2017-03-25T18:29:44
+    author: mdavidson
+    content: P-G42 isolé par PA-21 et PR-1. Séjour à l'infirmerie.
+  - date: 2017-07-09T13:51:45
+    author: mdavidson
+    content: G-S20 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2019-06-18T13:42:03
+    author: mdavidson
+    content: D-4B faut être plus flexible, s'adapter au changement.
+  - date: 2017-09-08T14:00:55
+    author: mdavidson
+    content: G-A37 a donné au prisonnier PN-44 un livre.
+  - date: 2019-10-03T15:13:20
+    author: mdavidson
+    content: P-G42 faut être plus flexible, s'adapter au changement.
+  - date: 2018-08-20T18:17:35
+    author: mdavidson
+    content: P-G42 devient bien trop proche de PL-25.
+  - date: 2017-09-30T15:38:07
+    author: mdavidson
+    content: D-4B pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2017-03-03T10:58:54
+    author: mdavidson
+    content: G-L35 faut être plus flexible, s'adapter au changement.
+  - date: 2018-09-14T09:38:10
+    author: mdavidson
+    content: G-N19 faut être plus flexible, s'adapter au changement.
+  - date: 2017-05-14T20:42:19
+    author: mdavidson
+    content: G-F254 devient bien trop proche de PN-144.
+  - date: 2019-03-03T17:44:49
+    author: mdavidson
+    content: G-J74 a donné au prisonnier PK-4 un livre.
+  - date: 2018-09-26T17:50:58
+    author: mdavidson
+    content: G-F196 se comporte en petit chef. A approcher
+  - date: 2019-01-13T21:05:56
+    author: mdavidson
+    content: G-F254 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2019-08-24T11:23:55
+    author: mdavidson
+    content: S-01 a détourné une partie de la nourriture des résidents
+  - date: 2017-09-23T10:03:39
+    author: mdavidson
+    content: G-F196 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2019-08-25T17:19:55
+    author: mdavidson
+    content: G-L35 a fait passer à PN-44 une lettre non officielle.
+  - date: 2019-09-24T22:41:31
+    author: mdavidson
+    content: G-C3 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2018-01-21T15:06:18
+    author: mdavidson
+    content: G-N19 a encore oublié de fermer correctement derrière lui.
+  - date: 2019-09-16T12:23:03
+    author: mdavidson
+    content: G-F5 faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2018-11-08T12:35:29
+    author: mdavidson
+    content: G-J74 a fait passer à PV-240 une lettre non officielle.
+  - date: 2019-08-11T20:47:39
+    author: mdavidson
+    content: G-F254 a encore oublié de fermer correctement derrière lui.
+  - date: 2018-08-23T16:10:57
+    author: mdavidson
+    content: Insulte envers P-G42, PR-8 se retrouve au trou.
+  - date: 2017-02-02T12:22:24
+    author: mdavidson
+    content: G-F5 soyez efficace dans votre travail et essayez toujours de trouver des moyens d'améliorer votre productivité.
+  - date: 2017-03-06T09:19:04
+    author: mdavidson
+    content: G-S20 faut être plus flexible, s'adapter au changement.
+  - date: 2017-07-31T16:25:57
+    author: mdavidson
+    content: G-F254 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2017-06-22T15:51:25
+    author: mdavidson
+    content: G-H292 se comporte en petit chef. A approcher
+  - date: 2018-02-26T20:04:48
+    author: mdavidson
+    content: G-N19 isolé par PS-197 et PZ-176. Séjour à l'infirmerie.
+  - date: 2018-07-02T14:45:25
+    author: mdavidson
+    content: S-01 aide le résident PR-1 à préparer son dossier de libération.
+  - date: 2018-12-17T10:26:56
+    author: mdavidson
+    content: G-L35 a détourné une partie de la nourriture des résidents
+  - date: 2017-12-24T14:31:18
+    author: mdavidson
+    content: G-F254 a donné au prisonnier PE-66 un livre.
+  - date: 2018-04-10T09:17:45
+    author: mdavidson
+    content: G-C3 soyez efficace dans votre travail et essayez toujours de trouver des moyens d'améliorer votre productivité.
+  - date: 2019-07-30T11:25:23
+    author: mdavidson
+    content: D-4B a détourné une partie de la nourriture des résidents
+  - date: 2017-07-21T18:54:21
+    author: mdavidson
+    content: Lors de la pause, G-H292 a laissé PO-270 et PL-25 seuls trop longtemps.
+  - date: 2018-02-16T19:34:57
+    author: mdavidson
+    content: G-J74 faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2018-11-14T21:31:15
+    author: mdavidson
+    content: G-C50 a fait passer à PX-280 une lettre non officielle.
+  - date: 2018-01-04T21:58:37
+    author: mdavidson
+    content: D-4B a mal supervisé le résident PO-114 pendant sa sortie, qui s'est battu avec PB-32.
+  - date: 2018-10-28T18:52:42
+    author: mdavidson
+    content: D-4B se comporte en petit chef. A approcher
+  - date: 2018-04-14T18:57:23
+    author: mdavidson
+    content: G-H292 aide le résident PP-250 à préparer son dossier de libération.
+  - date: 2018-07-06T16:01:57
+    author: mdavidson
+    content: G-F5 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2019-07-17T17:35:16
+    author: mdavidson
+    content: Insulte envers G-L35, PK-224 se retrouve au trou.
+  - date: 2017-08-21T18:59:06
+    author: mdavidson
+    content: G-H292 a mal supervisé le résident PK-4 pendant sa sortie, qui s'est battu avec PL-187.
+  - date: 2017-08-15T20:45:48
+    author: mdavidson
+    content: G-L35 a donné au prisonnier PN-173 un livre.
+  - date: 2017-09-01T11:30:06
+    author: mdavidson
+    content: G-N19 devient bien trop proche de PR-58.
+  - date: 2019-02-28T14:08:31
+    author: mdavidson
+    content: G-A37 a détourné une partie de la nourriture des résidents
+  - date: 2019-08-29T15:26:40
+    author: mdavidson
+    content: G-F196 soyez efficace dans votre travail et essayez toujours de trouver des moyens d'améliorer votre productivité.
+  - date: 2018-07-12T12:37:16
+    author: mdavidson
+    content: G-L35 a mal supervisé le résident PP-250 pendant sa sortie, qui s'est battu avec PH-270.
+  - date: 2018-11-18T11:16:40
+    author: mdavidson
+    content: S-01 a encore oublié de fermer correctement derrière lui.
+  - date: 2017-11-23T09:36:54
+    author: mdavidson
+    content: P-G42 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2019-02-09T17:45:17
+    author: mdavidson
+    content: G-C279 a donné au prisonnier PN-94 un livre.
+  - date: 2019-07-20T10:31:01
+    author: mdavidson
+    content: G-J74 a détourné une partie de la nourriture des résidents
+  - date: 2017-05-13T13:11:44
+    author: mdavidson
+    content: D-4B a encore oublié de fermer correctement derrière lui.
+  - date: 2019-06-20T22:21:52
+    author: mdavidson
+    content: G-C3 faut être plus flexible, s'adapter au changement.
+  - date: 2017-09-01T13:59:38
+    author: mdavidson
+    content: S-01 a encore oublié de fermer correctement derrière lui.
+  - date: 2019-09-11T21:38:52
+    author: mdavidson
+    content: G-F254 faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2017-09-07T09:25:11
+    author: mdavidson
+    content: P-G42 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2017-08-10T11:14:04
+    author: mdavidson
+    content: G-J74 aide le résident PI-40 à préparer son dossier de libération.
+  - date: 2017-04-09T19:02:08
+    author: mdavidson
+    content: P-G42 se comporte en petit chef. A approcher
+  - date: 2018-05-06T11:35:21
+    author: mdavidson
+    content: P-G42 a donné au prisonnier PK-224 un livre.
+  - date: 2018-03-31T13:21:31
+    author: mdavidson
+    content: G-F254 se comporte en petit chef. A approcher
+  - date: 2019-08-26T19:03:32
+    author: mdavidson
+    content: S-01 devient bien trop proche de PD-256.
+  - date: 2018-07-21T21:08:18
+    author: mdavidson
+    content: Insulte envers P-G42, PO-276 se retrouve au trou.
+  - date: 2017-04-19T14:24:58
+    author: mdavidson
+    content: D-4B faut être plus flexible, s'adapter au changement.
+  - date: 2019-05-18T17:52:03
+    author: mdavidson
+    content: G-C50 a fait passer à PR-58 une lettre non officielle.
+  - date: 2017-06-30T20:11:40
+    author: mdavidson
+    content: S-01 devient bien trop proche de PH-148.
+  - date: 2018-02-17T10:37:36
+    author: mdavidson
+    content: Lors de la pause, G-J74 a laissé PO-235 et PE-15 seuls trop longtemps.
+  - date: 2017-08-18T14:22:10
+    author: mdavidson
+    content: G-A37 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2018-02-13T18:36:03
+    author: mdavidson
+    content: G-H292 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2017-10-13T14:55:49
+    author: mdavidson
+    content: G-N19 a mal supervisé le résident PI-135 pendant sa sortie, qui s'est battu avec PV-28.
+  - date: 2017-02-19T13:21:42
+    author: mdavidson
+    content: G-C3 a détourné une partie de la nourriture des résidents
+  - date: 2019-01-04T12:43:36
+    author: mdavidson
+    content: G-F254 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2019-01-23T12:20:25
+    author: mdavidson
+    content: Lors de la pause, G-J74 a laissé PV-28 et PL-187 seuls trop longtemps.
+  - date: 2017-08-31T15:29:50
+    author: mdavidson
+    content: Lors de la pause, G-F5 a laissé PV-144 et PV-35 seuls trop longtemps.
+  - date: 2018-11-08T14:27:31
+    author: mdavidson
+    content: G-C17 faut être plus flexible, s'adapter au changement.
+  - date: 2018-11-08T16:01:47
+    author: mdavidson
+    content: P-G42 a fait passer à PH-148 une lettre non officielle.
+  - date: 2017-11-01T19:32:50
+    author: mdavidson
+    content: Insulte envers G-N19, PA-21 se retrouve au trou.
+  - date: 2017-04-11T15:13:05
+    author: mdavidson
+    content: G-F254 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2017-10-09T22:57:48
+    author: mdavidson
+    content: G-S20 a mal supervisé le résident PN-173 pendant sa sortie, qui s'est battu avec PK-4.
+  - date: 2019-01-29T10:35:01
+    author: mdavidson
+    content: G-H292 isolé par PD-256 et PK-224. Séjour à l'infirmerie.
+  - date: 2019-08-10T21:06:59
+    author: mdavidson
+    content: G-C3 faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2018-09-24T18:46:21
+    author: mdavidson
+    content: G-F5 a mal supervisé le résident PE-15 pendant sa sortie, qui s'est battu avec PC-263.
+  - date: 2019-02-09T13:24:26
+    author: mdavidson
+    content: G-F5 aide le résident PS-161 à préparer son dossier de libération.
+  - date: 2018-06-09T16:21:01
+    author: mdavidson
+    content: G-L35 aide le résident PO-235 à préparer son dossier de libération.
+  - date: 2019-08-21T18:14:41
+    author: mdavidson
+    content: G-C279 devient bien trop proche de PC-263.
+  - date: 2017-02-22T12:42:29
+    author: mdavidson
+    content: G-F5 isolé par PX-217 et PI-40. Séjour à l'infirmerie.
+  - date: 2019-06-02T13:28:31
+    author: mdavidson
+    content: G-A37 aide le résident PL-187 à préparer son dossier de libération.
+  - date: 2017-12-23T09:08:27
+    author: mdavidson
+    content: G-J74 faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2018-03-11T11:48:07
+    author: mdavidson
+    content: G-F5 aide le résident PH-148 à préparer son dossier de libération.
+  - date: 2019-02-25T16:47:50
+    author: mdavidson
+    content: S-01 a mal supervisé le résident PO-270 pendant sa sortie, qui s'est battu avec PO-276.
+  - date: 2018-03-26T18:26:21
+    author: mdavidson
+    content: G-F196 faut être plus flexible, s'adapter au changement.
+  - date: 2018-04-13T18:43:48
+    author: mdavidson
+    content: G-C17 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2018-12-23T20:21:45
+    author: mdavidson
+    content: G-F254 a mal supervisé le résident PZ-176 pendant sa sortie, qui s'est battu avec PE-15.
+  - date: 2018-11-09T11:33:31
+    author: mdavidson
+    content: G-C17 se comporte en petit chef. A approcher
+  - date: 2017-03-02T15:48:21
+    author: mdavidson
+    content: G-C17 a mal supervisé le résident PR-8 pendant sa sortie, qui s'est battu avec PA-21.
+  - date: 2018-12-12T18:10:05
+    author: mdavidson
+    content: G-F5 a mal supervisé le résident PA-186 pendant sa sortie, qui s'est battu avec PM-58.
+  - date: 2019-01-03T18:32:08
+    author: mdavidson
+    content: G-C279 a donné au prisonnier PO-276 un livre.
+  - date: 2018-04-30T14:55:51
+    author: mdavidson
+    content: G-F5 aide le résident PZ-176 à préparer son dossier de libération.
+  - date: 2018-01-23T17:29:02
+    author: mdavidson
+    content: G-C50 devient bien trop proche de PH-148.
+  - date: 2017-04-26T22:15:17
+    author: mdavidson
+    content: P-G42 soyez efficace dans votre travail et essayez toujours de trouver des moyens d'améliorer votre productivité.
+  - date: 2018-09-11T22:21:08
+    author: mdavidson
+    content: P-G42 se comporte en petit chef. A approcher
+  - date: 2017-04-20T15:05:35
+    author: mdavidson
+    content: G-N19 se comporte en petit chef. A approcher
+  - date: 2019-08-21T12:35:21
+    author: mdavidson
+    content: G-C50 a détourné une partie de la nourriture des résidents
+  - date: 2018-05-11T19:17:56
+    author: mdavidson
+    content: Lors de la pause, G-N19 a laissé PR-58 et PF-47 seuls trop longtemps.
+  - date: 2017-09-12T09:53:48
+    author: mdavidson
+    content: G-N19 a détourné une partie de la nourriture des résidents
+  - date: 2019-04-24T22:12:55
+    author: mdavidson
+    content: G-H292 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2017-07-15T21:40:07
+    author: mdavidson
+    content: Lors de la pause, G-F254 a laissé PT-19 et PH-169 seuls trop longtemps.
+  - date: 2018-01-19T17:09:54
+    author: mdavidson
+    content: G-F196 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2018-03-11T10:02:28
+    author: mdavidson
+    content: G-A37 faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2018-09-11T09:06:24
+    author: mdavidson
+    content: G-A37 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2018-01-18T19:27:17
+    author: mdavidson
+    content: S-01 a donné au prisonnier PD-256 un livre.
+  - date: 2019-06-02T19:38:24
+    author: mdavidson
+    content: D-4B faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2018-03-01T15:30:04
+    author: mdavidson
+    content: G-C50 a détourné une partie de la nourriture des résidents
+  - date: 2018-01-27T16:39:59
+    author: mdavidson
+    content: P-G42 pas assez motivé et déterminé à réussir, il faut se donner à fond.
+  - date: 2017-07-26T16:16:24
+    author: mdavidson
+    content: Insulte envers G-S20, PZ-176 se retrouve au trou.
+  - date: 2017-12-13T15:21:29
+    author: mdavidson
+    content: G-F5 faut être plus flexible, s'adapter au changement.
+  - date: 2017-08-25T09:06:05
+    author: mdavidson
+    content: Insulte envers G-F5, PE-15 se retrouve au trou.
+  - date: 2018-05-15T10:30:00
+    author: mdavidson
+    content: G-C50 se comporte en petit chef. A approcher
+  - date: 2017-12-10T15:15:18
+    author: mdavidson
+    content: P-G42 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2017-02-17T13:12:17
+    author: mdavidson
+    content: G-A37 a fait passer à PD-256 une lettre non officielle.
+  - date: 2017-08-19T17:41:24
+    author: mdavidson
+    content: G-C3 a encore oublié de fermer correctement derrière lui.
+  - date: 2018-08-11T20:42:15
+    author: mdavidson
+    content: G-F5 soyez efficace dans votre travail et essayez toujours de trouver des moyens d'améliorer votre productivité.
+  - date: 2019-05-20T10:34:22
+    author: mdavidson
+    content: G-C50 se comporte en petit chef. A approcher
+  - date: 2017-05-29T10:33:35
+    author: mdavidson
+    content: G-J74 a fait passer à PO-235 une lettre non officielle.
+  - date: 2018-03-02T09:42:58
+    author: mdavidson
+    content: G-F5 se comporte en petit chef. A approcher
+  - date: 2017-07-13T09:00:15
+    author: mdavidson
+    content: G-C3 devient bien trop proche de PP-250.
+  - date: 2017-11-05T17:08:55
+    author: mdavidson
+    content: P-G42 aide le résident PI-135 à préparer son dossier de libération.
+  - date: 2017-03-14T13:58:56
+    author: mdavidson
+    content: G-H292 a encore oublié de fermer correctement derrière lui.
+  - date: 2018-12-01T18:43:07
+    author: mdavidson
+    content: G-N19 aide le résident PL-25 à préparer son dossier de libération.
+  - date: 2018-07-22T14:12:25
+    author: mdavidson
+    content: S-01 a fait passer à PM-58 une lettre non officielle.
+  - date: 2018-02-13T14:58:06
+    author: mdavidson
+    content: S-01 soyez efficace dans votre travail et essayez toujours de trouver des moyens d'améliorer votre productivité.
+  - date: 2019-07-10T22:42:37
+    author: mdavidson
+    content: G-C279 faut être plus flexible, s'adapter au changement.
+  - date: 2017-05-18T17:01:06
+    author: mdavidson
+    content: G-L35 a donné au prisonnier PI-135 un livre.
+  - date: 2019-10-10T15:57:55
+    author: mdavidson
+    content: G-C279 faut être plus flexible, s'adapter au changement.
+  - date: 2019-08-31T22:54:17
+    author: mdavidson
+    content: G-S20 a encore oublié de fermer correctement derrière lui.
+  - date: 2019-10-16T21:57:02
+    author: mdavidson
+    content: G-F196 aide le résident PA-21 à préparer son dossier de libération.
+  - date: 2019-08-22T20:31:53
+    author: mdavidson
+    content: Lors de la pause, G-H292 a laissé PJ-1 et PV-35 seuls trop longtemps.
+  - date: 2019-04-24T21:26:21
+    author: mdavidson
+    content: G-L35 a détourné une partie de la nourriture des résidents
+  - date: 2017-04-27T20:11:08
+    author: mdavidson
+    content: G-H292 isolé par PL-25 et PP-250. Séjour à l'infirmerie.
+  - date: 2019-07-28T14:11:25
+    author: mdavidson
+    content: Lors de la pause, G-C3 a laissé PV-240 et PG-11 seuls trop longtemps.
+  - date: 2019-05-19T20:30:23
+    author: mdavidson
+    content: G-F196 faut être plus flexible, s'adapter au changement.
+  - date: 2017-07-29T11:31:23
+    author: mdavidson
+    content: G-S20 a fait passer à PN-44 une lettre non officielle.
+  - date: 2018-09-22T12:55:57
+    author: mdavidson
+    content: P-G42 a encore oublié de fermer correctement derrière lui.
+  - date: 2018-08-14T14:31:51
+    author: mdavidson
+    content: Lors de la pause, G-H292 a laissé PH-270 et PS-58 seuls trop longtemps.
+  - date: 2019-07-08T12:48:12
+    author: mdavidson
+    content: G-F196 a détourné une partie de la nourriture des résidents
+  - date: 2019-10-13T14:29:38
+    author: mdavidson
+    content: Insulte envers G-F5, PZ-176 se retrouve au trou.
+  - date: 2019-08-08T16:16:01
+    author: mdavidson
+    content: G-L35 soyez efficace dans votre travail et essayez toujours de trouver des moyens d'améliorer votre productivité.
+  - date: 2017-06-14T16:59:34
+    author: mdavidson
+    content: G-F196 a fait passer à PO-114 une lettre non officielle.
+  - date: 2017-11-16T18:43:04
+    author: mdavidson
+    content: G-A37 faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2017-11-26T12:57:34
+    author: mdavidson
+    content: G-J74 a mal supervisé le résident PD-256 pendant sa sortie, qui s'est battu avec PA-21.
+  - date: 2017-04-06T11:53:01
+    author: mdavidson
+    content: G-F254 se comporte en petit chef. A approcher
+  - date: 2018-06-17T12:58:20
+    author: mdavidson
+    content: P-G42 a mal supervisé le résident PF-47 pendant sa sortie, qui s'est battu avec PN-144.
+  - date: 2018-05-19T17:21:51
+    author: mdavidson
+    content: G-F5 isolé par PW-168 et PH-270. Séjour à l'infirmerie.
+  - date: 2018-02-13T16:37:14
+    author: mdavidson
+    content: G-N19 a donné au prisonnier PM-58 un livre.
+  - date: 2017-05-19T22:21:07
+    author: mdavidson
+    content: G-S20 soyez professionnel dans votre comportement et dans votre tenue vestimentaire.
+  - date: 2019-01-21T19:49:24
+    author: mdavidson
+    content: G-L35 faites attention aux détails et assurez-vous que votre travail est toujours précis.
+  - date: 2018-12-03T13:02:19
+    author: mdavidson
+    content: G-F5 soyez efficace dans votre travail et essayez toujours de trouver des moyens d'améliorer votre productivité.
+  - date: 2019-03-17T09:52:04
+    author: mdavidson
+    content: G-F5 a encore oublié de fermer correctement derrière lui.

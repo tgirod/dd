@@ -1117,6 +1117,7 @@ func Init() {
 		},
 		[]Link{},
 		[]Register{},
+		// TODO FIXME Forum à reprendre de _init.go
 		[]Post{},
 	)
 	InitServer(lair,
@@ -1126,11 +1127,12 @@ func Init() {
 		// TODO FIXME un Link vers leet.darknet ??
 		[]Link{},
 		[]Register{},
+		// TODO FIXME Forum à reprendre de _init.go
 		[]Post{},
 	)
 	InitServer(hopeServ,
 		[]User{
-			// TODO FIXME ajouter alan ??
+			// TODO FIXME ajouter amathison
 			{Login: "hope", Backdoor: false, Groups: []string{"admin"}},
 			{Login: "mel", Backdoor: false},
 		},

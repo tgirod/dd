@@ -14,18 +14,18 @@
 ** TODO editer Msg/Post/Transaction
 ** TODO kill Msg/Post/Transaction
 ** DONE Messages
-* [0/0] Contenu Forum
-** Kramps => en cours dans contenu
+* [4/4] Contenu Forum
+** DONE Kramps => en cours dans contenu
 - liste de gardiens : Code - Nom Prénom / Date Naiss / ref bizarre
 - liste de prisonniers : Code - Nom Prénom / Date Nass / ref bizarre
 - liste de lieux : AC1/AC2/AC4/DZ/RR/CE
 - horaires : 10/14/16/20
 => registry : code x heure = AC1 | AC2 | AC3 | DZ | RR | CE
-** Casier Judiciaire
+** DONE Casier Judiciaire
 ** Green glass
 **
-** dd.local => peut dire qu'il y a un crash qui a éradiqué certaines infos
+** DONE dd.local => peut dire qu'il y a un crash qui a éradiqué certaines infos
 ** bon district => antenne récente, et donc peu d'annonces
 ** id externes, pour payer/acheter/communiquer
 - contacts de La Fouine
-** Architecture du réseau
+** DONE Architecture du réseau

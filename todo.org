@@ -29,3 +29,4 @@
 ** id externes, pour payer/acheter/communiquer
 - contacts de La Fouine
 ** Architecture du réseau
+* Une ligen en plus

@@ -1,0 +1,71 @@
+digraph G {
+        leet [shape=doubleoctagon, label="leet.darknet"]
+        celine [shape=doubleoctagon, label="celine.darknet"]
+        hope [shape=doubleoctagon, label="hope.local"]
+
+        dd [label="dd.local"];
+        d22 [label="d22.eu"]
+        froz [label="froz.dd.local"]
+        legba [label="legba.d22.eu"]
+        satcom [shape=doubleoctagon, label="satcom.legba.d22.eu"]
+        archive [shape=doubleoctagon, label="archive.legba.d22.eu"]
+        kramps [label="kramps.d22.eu"]
+        privkramps [shape=doubleoctagon, label="priv.kramps.d22.eu"]
+        seckramps [shape=doubleoctagon, label="sec.kramps.d22.eu"]
+        corp [label="corp.d22.eu"]
+        justice [label="justice.corp.d22.eu"]
+        abus [label="abus.d22.eu"]
+        greendata [label="greendata.d22.eu"]
+        lbd [label="lebondistrict.d22.eu"]
+
+        dd -> d22;
+        dd -> froz;
+        d22 -> { legba kramps corp abus greendata lbd }
+        corp -> justice
+        kramps -> privkramps;
+        privkramps -> seckramps;
+        legba -> { satcom archive}
+
+        // Pour les hackers
+        cA [label="kommunishky.eu"]
+        cB [shape=octagon, label="kashik1842.eu"]
+        cC [shape=octagon, label="watchers.free.eu"]
+        cD [shape=octagon, label="kashik1851.eu"]
+        cE [shape=octagon, label="trace.net.eu"]
+        cF [shape=octagon, label="kashik1874.eu"]
+        cG [shape=octagon, label="pb5-34b.eu"]
+        cH [shape=octagon, label="route.global.ko"]
+        cI [shape=octagon, label="backup22.main.eu"]
+        cJ [shape=octagon, label="route.global.eu"]
+        cK [shape=octagon, label="backup64.Main.eu"]
+
+        uA [shape=box, label="backup31.main.eu"]
+        uB [shape=box, label="pb5-11b.eu"]
+        uC [shape=box, label="kashik1953.eu"]
+        uD [shape=box, label="cl52.cerne.eu"]
+        uE [shape=box, label="reservior12.eu"]
+        uF [shape=box, label="backup02.main.eu"]
+        uG [shape=box, label="cl53.cern.eu"]
+        uH [shape=box, label="cl54.cern.eu"]
+
+        cA -> { d22 uE };
+        cB -> { uG cA};
+        cC -> { d22 cB uH cD cE cH uD };
+        cD -> { uB cA uC cB cE };
+        cE -> { d22 uA };
+        cF -> { cA cB uC cG };
+        cG -> { cD uB };
+        cH -> { cF uG cJ uA };
+        cI -> { d22 cK };
+        cK -> { uF cE };
+
+        uA -> { uB uF };
+        uB -> { uD };
+        uC -> { uB cG };
+        uD -> { uC };
+        uE -> { uA uF };
+        uF -> { uA uD };
+        uG -> { uD uH };
+        uH -> { uF uA uG };
+
+}

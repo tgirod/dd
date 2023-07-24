@@ -818,6 +818,12 @@ var (
 	yblansein  = Identity{"yblansein", "tyg45g", "Youri Blansein", true}     // satcom
 	// Employé de GreenData
 	cyolinaro = Identity{"cyolinaro", "rtd98y", "Consuella Yolinaro", true} // gère contrats chez Green Data
+	// Cours de justice
+	agargan = Identity{"agargan", "tdg5df", "Armand Gargan", true}
+	// quelques boites mails
+	contKitsu  = Identity{"cont4yes@kitsune", "bosskitsu", "Contact Famille Kitsune", true}
+	contMills  = Identity{"mills.contact@weyland.eu", "bossweyland", "Contact Weyland", true}
+	contKramps = Identity{"contact@kramps.d22.eu", "bosskramps", "Contact Kramps Security", true}
 )
 
 // identités virtuelles fournies par Jésus et le FLR
@@ -927,6 +933,8 @@ var otherIds = []Identity{
 	amathison, atrebinsky, dyuong, eherswing, jkuipers, jmfusion, yblansein,
 	// Green Data
 	cyolinaro,
+	// cours justice
+	agargan,
 }
 
 // All the IDs, Corpo and Virtuelles
@@ -1079,7 +1087,9 @@ func Init() {
 		[]Post{},
 	)
 	InitServer(justice,
-		[]User{},
+		[]User{
+			{Login: "agargan", Groups: []string{"allowed"}},
+		},
 		[]Link{},
 		[]Register{},
 		[]Post{},

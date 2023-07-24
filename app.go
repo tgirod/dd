@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -62,9 +63,12 @@ type App struct {
 }
 
 // NewApp créé un nouvel objet application
-func NewApp(init bool) *App {
+func NewApp(init bool, fg_quit bool) *App {
 	if init {
 		Init()
+	}
+	if fg_quit {
+		os.Exit(0)
 	}
 
 	var err error

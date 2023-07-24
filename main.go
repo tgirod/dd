@@ -20,6 +20,7 @@ func main() {
 	fg_msg := flag.String("msg", "no_file", "load a YAML file of messages")
 	fg_transaction := flag.String("trans", "no_file", "load a YAML file of transactions")
 	fg_reg := flag.String("reg", "no_file", "load a YAML file of registries")
+	fg_quit := flag.Bool("quit", false, "quitte après avoir modifié la BDD.")
 	flag.Parse()
 
 	// if loading, then backup current DB
@@ -82,6 +83,6 @@ func main() {
 		LoadRegistries(*fg_reg)
 	}
 	//os.Exit(0)
-	app = NewApp(*init)
+	app = NewApp(*init, *fg_quit)
 	app.Start()
 }

@@ -1,4 +1,18 @@
 #+title:Todo
+* TODO changer la date des forums
+* TODO loader tous les fichiers yaml dans --init
+* TODO objets vendus et en vente sur LBD
+* TODO contenu dans les forums de hacker
+** mdp porn de GG
+** voir avec benoit pour fusionner le serveur de céline avec l33t
+* TODO playtest hacking
+* TODO tester la constellation
+* TODO justice : log avec l'ID corpo
+* TODO contrat JP ravi sur dd.local
+* TODO playtest run kramps
+** reboot des caméras
+
+
 * DONE quit : perd pas login si pas connecté
 * DONE imp reste même quand déconnecté
 * DONE affiche pas toujours les droits de jesus ou crunch
@@ -23,7 +37,6 @@
 => registry : code x heure = AC1 | AC2 | AC3 | DZ | RR | CE
 ** DONE Casier Judiciaire
 ** Green glass
-**
 ** DONE dd.local => peut dire qu'il y a un crash qui a éradiqué certaines infos
 ** bon district => antenne récente, et donc peu d'annonces
 ** id externes, pour payer/acheter/communiquer

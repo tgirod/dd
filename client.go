@@ -12,6 +12,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	lg "github.com/charmbracelet/lipgloss"
 	"github.com/knipferrc/teacup/statusbar"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 const DNISpeed = 3
@@ -273,6 +274,15 @@ func (c *Client) View() string {
 }
 
 func (c *Client) RenderOutput() {
+	min := func(a, b int) int {
+		if a < b {
+			return a
+		} else {
+			return b
+		}
+	}
+	width := min(80, c.width)
+
 	b := strings.Builder{}
 	for _, e := range c.Console.Results {
 		if e.Prompt != "" {
@@ -281,13 +291,13 @@ func (c *Client) RenderOutput() {
 		}
 
 		if e.Output != "" {
-			fmt.Fprintf(&b, "%s\n\n",
-				outputStyle.MaxWidth(c.width).Render(wrapLines(e.Output, c.width)))
+			wrapped := wordwrap.String(e.Output, width)
+			fmt.Fprintf(&b, "%s\n\n", outputStyle.Render(wrapped))
 		}
 
 		if e.Error != nil {
-			fmt.Fprintf(&b, "%s\n\n",
-				errorStyle.MaxWidth(c.width).Render(e.Error.Error()))
+			wrapped := wordwrap.String(e.Error.Error(), width)
+			fmt.Fprintf(&b, "%s\n\n", errorStyle.Render(wrapped))
 		}
 	}
 
@@ -330,17 +340,4 @@ func MsgToCmd(msg tea.Msg) tea.Cmd {
 	return func() tea.Msg {
 		return msg
 	}
-}
-func wrapLines(longLine string, maxLength int) string {
-	lines := strings.Split(longLine, "\n")
-
-	b := strings.Builder{}
-	for _, l := range lines {
-		for lg.Width(l) > maxLength {
-			fmt.Fprintf(&b, "%s\n", l[:maxLength])
-			l = l[maxLength:]
-		}
-		fmt.Fprintf(&b, "%s\n", l)
-	}
-	return b.String()
 }

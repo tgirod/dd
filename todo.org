@@ -28,4 +28,6 @@
 ** bon district => antenne récente, et donc peu d'annonces
 ** id externes, pour payer/acheter/communiquer
 - contacts de La Fouine
-** DONE Architecture du réseau
+=======
+** Architecture du réseau
+* Une ligen en plus

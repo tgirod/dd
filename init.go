@@ -1210,4 +1210,12 @@ func Init() {
 
 		InitServer(*(g.Node), users, links, []Register{}, []Post{})
 	}
+
+	// chargement YAML
+	LoadPosts("contenu/for_hope_greendata_final.yaml")
+	LoadPosts("contenu/for_legba_final.yaml")
+	LoadPosts("contenu/for_kramps_final.yaml")
+	LoadPosts("contenu/for_frozpunk_BY_HAND.yaml")
+	LoadRegistries("contenu/reg_kramps.yaml")
+	LoadRegistries("contenu/reg_satcom.yaml")
 }

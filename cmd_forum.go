@@ -178,6 +178,10 @@ func TopicRead(ctx Context) any {
 	return ctx.Output(b.String())
 }
 
+var real, _ = time.Parse(time.RFC3339, "2023-07-28T00:00:00Z")
+var fake, _ = time.Parse(time.RFC3339, "2020-07-31T00:00:00Z")
+var diff = fake.Sub(real)
+
 func PostWrite(ctx Context) any {
 	console := ctx.Console()
 	group := ctx.Value("group").(string)
@@ -187,12 +191,14 @@ func PostWrite(ctx Context) any {
 	subject := ctx.Value("subject").(string)
 	content := ctx.Value("content").(string)
 
-	// FIXME TODO Somehow change the date so that we are in 2020
+	// décaler l'horloge de trois ans
+	now := time.Now().Add(diff)
+
 	post := Post{
 		Server:  console.Server.Address,
 		Group:   group,
-		Date:    time.Now(),
-		Author:  console.User.Login,
+		Date:    now,
+		Author:  console.Identity.Login,
 		Subject: subject,
 		Content: content,
 	}

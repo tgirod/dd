@@ -272,6 +272,31 @@ var secKramps = Server{
 	Security:    SEC4,
 }
 
+var krampsElec = Server{
+	Address:     "elec.kramps.d22.eu",
+	Private:     true,
+	Description: kElecDesc,
+	Security:    SEC2,
+}
+
+var kElecDesc = `
+██╗  ██╗██████╗  █████╗ ███╗   ███╗██████╗ ███████╗
+██║ ██╔╝██╔══██╗██╔══██╗████╗ ████║██╔══██╗██╔════╝
+█████╔╝ ██████╔╝███████║██╔████╔██║██████╔╝███████╗
+██╔═██╗ ██╔══██╗██╔══██║██║╚██╔╝██║██╔═══╝ ╚════██║
+██║  ██╗██║  ██║██║  ██║██║ ╚═╝ ██║██║     ███████║
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝
+                                                   
+███████╗███╗   ██╗███████╗██████╗  ██████╗██╗   ██╗
+██╔════╝████╗  ██║██╔════╝██╔══██╗██╔════╝╚██╗ ██╔╝
+█████╗  ██╔██╗ ██║█████╗  ██████╔╝██║  ███╗╚████╔╝ 
+██╔══╝  ██║╚██╗██║██╔══╝  ██╔══██╗██║   ██║ ╚██╔╝  
+███████╗██║ ╚████║███████╗██║  ██║╚██████╔╝  ██║   
+╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   
+	     Gestion du réseau électrique
+	L'énergie c'est le pouvoir, utilisons-là
+`
+
 // serveur des services corporatistes D22
 var corp = Server{
 	Address:     "corp.d22.eu",
@@ -279,6 +304,7 @@ var corp = Server{
 	Description: cd22Desc,
 	Security:    SEC3,
 }
+
 var cd22Desc = `
 
    ((ervices  ((orporatistes
@@ -987,9 +1013,13 @@ func Init() {
 		[]Post{},
 	)
 	InitServer(kramps,
-		[]User{},
+		[]User{
+			{Login: "akremmer", Groups: []string{"pers", "sec"}},
+			{Login: "mdavidson", Groups: []string{"pers", "sec", "diradj"}},
+		},
 		[]Link{
 			{Address: persKramps.Address, Description: "Serveur réservé au personnel"},
+			{Address: krampsElec.Address, Description: "Gestion de l'énergie"},
 		},
 		[]Register{},
 		[]Post{},

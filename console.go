@@ -243,8 +243,8 @@ func (c *Console) Parse(prompt string) any {
 }
 
 func InitMem() []MemoryZone {
-	mz := make([]MemoryZone, 5)
-	for i := 0; i < 10; i++ {
+	mz := make([]MemoryZone, 10)
+	for i := 0; i < len(mz); i++ {
 		addr := fmt.Sprintf("%04x", uint16(rand.Uint32()))
 		mz[i] = MemoryZone{Address: addr}
 	}

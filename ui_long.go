@@ -15,8 +15,8 @@ type LongKeymap struct {
 
 var DefaultLongKeymap = LongKeymap{
 	Validate: key.NewBinding(
-		key.WithKeys("tab", "valider"),
-		key.WithHelp("tab", "valider"),
+		key.WithKeys("ctrl+s", "valider"),
+		key.WithHelp("ctrl+s", "valider"),
 	),
 	Cancel: key.NewBinding(
 		key.WithKeys("esc"),

@@ -809,6 +809,7 @@ var (
 	paula          = Identity{"paula", "mdpH@rd", "Paula", false}
 	georges        = Identity{"georges", "devine!", "Georges", false}
 	ringo          = Identity{"ringo", "l@cherien!", "Ringo", false}
+	schwartz       = Identity{"schwartz", "noircnoir", "Schwartz", false}
 )
 
 type InfoPlayer struct {
@@ -861,6 +862,7 @@ var allPlayers = []InfoPlayer{
 	{"Ringo", nil, ringo, false, true},
 	{"Georges", &gsuleymanoglu, georges, false, false},
 	{"Paula", nil, paula, false, true},
+	{schwartz.Name, nil, schwartz, false, true},
 }
 var otherIds = []Identity{
 	// fan blackwave

@@ -32,7 +32,7 @@ func Evade(ctx Context) any {
 				return ctx.Error(fmt.Errorf("%s : %w", mem, errMemUnavailable))
 			}
 			// trouvé une zone mémoire
-			sess.Mem[i].Used = false
+			sess.Mem[i].Used = true
 			sess.Countdown = COUNTDOWN
 			console.StartAlert()
 

@@ -1,0 +1,272 @@
+- server: dd.local
+  group: "elec"
+  date: 2020-07-25T10:10:00
+  author: jesus
+  subject: "Gestion de l'alimentation du DD"
+  content: |
+    Pensez à bien renseigner les changements de priorité. C'est important pour la gestion
+    à long terme. Et pour les stats.
+    cmd: registry ID edit terminal OU redbones OU doc OU carbu OU vaudou
+  answers:
+  - date: 2020-07-25T12:00:00
+    author: jesus
+    content: terminal
+  - date: 2020-07-25T18:00:00
+    author: ping
+    content: redbones
+  - date: 2020-07-26T07:00:00
+    author: ping
+    content: vaudou
+  - date: 2020-07-26T14:00:00
+    author: jesus
+    content: carbu
+  - date: 2020-07-26T18:00:00
+    author: ping
+    content: terminal
+  - date: 2020-07-26T23:00:00
+    author: ping
+    content: redbones
+  - date: 2020-07-27T10:00:00
+    author: ping
+    content: terminal
+  - date: 2020-07-27T15:00:00
+    author: ping
+    content: redbones
+  - date: 2020-07-27T18:00:00
+    author: ping
+    content: terminal
+  - date: 2020-07-28T08:00:00
+    author: ping
+    content: redbones
+  - date: 2020-07-28T11:00:00
+    author: ping
+    content: carbu
+  - date: 2020-07-28T15:00:00
+    author: ping
+    content: redbones
+  - date: 2020-07-28T18:00:00
+    author: jesus
+    content: terminal
+- server: dd.local
+  group: ""
+  date: 2020-03-30T19:31:00
+  author: kapo
+  subject: "Information sur JP Ravi"
+  content: |
+
+    Association HABITAT JEAN-PIERRE RAVI
+
+    HABITAT PARTICIPATIF
+    "HABITAT JEAN-PIERRE RAVI"
+
+
+    PACTE DE COOPERATION
+    Juin 2017
+
+
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⣸⣷⣦⡀⠀⠀⠀⠀⣿⢷⡄⠀⠀⠀⠀⠀⠀⢀⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣧⡀⠀⠀⢹⣷⠈⢿⣆⠀⠀⠀⣿⠈⣿⡄⠀⠀⣀⡴⢶⣿⡟⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⣿⣇⠀⠀⠈⢻⣆⠘⣿⠀⠀⣀⣽⣧⣸⣿⣴⡞⣉⣰⡞⢻⡇⢸⡇⠀⢀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⣶⣶⣷⣄⣿⠛⢷⣶⣿⣸⣿⣿⣤⣄⡀⠀⠉⠻⣿⣶⠞⢉⣽⡿⢿⣿⠛⠛⠋⠁⠀⢸⣇⣸⡿⢾⣿⡛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣌⣿⠀⠹⣿⣦⠀⠙⣿⣿⠛⢷⣄⠉⠻⣿⠀⣀⢻⣷⡶⠛⠁⠀⢠⡇⠀⢠⣴⡄⠀⢸⡟⣫⣼⣿⣟⣛⣛⣛⣷⣦⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣬⣿⣿⡄⠀⣿⡟⠛⠶⠾⣿⡄⠀⠙⠛⠲⢿⣷⣿⠘⣿⠀⠀⠀⠀⣼⠁⠀⢸⡇⢻⣾⡿⠛⠋⠁⠀⠉⠉⠉⣿⠁⣨⠿⠛⢛⣿⠟⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⢠⣿⣷⣄⠈⣿⣍⠉⠛⠿⣶⣿⠃⠀⠀⠀⢸⣧⡀⠀⠀⠀⠀⠉⣿⡇⢿⣇⠀⠀⠀⣿⠀⠀⢸⡇⣸⡏⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣡⡤⠾⠋⠁⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⢀⣀⣿⡆⢿⡄⠈⠛⠶⠶⠶⠾⠿⣷⣄⠀⠀⠈⣿⣇⠀⠀⠀⠀⠀⣿⡇⠀⢿⣦⡀⠀⣿⠀⠀⠈⣷⣏⡀⠀⠀⠀⠀⠀⢀⣠⣾⠟⠉⠁⠀⢀⣠⣴⠶⢶⣶⣄⠀⠀
+      ⠀⠀⠀⢸⣿⠻⣿⣼⡇⠀⠀⠀⠀⠀⠀⠀⠈⠻⢷⣦⣀⠘⢿⣆⠀⠀⠀⠀⣿⡇⠀⠀⠹⣧⣀⣿⠀⢠⡼⣿⡏⠻⣦⡀⢀⣤⣴⣿⣿⣥⣤⣤⣤⡶⣿⣿⡷⠶⠞⠛⠉⠀⠀
+      ⠀⠀⠀⠈⢿⣄⠈⢻⡇⠀⢀⣤⣶⣶⣦⡤⠀⠀⠀⠈⠛⠻⢿⣿⣷⣄⠀⠀⣿⡇⠀⠀⠀⢻⣿⣿⡾⠋⢠⣾⣷⣄⢸⡏⠉⠉⠀⠀⠀⠀⠀⠉⠻⣷⣄⠉⢻⣦⡄⠀⠀⠀⠀
+      ⠀⠀⢸⡿⣿⣿⠶⣤⣿⣾⡿⣤⣤⠾⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠻⣷⣄⣿⣿⠀⠀⠀⠈⣿⣿⠀⠀⣸⠏⢹⡏⠛⣿⠀⠀⠀⠀⠀⠀⢀⣀⡴⠟⠉⠛⠻⠿⠇⠀⠀⠀⠀
+      ⠀⠀⢸⣧⠈⢿⣆⠀⠈⢿⣧⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⠀⠀⠀⠀⠀⠙⢿⣿⣿⡄⠀⠀⠀⢹⣿⣤⠾⢻⡆⠸⣇⠀⠀⣀⣀⣀⣤⠶⠾⣿⡛⢷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠹⣷⣬⣿⠀⠀⠀⠹⣷⣄⡀⢀⣴⣾⣛⣩⣿⠟⠁⠀⠀⠀⠀⠀⠀⢻⣿⣿⠀⢀⣤⣿⣿⠋⠀⠈⢳⣴⣿⡶⠿⠛⠉⠉⠀⠀⠀⠈⠿⣦⣙⣷⡄⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠙⣿⣤⣀⡀⠀⠀⠙⢿⣮⣉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣶⡿⠋⢹⣿⠀⣠⣶⠟⠻⢷⣤⣤⣀⣀⣀⣤⣄⡀⠀⠀⠀⠉⠉⠀⠀⢀⣤⡴⢶⡆⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠛⠿⠷⠾⠿⣿⣦⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡿⠁⠀⢸⣿⣿⠋⠀⠀⠀⠀⠈⠉⠙⠛⠙⢻⡈⠛⣷⣄⠀⠀⢀⣴⣾⣯⣴⠾⠛⠃⠀
+      ⢀⣀⡀⠀⠀⠀⠀⣀⣤⡶⣦⣄⣀⠀⠀⠀⠉⠻⠿⢿⣿⣿⣿⣿⣿⣶⣦⣤⣀⢸⣿⣇⠀⠀⣾⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣷⣦⣨⣿⠶⢾⣿⣿⠿⠿⣦⣀⡀⠀⠀
+      ⢸⣏⡙⢷⣦⡀⠈⠽⠶⠶⠶⠿⢿⣀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠙⢿⣿⣿⣿⣿⠀⢀⣿⣿⠀⣀⣀⣀⣀⣤⣤⣶⡶⠾⢿⣟⢿⡍⠉⠀⢀⣿⣿⠉⠳⠶⣄⣹⣷⡄⠀
+      ⠀⠙⠷⣶⣾⣿⠀⠀⠀⠀⠀⠀⠀⠙⢿⣦⣤⣤⣀⣀⣀⣠⣤⣤⣤⣤⣀⠀⠙⢿⣿⡟⠀⣼⣿⣿⣿⢿⣿⣿⣟⠛⠛⠉⠀⠀⢈⣿⠀⣿⣄⣀⣿⡏⣼⡇⠀⠀⠀⠉⠉⠀⠀
+      ⠀⠀⠀⢈⣟⠻⢷⣦⣤⣤⣤⣤⣤⣤⡶⠿⠿⠛⠛⠛⠛⠋⠙⠛⠛⠻⢿⣿⣦⣼⣿⣇⣼⣿⠛⠁⠀⠀⠀⠉⠛⠛⢻⣿⣿⠛⠛⠻⣷⣿⠋⠉⠻⣿⣿⣧⣤⣶⡶⠶⣤⣄⡀
+      ⠀⠀⢀⣾⠿⣦⠀⠀⠀⠀⠀⠀⣠⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⢸⡟⢹⣷⠀⠀⠀⠉⠀⠀⠀⠉⠀⠻⣿⡈⠻⣶⣴⠿⠟
+      ⠀⠀⢸⣇⢠⣿⠀⠀⠀⠀⠀⠀⣿⡜⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⢸⣇⣾⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣦⣬⣷⡄⠀
+      ⠀⠀⠈⠻⣾⡋⠀⠀⠀⠀⠀⠀⠘⢿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠁⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣿⡿⠛⠻⣿⣍⠛⠿⣿⣿⣷⣶⣶⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠿⠿⠿⠛⠋⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠈⠹⠟⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    SOMMAIRE
+
+    I.        Préambule - Intention du Groupe HABITAT JEAN-PIERRE RAVI        3
+    II.        HABITAT JEAN-PIERRE RAVI        4
+    III.        Valeurs partagées par les membres        4
+    - Sur le plan économique        5
+    - Sur le plan environnemental        5
+    IV.        Estimation financière globale pour chaque membre actif        5
+    V.        Abondements ponctuels des comptes courants        7
+    VI.        Contrat coopératif        7
+    VII.        Calcul de la redevance mensuelle        7
+    VIII.        Non-respect des engagements de ce pacte        7
+
+
+    1. Préambule - Intention du Groupe HABITAT JEAN-PIERRE RAVI
+    Initié par un groupe de passionnés, ex-cadres de structures corporatistes pour la plupart, souhaitant construire un lieu de vie pour y vivre ensemble, tout en respectant la vie privée de chacun et sans être soumis au système corporatiste, ce projet, sans renoncer à son intention d'origine, a depuis peu évolué vers une ouverture intergénérationnelle, indépendamment du statut social d’origine. Un projet ouvert à toutes les générations qui se sentent concernées par l'esprit de solidarité, le respect de l'environnement et des règles établies par le Groupe, le lien social.
+    Implanté en bordure du District 19, HABITAT JEAN-PIERRE RAVI est un projet d'habitat groupé participatif réunissant des personnes qui souhaitent construire ensemble un habitat collectif en-dehors du système corporatiste. L’intérêt économique poursuivi ici n’est pas la recherche de profit financier mais plutôt d’un retour sous forme d’économies (redevances et charges faibles) et d’amélioration des services liés à l’habitat dans un but de développement durable.
+    Prévu de façon à respecter au mieux l'environnement et à limiter l'usage des ressources en énergie, HABITAT JEAN-PIERRE RAVI ambitionne d'être un lieu qui permettra la mixité de générations et de situations grâce à la solidarité et à la mutualisation d'espaces (jardin, lieux d’habitation, buanderie, atelier, salle commune...) – ceci dans le respect des personnes et des biens dont les limites seront formulées dans un règlement intérieur que tous les habitants s'engageront à respecter en le signant.
+    Au sein d’HABITAT JEAN-PIERRE RAVI et tout au long de la présence dans la communauté, les membres adhérents partagent et mettent en œuvre leurs convictions :
+    - sobriété énergétique et écoconstruction
+    - non-appropriation des biens immobiliers et du terrain
+    _ mutualisation et lien social
+    - gouvernance partagée.
+    Le présent préambule fait partie intégrante des statuts. En cas de différend sur l’interprétation des clauses statutaires, cette volonté commune des parties, telle qu’elle est exposée ci-dessus, prévaut.
+    Si le différend persiste, Jean-Pierre RAVI, le membre fondateur de la communauté, a pouvoir de décision finale.
+    2. HABITAT JEAN-PIERRE RAVI
+    HABITAT JEAN-PIERRE RAVI fonctionne en mode associatif. Ses statuts ont été déposés auprès de la Cour Corporatiste et enregistrés sous le n° WD2642441002644. Elle porte le projet d’un habitat groupé, participatif et écologique.
+    Actuellement, le Groupe se compose du fondateur, Jean-Pierre RAVI, et de 37 membres actifs. Chaque membre a consenti à investir en capital dans le projet.
+    Chaque membre est un membre actif de la communauté.
+    Pour toutes les décisions à prendre, 1 membre = 1 voix.
+    Un processus d'intégration a été réfléchi et expérimenté pour les nouveaux de sorte que le groupe s'agrandisse en toute transparence, confiance et engagement. Pour s'engager dans le projet HABITAT JEAN-PIERRE RAVI, les participants doivent d'abord adhérer à l'Association pour en comprendre les enjeux humains et financiers qui pourront les engager dans le futur avec le groupe d'habitants. Pour faire partie intégrante du projet, il leur faut signer la charte, socle des valeurs communes, les statuts et le contrat inhérents au projet HABITAT JEAN-PIERRE RAVI.
+    L'Association HABITAT JEAN-PIERRE RAVI a également mis en place un comité de pilotage qui a pour fonction d'élaborer les priorités et de les acter en lien avec les partenaires potentiels.
+
+
+    3. Valeurs partagées par les membres
+    Ce qui motive le choix des membres de l'Association pour un habitat participatif, se situe sur plusieurs plans :
+             - Sur le plan social
+    L’habitat collaboratif est intimement lié à un projet de vie : celui de (re)nouer du lien avec ses semblables, le rendre plus facile, en partageant un peu plus que de simples relations de voisinage, tout en respectant la vie privée de chacun.
+    C’est favoriser le lien social à tous les âges de la vie et quelle que soit la classe d’origine, l’ethnie ou le niveau social. Parce que de ce mélange, de ces échanges, pourront naître une meilleure compréhension les uns les autres, une solidarité précieuse à tous, malgré les (ou grâce aux) différences.
+
+
+    C’est, pour tous, trouver sa juste place dans une communauté vivante, où la convivialité, l’échange, la confiance, les partages sont les valeurs qui fondent l’adhésion de chacun.
+
+
+    C’est aussi être ouvert à la vie locale, et permettre qu’une partie des lieux soit accessible à des activités choisies, collaboratives (non commerciales).
+             - Sur le plan économique
+    Mutualiser les ressources permet de faire baisser les coûts et/ou d’optimiser les investissements. Le coût d’espaces communs tels qu’une chambre, un jardin ou une salle commune sera en effet divisé par autant de coopérateurs.
+
+
+    Cela permet aussi de rendre ce lieu de vie accessible de façon équitable à tous ceux qui ont un apport personnel. Cette équité de traitement, où chacun participe à l’effort commun, nous tient à cœur.
+
+
+    Au quotidien, ce type d’habitat permet de faire également des économies sur les charges ou encore sur les services, (électricité, réseau...).
+
+
+             - Sur le plan environnemental
+    Une construction aussi écologique que possible, tant dans les matériaux de construction utilisés, que dans la gestion des ressources produites et consommées (potager, eau, énergie, réseau ...).
+    C’est pourquoi nous voulons des appartements individuels de superficies calculées au plus juste et compensées par des espaces communs (salle commune, atelier, buanderie, garage, potager, ...).
+
+
+    4. Estimation financière globale pour chaque membre actif
+    Le groupe est toujours en recherche de participants.
+    Actuellement, et pour des raisons éthiques, le choix du groupe s'est porté vers un statut de coopérative d'habitants. Cela signifie que les membres actifs ne sont pas propriétaires des surfaces occupées, elles appartiennent à la Coopérative d'Habitants "Habitat Jean-Pierre RAVI".
+    Au moment de la signature du contrat coopératif, les membres effectuent une “contribution au projet commun”, non remboursée, reconnaissant qu’ils bénéficient d’un projet abouti dont le risque est minimisé et participant ainsi au projet de bien commun.
+    En effet, en permettant d’atteindre plus rapidement l’annulation de la dette de la communauté HABITAT JEAN-PIERRE RAVI, cette contribution bénéficie au projet de création d’un bien commun porté par la communauté défini dans le préambule du présent pacte.
+
+
+    A la date de leur agrément en tant que membre actif, chaque membre doit s’être acquitté de leur contribution au projet commun de la communauté HABITAT JEAN-PIERRE RAVI. Le montant de cette contribution est d’une valeur seuil de 10.000 Y€S par membre. Elle inclut notamment la location longue durée du terrain occupé, la préparation du futur logement, l’adhésion à l’association et les frais de dossier.
+
+
+    Les membres actifs versent au-delà de ce seuil un complément en participation libre et consciente, prenant en compte la connaissance et la reconnaissance de l’historique du projet, du chemin déjà accompli, l’objectif de création d’un bien commun, les coûts évités d’une location de plusieurs années et au regard des moyens financiers dont ils disposent, de leur situation familiale et professionnelle.
+
+
+    Le versement de cette contribution (seuil + complément) peut être l’objet d’une simple écriture comptable au moment de la signature du contrat si le membre actif a déjà versé avant la totalité de ses apports promis.
+    Cette contribution entre en compte avec le reste de l’apport du membre actif pour le calcul de sa redevance.
+
+
+    La totalité de la contribution au projet commun doit être versée à la date d’agrément, ouvrant droit aux membres actifs à la jouissance d’un logement via la signature d’un contrat coopératif. Le contrat coopératif mentionne le montant de l’apport par le membre actif, ainsi que son éventuel versement sur le compte courant de la communauté HABITAT JEAN-PIERRE RAVI.
+
+
+    Au-delà des frais d’adhésion, une redevance mensuelle sera demandée. Cette redevance mensuelle couvre la participation à l’entretien des communs, et les apports nécessaires type eau, électricité, réseau.
+    La redevance sera adaptée selon les apports et les situations (voir chapitre suivant). Elle s’élèvera en moyenne à 50 Y€S et ne dépassera pas, dans tous les cas, 150 Y€S, toutes charges comprises.
+    Aucun prêt ni aucune facilité de paiement ne pourront être autorisés.
+    Aucun remboursement ne sera consenti, si le membre adhérent souhaite par la suite quitter la communauté.
+
+
+    5. Abondements ponctuels des comptes courants
+    Les membres actifs peuvent effectuer des apports ponctuels à la communauté HABITAT JEAN-PIERRE RAVI qui font l’objet d’un amendement de l’article correspondant dans le contrat coopératif précisant la date et le montant du versement.
+
+
+    6. Contrat coopératif
+    Pour jouir de leur logement, les membres actifs signent un contrat coopératif, qui précise le montant de la redevance que les membres actifs doivent acquitter ainsi que les engagements réciproques des associé-e-s coopérateurs et de la coopérative.
+
+
+    La perte de la qualité de membre actif pour quelque cause que ce soit entraîne la cessation du contrat coopératif et emporte de plein droit la perte du droit de jouissance.
+    Inversement, la cessation du contrat coopératif (suite au non-respect du contrat et au refus de régulariser sa situation par le membre actif malgré la mise en demeure par la coopérative) entraîne la perte de la qualité de membre actif
+
+
+    7. Calcul de la redevance mensuelle
+    Le calcul de la redevance étant basé sur des paramètres susceptibles d’évolution de la conjoncture, les montants seront revus chaque année.
+
+
+    8. Non-respect des engagements de ce pacte
+    Le non-respect des engagements de ce pacte est un motif d’exclusion du membre actif.
+    Conformément aux statuts, l’exclusion entraîne la rupture du contrat coopératif valant perte de jouissance du logement.
+
+
+
+
+    Fait le 18 juin 2017,
+    signature de Jean-Pierre RAVI
+
+- server: dd.local
+  group: ""
+  date: 2020-01-01T00:00:00
+  author: kapo
+  subject: Compte-rendus des AG du quartier.
+  content: |
+    En général, nous nous réunissons tous les samedis.
+    Les AG sont ouvertes à toutes et à tous.
+    Votre avis est important.
+    La vraie vie du quartier, c'est à vous de la décider.
+
+    ===== One personne = One vote =======================
+  answers:
+  - date: 2020-03-04T23:30:52
+    author: kapo
+    content: |
+      Assemblée générale ordinaire du quartier
+      Date : Samedi 04 Mars 2020
+      Ordre du Jour : Présentation du Projet Jean-Pierre Ravi
+      Présents : Michel Platon, Kapo, Cageot, Grecko
+      Présentation du Projet de la communauté Jean-Pierre Ravi par Kapo qui semble enthousiaste.
+      Débouché : Invitation lancée à Jean-Pierre Ravi
+
+  - date: 2020-04-01T23:17:52
+    author: kapo
+    content: |
+      Assemblée générale ordinaire du quartier
+      Date : Samedi 01 avril 2020
+      Ordre du jour : Le Jardin communautaire et la Cuisine
+      Présents : Michel Platon, Kapo, Tiger Doll
+      Le jardin nécessite plus de travailleurs pour subvenir aux besoins de tous
+      Débouché : Pas de nouveaux volontaires, idée de mettre en place un roulement d’intérêt générale
+
+  - date: 2020-06-03T23:51:52
+    author: kapo
+    content: |
+      Assemblée générale ordinaire du quartier
+      Date : Samedi 03 juin 2020
+      Ordre du Jour : Utilisation des véhicules communautaires
+      Présents : Michel Platon, Kapo, Cageot, Zeus (endormi)
+      Suite au décès définitif de la golf break 1998 du quartier et l’impossibilité de la réparer, doit on rassembler des fonds pour acheter un véhicule réparable pour la communauté ?
+      Débouché : Achat d’un Multi-van envisagé, piste à discuter en AG pour l’organisation de son utilisation
+
+  - date: 2020-07-22T23:00:31
+    author: kapo
+    content: |
+      Assemblée extraordinaire du quartier
+      Date : Samedi 22 Juillet
+      Ordre du jour : Avenir du Quartier
+      Présents : Michel Platon, Kapo, Cageot, Grecko, Tiger Doll, Styx, La Fouine, Kennedy
+      Discussion animée sur les avenirs possibles de la communauté. Présentation des différents projets dont la structure Jean-Pierre Ravi, et l’affrontement avec les forces corporatistes.
+      Débouché : aucune décision, nécessité de rassembler une nouvelle AG.

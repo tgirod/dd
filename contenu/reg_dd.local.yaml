@@ -1,0 +1,10 @@
+- server: dd.local
+  group: "elec"
+  description: priorité alim
+  state: terminal
+  options:
+  - terminal
+  - redbone
+  - doc
+  - carbu
+  - vaudou

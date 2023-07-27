@@ -982,6 +982,18 @@ func Init() {
 				Backdoor: false,
 				Groups:   []string{"elec"},
 			},
+			{
+				Login:    "nikki",
+				Server:   "",
+				Backdoor: false,
+				Groups:   []string{"elec"},
+			},
+			{
+				Login:    "schwartz",
+				Server:   "",
+				Backdoor: false,
+				Groups:   []string{"elec"},
+			},
 		},
 		[]Link{
 			{Address: d22.Address, Description: "serveur public du District 22"},
@@ -1200,7 +1212,9 @@ func Init() {
 	LoadPosts("contenu/for_frozpunk_BY_HAND.yaml")
 	LoadPosts("contenu/for_leet.yaml")
 	LoadPosts("contenu/for_nrj.yaml")
+	LoadPosts("contenu/for_ddlocal.yaml")
 	LoadRegistries("contenu/reg_kramps.yaml")
 	LoadRegistries("contenu/reg_satcom.yaml")
 	LoadRegistries("contenu/reg_nrj.yaml")
+	LoadRegistries("contenu/reg_ddlocal.yaml")
 }

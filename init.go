@@ -444,7 +444,7 @@ var gdDesc = `
 (_)____(__)__    (_)__(_)(_)_(_)(_) (_)   (_)__(_)(_) _(__)(_)_ (_)   (_)(_)___ (_)_
 (______)(____)   (_____)  (___) (_) (_)   (_____) (_)(____) (__)(_)   (_) (____) (__)
 
-   ** On vend de tout - tout s'achète..... **
+   ** On vend de tout - s tout'achète..... **
 `
 
 // serveur le bon district
@@ -1160,7 +1160,7 @@ func Init() {
 			{Login: "crunch", Backdoor: false, Groups: []string{"admin"}},
 			{Login: "celine", Backdoor: false},
 			{Login: "nikki", Backdoor: false},
-			{Login: "greenglass", Backdoor: false},
+			{Login: "greenglass", Backdoor: false, Groups: []string{"admin", "gg"}},
 		},
 		[]Link{},
 		[]Register{},

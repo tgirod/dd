@@ -1,0 +1,197 @@
+- server: leet.darknet
+  group: gg
+  date: 2020-04-06T12:42:23
+  author: greenglass
+  subject: List de courses pour la relou
+  content: gnagnagna
+  answers:
+  - date: 2020-04-06T12:50:31
+    author: greenglass
+    content: |
+      tiger power, cheetos
+  - date: 2020-04-14T12:58:34
+    author: greenglass
+    content: |
+      cotton tiges, beignets, chouquettes, semoule, cheetos
+  - date: 2020-04-20T13:10:05
+    author: greenglass
+    content: |
+      steaks hachés, poulet frit, dentifrice
+  - date: 2020-04-27T12:45:53
+    author: greenglass
+    content: |
+      cheetos
+  - date: 2020-04-29T13:11:49
+    author: greenglass
+    content: |
+      lingettes, saucisson, mozzarella, cheetos
+  - date: 2020-04-29T12:52:08
+    author: greenglass
+    content: |
+      tomates, sparadra, bacon, oeufs, chocolat dur, cheetos
+  - date: 2020-05-05T13:13:26
+    author: greenglass
+    content: |
+      chaussettes, ceinture, poivron, poires, mousse, lait, steak de petits pois, escalope de carottes, cheetos (les nouveaux au goût vanille)
+  - date: 2020-05-09T13:40:50
+    author: greenglass
+    content: |
+      Tampons, lingettes, mascara noire, mascara bleu, lait démaquillant, cheetos
+  - date: 2020-05-12T14:03:03
+    author: greenglass
+    content: |
+      pain, crème pour le cul (hydratante, pas celle qui pique), yaourts hypoallergéniques, bananes roses, gin, whisky
+  - date: 2020-05-14T13:58:00
+    author: greenglass
+    content: |
+      cheetos
+  - date: 2020-05-22T14:01:01
+    author: greenglass
+    content: |
+      crème solaire, nougats, gants de vaisselle, frozeloops, petits sachets plastique, lait, cheetos
+  - date: 2020-05-28T13:45:47
+    author: greenglass
+    content: |
+      cola, cheetos
+- server: leet.darknet
+  group: gg
+  date: 2020-04-06T12:42:23
+  author: greenglass
+  subject: Pour FatMike
+  content: "note: penser à augmenter mes tarifs"
+  answers:
+  - date: 2020-04-13T13:07:59
+    author: greenglass
+    content: |
+      tag=runteamtag006
+      2006-2006
+       The Solsburry Four
+       NeoLondon
+       LD-Aurora*Cobalt*Grim*Slice*
+       Validated contracts 17
+       Estimated total number of contracts: 18
+       Contract unfulfilled on 2006-06-07 Reason: Aurora Terminated On Duty | estimated error: 8.6%
+  - date: 2020-04-20T12:54:13
+    author: greenglass
+    content: |
+      tag=runteamtag007
+      2009-2014
+       I Volteggiatori
+      NuevaRoma
+       LD-Phase*Pins*ShallowWater*Bull*
+       Validated contracts 7
+       Estimated total number of contracts: 8
+       Contract unfulfilled on 2009-09-14 Reason: Phase*ShallowWater Terminated On Duty | estimated error: 0.4%
+  - date: 2020-04-27T12:39:11
+    author: greenglass
+    content: |
+      tag=runteamtag008
+      2012-2012
+       Kanibale
+       VecchiaFirenze
+       Ego*Stitches*ZenHook*BlankSheet
+       Validated contracts 2
+       Estimated total number of contracts: 4
+       Contract unfulfilled on 2012-06-18 Reason: Blanksheet*Ego*Zenhook Terminated On Duty | estimated error: 16.005%
+  - date: 2020-05-04T12:24:50
+    author: greenglass
+    content: |
+      tag=runteamtag009
+      2013-2015
+       Credo zabójcy
+       NowaWarszawa
+       LD-Design*DoubleFeature*ShinyBone*Arch*DeadZone
+       Validated contracts 19
+       Estimated total number of contracts: 19
+       Contract unfulfilled 0 
+  - date: 2020-05-11T12:10:00
+    author: greenglass
+    content: |
+      tag=runteamtag010
+      2015-2018
+       Liberty-Damen
+       NordenBerlin
+       LD-FlukeAnt*LibertyBell*Pins*Design
+       Validated contracts 31
+       Estimated total number of contracts: 32
+       Contract unfulfilled on 2018-05-16 Reason: Design*FlukeAnt Terminated On Duty | estimated error: 23.8%
+  - date: 2020-05-18T11:45:53
+    author: greenglass
+    content: |
+      tag=runteamtag011
+      2015-2019
+       Wonton Soup
+       OldParis
+       LD-Cobalt*ImpPulse*Ink*SamouraiShowdown*SliceNDice
+       Validated contracts 28
+       Estimated total number of contracts: 29
+       Contract unfulfilled on 2019-01-24 Reason: Ink*SamouraiShodown Terminated On Duty | estimated error: 2.93%
+  - date: 2020-05-25T12:12:52
+    author: greenglass
+    content: |
+      tag=runteamtag011
+      2018-2019
+       King Kong Five
+       Europole
+       LD-AlcoLine*Bull*Mirror*PoisonClock
+       Validated contracts 5
+       Estimated total number of contracts: 6
+       Contract unfulfilled on 2019-12-01 Reason: Alcoline Missing On Duty | estimated error: 44.5%
+  - date: 2020-06-01T12:33:02
+    author: greenglass
+    content: |
+      tag=runteamtag011
+      2018-2019
+       RoadRunners
+       Europole
+        LD-Mamasita*Pins*ZenHook*BrashBeast
+       Validated contracts 14
+       Estimated total number of contracts: 14
+       Contract unfulfilled 0
+  - date: 2020-06-08T12:34:58
+    author: greenglass
+    content: |
+      tag=runteamtag011
+      2018-2019
+       BlastingRogues
+       Europole
+        LD-Design*Silverpath*Stitches
+       Validated contracts 8
+       Estimated total number of contracts: 9
+       Contract unfulfilled on 2019-10-15 Reason: Cancelled contract | estimated error: 0.09%
+  - date: 2020-06-15T12:05:04
+    author: greenglass
+    content: |
+      tag=runteamtag011
+      2019-12-31+
+       Trigger Legacy
+       Europole
+       LD-Cobalt*Design*Pins*Stitches*Bull*
+       Validated contracts 4
+       Estimated total number of contracts: 5
+       Contract unfulfilled 0
+       Current Contracts: Contract A = Castle Corp. [Disney-Dassault] / estimated ¥€$ = 50.000 end 2020-07-31 | Contract B = Ubink Inc. [MetaSoft] / estimated ¥€$ = 25.000 / end 2020-08-10 |
+  - date: 2020-07-05T00:00:00
+    author: botGG742
+    content: |
+      2020/07/05
+       nb entrées 0 | total data: 0
+  - date: 2020-07-12T00:00:00
+    author: botGG742
+    content: |
+      2020/07/12
+       nb entrées 0 | total data: 0
+  - date: 2020-07-19T00:00:00
+    author: botGG742
+    content: |
+      2020/07/19
+       nb entrées 0 | total data: 0
+  - date: 2020-07-26T00:00:00
+    author: botGG742
+    content: |
+      2020/07/26
+       nb entrées 1 | total data: 1
+       The Team/LD-Mercury*Dozer
+       Contract: zone isolation
+           starting 2020/07/29:20:00
+           Mr Johnson

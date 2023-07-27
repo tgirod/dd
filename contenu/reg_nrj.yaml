@@ -1,0 +1,45 @@
+- server: elec.kramps.d22.eu
+  group: ""
+  description: GEN01
+  state: off
+  options:
+  - off
+  - 25
+  - 50
+  - 100
+- server: elec.kramps.d22.eu
+  group: ""
+  description: GEN02
+  state: 75
+  options:
+  - off
+  - 25
+  - 50
+  - 100
+- server: elec.kramps.d22.eu
+  group: ""
+  description: GEN03
+  state: 75
+  options:
+  - off
+  - 25
+  - 50
+  - 100
+- server: elec.kramps.d22.eu
+  group: ""
+  description: GEN04
+  state: 75
+  options:
+  - off
+  - 25
+  - 50
+  - 100
+- server: elec.kramps.d22.eu
+  group: ""
+  description: GEN05
+  state: 25
+  options:
+  - off
+  - 25
+  - 50
+  - 100

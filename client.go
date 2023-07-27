@@ -167,6 +167,9 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			c.output, cmd = c.output.Update(msg)
 			cmds = append(cmds, cmd)
 
+		case tea.KeyTab:
+			// ignorer la touche tab
+
 		default:
 			// passer le KeyMsg au prompt
 			c.input, cmd = c.input.Update(msg)

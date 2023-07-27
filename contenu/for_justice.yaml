@@ -1,0 +1,258 @@
+- server: justice.corp.d22.eu
+  group: allowed
+  date: 2020-02-01T18:00:00
+  author: greff03
+  subject: **** Wanted List *****
+  content: MAJ 2020 - A.G - bull-03.64a-2020
+  answers:
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Mélody Mathison
+      Disparue
+       Incident 16485      4346B, Nexkemia Petrochemicals, 07/07/2000
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: John Doe (2051)
+      ***** Personne recherchée, mandat interdistrict PG/634/ID/765387 *****
+       D22/ag#867533654: agression à main armée (victime Sony HAARTZ)
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Julius Villanova
+      ***** Personne recherchée, mandat interdistrict PJ/676/ER/65534 *****
+       D22/cm#5674243: complicité de meurtre
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: John Mac Fright
+      ***** Personne recherchée, mandat interdistrict PF/0865/EP/55463 *****
+       D21/rc#12785234452 rupture de contrat
+       
+       $$$SPECIAL$$$ contacter cont4yes@kitsune ¥€$ en rapport
+       
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Eva Martin
+      ***** Personne recherchée, mandat interdistrict PF/1437/PM/02 *****
+       D21/rc#6542867 rupture contrat
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Michael Dubian
+      ***** Personne recherchée, mandat interdistrict PA/172/PD/945337 *****
+       D22/vm#23842834: vol à l'étalage
+       D22/vm#54327653: vol recette épicerie nuit
+       D22/vm#543299873: vol simple
+       D22/vm#547699823: vol graviscooter
+       D22/vm#753296671: vol à l'étalage
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Carlotta Mihalec
+      ***** Personne recherchée, mandat interdistrict PF/0865/EP/55463 *****
+       D22/vd#765428736: vol données confidentielles 
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Daisy Johannesen
+      ***** Personne recherchée, mandat interdistrict PF/0415/EG/55323 *****
+       D22/me#1275436253: double meurtre, arme à feu
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Harald Proskychev
+      ***** Personne recherchée, mandat interdistrict PF/2964/EP/98254 *****
+       D22/vd#89875357678: vol données avec copyright
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Stefan Jasinski
+      ***** Personne recherchée, mandat interdistrict PF/7253/EP/90271 *****
+       D22/vd#1100298735: vol données sous brevet
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Franz-Ferdinand Celine
+      ***** Personne recherchée, mandat interdistrict PF/1001/EP/98682 *****
+       D22/pi#9867356873: piratage informatique
+       D22/am#18763725: association malfaiteurs
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Camélia Mills
+      ***** Personne recherchée
+       Disparue : main courante du 05/05/2013
+
+       $$$SPECIAL$$$ contacter mills.contact@weyland.eu 
+       
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Eloïse Dubian
+      ***** Personne recherchée *****
+       D22/ou#7578538765: outrage et rébellion, EuroPol
+       D22/va#325363552: vandalisme
+       D22/td#89765363: tapage diurne répété
+       D22/tn#101002543: tapage nocturne
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Richard White
+      ***** Personne recherchée, mandat interdistrict PF/3151/FZ/76429 *****
+      D22/tr#8563427735: traffic illégal
+      D22/re#16753823: recel répété
+- server: justice.corp.d22.eu
+  group: allowed
+  date: 2020-02-01T18:00:00
+  author: greff03
+  subject: Citoyen.e.s en règle
+  content: MAJ 2020 - A.G - bull-03.63-2020
+  answers:
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Margherita Bellamy
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Sebastian Bronner
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Camélia Bellamy
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Eddy Canto
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Edwin Johannesen
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Jonathan Branson
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Sylvia Kemija Mihalec
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Sabrina Johannesen
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Raoul Michu
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Rupert Glass
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Désiré Bonenfant
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Nikole Jasinski
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Lilas Septembre
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Zilmir Abasolo
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Elisabeth Branson
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Jordan Kievain
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Frédéric Manson
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Rodolph Kievain
+      - néant
+      - >>> automated procedure: contact@kramps.d22.eu | #line>2
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Pete Doberty
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Adrien Jolivet
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Joseph Vazzanna
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Mickael Klebert
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Johaquim Batista
+      - néant
+
+  - date: 2020-02-01T18:00:00
+    author: greff03
+    content: |
+      Etat Civil: Georges Suleymanoglu
+      - néant
+

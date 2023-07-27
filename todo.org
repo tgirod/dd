@@ -2,7 +2,7 @@
 * TODO marav.dd.local
 forum public pour faire des paris sur le combat du samedi soir
 serveur créé pour l'occasion, pas grand chose dedans
-* TODO loader tous les fichiers yaml dans --init
+* DONE loader tous les fichiers yaml dans --init
 * DONE objets vendus et en vente sur LBD
 * TODO contenu dans les forums de hacker
 ** DONE mdp porn de GG

@@ -143,6 +143,50 @@ var frozdd = Server{
 	Security:    SEC1,
 }
 
+var maravdd = Server{
+	Address:     "marav.dd.local",
+	Private:     false,
+	Description: maravDesc,
+	Security:    0,
+}
+
+var maravDesc = `
+                LA MARAV' PRÉSENTE                                                                        
+
+        █████████    █████████   ███████████                   
+       ███░░░░░███  ███░░░░░███ ░█░░░███░░░█                   
+      ░███    ░░░  ░███    ░███ ░   ░███  ░                    
+      ░░█████████  ░███████████     ░███                       
+       ░░░░░░░░███ ░███░░░░░███     ░███                       
+       ███    ░███ ░███    ░███     ░███                       
+      ░░█████████  █████   █████    █████    ██                
+       ░░░░░░░░░  ░░░░░   ░░░░░    ░░░░░    ░░                 
+
+                                                                        
+     ███████    ███████████  ██████████ ██████   █████                   
+   ███░░░░░███ ░░███░░░░░███░░███░░░░░█░░██████ ░░███                    
+  ███     ░░███ ░███    ░███ ░███  █ ░  ░███░███ ░███                    
+ ░███      ░███ ░██████████  ░██████    ░███░░███░███                    
+ ░███      ░███ ░███░░░░░░   ░███░░█    ░███ ░░██████                    
+ ░░███     ███  ░███         ░███ ░   █ ░███  ░░█████                    
+  ░░░███████░   █████        ██████████ █████  ░░█████                   
+    ░░░░░░░    ░░░░░        ░░░░░░░░░░ ░░░░░    ░░░░░                    
+                                                                        
+                                                                        
+ ███████████ █████   █████████  █████   █████ ███████████               
+░░███░░░░░░█░░███   ███░░░░░███░░███   ░░███ ░█░░░███░░░█               
+ ░███   █ ░  ░███  ███     ░░░  ░███    ░███ ░   ░███  ░                
+ ░███████    ░███ ░███          ░███████████     ░███                   
+ ░███░░░█    ░███ ░███    █████ ░███░░░░░███     ░███                   
+ ░███  ░     ░███ ░░███  ░░███  ░███    ░███     ░███                   
+ █████       █████ ░░█████████  █████   █████    █████                  
+░░░░░       ░░░░░   ░░░░░░░░░  ░░░░░   ░░░░░    ░░░░░                   
+
+     TIGER DOLL       vs       NINO FIREGUN BENVENUTI
+
+pour les parieurs locaux, voyez avec Oggy
+`
+
 var dd22Desc = `
                     _____                            _                       
                    |  ___|                          | |                      
@@ -986,6 +1030,7 @@ func Init() {
 		[]Link{
 			{Address: d22.Address, Description: "serveur public du District 22"},
 			{Address: frozdd.Address, Description: "pour les fans de Frozpunk"},
+			{Address: maravdd.Address, Description: "paris en ligne pour le Saturday Open Fight"},
 		},
 		[]Register{
 			// FIXME TODO registres elec
@@ -994,6 +1039,12 @@ func Init() {
 		[]Post{},
 	)
 	InitServer(frozdd,
+		[]User{},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
+	InitServer(maravdd,
 		[]User{},
 		[]Link{},
 		[]Register{},

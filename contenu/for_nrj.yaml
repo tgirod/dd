@@ -1,0 +1,23 @@
+- server: elec.kramps.d22.eu
+  group: ""
+  date: 2016-03-20T17:20:30
+  author: taugusto
+  subject: Les générateurs de puissance
+  content: |
+    Les générateurs de puissance du centre pénitencier.
+  answers:
+  - date: 2016-03-20T17:20:35
+    author: taugusto
+    content: Arasaka T23 (100 kWh) [GEN01]
+  - date: 2016-03-20T17:20:35
+    author: taugusto
+    content: Arasaka T23 (100 kWh) [GEN02]
+  - date: 2016-03-20T17:20:35
+    author: taugusto
+    content: Arasaka T23 (100 kWh) [GEN03]
+  - date: 2016-03-20T17:20:35
+    author: taugusto
+    content: Weyland HPCG - Série 2 [GEN04]
+  - date: 2016-03-20T17:20:35
+    author: taugusto
+    content: Weyland HPCG - Série 3 [GEN05]

@@ -1188,6 +1188,8 @@ func Init() {
 	LoadPosts("contenu/for_kramps_final.yaml")
 	LoadPosts("contenu/for_frozpunk_BY_HAND.yaml")
 	LoadPosts("contenu/for_leet.yaml")
+	LoadPosts("contenu/for_nrj.yaml")
 	LoadRegistries("contenu/reg_kramps.yaml")
 	LoadRegistries("contenu/reg_satcom.yaml")
+	LoadRegistries("contenu/reg_nrj.yaml")
 }

@@ -1,45 +1,16 @@
 #+title:Todo
 * DONE changer la date des forums
 * TODO loader tous les fichiers yaml dans --init
-* TODO objets vendus et en vente sur LBD
+* DONE objets vendus et en vente sur LBD
 * TODO contenu dans les forums de hacker
 ** DONE mdp porn de GG
 ** TODO argent des transactions sur le compte de greenglass
+** DONE info sur runners sur forum GG
 ** TODO accès à des ressources de hack ?
-** documents perso de céline
+** TODO documents perso de céline
 * TODO playtest hacking
 * TODO tester la constellation
 * TODO justice : log avec l'ID corpo
 * TODO contrat JP ravi sur dd.local
 * TODO playtest run kramps
 ** reboot des caméras
-
-* DONE quit : perd pas login si pas connecté
-* DONE imp reste même quand déconnecté
-* DONE affiche pas toujours les droits de jesus ou crunch
-* DONE crunch, souvent pas les droits
-* DONE version admin : liens indiquent pas les serveur
-* DONE formatter la lecture des Poste pour les lignes très longues ?
-* [/] interdire Forum sur certains serveur ?
-** bool allowForum dans server ?
-* [3/6] ajouter Contenu depuis monitoring
-** DONE mode cli, avec préservation de la DB temporaire ?
-** DONE forum depuis fichier
-** TODO ajouter New registry
-** TODO editer Msg/Post/Transaction
-** TODO kill Msg/Post/Transaction
-** DONE Messages
-* [4/4] Contenu Forum
-** DONE Kramps => en cours dans contenu
-- liste de gardiens : Code - Nom Prénom / Date Naiss / ref bizarre
-- liste de prisonniers : Code - Nom Prénom / Date Nass / ref bizarre
-- liste de lieux : AC1/AC2/AC4/DZ/RR/CE
-- horaires : 10/14/16/20
-=> registry : code x heure = AC1 | AC2 | AC3 | DZ | RR | CE
-** DONE Casier Judiciaire
-** Green glass
-** DONE dd.local => peut dire qu'il y a un crash qui a éradiqué certaines infos
-** bon district => antenne récente, et donc peu d'annonces
-** id externes, pour payer/acheter/communiquer
-- contacts de La Fouine
-** DONE Architecture du réseau

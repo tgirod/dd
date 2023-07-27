@@ -15,7 +15,7 @@ import (
 	"github.com/muesli/reflow/wordwrap"
 )
 
-const DNISpeed = 3
+const DNISpeed = 4
 
 type Client struct {
 	width  int              // largeur de l'affichage

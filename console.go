@@ -52,9 +52,9 @@ func (z MemoryZone) Value() any {
 
 func (z MemoryZone) Desc() string {
 	if z.Used {
-		return "disponible"
-	} else {
 		return "occupée"
+	} else {
+		return "disponible"
 	}
 }
 
@@ -244,8 +244,8 @@ func (c *Console) Parse(prompt string) any {
 
 func InitMem() []MemoryZone {
 	mz := make([]MemoryZone, 5)
-	for i := 0; i < 5; i++ {
-		addr := fmt.Sprintf("%08x", rand.Uint32())
+	for i := 0; i < 10; i++ {
+		addr := fmt.Sprintf("%04x", uint16(rand.Uint32()))
 		mz[i] = MemoryZone{Address: addr}
 	}
 	return mz

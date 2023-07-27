@@ -4,7 +4,7 @@
 * DONE objets vendus et en vente sur LBD
 * TODO contenu dans les forums de hacker
 ** DONE mdp porn de GG
-** TODO argent des transactions sur le compte de greenglass
+** DONE argent des transactions sur le compte de greenglass
 ** DONE info sur runners sur forum GG
 ** TODO accès à des ressources de hack ?
 ** TODO documents perso de céline

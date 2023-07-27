@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"time"
 
 	"gopkg.in/yaml.v3"
 )
@@ -400,7 +399,7 @@ Australie District D30`},
 }
 
 func rndState(states []RegisterState) RegisterState {
-	return states[rnd.Intn(len(states))]
+	return states[rand.Intn(len(states))]
 }
 
 func genSatRegistry(sat []EntrySat, states []RegisterState) []Register {
@@ -423,13 +422,12 @@ func genSatRegistry(sat []EntrySat, states []RegisterState) []Register {
 	return res
 }
 
-var rnd *rand.Rand
 var regDevice []Register
 
 // génère du YAML pour les registres de Satcom.Legba
 // go run contenu/gen_satcom.go > reg_satcom.yaml
 func main() {
-	rnd = rand.New(rand.NewSource(time.Now().Unix()))
+	rand.Seed(0)
 
 	regDevice = append(regDevice, genSatRegistry(satEntry, satFred)...)
 

@@ -17,8 +17,6 @@ type EntryGG struct {
 
 var servAddress = "leet.darknet"
 
-var rnd *rand.Rand
-
 var ggList = []EntryGG{
 	// ID keywords restricted owner title content
 	{"vlope20", []string{"flr", "pr0n"}, "", "vanessalope", `login: green pass: nait5zee`},
@@ -63,11 +61,11 @@ var ggList = []EntryGG{
 var startDate, _ = time.Parse("2006-01-02T15:04:05", "2020-04-06T12:42:23")
 
 func genNextWeek(start time.Time) time.Time {
-	nbDay := rnd.Intn(10)
+	nbDay := rand.Intn(10)
 	tmpDate := start.AddDate(0, 0, nbDay)
 	//alter the time
-	nbMin := rnd.Intn(60) - 30
-	nbSec := rnd.Intn(60)
+	nbMin := rand.Intn(60) - 30
+	nbSec := rand.Intn(60)
 	res := tmpDate.Add(time.Minute*time.Duration(nbMin) +
 		time.Second*time.Duration(nbSec))
 	return res
@@ -76,8 +74,8 @@ func genNextDate(start time.Time) time.Time {
 	nbDay := 7
 	tmpDate := start.AddDate(0, 0, nbDay)
 	//alter the time
-	nbMin := rnd.Intn(60) - 30
-	nbSec := rnd.Intn(60)
+	nbMin := rand.Intn(60) - 30
+	nbSec := rand.Intn(60)
 	res := tmpDate.Add(time.Minute*time.Duration(nbMin) +
 		time.Second*time.Duration(nbSec))
 	return res
@@ -149,7 +147,7 @@ func genGGContract() {
 
 func main() {
 	startDate, _ = time.Parse("2006-01-02T15:04:05", "2020-04-06T12:42:23")
-	rnd = rand.New(rand.NewSource(time.Now().Unix()))
+	rand.Seed(0)
 	genGGGrocery()
 
 	startDate, _ = time.Parse("2006-01-02T15:04:05", "2020-04-06T12:42:23")

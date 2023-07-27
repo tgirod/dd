@@ -26,21 +26,19 @@ func genBarNames() []string {
 	for _, ch := range concertHall {
 		// chance outside D22
 		district := 22
-		if rnd.Float32() < 0.15 {
-			district = districts[rnd.Intn(len(districts))]
+		if rand.Float32() < 0.15 {
+			district = districts[rand.Intn(len(districts))]
 		}
 		res = append(res, fmt.Sprintf("%s (D%d)", ch, district))
 	}
 	return res
 }
 
-var rnd *rand.Rand
-
 func genDate(start time.Time, interval int) time.Time {
-	nbDay := rnd.Intn(interval)
+	nbDay := rand.Intn(interval)
 	tmpDate := start.AddDate(0, 0, nbDay)
-	nbMin := rnd.Intn(60 * 14)
-	nbSec := rnd.Intn(60)
+	nbMin := rand.Intn(60 * 14)
+	nbSec := rand.Intn(60)
 	res := tmpDate.Add(time.Minute*time.Duration(nbMin) +
 		time.Second*time.Duration(nbSec))
 	return res
@@ -48,8 +46,8 @@ func genDate(start time.Time, interval int) time.Time {
 func genPlace() string {
 	// chance for Termina
 	res := "Terminal - DZ"
-	if rnd.Float32() < 0.90 {
-		res = places[rnd.Intn(len(places))]
+	if rand.Float32() < 0.90 {
+		res = places[rand.Intn(len(places))]
 	}
 	return res
 }
@@ -96,7 +94,6 @@ func genConcertDates(nb int,
 
 func main() {
 
-	rnd = rand.New(rand.NewSource(time.Now().Unix()))
 	places = append(places, genBarNames()...)
 
 	genConcertDates(100, "«Plastobéton», tous les concerts (enfin, on essaie)",

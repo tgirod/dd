@@ -940,17 +940,15 @@ var satEntry = []EntrySat{
 	{"MEO-IRIDIUM", []string{"MEO", "IRIDIUM"}, "", "Constellation IRIDIUM orbite MEO", "c65c0fe2-0ada-4555-b641-439239426488"},
 }
 
-var rnd *rand.Rand
-
 var articleAll []Post
 
 func genDate(last time.Time, interval int) time.Time {
-	nbDay := rnd.Intn(interval)
+	nbDay := rand.Intn(interval)
 	res := last.AddDate(0, 0, -nbDay)
 	return res
 }
 func genChoice(sList []string) string {
-	return sList[rnd.Intn(len(sList))]
+	return sList[rand.Intn(len(sList))]
 }
 
 // WRITE directement du YAML !!! (sinon, les answers, c'est pas évident)
@@ -992,11 +990,10 @@ func genConst(sat []EntrySat) {
 // Génère des post sans answers pour chaque article
 // puis génère les données satellites pour SatCom
 func main() {
+	rand.Seed(0)
 
 	var err error
 	var date time.Time
-
-	rnd = rand.New(rand.NewSource(time.Now().Unix()))
 
 	// articles de Mandrake, commence par le dernier
 	var lastDate time.Time

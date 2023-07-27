@@ -10,10 +10,10 @@ serveur créé pour l'occasion, pas grand chose dedans
 ** DONE info sur runners sur forum GG
 ** TODO accès à des ressources de hack ?
 ** TODO documents perso de céline
-* TODO playtest hacking
+* DONE playtest hacking
 * DONE tester la constellation
 * DONE justice : log avec l'ID corpo
 * TODO contrat JP ravi sur dd.local
-* TODO playtest run kramps
+* DONE playtest run kramps
 ** reboot des caméras
 * DONE changer la date des forums

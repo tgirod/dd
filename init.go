@@ -1136,17 +1136,10 @@ func Init() {
 
 	InitServer(leet,
 		[]User{
-<<<<<<< HEAD
-			{Login: "crunch", Backdoor: false, Groups: []string{"admin"}},
-			{Login: "celine", Backdoor: false},
-			{Login: "nikki", Backdoor: false},
-			{Login: "greenglass", Backdoor: false, Groups: []string{"admin", "gg"}},
-=======
 			{Login: "crunch", Backdoor: false, Groups: []string{"admin", "flr"}},
 			{Login: "celine", Backdoor: false, Groups: []string{"celine", "flr", "pornloverz"}},
 			{Login: "nikki", Backdoor: false, Groups: []string{"flr"}},
-			{Login: "greenglass", Backdoor: false, Groups: []string{"pornloverz"}},
->>>>>>> 3617d88a6fdf1186815ea9eef2bf986d981f082a
+			{Login: "greenglass", Backdoor: false, Groups: []string{"pornloverz", "gg"}},
 		},
 		[]Link{},
 		[]Register{},

@@ -281,7 +281,7 @@ func (c *Client) RenderOutput() {
 			return b
 		}
 	}
-	width := min(80, c.width)
+	width := min(90, c.width)
 
 	b := strings.Builder{}
 	for _, e := range c.Console.Results {

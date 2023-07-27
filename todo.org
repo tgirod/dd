@@ -11,8 +11,8 @@ serveur créé pour l'occasion, pas grand chose dedans
 ** TODO accès à des ressources de hack ?
 ** TODO documents perso de céline
 * TODO playtest hacking
-* TODO tester la constellation
-* TODO justice : log avec l'ID corpo
+* DONE tester la constellation
+* DONE justice : log avec l'ID corpo
 * TODO contrat JP ravi sur dd.local
 * TODO playtest run kramps
 ** reboot des caméras

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -33,8 +34,12 @@ func LinkCmd(ctx Context) any {
 	}
 
 	if err := console.Connect(link.Address, console.Identity, false, false); err != nil {
-		// connexion impossible avec l'identité courante
-		return ctx.WithContext(idlink, "address", link.Address)
+		if errors.Is(err, errInvalidUser) {
+			// connexion impossible avec l'identité courante
+			return ctx.WithContext(idlink, "address", link.Address)
+		}
+
+		return ctx.Error(err)
 	}
 
 	b := strings.Builder{}

@@ -128,7 +128,7 @@ func genCasiers() {
 	fmt.Printf("  group: allowed\n")
 	fmt.Printf("  date: 2020-02-01T18:00:00\n")
 	fmt.Printf("  author: greff03\n")
-	fmt.Printf("  subject: **** Wanted List *****\n")
+	fmt.Printf("  subject: \"**** Wanted List *****\"\n")
 	fmt.Printf("  content: MAJ 2020 - A.G - bull-03.64a-2020\n")
 	fmt.Printf("  answers:\n")
 

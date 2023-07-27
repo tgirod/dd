@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"time"
 
 	"gopkg.in/yaml.v3"
 )
@@ -134,10 +133,8 @@ var regGuards []Register
 var regPriso []Register
 var regDevice []Register
 
-var rnd *rand.Rand
-
 func rndPlace() string {
-	return places[rnd.Intn(len(places))]
+	return places[rand.Intn(len(places))]
 }
 
 func gen_registries(peoples []string) []Register {
@@ -195,7 +192,7 @@ func genDevices(name string, dev []Device, states []RegisterState) []Register {
 // génère du YAML pour les registres de la Kramps
 // go run contenu/gen_edt_kramps.go > reg_kramps.yaml
 func main() {
-	rnd = rand.New(rand.NewSource(time.Now().Unix()))
+	rand.Seed(0)
 
 	// fmt.Printf("p=%s\n", rndPlace())
 	// fmt.Printf("p=%s\n", rndPlace())

@@ -119,16 +119,14 @@ var servAdrr = "priv.kramps.d22.eu"
 var groupPers = "pers"
 var groupDA = "diradj"
 
-var rnd *rand.Rand
-
 func rndCode(people []Entry) string {
-	return people[rnd.Intn(len(people))].Code
+	return people[rand.Intn(len(people))].Code
 }
 func genDate(start time.Time, interval int) time.Time {
-	nbDay := rnd.Intn(interval)
+	nbDay := rand.Intn(interval)
 	tmpDate := start.AddDate(0, 0, nbDay)
-	nbMin := rnd.Intn(60 * 14)
-	nbSec := rnd.Intn(60)
+	nbMin := rand.Intn(60 * 14)
+	nbSec := rand.Intn(60)
 	res := tmpDate.Add(time.Minute*time.Duration(nbMin) +
 		time.Second*time.Duration(nbSec))
 	return res
@@ -147,7 +145,7 @@ func genPhrases(nb int) {
 	fmt.Printf("  answers:\n")
 
 	for n := 0; n < nb; n = n + 1 {
-		pt := phraseTypique[rnd.Intn(len(phraseTypique))]
+		pt := phraseTypique[rand.Intn(len(phraseTypique))]
 		date := genDate(startDate, 1000)
 		guard := rndCode(guards)
 		var phrase string
@@ -190,9 +188,6 @@ func genPeople(subject string, content string, people []Entry) {
 }
 
 func main() {
-
-	rnd = rand.New(rand.NewSource(time.Now().Unix()))
-
 	genPeople("Liste du Personnel", "-- m-à-j 2020 -- ", guards)
 	genPeople("Liste des Résidents", "-- m-à-j 2020 -- ", prisoners)
 	genPhrases(174)

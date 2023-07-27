@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -25,14 +26,13 @@ func Connect(ctx Context) any {
 	console := ctx.Console()
 	address := ctx.Value("address").(string)
 
-	// BUG CONNECT
-	// fmt.Printf("LOG try connecting\n")
 	if err := console.Connect(address, console.Identity, false, true); err != nil {
-		// connexion impossible avec l'identité courante
-		// lancer la saisie du login
-		// BUG CONNECT
-		// fmt.Printf("LOG Connect bad identity\n")
-		return ctx.WithContext(idconnect, "address", address)
+		if errors.Is(err, errInvalidUser) {
+			// connexion impossible avec l'identité courante
+			return ctx.WithContext(idconnect, "address", address)
+		}
+
+		return ctx.Error(err)
 	}
 
 	b := strings.Builder{}

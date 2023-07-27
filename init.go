@@ -1180,6 +1180,7 @@ func Init() {
 	}
 
 	// chargement YAML
+	LoadTransactions("contenu/trans_gg.yaml")
 	LoadPosts("contenu/for_hope_greendata_final.yaml")
 	LoadPosts("contenu/for_legba_final.yaml")
 	LoadPosts("contenu/for_kramps_final.yaml")

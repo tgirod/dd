@@ -1,5 +1,7 @@
 #+title:Todo
-* DONE changer la date des forums
+* TODO marav.dd.local
+forum public pour faire des paris sur le combat du samedi soir
+serveur créé pour l'occasion, pas grand chose dedans
 * TODO loader tous les fichiers yaml dans --init
 * DONE objets vendus et en vente sur LBD
 * TODO contenu dans les forums de hacker
@@ -14,3 +16,4 @@
 * TODO contrat JP ravi sur dd.local
 * TODO playtest run kramps
 ** reboot des caméras
+* DONE changer la date des forums

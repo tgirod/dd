@@ -719,7 +719,7 @@ var dag = []Graph{
 		[]*Server{&unconD},
 		allFLR},
 	{&unconC, "ссылка на ",
-		[]*Server{&unconB, &connectedG},
+		[]*Server{&unconB, &unconG},
 		allFLR},
 	{&unconD, "Liens vers ",
 		[]*Server{&unconC},

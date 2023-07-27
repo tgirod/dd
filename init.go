@@ -1187,6 +1187,7 @@ func Init() {
 	}
 
 	// chargement YAML
+	LoadTransactions("contenu/trans_balance.yaml")
 	LoadPosts("contenu/for_lbd.yaml")
 	LoadPosts("contenu/for_gg_grocery_contract.yaml")
 	LoadPosts("contenu/for_justice.yaml")

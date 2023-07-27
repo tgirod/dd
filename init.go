@@ -514,27 +514,6 @@ var cruDesc = `
     is NOT watching you... No need for that.... :o)
 `
 
-// serveur privé de Céline
-var lair = Server{
-	Address:     "celine.darknet",
-	Private:     true,
-	Description: celDesc,
-	Security:    SEC3,
-}
-
-var celDesc = `
-  ******               *******                    **
-  **////**   **    **  /**////**                  /**
- **    //  ************/**    /**  ******   ******/**  **
-/**       ///**////**/ /**    /** //////** //**//*/** **
-/**         /**   /**  /**    /**  *******  /** / /****
-//**    ** ************/**    **  **////**  /**   /**/**
- //****** ///**////**/ /*******  //********/***   /**//**
-  //////    //    //   ///////    //////// ///    //  //
-
-...... Dernier avertissement ............................
-`
-
 // serveur de Hope
 var hopeServ = Server{
 	Address:     "hope.local",
@@ -1157,24 +1136,13 @@ func Init() {
 
 	InitServer(leet,
 		[]User{
-			{Login: "crunch", Backdoor: false, Groups: []string{"admin"}},
-			{Login: "celine", Backdoor: false},
-			{Login: "nikki", Backdoor: false},
-			{Login: "greenglass", Backdoor: false},
+			{Login: "crunch", Backdoor: false, Groups: []string{"admin", "flr"}},
+			{Login: "celine", Backdoor: false, Groups: []string{"celine", "flr", "pornloverz"}},
+			{Login: "nikki", Backdoor: false, Groups: []string{"flr"}},
+			{Login: "greenglass", Backdoor: false, Groups: []string{"pornloverz"}},
 		},
 		[]Link{},
 		[]Register{},
-		// TODO FIXME Forum à reprendre de _init.go
-		[]Post{},
-	)
-	InitServer(lair,
-		[]User{
-			{Login: "celine", Backdoor: false, Groups: []string{"admin"}},
-		},
-		// TODO FIXME un Link vers leet.darknet ??
-		[]Link{},
-		[]Register{},
-		// TODO FIXME Forum à reprendre de _init.go
 		[]Post{},
 	)
 	InitServer(hopeServ,
@@ -1216,6 +1184,7 @@ func Init() {
 	LoadPosts("contenu/for_legba_final.yaml")
 	LoadPosts("contenu/for_kramps_final.yaml")
 	LoadPosts("contenu/for_frozpunk_BY_HAND.yaml")
+	LoadPosts("contenu/for_leet.yaml")
 	LoadRegistries("contenu/reg_kramps.yaml")
 	LoadRegistries("contenu/reg_satcom.yaml")
 }

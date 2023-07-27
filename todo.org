@@ -3,7 +3,9 @@
 * TODO loader tous les fichiers yaml dans --init
 * TODO objets vendus et en vente sur LBD
 * TODO contenu dans les forums de hacker
-** mdp porn de GG
+** DONE mdp porn de GG
+** TODO argent des transactions sur le compte de greenglass
+** TODO accès à des ressources de hack ?
 ** documents perso de céline
 * TODO playtest hacking
 * TODO tester la constellation
@@ -11,7 +13,6 @@
 * TODO contrat JP ravi sur dd.local
 * TODO playtest run kramps
 ** reboot des caméras
-
 
 * DONE quit : perd pas login si pas connecté
 * DONE imp reste même quand déconnecté

@@ -125,8 +125,10 @@ func fmtConnexion(sh SessionHandle) string {
 		conn += fmt.Sprintf(sDNI /*c.Privilege,*/, defDNINo)
 	}
 	if c.Alert {
-		conn += fmt.Sprintf(sAlert,
-			int(c.Countdown.Minutes()), int(c.Countdown.Seconds()))
+		timeLeft := c.TimeLeft()
+		min := int(timeLeft.Minutes())
+		sec := int(timeLeft.Seconds()) - min*60
+		conn += fmt.Sprintf(sAlert, min, sec)
 	} else {
 		conn += defAlert
 	}

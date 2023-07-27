@@ -519,7 +519,7 @@ var hopeServ = Server{
 	Address:     "hope.local",
 	Private:     true,
 	Description: hopDesc,
-	Security:    SEC5,
+	Security:    SEC3,
 }
 
 // Project "Hope"

@@ -272,7 +272,7 @@ var secKramps = Server{
 	Security:    SEC4,
 }
 
-var krampsElec = Server{
+var elecKramps = Server{
 	Address:     "elec.kramps.d22.eu",
 	Private:     true,
 	Description: kElecDesc,
@@ -1019,7 +1019,7 @@ func Init() {
 		},
 		[]Link{
 			{Address: persKramps.Address, Description: "Serveur réservé au personnel"},
-			{Address: krampsElec.Address, Description: "Gestion de l'énergie"},
+			{Address: elecKramps.Address, Description: "Gestion de l'énergie"},
 		},
 		[]Register{},
 		[]Post{},
@@ -1049,7 +1049,15 @@ func Init() {
 		[]Register{},
 		[]Post{},
 	)
-
+	InitServer(elecKramps,
+		[]User{
+			{Login: "akremmer", Groups: []string{"pers", "sec"}},
+			{Login: "mdavidson", Groups: []string{"pers", "sec", "diradj"}},
+		},
+		[]Link{},
+		[]Register{},
+		[]Post{},
+	)
 	InitServer(corp,
 		[]User{},
 		[]Link{

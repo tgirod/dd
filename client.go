@@ -162,10 +162,17 @@ func (c *Client) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.input.SetValue(c.Results[c.hist].Prompt)
 			}
 
-		case tea.KeyPgUp, tea.KeyPgDown:
+		case tea.KeyPgUp:
 			// scroll de la sortie
-			c.output, cmd = c.output.Update(msg)
-			cmds = append(cmds, cmd)
+			c.output.LineUp(5)
+			// c.output, cmd = c.output.Update(msg)
+			// cmds = append(cmds, cmd)
+
+		case tea.KeyPgDown:
+			// scroll de la sortie
+			c.output.LineDown(5)
+			// c.output, cmd = c.output.Update(msg)
+			// cmds = append(cmds, cmd)
 
 		case tea.KeyTab:
 			// ignorer la touche tab

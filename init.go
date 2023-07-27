@@ -775,6 +775,7 @@ var (
 	akremmer  = Identity{"akremmer", "sexgod22", "Alexandre Kremmer", true}   // security Kramps
 	mdavidson = Identity{"mdavidson", "allbitches", "Milton Davidson", true}  // dir adjoint Kramps
 	vredmint  = Identity{"vredmint", "lily-dorian", "Virginia Redmint", true} // assistante Kramps
+	taugusto  = Identity{"taugusto", "tde54e", "Terry Augusto", true}
 	// TODO quelques employé•e•s de legba voodoocom
 	atrebinsky = Identity{"atrebinsky", "56raz8", "Anthon Trebinsky", true}  // proj. Mandrake
 	dyuong     = Identity{"dyuong", "gd86rw", "Dyop Yuong", true}            // proj. Mandrake
@@ -1030,6 +1031,7 @@ func Init() {
 			{Login: "mdavidson", Groups: []string{"pers", "sec", "diradj"}},
 			{Login: "rkievain", Groups: []string{"pers"}},
 			{Login: "vredmint", Groups: []string{"pers"}},
+			{Login: "taugusto", Groups: []string{"pers", "elec"}},
 		},
 		[]Link{
 			//{Address: kramps.Address, Description: "Accueil"},
@@ -1052,7 +1054,8 @@ func Init() {
 	InitServer(elecKramps,
 		[]User{
 			{Login: "akremmer", Groups: []string{"pers", "sec"}},
-			{Login: "mdavidson", Groups: []string{"pers", "sec", "diradj"}},
+			{Login: "mdavidson", Groups: []string{"pers", "sec", "diradj", "elec"}},
+			{Login: "taugusto", Groups: []string{"pers", "elec"}},
 		},
 		[]Link{},
 		[]Register{},

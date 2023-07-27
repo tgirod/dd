@@ -114,21 +114,21 @@ var camDev = []Device{
 	{"CE", 5},
 	{"DIV", 1},
 }
-var camState = []RegisterState{"On", "Off", "Disconnected"}
+var camState = []RegisterState{"on", "off", "rebooting"}
 
 var doorDev = []Device{
 	{"AC1", 1}, {"AC2", 1}, {"AC3", 1},
 	{"RR", 3},
 	{"CE", 5},
 }
-var doorState = []RegisterState{"Locked", "Unlocked"}
+var doorState = []RegisterState{"locked", "unlocked"}
 
 var alarmDev = []Device{
 	{"AC1", 1}, {"AC2", 1}, {"AC3", 1},
 	{"RR", 1},
 	{"CE", 5},
 }
-var alarmState = []RegisterState{"ok", "Warning", "ALARM"}
+var alarmState = []RegisterState{"on", "off", "alarm", "rebooting"}
 
 var regGuards []Register
 var regPriso []Register

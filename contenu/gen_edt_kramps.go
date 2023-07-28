@@ -81,7 +81,7 @@ var prisoners = []Entry{
 	{"PI-40", []string{"Che", "Rozas", "Montesinos"}, "", "Che Rozas Montesinos", "Che Rozas Montesinos - 12/12/2000 - 5ac440eb-c586-4051-9abd-736ee40c9ada"},
 	{"PK-4", []string{"Gilles", "Pereira"}, "", "Gilles Pereira", "Gilles Pereira - 26/5/2002 - c378d251-d729-4a88-9187-70570b2ddb89"},
 	{"PC-52", []string{"Marcial", "Rodrigo"}, "", "Marcial Rodrigo", "Marcial Rodrigo - 19/11/1953 - 3f5fe026-7da2-40b1-a799-159a0c2322d5"},
-	{"PA-21", []string{"Pedro", "Ramirez"}, "", "Pedro Ramirez", "Pedro Ramirez - 8/7/1991 - 383ca3ff-58eb-4745-efff-e046ff8e552e"},
+	{"PA-21", []string{"Sergi", "Fratelli"}, "", "Sergio Fratelli", "Sergio Fratelli - 8/7/1991 - 383ca3ff-58eb-4745-efff-e046ff8e552e"},
 	{"PL-25", []string{"Valentine", "Clerc"}, "", "Valentine Clerc", "Valentine Clerc - 30/5/1970 - 0d4dfc82-e8f7-47e2-9c48-3726d2f8c064"},
 	{"PG-11", []string{"Miguel", "Williams"}, "", "Miguel Williams", "Miguel Williams - 1/2/1970 - 937859bc-9d1d-4b8d-98ae-08e541df9159"},
 	{"PN-144", []string{"Vera", "Pont", "Avilés"}, "", "Vera Pont Avilés", "Vera Pont Avilés - 12/7/1987 - 03c9b13c-f632-4fb6-b0cb-8aefb17e7c74"},

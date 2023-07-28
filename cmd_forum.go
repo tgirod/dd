@@ -54,10 +54,10 @@ func groupList(ctx Context) ([]Option, error) {
 }
 
 var forum = Cmd{
-	name:       "forum",
-	help:       "participer au forum du serveur",
-	connected:  true,
-	identified: true,
+	name:      "forum",
+	help:      "participer au forum du serveur",
+	connected: true,
+	// identified: true,
 	next: Branch{
 		name: "action",
 		cmds: []Cmd{
@@ -73,8 +73,9 @@ var forum = Cmd{
 				},
 			},
 			{
-				name: "write",
-				help: "ouvrir un nouveau sujet",
+				name:       "write",
+				help:       "ouvrir un nouveau sujet",
+				identified: true,
 				next: Select{
 					name:    "group",
 					help:    "groupe propriétaire du sujet",
@@ -92,8 +93,9 @@ var forum = Cmd{
 				},
 			},
 			{
-				name: "answer",
-				help: "répondre à un topic",
+				name:       "answer",
+				help:       "répondre à un topic",
+				identified: true,
 				next: Select{
 					name:    "topic",
 					help:    "sujet de discussion",

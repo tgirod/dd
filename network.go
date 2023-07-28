@@ -86,7 +86,7 @@ func (i Identity) Send(to, subject, content string) (Message, error) {
 	return Save(Message{
 		From:    i.Login,
 		To:      to,
-		Date:    time.Now(),
+		Date:    time.Now().Add(diff),
 		Subject: subject,
 		Content: content,
 		Opened:  false,

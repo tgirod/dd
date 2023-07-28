@@ -126,11 +126,11 @@ var forum = Cmd{
 					next: Run(TopicSearch),
 				},
 			},
-			{
-				name: "dump",
-				help: "dump all posts",
-				next: Run(DumpForum),
-			},
+			// {
+			// 	name: "dump",
+			// 	help: "dump all posts",
+			// 	next: Run(DumpForum),
+			// },
 		},
 	},
 }

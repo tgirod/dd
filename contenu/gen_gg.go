@@ -53,7 +53,7 @@ var ggList = []EntryGG{
 	{"005698bR1An", []string{"maman", "bot"}, "greenglass", "2020-07-05T00:00:00", `2020/07/05 - nb entrées 0 | total data: 0`},
 	{"005698bR1An", []string{"maman", "bot"}, "greenglass", "2020-07-12T00:00:00", `2020/07/12 - nb entrées 0 | total data: 0`},
 	{"005698bR1An", []string{"maman", "bot"}, "greenglass", "2020-07-19T00:00:00", `2020/07/19 - nb entrées 0 | total data: 0`},
-	{"005698bR1An", []string{"maman", "bot"}, "greenglass", "2020-07-26T00:00:00", `2020/07/26 - nb entrées 1 | total data: 1 - The Team/LD-Mercury*Dozer - Contract: zone isolation -     starting 2020/07/29:20:00 -     Mr Johnson`},
+	{"005698bR1An", []string{"maman", "bot"}, "greenglass", "2020-07-26T00:00:00", `2020/07/26 - nb entrées 1 | total data: 1 - The Team/LD-Mercury*Dozer*Ashes - Contract: zone isolation -     starting 2020/07/29:20:00 -     Mr Johnson`},
 	{"005699bR1An", []string{"maman", "grocery"}, "greenglass", "grocetag469", `cola, cheetos`},
 	{"005700bR1An", []string{"maman", "pr0n"}, "greenglass", "pr0n", `MummyshitsonDaddy.mov`},
 }

@@ -815,6 +815,9 @@ var (
 
 	// PNJs
 	afrieman = Identity{"afrieman", "far3ik", "Anton Frieman", true} // PNJ fan blackwave
+	ifrancher = Identity{"ifrancher", "asu62k", "Isabella Francher", true}
+	yfrancher = Identity{"yfrancher", "oegy8s", "Yves Francher", true}
+	svox = Identity{"svox", "eg76wn", "Samantha Vox", true}
 	// TODO quelques employé•e•s de la kramps
 	akremmer  = Identity{"akremmer", "sexgod22", "Alexandre Kremmer", true}   // security Kramps
 	mdavidson = Identity{"mdavidson", "allbitches", "Milton Davidson", true}  // dir adjoint Kramps
@@ -937,7 +940,7 @@ var allPlayers = []InfoPlayer{
 }
 var otherIds = []Identity{
 	// fan blackwave
-	afrieman,
+	afrieman, ifrancher, yfrancher, svox,
 	// sasquatch
 	sjasinski,
 	// Kramps

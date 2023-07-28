@@ -1,0 +1,36 @@
+# Exemple de fichier permettant d'ajouter des messages entre joueurs sur la "toile"
+# toute ligne qui commence par # est un commentaire.
+# *** ATTENTION *** les ordis sont bête alors il faut respecter la syntaxe,
+#                   sinon ça va nous faire du taf à Tomtom et moi :o)
+#
+# une liste de messages où chaque message commence par un '-'
+# et le reste des champs à remplir sont indentés avec 2 espaces
+# 'from' et 'to' sont des login de personnages.
+# les Dates DOIVENT respecter le format, et pensez qu'on joue en **2020**
+# si votre message fait plusieurs lignes, mettez un '|' et commencez tout le texte qui suit,
+# avec les passage à la ligne, après **4** espaces. Comme sur les exemples.
+- from: yfrancher
+  to: ifrancher
+  date: 2020-07-28T15:03:47
+  subject: Ce soir
+  content: |
+    J'imagine que tu vas toujours à ton Festival. Pas moyen de te faire changer d'avis ?
+
+    Soit prudente. Et n'oublie pas, couvre-feu à 2 heure. Je compte sur toi.
+- from: ifrancher
+  to: yfrancher
+  date: 2020-07-28T16:01:48
+  subject: 'Re: Ce soir'
+  content: |
+    Oui, je serai prudente.
+    Ne t'inquiète pas, je serai avec Sam et Jess'. Et il y a aussi Anton.
+    Il connaît tout le monde là-bas, ca va être super.
+
+    Bisous mon papounet d'amour
+- from: yfrancher
+  to: ifrancher
+  date: 2020-07-28T16:02:03
+  subject: 'Re: Ce soir'
+  content: |
+    Amuse toi bien.
+    dadY

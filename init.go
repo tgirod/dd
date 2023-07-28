@@ -814,10 +814,10 @@ var (
 	gsuleymanoglu = Identity{"gsuleymanoglu", "zo1daa", "Georges Suleymanoglu", true} // georges
 
 	// PNJs
-	afrieman = Identity{"afrieman", "far3ik", "Anton Frieman", true} // PNJ fan blackwave
+	afrieman  = Identity{"afrieman", "far3ik", "Anton Frieman", true} // PNJ fan blackwave
 	ifrancher = Identity{"ifrancher", "asu62k", "Isabella Francher", true}
 	yfrancher = Identity{"yfrancher", "oegy8s", "Yves Francher", true}
-	svox = Identity{"svox", "eg76wn", "Samantha Vox", true}
+	svox      = Identity{"svox", "eg76wn", "Samantha Vox", true}
 	// TODO quelques employé•e•s de la kramps
 	akremmer  = Identity{"akremmer", "sexgod22", "Alexandre Kremmer", true}   // security Kramps
 	mdavidson = Identity{"mdavidson", "allbitches", "Milton Davidson", true}  // dir adjoint Kramps
@@ -1272,4 +1272,5 @@ func Init() {
 	LoadRegistries("contenu/reg_satcom.yaml")
 	LoadRegistries("contenu/reg_nrj.yaml")
 	LoadRegistries("contenu/reg_ddlocal.yaml")
+	LoadMessages("contenu/msg_francher.yaml")
 }

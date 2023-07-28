@@ -328,6 +328,7 @@ func (c *Console) Identify(login, password string) error {
 }
 
 func (c *Console) AddResult(o Result) {
+	o.Output = strings.ReplaceAll(o.Output, "\t", "    ")
 	c.Results = append(c.Results, o)
 	if len(c.Results) > MAX_RESULTS {
 		c.Results = c.Results[len(c.Results)-MAX_RESULTS : len(c.Results)]

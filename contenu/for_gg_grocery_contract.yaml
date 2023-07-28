@@ -5,51 +5,51 @@
   subject: List de courses pour la relou
   content: gnagnagna
   answers:
-  - date: 2020-04-06T12:50:31
+  - date: 2020-04-10T13:06:36
     author: greenglass
     content: |
       tiger power, cheetos
-  - date: 2020-04-14T12:58:34
+  - date: 2020-04-16T13:11:52
     author: greenglass
     content: |
       cotton tiges, beignets, chouquettes, semoule, cheetos
-  - date: 2020-04-20T13:10:05
+  - date: 2020-04-23T12:59:40
     author: greenglass
     content: |
       steaks hachés, poulet frit, dentifrice
-  - date: 2020-04-27T12:45:53
+  - date: 2020-05-01T13:18:27
     author: greenglass
     content: |
       cheetos
-  - date: 2020-04-29T13:11:49
+  - date: 2020-05-10T13:36:39
     author: greenglass
     content: |
       lingettes, saucisson, mozzarella, cheetos
-  - date: 2020-04-29T12:52:08
+  - date: 2020-05-16T13:18:29
     author: greenglass
     content: |
       tomates, sparadra, bacon, oeufs, chocolat dur, cheetos
-  - date: 2020-05-05T13:13:26
+  - date: 2020-05-16T13:43:04
     author: greenglass
     content: |
       chaussettes, ceinture, poivron, poires, mousse, lait, steak de petits pois, escalope de carottes, cheetos (les nouveaux au goût vanille)
-  - date: 2020-05-09T13:40:50
+  - date: 2020-05-24T13:39:04
     author: greenglass
     content: |
       Tampons, lingettes, mascara noire, mascara bleu, lait démaquillant, cheetos
-  - date: 2020-05-12T14:03:03
+  - date: 2020-05-25T13:15:56
     author: greenglass
     content: |
       pain, crème pour le cul (hydratante, pas celle qui pique), yaourts hypoallergéniques, bananes roses, gin, whisky
-  - date: 2020-05-14T13:58:00
+  - date: 2020-05-25T13:17:48
     author: greenglass
     content: |
       cheetos
-  - date: 2020-05-22T14:01:01
+  - date: 2020-06-01T12:55:53
     author: greenglass
     content: |
       crème solaire, nougats, gants de vaisselle, frozeloops, petits sachets plastique, lait, cheetos
-  - date: 2020-05-28T13:45:47
+  - date: 2020-06-05T13:04:06
     author: greenglass
     content: |
       cola, cheetos
@@ -60,7 +60,7 @@
   subject: Pour FatMike
   content: "note: penser à augmenter mes tarifs"
   answers:
-  - date: 2020-04-13T13:07:59
+  - date: 2020-04-13T12:32:33
     author: greenglass
     content: |
       tag=runteamtag006
@@ -71,7 +71,7 @@
        Validated contracts 17
        Estimated total number of contracts: 18
        Contract unfulfilled on 2006-06-07 Reason: Aurora Terminated On Duty | estimated error: 8.6%
-  - date: 2020-04-20T12:54:13
+  - date: 2020-04-20T12:32:27
     author: greenglass
     content: |
       tag=runteamtag007
@@ -82,7 +82,7 @@
        Validated contracts 7
        Estimated total number of contracts: 8
        Contract unfulfilled on 2009-09-14 Reason: Phase*ShallowWater Terminated On Duty | estimated error: 0.4%
-  - date: 2020-04-27T12:39:11
+  - date: 2020-04-27T12:09:51
     author: greenglass
     content: |
       tag=runteamtag008
@@ -93,7 +93,7 @@
        Validated contracts 2
        Estimated total number of contracts: 4
        Contract unfulfilled on 2012-06-18 Reason: Blanksheet*Ego*Zenhook Terminated On Duty | estimated error: 16.005%
-  - date: 2020-05-04T12:24:50
+  - date: 2020-05-04T12:16:29
     author: greenglass
     content: |
       tag=runteamtag009
@@ -104,7 +104,7 @@
        Validated contracts 19
        Estimated total number of contracts: 19
        Contract unfulfilled 0 
-  - date: 2020-05-11T12:10:00
+  - date: 2020-05-11T12:05:36
     author: greenglass
     content: |
       tag=runteamtag010
@@ -115,7 +115,7 @@
        Validated contracts 31
        Estimated total number of contracts: 32
        Contract unfulfilled on 2018-05-16 Reason: Design*FlukeAnt Terminated On Duty | estimated error: 23.8%
-  - date: 2020-05-18T11:45:53
+  - date: 2020-05-18T12:23:36
     author: greenglass
     content: |
       tag=runteamtag011
@@ -126,7 +126,7 @@
        Validated contracts 28
        Estimated total number of contracts: 29
        Contract unfulfilled on 2019-01-24 Reason: Ink*SamouraiShodown Terminated On Duty | estimated error: 2.93%
-  - date: 2020-05-25T12:12:52
+  - date: 2020-05-25T12:36:33
     author: greenglass
     content: |
       tag=runteamtag011
@@ -137,7 +137,7 @@
        Validated contracts 5
        Estimated total number of contracts: 6
        Contract unfulfilled on 2019-12-01 Reason: Alcoline Missing On Duty | estimated error: 44.5%
-  - date: 2020-06-01T12:33:02
+  - date: 2020-06-01T12:57:01
     author: greenglass
     content: |
       tag=runteamtag011
@@ -148,7 +148,7 @@
        Validated contracts 14
        Estimated total number of contracts: 14
        Contract unfulfilled 0
-  - date: 2020-06-08T12:34:58
+  - date: 2020-06-08T13:21:53
     author: greenglass
     content: |
       tag=runteamtag011
@@ -159,7 +159,7 @@
        Validated contracts 8
        Estimated total number of contracts: 9
        Contract unfulfilled on 2019-10-15 Reason: Cancelled contract | estimated error: 0.09%
-  - date: 2020-06-15T12:05:04
+  - date: 2020-06-15T13:10:53
     author: greenglass
     content: |
       tag=runteamtag011
@@ -191,7 +191,7 @@
     content: |
       2020/07/26
        nb entrées 1 | total data: 1
-       The Team/LD-Mercury*Dozer
+       The Team/LD-Mercury*Dozer*Ashes
        Contract: zone isolation
            starting 2020/07/29:20:00
            Mr Johnson

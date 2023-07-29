@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -346,7 +347,26 @@ func (c *Console) Delay() time.Duration {
 	}
 }
 
+var shutdown = []string{
+	dd.Address,
+	frozdd.Address,
+	maravdd.Address,
+}
+
 func (c *Console) Connect(address string, identity Identity, force bool, reset bool) error {
+	ok := false
+	for _, s := range shutdown {
+		if s == address {
+			ok = true
+			break
+		}
+	}
+	if !ok {
+		return errors.New(`POUR DES RAISONS DE SÉCURITÉ, CETTE LIAISON RÉSEAU A ÉTÉ COUPÉE
+POUR TOUTE DEMANDE DE RÉTABLISSEMENT,
+MERCI DE CONTACTER LE SERVICE CLIENT DE LEGBA VOODOOCOM `)
+	}
+
 	server, err := FindServer(address)
 	if err != nil {
 		return err

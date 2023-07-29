@@ -1210,6 +1210,7 @@ func Init() {
 			{Login: "celine", Backdoor: false, Groups: []string{"celine", "flr", "pornloverz"}},
 			{Login: "nikki", Backdoor: false, Groups: []string{"flr", "nikki"}},
 			{Login: "greenglass", Backdoor: false, Groups: []string{"pornloverz", "gg"}},
+			{Login: "bettyb", Backdoor: false, Groups: []string{"bettyb"}},
 		},
 		[]Link{
 			{
@@ -1235,7 +1236,7 @@ func Init() {
 		[]User{
 			// TODO FIXME ajouter amathison
 			{Login: "hope", Backdoor: false, Groups: []string{"admin"}},
-			{Login: "mel", Backdoor: false},
+			{Login: "amathison", Backdoor: false},
 		},
 		[]Link{},
 		[]Register{},

@@ -2,7 +2,11 @@
 
 installer go 1.18+
 
-pour lancer le serveur :
+récupérer le code :
+
+> git clone github.com/tgirod/dd
+
+pour lancer le serveur et initialiser la base de données :
 
 > make init
 

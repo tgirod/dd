@@ -1,7 +1,7 @@
 package main
 
 import (
-	"errors"
+//	"errors"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -347,6 +347,7 @@ func (c *Console) Delay() time.Duration {
 	}
 }
 
+// FIXME a virer
 var shutdown = []string{
 	dd.Address,
 	frozdd.Address,
@@ -354,6 +355,8 @@ var shutdown = []string{
 }
 
 func (c *Console) Connect(address string, identity Identity, force bool, reset bool) error {
+	// FIXME a virer
+	/*
 	ok := false
 	for _, s := range shutdown {
 		if s == address {
@@ -366,6 +369,8 @@ func (c *Console) Connect(address string, identity Identity, force bool, reset b
 POUR TOUTE DEMANDE DE RÉTABLISSEMENT,
 MERCI DE CONTACTER LE SERVICE CLIENT DE LEGBA VOODOOCOM `)
 	}
+	*/
+	/// fin
 
 	server, err := FindServer(address)
 	if err != nil {
